@@ -1,0 +1,29 @@
+# Ignore all */bin/ and */obj/ folders...
+[Bb]in/
+[Oo]bj/
+
+# Ignore backup files.
+*.orig
+
+# Ignore all Visual Studio generated files.
+*.suo
+*.user
+*.ncb
+_ReSharper.*
+*.[Cc]ache
+*.ncrunch*
+
+# Ignore all MonoDevelop generated files.
+*.userprefs
+*.pidb
+
+# Ignore all Operating System generated files.
+Thumbs.db
+
+# Ignore all Test Suite status files.
+TestResult.xml
+*.VisualState.xml
+
+# Ignore NuGet files in the root.
+/*.nupkg
+
