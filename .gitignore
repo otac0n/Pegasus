@@ -27,3 +27,5 @@ TestResult.xml
 # Ignore NuGet files in the root.
 /*.nupkg
 
+# Use NuGet Package Restore for packages.
+/packages/
