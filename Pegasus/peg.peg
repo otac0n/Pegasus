@@ -1,0 +1,254 @@
+﻿start
+	= grammar
+	;
+
+grammar
+	= __ rules:rule+
+	;
+
+rule
+	= name:identifier equals expression:expression semicolon
+	;
+
+expression
+	= choice
+	;
+
+choice
+	= head:sequence tail:(slash sequence)*
+	;
+
+sequence
+	= elements:labeled* code:action
+	/ elements:labeled*
+	;
+
+labeled
+	= label:identifier colon expression:prefixed
+	;
+
+prefixed
+	= and code:action
+	/ and expression:suffixed
+	/ not code:action
+	/ not expression:suffixed
+	/ suffixed
+	;
+
+primary
+	= name:identifier
+	/ literal
+	/ class
+	/ dot
+	/ lparen expression:expression rparen
+	;
+
+action
+	= braced:braced __
+	;
+
+braced
+	= "{" parts:(braced / nonBraceCharacters)* "}"
+	;
+
+nonBraceCharacters
+	= chars:nonBraceCharacter+
+	;
+
+nonBraceCharacter
+	= [^{}]
+	;
+
+equals
+	= "=" __
+	;
+
+colon
+	= ":" __
+	;
+
+semicolon
+	= ";" __
+	;
+
+slash
+	= "/" __
+	;
+
+and
+	= "&" __
+	;
+
+not
+	= "!" __
+	;
+
+question
+	= "?" __
+	;
+
+star
+	= "*" __
+	;
+
+plus
+	= "+" __
+	;
+
+lparen
+	= "(" __
+	;
+
+rparen
+	= ")" __
+	;
+
+dot
+	= "." __
+	;
+
+identifier
+	= !(digit) name:(letter / digit / "_" / "$")* __
+	;
+
+literal
+	= value:string flags:"i"? __
+	;
+
+string
+	= doubleQuotedString
+	/ singleQuotedString
+	;
+
+doubleQuotedString
+	= '"' chars:doubleQuotedCharacter* '"'
+	;
+
+doubleQuotedCharacter
+	= simpleDoubleQuotedCharacter
+	/ simpleEscapeSequence
+	/ zeroEscapeSequence
+	/ hexEscapeSequence
+	/ unicodeEscapeSequence
+	/ eolEscapeSequence
+	;
+
+simpleDoubleQuotedCharacter
+	= !('"' / "\\" / eolChar) char_:.
+	;
+
+singleQuotedString
+	= "'" chars:singleQuotedCharacter* "'"
+	;
+
+singleQuotedCharacter
+	= simpleSingleQuotedCharacter
+	/ simpleEscapeSequence
+	/ zeroEscapeSequence
+	/ hexEscapeSequence
+	/ unicodeEscapeSequence
+	/ eolEscapeSequence
+	;
+
+simpleSingleQuotedCharacter
+	= !("'" / "\\" / eolChar) char_:.
+	;
+
+class "character class"
+	= "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __
+	;
+
+classCharacterRange
+	= begin:classCharacter "-" end:classCharacter
+	;
+
+classCharacter
+	= char_:bracketDelimitedCharacter
+	;
+
+bracketDelimitedCharacter
+	= simpleBracketDelimitedCharacter
+	/ simpleEscapeSequence
+	/ zeroEscapeSequence
+	/ hexEscapeSequence
+	/ unicodeEscapeSequence
+	/ eolEscapeSequence
+	;
+
+simpleBracketDelimitedCharacter
+	= !("]" / "\\" / eolChar) char_:.
+	;
+
+simpleEscapeSequence
+	= "\\" !(digit / "x" / "u" / eolChar) char_:.
+	;
+
+zeroEscapeSequence
+	= "\\0" !digit
+	;
+
+hexEscapeSequence
+	= "\\x" h1:hexDigit h2:hexDigit
+	;
+
+unicodeEscapeSequence
+	= "\\u" h1:hexDigit h2:hexDigit h3:hexDigit h4:hexDigit
+	;
+
+eolEscapeSequence
+	= "\\" eol:eol
+	;
+
+digit
+	= [0-9]
+	;
+
+hexDigit
+	= [0-9a-fA-F]
+	;
+
+letter
+	= lowerCaseLetter
+	/ upperCaseLetter
+	;
+
+lowerCaseLetter
+	= [a-z]
+	;
+
+upperCaseLetter
+	= [A-Z]
+	;
+
+__
+	= (whitespace / eol / comment)*
+	;
+
+comment
+	= singleLineComment
+	/ multiLineComment
+	;
+
+singleLineComment
+	= "//" (!eolChar .)*
+	;
+
+multiLineComment
+	= "/*" (!"*/" .)* "*/"
+	;
+
+eol
+	= "\n"
+	/ "\r\n"
+	/ "\r"
+	/ "\u2028"
+	/ "\u2029"
+	;
+
+eolChar
+	= [\n\r\u2028\u2029]
+	;
+
+whitespace
+	= [ \t\v\f\u00A0\uFEFF\u1680\u180E\u2000-\u200A\u202F\u205F\u3000]
+	;
