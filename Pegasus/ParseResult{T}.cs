@@ -60,7 +60,7 @@ namespace Pegasus
         /// </summary>
         /// <param name="a">The first <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
         /// <param name="b">The second <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
-        /// <returns>true if the value of a is the same as the value of b; otherwise, false.</returns>
+        /// <returns>true if the value of <paramref name="a"/> is the same as the value of <paramref name="b"/>; otherwise, false.</returns>
         public static bool operator ==(ParseResult<T> a, ParseResult<T> b)
         {
             return object.Equals(a, b);
@@ -71,7 +71,7 @@ namespace Pegasus
         /// </summary>
         /// <param name="a">The first <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
         /// <param name="b">The second <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
-        /// <returns>true if the value of a is different from the value of b; otherwise, false.</returns>
+        /// <returns>true if the value of <paramref name="a"/> is different from the value of <paramref name="b"/>; otherwise, false.</returns>
         public static bool operator !=(ParseResult<T> a, ParseResult<T> b)
         {
             return !object.Equals(a, b);
@@ -90,7 +90,7 @@ namespace Pegasus
         /// <summary>
         /// Determines whether the specified <see cref="ParseResult&lt;T&gt;"/> is equal to the current <see cref="ParseResult&lt;T&gt;"/>.
         /// </summary>
-        /// <param name="other">An <see cref="ParseResult&lt;T&gt;"/> to compare with this <see cref="ParseResult&lt;T&gt;"/>.</param>
+        /// <param name="other">A <see cref="ParseResult&lt;T&gt;"/> to compare with this <see cref="ParseResult&lt;T&gt;"/>.</param>
         /// <returns>true if the parse results are considered equal; otherwise, false.</returns>
         public bool Equals(ParseResult<T> other)
         {
