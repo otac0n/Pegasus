@@ -16,12 +16,12 @@ namespace Pegasus
 
     public class PegParser
     {
-        public ParseResult<List<Rule>> Parse(string subject, int location = 0)
+        public ParseResult<Grammar> Parse(string subject, int location = 0)
         {
             return this.ParseGrammar(new Cursor(subject, location));
         }
 
-        private ParseResult<List<Rule>> ParseGrammar(Cursor cursor)
+        private ParseResult<Grammar> ParseGrammar(Cursor cursor)
         {
             var startCursor = cursor;
 
@@ -56,7 +56,7 @@ namespace Pegasus
             }
 
             var len = cursor - startCursor;
-            return new ParseResult<List<Rule>>(len, rules);
+            return new ParseResult<Grammar>(len, new Grammar(rules));
         }
 
         private ParseResult<Rule> ParseRule(Cursor cursor)

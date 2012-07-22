@@ -51,6 +51,7 @@
     <Compile Include="Expressions\ChoiceExpression.cs" />
     <Compile Include="Expressions\ClassExpression.cs" />
     <Compile Include="Expressions\Expression.cs" />
+    <Compile Include="Expressions\Grammar.cs" />
     <Compile Include="Expressions\LiteralExpression.cs" />
     <Compile Include="Expressions\NameExpression.cs" />
     <Compile Include="Expressions\NotExpression.cs" />
