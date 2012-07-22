@@ -60,6 +60,7 @@
     <Compile Include="Expressions\SequenceExpression.cs" />
     <Compile Include="Expressions\WildcardExpression.cs" />
     <Compile Include="ParseResult{T}.cs" />
+    <Compile Include="PegParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
