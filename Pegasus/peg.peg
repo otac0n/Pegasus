@@ -3,7 +3,7 @@
 	;
 
 grammar
-	= __ rules:rule+
+	= ws rules:rule+
 	;
 
 rule
@@ -52,7 +52,7 @@ primary
 	;
 
 action
-	= braced:braced __
+	= braced:braced ws
 	;
 
 braced
@@ -68,59 +68,59 @@ nonBraceCharacter
 	;
 
 equals
-	= "=" __
+	= "=" ws
 	;
 
 colon
-	= ":" __
+	= ":" ws
 	;
 
 semicolon
-	= ";" __
+	= ";" ws
 	;
 
 slash
-	= "/" __
+	= "/" ws
 	;
 
 and
-	= "&" __
+	= "&" ws
 	;
 
 not
-	= "!" __
+	= "!" ws
 	;
 
 question
-	= "?" __
+	= "?" ws
 	;
 
 star
-	= "*" __
+	= "*" ws
 	;
 
 plus
-	= "+" __
+	= "+" ws
 	;
 
 lparen
-	= "(" __
+	= "(" ws
 	;
 
 rparen
-	= ")" __
+	= ")" ws
 	;
 
 dot
-	= "." __
+	= "." ws
 	;
 
 identifier
-	= !(digit) name:(letter / digit / "_" / "$")+ __
+	= !(digit) name:(letter / digit / "_" / "$")+ ws
 	;
 
 literal
-	= value:string flags:"i"? __
+	= value:string flags:"i"? ws
 	;
 
 string
@@ -163,7 +163,7 @@ simpleSingleQuotedCharacter
 	;
 
 class
-	= "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __
+	= "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? ws
 	;
 
 classCharacterRange
@@ -228,7 +228,7 @@ upperCaseLetter
 	= [A-Z]
 	;
 
-__
+ws
 	= (whitespace / eol / comment)*
 	;
 
