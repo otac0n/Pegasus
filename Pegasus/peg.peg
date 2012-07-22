@@ -25,6 +25,7 @@ sequence
 
 labeled
 	= label:identifier colon expression:prefixed
+	/ prefixed
 	;
 
 prefixed
@@ -33,6 +34,13 @@ prefixed
 	/ not code:action
 	/ not expression:suffixed
 	/ suffixed
+	;
+
+suffixed
+	= expression:primary question
+	/ expression:primary star
+	/ expression:primary plus
+	/ primary
 	;
 
 primary
@@ -108,7 +116,7 @@ dot
 	;
 
 identifier
-	= !(digit) name:(letter / digit / "_" / "$")* __
+	= !(digit) name:(letter / digit / "_" / "$")+ __
 	;
 
 literal
@@ -154,7 +162,7 @@ simpleSingleQuotedCharacter
 	= !("'" / "\\" / eolChar) char_:.
 	;
 
-class "character class"
+class
 	= "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __
 	;
 
