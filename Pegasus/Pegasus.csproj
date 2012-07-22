@@ -46,6 +46,19 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Cursor.cs" />
+    <Compile Include="Expressions\AndExpression.cs" />
+    <Compile Include="Expressions\CharacterRange.cs" />
+    <Compile Include="Expressions\ChoiceExpression.cs" />
+    <Compile Include="Expressions\ClassExpression.cs" />
+    <Compile Include="Expressions\Expression.cs" />
+    <Compile Include="Expressions\LiteralExpression.cs" />
+    <Compile Include="Expressions\NameExpression.cs" />
+    <Compile Include="Expressions\NotExpression.cs" />
+    <Compile Include="Expressions\PrefixedExpression.cs" />
+    <Compile Include="Expressions\RepetitionExpression.cs" />
+    <Compile Include="Expressions\Rule.cs" />
+    <Compile Include="Expressions\SequenceExpression.cs" />
+    <Compile Include="Expressions\WildcardExpression.cs" />
     <Compile Include="ParseResult{T}.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
