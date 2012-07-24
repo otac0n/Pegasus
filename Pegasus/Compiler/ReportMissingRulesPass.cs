@@ -18,20 +18,29 @@ namespace Pegasus.Compiler
     {
         public override void Run(Grammar grammar, CompileResult result)
         {
-            var knownRules = new HashSet<string>(grammar.Rules.Select(r => r.Name));
+            new MissingRuleExpressionTreeWalker(grammar, result).WalkGrammar(grammar);
+        }
 
-            CompilePass.WalkExpressions(grammar, e =>
+        private class MissingRuleExpressionTreeWalker : ExpressionTreeWalker
+        {
+            private readonly HashSet<string> knownRules;
+            private readonly CompileResult result;
+
+            public MissingRuleExpressionTreeWalker(Grammar grammar, CompileResult result)
             {
-                var nameExp = e as NameExpression;
-                if (nameExp != null)
+                this.knownRules = new HashSet<string>(grammar.Rules.Select(r => r.Name));
+                this.result = result;
+            }
+
+            protected override void WalkNameExpression(NameExpression nameExpression)
+            {
+                var name = nameExpression.Name;
+                if (!this.knownRules.Contains(name))
                 {
-                    if (!knownRules.Contains(nameExp.Name))
-                    {
-                        result.Errors.Add(
-                            new CompilerError(string.Empty, 0, 0, "PEG0003", string.Format(Resources.PEG0003_RULE_DOES_NOT_EXIST, nameExp.Name)));
-                    }
+                    this.result.Errors.Add(
+                        new CompilerError(string.Empty, 0, 0, "PEG0003", string.Format(Resources.PEG0003_RULE_DOES_NOT_EXIST, name)));
                 }
-            });
+            }
         }
     }
 }

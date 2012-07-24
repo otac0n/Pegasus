@@ -47,6 +47,7 @@
     </Compile>
     <Compile Include="Compiler\CompilePass.cs" />
     <Compile Include="Compiler\CompileResult.cs" />
+    <Compile Include="Compiler\ExpressionTreeWalker.cs" />
     <Compile Include="Compiler\PegCompiler.cs" />
     <Compile Include="Compiler\ReportDuplicateRulesPass.cs" />
     <Compile Include="Compiler\ReportMissingRulesPass.cs" />
