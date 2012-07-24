@@ -23,7 +23,7 @@ namespace Pegasus.Expressions
         /// </summary>
         /// <param name="value">The literal value.</param>
         /// <param name="ignoreCase">A value indicating whether or not the expression should ignore case differences when matching.</param>
-        public LiteralExpression(string value, bool ignoreCase)
+        public LiteralExpression(string value, bool ignoreCase = false)
         {
             if (value == null)
             {

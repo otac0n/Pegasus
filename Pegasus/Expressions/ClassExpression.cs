@@ -27,7 +27,7 @@ namespace Pegasus.Expressions
         /// <param name="ranges">The ranges that match.</param>
         /// <param name="negated">A value indicating whether or not the expression is negated.</param>
         /// <param name="ignoreCase">A value indicating whether or not the expression should ignore case differences when matching.</param>
-        public ClassExpression(IEnumerable<CharacterRange> ranges, bool negated, bool ignoreCase)
+        public ClassExpression(IEnumerable<CharacterRange> ranges, bool negated = false, bool ignoreCase = false)
         {
             if (ranges == null)
             {
