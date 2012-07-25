@@ -69,7 +69,7 @@ namespace Pegasus.Compiler
             }
             else if ((repetitionExpression = expression as RepetitionExpression) != null)
             {
-                this.WalkPrefixedExpression(prefixedExpression);
+                this.WalkRepetitionExpression(repetitionExpression);
             }
             else if ((sequenceExpression = expression as SequenceExpression) != null)
             {
@@ -118,6 +118,11 @@ namespace Pegasus.Compiler
         protected virtual void WalkPrefixedExpression(PrefixedExpression prefixedExpression)
         {
             this.WalkExpression(prefixedExpression.Expression);
+        }
+
+        protected virtual void WalkRepetitionExpression(RepetitionExpression repetitionExpression)
+        {
+            this.WalkExpression(repetitionExpression.Expression);
         }
 
         protected virtual void WalkSequenceExpression(SequenceExpression sequenceExpression)
