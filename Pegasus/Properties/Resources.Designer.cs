@@ -86,5 +86,14 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0003_RULE_DOES_NOT_EXIST", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The rules &apos;{0}&apos; are left-recursive..
+        /// </summary>
+        internal static string PEG0004_LEFT_RECURSION_DETECTED {
+            get {
+                return ResourceManager.GetString("PEG0004_LEFT_RECURSION_DETECTED", resourceCulture);
+            }
+        }
     }
 }

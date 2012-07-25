@@ -126,4 +126,7 @@
   <data name="PEG0003_RULE_DOES_NOT_EXIST" xml:space="preserve">
     <value>The referenced rule '{0}' does not exist.</value>
   </data>
+  <data name="PEG0004_LEFT_RECURSION_DETECTED" xml:space="preserve">
+    <value>The rules '{0}' are left-recursive.</value>
+  </data>
 </root>

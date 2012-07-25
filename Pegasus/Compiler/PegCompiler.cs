@@ -20,6 +20,7 @@ namespace Pegasus.Compiler
             new ReportNoRulesPass(),
             new ReportMissingRulesPass(),
             new ReportDuplicateRulesPass(),
+            new ReportLeftRecursionPass(),
         };
 
         /// <summary>
