@@ -28,5 +28,10 @@ namespace Pegasus.Compiler
         /// Gets the collection of errors that occurred during compilation.
         /// </summary>
         public IList<CompilerError> Errors { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the code resulting from compilation.
+        /// </summary>
+        public string Code { get; set; }
     }
 }
