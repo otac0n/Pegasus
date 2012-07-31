@@ -28,13 +28,19 @@ namespace Pegasus.Compiler
 
         private class GenerateCodeExpressionTreeWlaker : ExpressionTreeWalker
         {
-            private readonly CompileResult result;
             private readonly IndentedTextWriter code;
+            private int id;
+            private readonly CompileResult result;
 
             public GenerateCodeExpressionTreeWlaker(CompileResult result, IndentedTextWriter codeWriter)
             {
                 this.result = result;
                 this.code = codeWriter;
+            }
+
+            private int Id
+            {
+                get { return ++id; }
             }
 
             public override void WalkGrammar(Grammar grammar)
@@ -48,7 +54,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("// the code is regenerated.");
                 this.code.WriteLine("// </auto-generated>");
                 this.code.WriteLine("// -----------------------------------------------------------------------");
-                this.code.WriteLine();
+                this.code.WriteLineNoTabs("");
 
                 this.code.WriteLine("namespace Test");
                 this.code.WriteLine("{");
@@ -77,41 +83,64 @@ namespace Pegasus.Compiler
 
             protected override void WalkRule(Rule rule)
             {
-                this.code.WriteLine();
-                this.code.WriteLine("private ParseResut<string> " + rule.Name + "(Cursor cursor)");
+                this.code.WriteLineNoTabs("");
+                this.code.WriteLine("private ParseResut<string> " + rule.Name + "(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("var startCursor = cursor;");
 
                 base.WalkRule(rule);
 
-                this.code.WriteLine();
-                this.code.WriteLine("var len = cursor.Location - startCursor.Location;");
-                this.code.WriteLine("return new ParseResult<string>(len, cursor.Subject.Substring(startCursor.Location, len));");
+                this.code.WriteLine("return null;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
             }
 
             protected override void WalkLiteralExpression(LiteralExpression literalExpression)
             {
-                this.code.WriteLine("var l1 = this.ParseLiteral(" + ToLiteral(literalExpression.Value) + ", cursor);");
-                this.code.WriteLine("if (l1 != null)");
-                this.code.WriteLine("{");
-                this.code.Indent++;
-                this.code.WriteLine("cursor = cursor.Advance(l1);");
-                this.code.Indent--;
-                this.code.WriteLine("}");
+                var id = Id;
+                this.code.WriteLine("var r" + id + " = this.ParseLiteral(" + ToLiteral(literalExpression.Value) + ", ref cursor);");
             }
 
             protected override void WalkWildcardExpression(WildcardExpression wildcardExpression)
             {
-                this.code.WriteLine("var c1 = this.ParseAny(cursor);");
-                this.code.WriteLine("if (c1 != null)");
-                this.code.WriteLine("{");
-                this.code.Indent++;
-                this.code.WriteLine("cursor = cursor.Advance(c1);");
-                this.code.Indent--;
-                this.code.WriteLine("}");
+                var id = Id;
+                this.code.WriteLine("var r" + id + " = this.ParseAny(ref cursor);");
+            }
+
+            protected override void WalkNameExpression(NameExpression nameExpression)
+            {
+                var id = Id;
+                this.code.WriteLine("var r" + id + " = this." + nameExpression.Name + "(ref cursor);");
+            }
+
+            protected override void WalkSequenceExpression(SequenceExpression sequenceExpression)
+            {
+                var startId = this.Id;
+                this.code.WriteLine("var startCursor" + startId + " = cursor;");
+
+                foreach (var expression in sequenceExpression.Sequence)
+                {
+                    this.WalkExpression(expression);
+                    this.code.WriteLine("if (r" + this.id + " != null)");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                }
+
+                this.code.WriteLine("var len = cursor.Location - startCursor" + startId + ".Location;");
+                this.code.WriteLine("return new ParseResult<string>(len, cursor.Subject.Substring(startCursor" + startId + ".Location, len));");
+
+                for (int i = 0; i < sequenceExpression.Sequence.Count; i++)
+                {
+                    this.code.Indent--;
+                    this.code.WriteLine("}");
+                    this.code.WriteLine("else");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                    this.code.WriteLine("cursor = startCursor" + startId + ";");
+                    this.code.Indent--;
+                    this.code.WriteLine("}");
+                    this.code.WriteLineNoTabs("");
+                }
             }
 
             private static string ToLiteral(string input)
