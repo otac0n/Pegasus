@@ -209,6 +209,19 @@ namespace Pegasus.Compiler
                 }
             }
 
+            protected override void WalkChoiceExpression(ChoiceExpression choiceExpression)
+            {
+                foreach (var expression in choiceExpression.Choices)
+                {
+                    this.code.WriteLine("if (" + this.currentResultName + " == null)");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                    this.WalkExpression(expression);
+                    this.code.Indent--;
+                    this.code.WriteLine("}");
+                }
+            }
+
             private static string ToLiteral(string input)
             {
                 using (var writer = new StringWriter())
