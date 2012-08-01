@@ -61,8 +61,10 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("namespace Test");
                 this.code.WriteLine("{");
                 this.code.Indent++;
+                this.code.WriteLine("using Pegasus;");
+                this.code.WriteLineNoTabs("");
 
-                this.code.WriteLine("[System.CodeDom.Compiler.GeneratedCode(Tool = \"" + assemblyName.Name + "\", Version = \"" + assemblyName.Version + "\")]");
+                this.code.WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"" + assemblyName.Name + "\", \"" + assemblyName.Version + "\")]");
                 this.code.WriteLine("public partial class Parser");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -70,7 +72,8 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("public string Parse(string subject)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("return this." + grammar.Rules[0].Name + "(new Cursor(subject)).Value;");
+                this.code.WriteLine("var cursor = new Cursor(subject, 0);");
+                this.code.WriteLine("return this." + grammar.Rules[0].Name + "(ref cursor).Value;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
@@ -108,12 +111,12 @@ namespace Pegasus.Compiler
             protected override void WalkRule(Rule rule)
             {
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResut<string> " + rule.Name + "(ref Cursor cursor)");
+                this.code.WriteLine("private ParseResult<string> " + rule.Name + "(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
                 this.currentResultName = "r" + this.Id;
-                this.code.WriteLine("ParseResult<string> " + this.currentResultName + ";");
+                this.code.WriteLine("ParseResult<string> " + this.currentResultName + " = null;");
                 base.WalkRule(rule);
                 this.code.WriteLine("return " + this.currentResultName + ";");
                 this.currentResultName = null;
@@ -147,7 +150,7 @@ namespace Pegasus.Compiler
                 foreach (var expression in sequenceExpression.Sequence)
                 {
                     this.currentResultName = "r" + this.Id;
-                    this.code.WriteLine("ParseResult<string> " + this.currentResultName + ";");
+                    this.code.WriteLine("ParseResult<string> " + this.currentResultName + " = null;");
                     this.WalkExpression(expression);
                     this.code.WriteLine("if (" + this.currentResultName + " != null)");
                     this.code.WriteLine("{");
