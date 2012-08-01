@@ -61,6 +61,8 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("namespace Test");
                 this.code.WriteLine("{");
                 this.code.Indent++;
+                this.code.WriteLine("using System;");
+                this.code.WriteLine("using System.Collections.Generic;");
                 this.code.WriteLine("using Pegasus;");
                 this.code.WriteLineNoTabs("");
 
@@ -68,12 +70,22 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("public partial class Parser");
                 this.code.WriteLine("{");
                 this.code.Indent++;
+                this.code.WriteLine("private Cursor rightmostErrorCursor = null;");
+                this.code.WriteLine("private List<string> rightmostErrors = new List<string>();");
+                this.code.WriteLineNoTabs("");
 
                 this.code.WriteLine("public string Parse(string subject)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("var cursor = new Cursor(subject, 0);");
-                this.code.WriteLine("return this." + grammar.Rules[0].Name + "(ref cursor).Value;");
+                this.code.WriteLine("var result = this." + grammar.Rules[0].Name + "(ref cursor);");
+                this.code.WriteLine("if (result == null)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("throw new InvalidOperationException(\"Expected \" + string.Join(\", \", this.rightmostErrors) + \".\");");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine("return result.Value;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
@@ -97,7 +109,29 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
                 this.code.Indent--;
                 this.code.WriteLine("}");
+                this.code.WriteLine("this.ReportError(cursor, \"'\" + literal + \"'\");");
                 this.code.WriteLine("return null;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+
+                this.code.WriteLineNoTabs("");
+                this.code.WriteLine("private void ReportError(Cursor cursor, string expected)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("if (this.rightmostErrorCursor != null && this.rightmostErrorCursor.Location > cursor.Location)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("return;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine("if (this.rightmostErrorCursor == null || this.rightmostErrorCursor.Location < cursor.Location)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("this.rightmostErrorCursor = cursor;");
+                this.code.WriteLine("this.rightmostErrors.Clear();");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine("this.rightmostErrors.Add(expected);");
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
