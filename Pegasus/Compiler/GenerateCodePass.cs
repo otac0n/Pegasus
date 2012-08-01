@@ -43,6 +43,8 @@ namespace Pegasus.Compiler
                 get { return ++id; }
             }
 
+            private string currentResultName = null;
+
             public override void WalkGrammar(Grammar grammar)
             {
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
@@ -88,29 +90,29 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
+                this.currentResultName = "r" + this.Id;
+                this.code.WriteLine("ParseResult<string> " + this.currentResultName + ";");
                 base.WalkRule(rule);
+                this.code.WriteLine("return " + this.currentResultName + ";");
+                this.currentResultName = null;
 
-                this.code.WriteLine("return null;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
             }
 
             protected override void WalkLiteralExpression(LiteralExpression literalExpression)
             {
-                var id = Id;
-                this.code.WriteLine("var r" + id + " = this.ParseLiteral(" + ToLiteral(literalExpression.Value) + ", ref cursor);");
+                this.code.WriteLine(this.currentResultName + " = this.ParseLiteral(" + ToLiteral(literalExpression.Value) + ", ref cursor);");
             }
 
             protected override void WalkWildcardExpression(WildcardExpression wildcardExpression)
             {
-                var id = Id;
-                this.code.WriteLine("var r" + id + " = this.ParseAny(ref cursor);");
+                this.code.WriteLine(this.currentResultName + " = this.ParseAny(ref cursor);");
             }
 
             protected override void WalkNameExpression(NameExpression nameExpression)
             {
-                var id = Id;
-                this.code.WriteLine("var r" + id + " = this." + nameExpression.Name + "(ref cursor);");
+                this.code.WriteLine(this.currentResultName + " = this." + nameExpression.Name + "(ref cursor);");
             }
 
             protected override void WalkSequenceExpression(SequenceExpression sequenceExpression)
@@ -118,16 +120,22 @@ namespace Pegasus.Compiler
                 var startId = this.Id;
                 this.code.WriteLine("var startCursor" + startId + " = cursor;");
 
+                var oldResultName = this.currentResultName;
+
                 foreach (var expression in sequenceExpression.Sequence)
                 {
+                    this.currentResultName = "r" + this.Id;
+                    this.code.WriteLine("ParseResult<string> " + this.currentResultName + ";");
                     this.WalkExpression(expression);
-                    this.code.WriteLine("if (r" + this.id + " != null)");
+                    this.code.WriteLine("if (" + this.currentResultName + " != null)");
                     this.code.WriteLine("{");
                     this.code.Indent++;
                 }
 
+                this.currentResultName = oldResultName;
+
                 this.code.WriteLine("var len = cursor.Location - startCursor" + startId + ".Location;");
-                this.code.WriteLine("return new ParseResult<string>(len, cursor.Subject.Substring(startCursor" + startId + ".Location, len));");
+                this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(len, cursor.Subject.Substring(startCursor" + startId + ".Location, len));");
 
                 for (int i = 0; i < sequenceExpression.Sequence.Count; i++)
                 {
@@ -139,7 +147,6 @@ namespace Pegasus.Compiler
                     this.code.WriteLine("cursor = startCursor" + startId + ";");
                     this.code.Indent--;
                     this.code.WriteLine("}");
-                    this.code.WriteLineNoTabs("");
                 }
             }
 
