@@ -76,6 +76,28 @@ namespace Pegasus.Compiler
 
                 base.WalkGrammar(grammar);
 
+                this.code.WriteLineNoTabs("");
+                this.code.WriteLine("private ParseResult<string> ParseLiteral(string literal, ref Cursor cursor)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("if (cursor.Location + literal.Length <= cursor.Subject.Length)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("var substr = cursor.Subject.Substring(cursor.Location, literal.Length);");
+                this.code.WriteLine("if (substr == literal)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("var result = new ParseResult<string>(substr.Length, substr);");
+                this.code.WriteLine("cursor = cursor.Advance(result);");
+                this.code.WriteLine("return result;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine("return null;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
