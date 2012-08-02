@@ -151,6 +151,24 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
+                this.code.WriteLine("private ParseResult<string> ParseAny(ref Cursor cursor)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("if (cursor.Location + 1 <= cursor.Subject.Length)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("var substr = cursor.Subject.Substring(cursor.Location, 1);");
+                this.code.WriteLine("var result = new ParseResult<string>(1, substr);");
+                this.code.WriteLine("cursor = cursor.Advance(result);");
+                this.code.WriteLine("return result;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine("this.ReportError(cursor, \"any character\");");
+                this.code.WriteLine("return null;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+
+                this.code.WriteLineNoTabs("");
                 this.code.WriteLine("private void ReportError(Cursor cursor, string expected)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
