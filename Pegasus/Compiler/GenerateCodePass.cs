@@ -13,6 +13,7 @@ namespace Pegasus.Compiler
     using System.IO;
     using System.Reflection;
     using Pegasus.Expressions;
+    using System.Collections.Generic;
 
     internal class GenerateCodePass : CompilePass
     {
@@ -44,6 +45,41 @@ namespace Pegasus.Compiler
             }
 
             private string currentResultName = null;
+
+            private static HashSet<string> keywords = new HashSet<string>
+            {
+                "abstract", "as", "base",
+                "bool", "break", "byte",
+                "case", "catch", "char",
+                "checked", "class", "const",
+                "continue", "decimal", "default",
+                "delegate", "do", "double",
+                "else", "enum", "event",
+                "explicit", "extern", "false",
+                "finally", "fixed", "float",
+                "for", "foreach", "goto",
+                "if", "implicit", "in",
+                "int", "interface", "internal",
+                "is", "lock", "long",
+                "namespace", "new", "null",
+                "object", "operator", "out",
+                "override", "params", "private",
+                "protected", "public", "readonly",
+                "ref", "return", "sbyte",
+                "sealed", "short", "sizeof",
+                "stackalloc", "static", "string",
+                "struct", "switch", "this",
+                "throw", "true", "try",
+                "typeof", "uint", "ulong",
+                "unchecked", "unsafe", "ushort",
+                "using", "virtual", "void",
+                "volatile", "while",
+            };
+
+            private static string EscapeName(string name)
+            {
+                return keywords.Contains(name) ? "@" + name : name;
+            }
 
             public override void WalkGrammar(Grammar grammar)
             {
@@ -78,7 +114,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("var cursor = new Cursor(subject, 0);");
-                this.code.WriteLine("var result = this." + grammar.Rules[0].Name + "(ref cursor);");
+                this.code.WriteLine("var result = this." + EscapeName(grammar.Rules[0].Name) + "(ref cursor);");
                 this.code.WriteLine("if (result == null)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -145,7 +181,7 @@ namespace Pegasus.Compiler
             protected override void WalkRule(Rule rule)
             {
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResult<string> " + rule.Name + "(ref Cursor cursor)");
+                this.code.WriteLine("private ParseResult<string> " + EscapeName(rule.Name) + "(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
@@ -171,7 +207,7 @@ namespace Pegasus.Compiler
 
             protected override void WalkNameExpression(NameExpression nameExpression)
             {
-                this.code.WriteLine(this.currentResultName + " = this." + nameExpression.Name + "(ref cursor);");
+                this.code.WriteLine(this.currentResultName + " = this." + EscapeName(nameExpression.Name) + "(ref cursor);");
             }
 
             protected override void WalkSequenceExpression(SequenceExpression sequenceExpression)
