@@ -14,6 +14,7 @@ namespace Pegasus.Compiler
     using System.Reflection;
     using Pegasus.Expressions;
     using System.Collections.Generic;
+    using System.Text;
 
     internal class GenerateCodePass : CompilePass
     {
@@ -277,16 +278,37 @@ namespace Pegasus.Compiler
                 }
             }
 
+            private static Dictionary<char, string> simpleEscapeChars = new Dictionary<char,string>()
+            {
+                { '\'', "\\'" }, { '\"', "\\\"" }, { '\\', "\\\\" }, { '\0', "\\0" },
+                { '\a', "\\a" }, { '\b', "\\b" }, { '\f', "\\f" }, { '\n', "\\n" },
+                { '\r', "\\r" }, { '\t', "\\t" }, { '\v', "\\v" },
+            };
+
             private static string ToLiteral(string input)
             {
-                using (var writer = new StringWriter())
+                var sb = new StringBuilder();
+                sb.Append("\"");
+                for (int i = 0; i < input.Length; i++)
                 {
-                    using (var provider = CodeDomProvider.CreateProvider("CSharp"))
+                    var c = input[i];
+                    
+                    string literal;
+                    if (simpleEscapeChars.TryGetValue(c, out literal))
                     {
-                        provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
-                        return writer.ToString();
+                        sb.Append(literal);
+                    }
+                    else if (c >= 32 && c <= 126)
+                    {
+                        sb.Append(c);
+                    }
+                    else
+                    {
+                        sb.Append("\\u").Append(((int)c).ToString("x4"));
                     }
                 }
+                sb.Append("\"");
+                return sb.ToString();
             }
         }
     }
