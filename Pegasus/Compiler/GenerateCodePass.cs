@@ -128,14 +128,14 @@ namespace Pegasus.Compiler
                 base.WalkGrammar(grammar);
 
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResult<string> ParseLiteral(string literal, ref Cursor cursor)");
+                this.code.WriteLine("private ParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("if (cursor.Location + literal.Length <= cursor.Subject.Length)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("var substr = cursor.Subject.Substring(cursor.Location, literal.Length);");
-                this.code.WriteLine("if (substr == literal)");
+                this.code.WriteLine("if (ignoreCase ? substr.Equals(literal, StringComparison.OrdinalIgnoreCase) : substr == literal)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("var result = new ParseResult<string>(substr.Length, substr);");
@@ -215,7 +215,7 @@ namespace Pegasus.Compiler
 
             protected override void WalkLiteralExpression(LiteralExpression literalExpression)
             {
-                this.code.WriteLine(this.currentResultName + " = this.ParseLiteral(" + ToLiteral(literalExpression.Value) + ", ref cursor);");
+                this.code.WriteLine(this.currentResultName + " = this.ParseLiteral(ref cursor, " + ToLiteral(literalExpression.Value) + (literalExpression.IgnoreCase ? ", ignoreCase: true" : "") + ");");
             }
 
             protected override void WalkWildcardExpression(WildcardExpression wildcardExpression)
