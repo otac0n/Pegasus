@@ -309,6 +309,10 @@ namespace Pegasus.Compiler
                     this.code.WriteLine("{");
                     this.code.Indent++;
                     this.WalkExpression(expression);
+                }
+
+                for (int i = 0; i < choiceExpression.Choices.Count; i++)
+                {
                     this.code.Indent--;
                     this.code.WriteLine("}");
                 }
