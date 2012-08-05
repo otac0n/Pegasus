@@ -41,7 +41,7 @@ namespace Pegasus.Compiler
 
             private int Id
             {
-                get { return ++id; }
+                get { return id++; }
             }
 
             private string currentResultName = null;
@@ -211,6 +211,7 @@ namespace Pegasus.Compiler
 
                 this.code.Indent--;
                 this.code.WriteLine("}");
+                this.id = 0;
             }
 
             protected override void WalkLiteralExpression(LiteralExpression literalExpression)
