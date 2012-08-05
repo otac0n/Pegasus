@@ -8,6 +8,7 @@
 
 namespace Pegasus.Compiler
 {
+    using System.Linq;
     using System.CodeDom;
     using System.CodeDom.Compiler;
     using System.IO;
@@ -152,6 +153,36 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
+                this.code.WriteLine("private ParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, bool negated = false, bool ignoreCase = false)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("if (cursor.Location + 1 <= cursor.Subject.Length)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("var c = cursor.Subject[cursor.Location];");
+                this.code.WriteLine("bool match = false;");
+                this.code.WriteLine("for (int i = 0; !match && i < characterRanges.Length; i += 2)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("match = c >= characterRanges[i] && c <= characterRanges[i + 1];");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine("if (match ^ negated)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("var result = new ParseResult<string>(1, cursor.Subject.Substring(cursor.Location, 1));");
+                this.code.WriteLine("cursor = cursor.Advance(result);");
+                this.code.WriteLine("return result;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine("this.ReportError(cursor, \"[\" + (negated ? \"^\" : \"\")  + characterRanges + \"]\");");
+                this.code.WriteLine("return null;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+
+                this.code.WriteLineNoTabs("");
                 this.code.WriteLine("private ParseResult<string> ParseAny(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -228,6 +259,11 @@ namespace Pegasus.Compiler
             protected override void WalkNameExpression(NameExpression nameExpression)
             {
                 this.code.WriteLine(this.currentResultName + " = this." + EscapeName(nameExpression.Name) + "(ref cursor);");
+            }
+
+            protected override void WalkClassExpression(ClassExpression classExpression)
+            {
+                this.code.WriteLine(this.currentResultName + " = this.ParseClass(ref cursor, " + ToLiteral(string.Join(string.Empty, classExpression.Ranges.SelectMany(r => new[] { r.Min, r.Max }))) + (classExpression.Negated ? ", negated: true" : "") + (classExpression.IgnoreCase ? ", ignoreCase: true" : "") + ");");
             }
 
             protected override void WalkSequenceExpression(SequenceExpression sequenceExpression)
