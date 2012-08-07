@@ -8,7 +8,9 @@
 
 namespace Pegasus
 {
+    using System;
     using System.IO;
+    using System.Linq;
     using Pegasus.Compiler;
 
     internal class Program
@@ -20,7 +22,15 @@ namespace Pegasus
             var grammar = parser.Parse(input);
             var compiler = new PegCompiler();
             var result = compiler.Compile(grammar.Value);
-            File.WriteAllText(Path.GetFileNameWithoutExtension(args[0]) + ".cs", result.Code);
+            foreach (var error in result.Errors)
+            {
+                Console.Error.WriteLine(error.ToString());
+            }
+
+            if (!result.Errors.Any(e => !e.IsWarning))
+            {
+                File.WriteAllText(Path.GetFileNameWithoutExtension(args[0]) + ".cs", result.Code);
+            }
         }
     }
 }
