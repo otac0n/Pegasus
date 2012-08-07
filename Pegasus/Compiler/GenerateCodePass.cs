@@ -383,6 +383,35 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
             }
 
+            protected override void WalkAndExpression(AndExpression andExpression)
+            {
+                WalkAssertionExpression(andExpression.Expression, mustMatch: true);
+            }
+
+            protected override void WalkNotExpression(NotExpression notExpression)
+            {
+                WalkAssertionExpression(notExpression.Expression, mustMatch: false);
+            }
+
+            private void WalkAssertionExpression(Expression expression, bool mustMatch)
+            {
+                var startId = this.Id;
+                this.code.WriteLine("var startCursor" + startId + " = cursor;");
+
+                var oldResultName = this.currentResultName;
+                this.currentResultName = "r" + this.Id;
+                this.code.WriteLine("ParseResult<string> " + this.currentResultName + " = null;");
+                this.WalkExpression(expression);
+
+                this.code.WriteLine("cursor = startCursor" + startId + ";");
+
+                this.code.WriteLine("if (" + this.currentResultName + (mustMatch ? "==" : "!=") + "null)");
+                this.code.WriteLine("{");
+                this.currentResultName = oldResultName;
+                this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(0, string.Empty);");
+                this.code.WriteLine("}");
+            }
+
             private static Dictionary<char, string> simpleEscapeChars = new Dictionary<char, string>()
             {
                 { '\'', "\\'" }, { '\"', "\\\"" }, { '\\', "\\\\" }, { '\0', "\\0" },
