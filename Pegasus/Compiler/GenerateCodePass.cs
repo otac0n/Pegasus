@@ -317,6 +317,53 @@ namespace Pegasus.Compiler
                 }
             }
 
+            protected override void WalkRepetitionExpression(RepetitionExpression repetitionExpression)
+            {
+                var startId = this.Id;
+                this.code.WriteLine("var startCursor" + startId + " = cursor;");
+
+                var listName = "l" + this.Id;
+                var oldResultName = this.currentResultName;
+                this.currentResultName = "r" + this.Id;
+
+                this.code.WriteLine("var " + listName + " = new List<string>();");
+                this.code.WriteLine("while (" + (repetitionExpression.Max.HasValue ? listName + ".Count < " + repetitionExpression.Max : "true") + ")");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("ParseResult<string> " + this.currentResultName + " = null;");
+                this.WalkExpression(repetitionExpression.Expression);
+                this.code.WriteLine("if (" + this.currentResultName + " != null)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine(listName + ".Add(" + this.currentResultName + ".Value);");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine("else");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("break;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+
+                this.currentResultName = oldResultName;
+
+                this.code.WriteLine("if (" + listName + ".Count >= " + repetitionExpression.Min + ")");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("var len = cursor.Location - startCursor" + startId + ".Location;");
+                this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(len, cursor.Subject.Substring(startCursor" + startId + ".Location, len));");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine("else");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("cursor = startCursor" + startId + ";");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+            }
+
             private static Dictionary<char, string> simpleEscapeChars = new Dictionary<char, string>()
             {
                 { '\'', "\\'" }, { '\"', "\\\"" }, { '\\', "\\\\" }, { '\0', "\\0" },
