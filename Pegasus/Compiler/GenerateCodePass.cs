@@ -8,14 +8,13 @@
 
 namespace Pegasus.Compiler
 {
-    using System.Linq;
-    using System.CodeDom;
     using System.CodeDom.Compiler;
-    using System.IO;
-    using System.Reflection;
-    using Pegasus.Expressions;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
     using System.Text;
+    using Pegasus.Expressions;
 
     internal class GenerateCodePass : CompilePass
     {
@@ -318,7 +317,7 @@ namespace Pegasus.Compiler
                 }
             }
 
-            private static Dictionary<char, string> simpleEscapeChars = new Dictionary<char,string>()
+            private static Dictionary<char, string> simpleEscapeChars = new Dictionary<char, string>()
             {
                 { '\'', "\\'" }, { '\"', "\\\"" }, { '\\', "\\\\" }, { '\0', "\\0" },
                 { '\a', "\\a" }, { '\b', "\\b" }, { '\f', "\\f" }, { '\n', "\\n" },
@@ -332,7 +331,7 @@ namespace Pegasus.Compiler
                 for (int i = 0; i < input.Length; i++)
                 {
                     var c = input[i];
-                    
+
                     string literal;
                     if (simpleEscapeChars.TryGetValue(c, out literal))
                     {
