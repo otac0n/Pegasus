@@ -412,6 +412,13 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
             }
 
+            protected override void WalkPrefixedExpression(PrefixedExpression prefixedExpression)
+            {
+                this.WalkExpression(prefixedExpression.Expression);
+
+                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix) + " = " + this.currentResultName + ";");
+            }
+
             private static Dictionary<char, string> simpleEscapeChars = new Dictionary<char, string>()
             {
                 { '\'', "\\'" }, { '\"', "\\\"" }, { '\\', "\\\\" }, { '\0', "\\0" },
