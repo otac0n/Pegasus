@@ -219,6 +219,14 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
+                this.code.WriteLine("private ParseResult<T> ReturnHelper<T>(Func<T> wrappedCode)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("return null;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+
+                this.code.WriteLineNoTabs("");
                 this.code.WriteLine("private void ReportError(Cursor cursor, string expected)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -282,6 +290,16 @@ namespace Pegasus.Compiler
             protected override void WalkClassExpression(ClassExpression classExpression)
             {
                 this.code.WriteLine(this.currentResultName + " = this.ParseClass(ref cursor, " + ToLiteral(string.Join(string.Empty, classExpression.Ranges.SelectMany(r => new[] { r.Min, r.Max }))) + (classExpression.Negated ? ", negated: true" : "") + (classExpression.IgnoreCase ? ", ignoreCase: true" : "") + ");");
+            }
+
+            protected override void WalkCodeExpression(CodeExpression codeExpression)
+            {
+                this.code.WriteLine(this.currentResultName + " = this.ReturnHelpler(() =>");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine(codeExpression.Code);
+                this.code.Indent--;
+                this.code.WriteLine("});");
             }
 
             protected override void WalkSequenceExpression(SequenceExpression sequenceExpression)
