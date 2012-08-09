@@ -31,6 +31,7 @@ namespace Pegasus.Compiler
             AndExpression andExpression;
             ChoiceExpression choiceExpression;
             ClassExpression classExpression;
+            CodeExpression codeExpression;
             LiteralExpression literalExpression;
             NameExpression nameExpression;
             NotExpression notExpression;
@@ -50,6 +51,10 @@ namespace Pegasus.Compiler
             else if ((classExpression = expression as ClassExpression) != null)
             {
                 this.WalkClassExpression(classExpression);
+            }
+            else if ((codeExpression = expression as CodeExpression) != null)
+            {
+                this.WalkCodeExpression(codeExpression);
             }
             else if ((literalExpression = expression as LiteralExpression) != null)
             {
@@ -99,6 +104,10 @@ namespace Pegasus.Compiler
         }
 
         protected virtual void WalkClassExpression(ClassExpression classExpression)
+        {
+        }
+
+        protected virtual void WalkCodeExpression(CodeExpression codeExpression)
         {
         }
 

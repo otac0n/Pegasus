@@ -100,6 +100,10 @@ namespace Pegasus.Compiler
                 {
                     return false;
                 }
+                else if (expression is CodeExpression)
+                {
+                    return true;
+                }
                 else if ((literalExpression = expression as LiteralExpression) != null)
                 {
                     return literalExpression.Value == string.Empty;

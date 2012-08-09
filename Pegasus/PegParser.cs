@@ -186,6 +186,14 @@ namespace Pegasus
                 }
             }
 
+            var action1 = this.ParseAction(cursor);
+            if (action1 != null)
+            {
+                cursor = cursor.Advance(action1);
+
+                elements.Add(action1.Value);
+            }
+
             var len = cursor - startCursor;
             if (elements.Count == 1)
             {
@@ -413,6 +421,109 @@ namespace Pegasus
             {
                 return null;
             }
+        }
+
+        private ParseResult<Expression> ParseAction(Cursor cursor)
+        {
+            var startCursor = cursor;
+
+            var braced1 = this.ParseBraced(cursor);
+            if (braced1 != null)
+            {
+                cursor = cursor.Advance(braced1);
+
+                var ws1 = this.ParseWs(cursor);
+                if (ws1 != null)
+                {
+                    cursor = cursor.Advance(ws1);
+                }
+
+                var len = cursor - startCursor;
+                return new ParseResult<Expression>(len, new CodeExpression(braced1.Value));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private ParseResult<string> ParseBraced(Cursor cursor)
+        {
+            var startCursor = cursor;
+
+            var l1 = this.ParseLiteral("{", cursor);
+            if (l1 != null)
+            {
+                cursor = cursor.Advance(l1);
+
+                while (true)
+                {
+                    var part =
+                        this.ParseNonBracedCharacters(cursor) ??
+                        this.ParseBraced(cursor);
+                    if (part != null)
+                    {
+                        cursor = cursor.Advance(part);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                var l2 = this.ParseLiteral("}", cursor);
+                if (l2 != null)
+                {
+                    cursor = cursor.Advance(l2);
+
+                    var len = cursor - startCursor;
+                    return new ParseResult<string>(len, cursor.Subject.Substring(startCursor.Location + 1, len - 2));
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private ParseResult<string> ParseNonBracedCharacters(Cursor cursor)
+        {
+            var startCursor = cursor;
+
+            var chars = new List<string>();
+            while (true)
+            {
+                var nonBraceCharacter1 = this.ParseNonBraceCharacter(cursor);
+                if (nonBraceCharacter1 != null)
+                {
+                    cursor = cursor.Advance(nonBraceCharacter1);
+
+                    chars.Add(nonBraceCharacter1.Value);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (chars.Count > 1)
+            {
+                var len = cursor - startCursor;
+                return new ParseResult<string>(len, cursor.Subject.Substring(startCursor.Location + 1, len - 2));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private ParseResult<string> ParseNonBraceCharacter(Cursor cursor)
+        {
+            return this.ParseRegex("[^{}]", cursor);
         }
 
         private ParseResult<Expression> ParseClass(Cursor cursor)
