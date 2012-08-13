@@ -423,10 +423,12 @@ namespace Pegasus.Compiler
 
                 this.code.WriteLine("cursor = startCursor" + startId + ";");
 
-                this.code.WriteLine("if (" + this.currentResultName + (mustMatch ? "==" : "!=") + "null)");
+                this.code.WriteLine("if (" + this.currentResultName + " " + (mustMatch ? "==" : "!=") + " null)");
                 this.code.WriteLine("{");
+                this.code.Indent++;
                 this.currentResultName = oldResultName;
                 this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(0, string.Empty);");
+                this.code.Indent--;
                 this.code.WriteLine("}");
             }
 
