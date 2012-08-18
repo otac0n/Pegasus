@@ -82,14 +82,10 @@ namespace Pegasus
                         if (semicolon1 != null)
                         {
                             cursor = cursor.Advance(semicolon1);
+                        }
 
-                            var len = cursor - startCursor;
-                            return new ParseResult<Rule>(len, new Rule(identifier1.Value, expression1.Value));
-                        }
-                        else
-                        {
-                            return null;
-                        }
+                        var len = cursor - startCursor;
+                        return new ParseResult<Rule>(len, new Rule(identifier1.Value, expression1.Value));
                     }
                     else
                     {
@@ -363,6 +359,21 @@ namespace Pegasus
             if (identifier1 != null)
             {
                 cursor = cursor.Advance(identifier1);
+
+                var startCursor1 = cursor;
+                var string1 = this.ParseString(cursor);
+                if (string1 != null)
+                {
+                    cursor = cursor.Advance(string1);
+                }
+
+                var equals1 = this.ParseEquals(cursor);
+                if (equals1 != null)
+                {
+                    return null;
+                }
+
+                cursor = startCursor1;
 
                 var len = cursor - startCursor;
                 return new ParseResult<Expression>(len, new NameExpression(identifier1.Value));
