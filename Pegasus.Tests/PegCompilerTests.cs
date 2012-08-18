@@ -20,7 +20,7 @@ namespace Pegasus.Tests
         {
             var grammar = new Grammar(new[]
             {
-                new Rule("start", new LiteralExpression("OK")),
+                new Rule("start", null, new LiteralExpression("OK")),
             });
             var compiler = new PegCompiler();
 
@@ -45,8 +45,8 @@ namespace Pegasus.Tests
         {
             var grammar = new Grammar(new[]
             {
-                new Rule("a", new LiteralExpression("a")),
-                new Rule("a", new LiteralExpression("b")),
+                new Rule("a", null, new LiteralExpression("a")),
+                new Rule("a", null, new LiteralExpression("b")),
             });
             var compiler = new PegCompiler();
 
@@ -61,7 +61,7 @@ namespace Pegasus.Tests
         {
             var grammar = new Grammar(new[]
             {
-                new Rule("a", new NameExpression("b")),
+                new Rule("a", null, new NameExpression("b")),
             });
             var compiler = new PegCompiler();
 

@@ -68,6 +68,12 @@ namespace Pegasus
             {
                 cursor = cursor.Advance(identifier1);
 
+                var string1 = this.ParseString(cursor);
+                if (string1 != null)
+                {
+                    cursor = cursor.Advance(string1);
+                }
+
                 var equals1 = this.ParseEquals(cursor);
                 if (equals1 != null)
                 {
@@ -85,7 +91,7 @@ namespace Pegasus
                         }
 
                         var len = cursor - startCursor;
-                        return new ParseResult<Rule>(len, new Rule(identifier1.Value, expression1.Value));
+                        return new ParseResult<Rule>(len, new Rule(identifier1.Value, string1 != null ? string1.Value : null, expression1.Value));
                     }
                     else
                     {
@@ -735,9 +741,33 @@ namespace Pegasus
 
         private ParseResult<string> ParseString(Cursor cursor)
         {
-            return
+            var startCursor = cursor;
+
+            var string1 =
                 this.ParseSingleQuotedString(cursor) ??
                 this.ParseDoubleQuotedString(cursor);
+
+            if (string1 != null)
+            {
+                cursor = cursor.Advance(string1);
+
+                var ws1 = this.ParseWs(cursor);
+                if (ws1 != null)
+                {
+                    cursor = cursor.Advance(ws1);
+
+                    var len = cursor - startCursor;
+                    return new ParseResult<string>(len, string1.Value);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private ParseResult<string> ParseSingleQuotedString(Cursor cursor)
