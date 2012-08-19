@@ -798,7 +798,10 @@ namespace Pegasus
         {
             var startCursor = cursor;
 
-            var string1 = this.ParseString(cursor);
+            var string1 =
+                this.ParseSingleQuotedString(cursor) ??
+                this.ParseDoubleQuotedString(cursor);
+
             if (string1 != null)
             {
                 cursor = cursor.Advance(string1);
