@@ -220,10 +220,11 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResult<T> ReturnHelper<T>(Func<T> wrappedCode)");
+                this.code.WriteLine("private ParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<T> wrappedCode)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("return null;");
+                this.code.WriteLine("var len = endCursor.Location - startCursor.Location;");
+                this.code.WriteLine("return new ParseResult<T>(len, wrappedCode());");
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
@@ -335,7 +336,7 @@ namespace Pegasus.Compiler
                 }
                 else
                 {
-                    this.code.WriteLine(this.currentResultName + " = this.ReturnHelper(() =>");
+                    this.code.WriteLine(this.currentResultName + " = this.ReturnHelper(startCursor" + startId + ", cursor, () =>");
                     this.code.WriteLine("{");
                     this.code.Indent++;
                     this.code.WriteLine(codeExpression.Code);
