@@ -1,34 +1,25 @@
-﻿grammar
+﻿{
+    using Pegasus.Expressions;
+}
+
+grammar
   = __ initializer:initializer? rules:rule+ {
-      return {
-        type:        "grammar",
-        initializer: initializer !== "" ? initializer : null,
-        rules:       rules,
-        startRule:   rules[0].name
-      };
+        return new Grammar(
+            rules: rules,
+            initializer: initializer != null ? null : initializer.Value);
     }
 
 initializer
   = code:action semicolon? {
-      return {
-        type: "initializer",
-        code: code
-      };
+        return ((CodeExpression)code.Value).Code;
     }
 
 rule
   = name:identifier displayName:string? equals expression:expression semicolon? {
-      return {
-        type:        "rule",
-        name:        name,
-        expression:  displayName !== ""
-          ? {
-              type:       "named",
-              name:       displayName,
-              expression: expression
-            }
-          : expression
-      };
+        return new Rule(
+            name: name.Value,
+            displayName: displayName != null ? displayName.Value : null,
+            expression: expression.Value);
     }
 
 expression
@@ -36,125 +27,77 @@ expression
 
 choice
   = head:sequence tail:(slash sequence)* {
-      if (tail.length > 0) {
-        var alternatives = [head].concat(map(
-            tail,
-            function(element) { return element[1]; }
-        ));
-        return {
-          type:         "choice",
-          alternatives: alternatives
-        };
-      } else {
-        return head;
-      }
+        if (tail.Count == 0)
+        {
+            return head;
+        }
+        else
+        {
+            return new SequenceExpression(new [] { head }.Concat(tail));
+        }
     }
 
 sequence
   = elements:labeled* code:action {
-      var expression = elements.length !== 1
-        ? {
-            type:     "sequence",
-            elements: elements
-          }
-        : elements[0];
-      return {
-        type:       "action",
-        expression: expression,
-        code:       code
-      };
+        return new SequenceExpression(elements.Concat(code));
     }
   / elements:labeled* {
-      return elements.length !== 1
-        ? {
-            type:     "sequence",
-            elements: elements
-          }
-        : elements[0];
+        if (elements.Count == 1)
+        {
+            return elements[0];
+        }
+        else
+        {
+            return new SequenceExpression(elements);
+        }
     }
 
 labeled
   = label:identifier colon expression:prefixed {
-      return {
-        type:       "labeled",
-        label:      label,
-        expression: expression
-      };
+        return new PrefixedExpression(label.Value, expression.Value);
     }
   / prefixed
 
 prefixed
-  = and code:action {
-      return {
-        type: "semantic_and",
-        code: code
-      };
-    }
-  / and expression:suffixed {
-      return {
-        type:       "simple_and",
-        expression: expression
-      };
-    }
-  / not code:action {
-      return {
-        type: "semantic_not",
-        code: code
-      };
+  = and expression:suffixed {
+        return new AndExpression(expression.Value);
     }
   / not expression:suffixed {
-      return {
-        type:       "simple_not",
-        expression: expression
-      };
+        return new NotExpression(expression.Value);
     }
   / suffixed
 
 suffixed
   = expression:primary question {
-      return {
-        type:       "optional",
-        expression: expression
-      };
+        return new RepetitionExpression(expression, min: 0, max: 1);
     }
   / expression:primary star {
-      return {
-        type:       "zero_or_more",
-        expression: expression
-      };
+        return new RepetitionExpression(expression, min: 0, max: null);
     }
   / expression:primary plus {
-      return {
-        type:       "one_or_more",
-        expression: expression
-      };
+        return new RepetitionExpression(expression, min: 1, max: null);
     }
   / primary
 
 primary
   = name:identifier !(string? equals) {
-      return {
-        type: "rule_ref",
-        name: name
-      };
+        return new NameExpression(name);
     }
   / literal
   / class
-  / dot { return { type: "any" }; }
-  / lparen expression:expression rparen { return expression; }
+  / dot { return new WildcardExpression(); }
+  / lparen expression:expression rparen { return expression.Value; }
 
 /* "Lexical" elements */
 
 action "action"
-  = braced:braced __ { return braced.substr(1, braced.length - 2); }
+  = braced:braced __ { return braced.Value.Substring(1, braced.Value.Length - 2); }
 
 braced
-  = "{" parts:(braced / nonBraceCharacters)* "}" {
-      return "{" + parts.join("") + "}";
-    }
+  = "{" parts:(braced / nonBraceCharacters)* "}"
 
 nonBraceCharacters
-  = chars:nonBraceCharacter+ { return chars.join(""); }
+  = chars:nonBraceCharacter+
 
 nonBraceCharacter
   = [^{}]
@@ -173,7 +116,7 @@ rparen    = ")" __ { return ")"; }
 dot       = "." __ { return "."; }
 
 /*
- * Modelled after ECMA-262, 5th ed., 7.6, but much simplified:
+ * Modeled after ECMA-262, 5th ed., 7.6, but much simplified:
  *
  * * no Unicode escape sequences
  *
@@ -189,27 +132,23 @@ dot       = "." __ { return "."; }
  */
 identifier "identifier"
   = head:(letter / "_" / "$") tail:(letter / digit / "_" / "$")* __ {
-      return head + tail.join("");
+        return head + string.Join("", tail);
     }
 
 /*
- * Modelled after ECMA-262, 5th ed., 7.8.4. (syntax & semantics, rules only
+ * Modeled after ECMA-262, 5th ed., 7.8.4. (syntax & semantics, rules only
  * vaguely).
  */
 literal "literal"
   = value:(doubleQuotedString / singleQuotedString) flags:"i"? __ {
-      return {
-        type:       "literal",
-        value:      value,
-        ignoreCase: flags === "i"
-      };
+        return new LiteralExpression(value, ignoreCase: flags != null && flags.Value == "i");
     }
 
 string "string"
-  = string:(doubleQuotedString / singleQuotedString) __ { return string; }
+  = string:(doubleQuotedString / singleQuotedString) __ { return @string; }
 
 doubleQuotedString
-  = '"' chars:doubleQuotedCharacter* '"' { return chars.join(""); }
+  = '"' chars:doubleQuotedCharacter* '"' { return string.join("", chars); }
 
 doubleQuotedCharacter
   = simpleDoubleQuotedCharacter
@@ -223,7 +162,7 @@ simpleDoubleQuotedCharacter
   = !('"' / "\\" / eolChar) char_:. { return char_; }
 
 singleQuotedString
-  = "'" chars:singleQuotedCharacter* "'" { return chars.join(""); }
+  = "'" chars:singleQuotedCharacter* "'" { return string.join("", chars); }
 
 singleQuotedCharacter
   = simpleSingleQuotedCharacter
@@ -238,45 +177,20 @@ simpleSingleQuotedCharacter
 
 class "character class"
   = "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __ {
-      var partsConverted = map(parts, function(part) { return part.data; });
-      var rawText = "["
-        + inverted
-        + map(parts, function(part) { return part.rawText; }).join("")
-        + "]"
-        + flags;
-
-      return {
-        type:       "class",
-        parts:      partsConverted,
-        // FIXME: Get the raw text from the input directly.
-        rawText:    rawText,
-        inverted:   inverted === "^",
-        ignoreCase: flags === "i"
-      };
+        return new ClassExpression(
+            parts,
+            negated: inverted != null && inverted.Value == "^",
+            ignoreCase: flags != null && flags.Value == "i");
     }
 
 classCharacterRange
   = begin:classCharacter "-" end:classCharacter {
-      if (begin.data.charCodeAt(0) > end.data.charCodeAt(0)) {
-        throw new this.SyntaxError(
-          "Invalid character range: " + begin.rawText + "-" + end.rawText + "."
-        );
-      }
-
-      return {
-        data:    [begin.data, end.data],
-        // FIXME: Get the raw text from the input directly.
-        rawText: begin.rawText + "-" + end.rawText
-      };
+        return new CharacterRange(begin[0], end[0]);
     }
 
 classCharacter
   = char_:bracketDelimitedCharacter {
-      return {
-        data:    char_,
-        // FIXME: Get the raw text from the input directly.
-        rawText: quoteForRegexpClass(char_)
-      };
+        return new CharacterRange(char_[0], char_[0]);
     }
 
 bracketDelimitedCharacter
@@ -292,13 +206,13 @@ simpleBracketDelimitedCharacter
 
 simpleEscapeSequence
   = "\\" !(digit / "x" / "u" / eolChar) char_:. {
-      return char_
-        .replace("b", "\b")
-        .replace("f", "\f")
-        .replace("n", "\n")
-        .replace("r", "\r")
-        .replace("t", "\t")
-        .replace("v", "\x0B"); // IE does not recognize "\v".
+        return char_
+            .Replace("b", "\b")
+            .Replace("f", "\f")
+            .Replace("n", "\n")
+            .Replace("r", "\r")
+            .Replace("t", "\t")
+            .Replace("v", "\v");
     }
 
 zeroEscapeSequence
@@ -306,12 +220,12 @@ zeroEscapeSequence
 
 hexEscapeSequence
   = "\\x" h1:hexDigit h2:hexDigit {
-      return String.fromCharCode(parseInt(h1 + h2, 16));
+        return ((char)Convert.ToInt32(h1.Value + h2.Value)).ToString();
     }
 
 unicodeEscapeSequence
   = "\\u" h1:hexDigit h2:hexDigit h3:hexDigit h4:hexDigit {
-      return String.fromCharCode(parseInt(h1 + h2 + h3 + h4, 16));
+        return ((char)Convert.ToInt32(h1.Value + h2.Value + h3.Value + h4.Value)).ToString();
     }
 
 eolEscapeSequence
@@ -335,7 +249,7 @@ upperCaseLetter
 
 __ = (whitespace / eol / comment)*
 
-/* Modelled after ECMA-262, 5th ed., 7.4. */
+/* Modeled after ECMA-262, 5th ed., 7.4. */
 comment "comment"
   = singleLineComment
   / multiLineComment
@@ -346,7 +260,7 @@ singleLineComment
 multiLineComment
   = "/*" (!"*/" .)* "*/"
 
-/* Modelled after ECMA-262, 5th ed., 7.3. */
+/* Modeled after ECMA-262, 5th ed., 7.3. */
 eol "end of line"
   = "\n"
   / "\r\n"
@@ -357,6 +271,6 @@ eol "end of line"
 eolChar
   = [\n\r\u2028\u2029]
 
-/* Modelled after ECMA-262, 5th ed., 7.2. */
+/* Modeled after ECMA-262, 5th ed., 7.2. */
 whitespace "whitespace"
   = [ \t\v\f\u00A0\uFEFF\u1680\u180E\u2000-\u200A\u202F\u205F\u3000]
