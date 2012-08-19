@@ -8,6 +8,7 @@
 
 namespace Pegasus.Compiler
 {
+    using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.IO;
@@ -294,12 +295,7 @@ namespace Pegasus.Compiler
 
             protected override void WalkCodeExpression(CodeExpression codeExpression)
             {
-                this.code.WriteLine(this.currentResultName + " = this.ReturnHelpler(() =>");
-                this.code.WriteLine("{");
-                this.code.Indent++;
-                this.code.WriteLine(codeExpression.Code);
-                this.code.Indent--;
-                this.code.WriteLine("});");
+                throw new InvalidOperationException("Code expressions are only valid at the end of a sequence expression.");
             }
 
             protected override void WalkSequenceExpression(SequenceExpression sequenceExpression)
@@ -309,7 +305,18 @@ namespace Pegasus.Compiler
 
                 var oldResultName = this.currentResultName;
 
-                foreach (var expression in sequenceExpression.Sequence)
+                var sequence = sequenceExpression.Sequence;
+                CodeExpression codeExpression = null;
+                if (sequence.Count > 0)
+                {
+                    codeExpression = sequence[sequence.Count - 1] as CodeExpression;
+                    if (codeExpression != null)
+                    {
+                        sequence = sequence.Take(sequence.Count - 1).ToList();
+                    }
+                }
+
+                foreach (var expression in sequence)
                 {
                     this.currentResultName = "r" + this.Id;
                     this.code.WriteLine("ParseResult<string> " + this.currentResultName + " = null;");
@@ -321,10 +328,22 @@ namespace Pegasus.Compiler
 
                 this.currentResultName = oldResultName;
 
-                this.code.WriteLine("var len = cursor.Location - startCursor" + startId + ".Location;");
-                this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(len, cursor.Subject.Substring(startCursor" + startId + ".Location, len));");
+                if (codeExpression == null)
+                {
+                    this.code.WriteLine("var len = cursor.Location - startCursor" + startId + ".Location;");
+                    this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(len, cursor.Subject.Substring(startCursor" + startId + ".Location, len));");
+                }
+                else
+                {
+                    this.code.WriteLine(this.currentResultName + " = this.ReturnHelper(() =>");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                    this.code.WriteLine(codeExpression.Code);
+                    this.code.Indent--;
+                    this.code.WriteLine("});");
+                }
 
-                for (int i = 0; i < sequenceExpression.Sequence.Count; i++)
+                for (int i = 0; i < sequence.Count; i++)
                 {
                     this.code.Indent--;
                     this.code.WriteLine("}");
