@@ -3,7 +3,7 @@
 }
 
 grammar
-  = __ initializer:initializer? rules:rule+ {
+  = <Grammar> __ initializer:initializer? rules:rule+ {
         return new Grammar(
             rules: rules,
             initializer: initializer != null ? null : initializer.Value);
@@ -15,7 +15,7 @@ initializer
     }
 
 rule
-  = name:identifier displayName:string? equals expression:expression semicolon? {
+  = <Rule> name:identifier displayName:string? equals expression:expression semicolon? {
         return new Rule(
             name: name.Value,
             displayName: displayName != null ? displayName.Value : null,
@@ -23,7 +23,7 @@ rule
     }
 
 expression
-  = type:type? choice:choice {
+  = <Expression> type:type? choice:choice {
         return type != null
             ? new TypedExpression(choice.Value, type.Value)
             : choice.Value;
@@ -35,7 +35,7 @@ type
     }
 
 choice
-  = head:sequence tail:(slash sequence)* {
+  = <Expression> head:sequence tail:(slash sequence)* {
         if (tail.Count == 0)
         {
             return head;
@@ -47,7 +47,7 @@ choice
     }
 
 sequence
-  = elements:labeled* code:action {
+  = <Expression> elements:labeled* code:action {
         return new SequenceExpression(elements.Concat(code));
     }
   / elements:labeled* {
@@ -62,13 +62,13 @@ sequence
     }
 
 labeled
-  = label:identifier colon expression:prefixed {
+  = <Expression> label:identifier colon expression:prefixed {
         return new PrefixedExpression(label.Value, expression.Value);
     }
   / prefixed
 
 prefixed
-  = and expression:suffixed {
+  = <Expression> and expression:suffixed {
         return new AndExpression(expression.Value);
     }
   / not expression:suffixed {
@@ -77,7 +77,7 @@ prefixed
   / suffixed
 
 suffixed
-  = expression:primary question {
+  = <Expression> expression:primary question {
         return new RepetitionExpression(expression, min: 0, max: 1);
     }
   / expression:primary star {
@@ -89,7 +89,7 @@ suffixed
   / primary
 
 primary
-  = name:identifier !(string? equals) {
+  = <Expression> name:identifier !(string? equals) {
         return new NameExpression(name);
     }
   / literal
@@ -193,7 +193,7 @@ simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) char_:. { return char_; }
 
 class "character class"
-  = "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __ {
+  = <ClassExpression> "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __ {
         return new ClassExpression(
             parts,
             negated: inverted != null && inverted.Value == "^",
@@ -201,12 +201,12 @@ class "character class"
     }
 
 classCharacterRange
-  = begin:classCharacter "-" end:classCharacter {
+  = <CharacterRange> begin:classCharacter "-" end:classCharacter {
         return new CharacterRange(begin[0], end[0]);
     }
 
 classCharacter
-  = char_:bracketDelimitedCharacter {
+  = <CharacterRange> char_:bracketDelimitedCharacter {
         return new CharacterRange(char_[0], char_[0]);
     }
 
