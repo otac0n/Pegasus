@@ -23,7 +23,16 @@ rule
     }
 
 expression
-  = choice
+  = type:type? choice:choice {
+        return type != null
+            ? new TypedExpression(choice.Value, type.Value)
+            : choice.Value;
+    }
+
+type
+  = lt dotted:dotted gt {
+        return dotted.Value;
+    }
 
 choice
   = head:sequence tail:(slash sequence)* {
@@ -114,6 +123,8 @@ plus      = "+" __ { return "+"; }
 lparen    = "(" __ { return "("; }
 rparen    = ")" __ { return ")"; }
 dot       = "." __ { return "."; }
+lt        = "<" __ { return "."; }
+gt        = ">" __ { return "."; }
 
 /*
  * Modeled after ECMA-262, 5th ed., 7.6, but much simplified:
@@ -134,6 +145,12 @@ identifier "identifier"
   = head:(letter / "_" / "$") tail:(letter / digit / "_" / "$")* __ {
         return head + string.Join("", tail);
     }
+
+dotted "dotted identifier"
+  = segment (dot segment)*
+
+segment
+  = identifier (lt dotted gt)?
 
 /*
  * Modeled after ECMA-262, 5th ed., 7.8.4. (syntax & semantics, rules only

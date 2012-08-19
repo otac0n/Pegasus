@@ -141,7 +141,66 @@ namespace Pegasus
 
         private ParseResult<Expression> ParseExpression(Cursor cursor)
         {
-            return this.ParseChoice(cursor);
+            var startCursor = cursor;
+
+            var type1 = this.ParseType(cursor);
+            if (type1 != null)
+            {
+                cursor = cursor.Advance(type1);
+            }
+
+            var choice1 = this.ParseChoice(cursor);
+            if (choice1 != null)
+            {
+                cursor = cursor.Advance(choice1);
+
+                var len = cursor - startCursor;
+                return new ParseResult<Expression>(len, type1 != null
+                    ? new TypedExpression(type1.Value, choice1.Value)
+                    : choice1.Value);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private ParseResult<string> ParseType(Cursor cursor)
+        {
+            var startCursor = cursor;
+
+            var lt1 = this.ParseLt(cursor);
+            if (lt1 != null)
+            {
+                cursor = cursor.Advance(lt1);
+
+                var dotted1 = this.ParseDotted(cursor);
+                if (dotted1 != null)
+                {
+                    cursor = cursor.Advance(dotted1);
+
+                    var gt1 = this.ParseGt(cursor);
+                    if (gt1 != null)
+                    {
+                        cursor = cursor.Advance(gt1);
+
+                        var len = cursor - startCursor;
+                        return new ParseResult<string>(len, dotted1.Value);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private ParseResult<Expression> ParseChoice(Cursor cursor)
@@ -1450,6 +1509,54 @@ namespace Pegasus
             }
         }
 
+        private ParseResult<string> ParseLt(Cursor cursor)
+        {
+            var startCursor = cursor;
+
+            var l1 = this.ParseLiteral("<", cursor);
+            if (l1 != null)
+            {
+                cursor = cursor.Advance(l1);
+
+                var ws1 = this.ParseWs(cursor);
+                if (ws1 != null)
+                {
+                    cursor = cursor.Advance(ws1);
+                }
+
+                var len = cursor - startCursor;
+                return new ParseResult<string>(len, l1.Value);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private ParseResult<string> ParseGt(Cursor cursor)
+        {
+            var startCursor = cursor;
+
+            var l1 = this.ParseLiteral(">", cursor);
+            if (l1 != null)
+            {
+                cursor = cursor.Advance(l1);
+
+                var ws1 = this.ParseWs(cursor);
+                if (ws1 != null)
+                {
+                    cursor = cursor.Advance(ws1);
+                }
+
+                var len = cursor - startCursor;
+                return new ParseResult<string>(len, l1.Value);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         private ParseResult<string> ParseIdentifier(Cursor cursor)
         {
             var startCursor = cursor;
@@ -1493,6 +1600,96 @@ namespace Pegasus
 
             var len = cursor - startCursor;
             return new ParseResult<string>(len, string.Join(string.Empty, name));
+        }
+
+        private ParseResult<string> ParseDotted(Cursor cursor)
+        {
+            var startCursor = cursor;
+
+            var segment1 = this.ParseSegment(cursor);
+            if (segment1 != null)
+            {
+                cursor = cursor.Advance(segment1);
+
+                while (true)
+                {
+                    var dot1 = this.ParseDot(cursor);
+                    if (dot1 != null)
+                    {
+                        cursor = cursor.Advance(dot1);
+
+                        var segment2 = this.ParseSegment(cursor);
+                        if (segment2 != null)
+                        {
+                            cursor = cursor.Advance(segment2);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                var len = cursor - startCursor;
+                return new ParseResult<string>(len, cursor.Subject.Substring(startCursor.Location, len));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private ParseResult<string> ParseSegment(Cursor cursor)
+        {
+            var startCursor = cursor;
+
+            var identifier1 = this.ParseIdentifier(cursor);
+            if (identifier1 != null)
+            {
+                cursor = cursor.Advance(identifier1);
+
+                var startCursor1 = cursor;
+                var lt1 = this.ParseLt(cursor);
+                if (lt1 != null)
+                {
+                    cursor = cursor.Advance(lt1);
+
+                    var dotted1 = this.ParseDotted(cursor);
+                    if (dotted1 != null)
+                    {
+                        cursor = cursor.Advance(dotted1);
+
+                        var gt1 = this.ParseGt(cursor);
+                        if (gt1 != null)
+                        {
+                            cursor = cursor.Advance(gt1);
+                        }
+                        else
+                        {
+                            cursor = startCursor1;
+                        }
+                    }
+                    else
+                    {
+                        cursor = startCursor1;
+                    }
+                }
+                else
+                {
+                    cursor = startCursor1;
+                }
+
+                var len = cursor - startCursor;
+                return new ParseResult<string>(len, cursor.Subject.Substring(startCursor.Location, len));
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private ParseResult<string> ParseDigit(Cursor cursor)

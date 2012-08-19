@@ -38,6 +38,7 @@ namespace Pegasus.Compiler
             PrefixedExpression prefixedExpression;
             RepetitionExpression repetitionExpression;
             SequenceExpression sequenceExpression;
+            TypedExpression typedExpression;
             WildcardExpression wildcardExpression;
 
             if ((andExpression = expression as AndExpression) != null)
@@ -79,6 +80,10 @@ namespace Pegasus.Compiler
             else if ((sequenceExpression = expression as SequenceExpression) != null)
             {
                 this.WalkSequenceExpression(sequenceExpression);
+            }
+            else if ((typedExpression = expression as TypedExpression) != null)
+            {
+                this.WalkTypedExpression(typedExpression);
             }
             else if ((wildcardExpression = expression as WildcardExpression) != null)
             {
@@ -140,6 +145,11 @@ namespace Pegasus.Compiler
             {
                 this.WalkExpression(expression);
             }
+        }
+
+        protected virtual void WalkTypedExpression(TypedExpression typedExpression)
+        {
+            this.WalkExpression(typedExpression.Expression);
         }
 
         protected virtual void WalkWildcardExpression(WildcardExpression wildcardExpression)

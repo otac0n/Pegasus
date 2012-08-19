@@ -72,6 +72,7 @@
     <Compile Include="Expressions\RepetitionExpression.cs" />
     <Compile Include="Expressions\Rule.cs" />
     <Compile Include="Expressions\SequenceExpression.cs" />
+    <Compile Include="Expressions\TypedExpression.cs" />
     <Compile Include="Expressions\WildcardExpression.cs" />
     <Compile Include="ParseResult{T}.cs" />
     <Compile Include="PegParser.cs" />
