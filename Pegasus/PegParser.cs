@@ -35,6 +35,12 @@ namespace Pegasus
                 return null;
             }
 
+            var initializer1 = this.ParseInitializer(cursor);
+            if (initializer1 != null)
+            {
+                cursor = cursor.Advance(initializer1);
+            }
+
             var rules = new List<Rule>();
             while (true)
             {
@@ -56,7 +62,31 @@ namespace Pegasus
             }
 
             var len = cursor - startCursor;
-            return new ParseResult<Grammar>(len, new Grammar(rules));
+            return new ParseResult<Grammar>(len, new Grammar(rules, initializer1 != null ? initializer1.Value : null));
+        }
+
+        private ParseResult<string> ParseInitializer(Cursor cursor)
+        {
+            var startCursor = cursor;
+
+            var action1 = this.ParseAction(cursor);
+            if (action1 != null)
+            {
+                cursor = cursor.Advance(action1);
+
+                var semicolon1 = this.ParseSemicolon(cursor);
+                if (semicolon1 != null)
+                {
+                    cursor = cursor.Advance(semicolon1);
+                }
+
+                var len = cursor - startCursor;
+                return new ParseResult<string>(len, ((CodeExpression)action1.Value).Code);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private ParseResult<Rule> ParseRule(Cursor cursor)

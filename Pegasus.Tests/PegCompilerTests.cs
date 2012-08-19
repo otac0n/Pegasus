@@ -21,7 +21,7 @@ namespace Pegasus.Tests
             var grammar = new Grammar(new[]
             {
                 new Rule("start", null, new LiteralExpression("OK")),
-            });
+            }, null);
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -31,7 +31,7 @@ namespace Pegasus.Tests
         [Test]
         public void Compile_WithNoRules_YieldsError()
         {
-            var grammar = new Grammar(Enumerable.Empty<Rule>());
+            var grammar = new Grammar(Enumerable.Empty<Rule>(), null);
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -47,7 +47,7 @@ namespace Pegasus.Tests
             {
                 new Rule("a", null, new LiteralExpression("a")),
                 new Rule("a", null, new LiteralExpression("b")),
-            });
+            }, null);
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -62,7 +62,7 @@ namespace Pegasus.Tests
             var grammar = new Grammar(new[]
             {
                 new Rule("a", null, new NameExpression("b")),
-            });
+            }, null);
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);

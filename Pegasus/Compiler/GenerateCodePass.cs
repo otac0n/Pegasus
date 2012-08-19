@@ -102,6 +102,12 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("using System;");
                 this.code.WriteLine("using System.Collections.Generic;");
                 this.code.WriteLine("using Pegasus;");
+
+                if (grammar.Initializer != null)
+                {
+                    this.code.Write(grammar.Initializer);
+                }
+
                 this.code.WriteLineNoTabs("");
 
                 this.code.WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"" + assemblyName.Name + "\", \"" + assemblyName.Version + "\")]");

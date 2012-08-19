@@ -17,13 +17,14 @@ namespace Pegasus.Expressions
     /// </summary>
     public class Grammar
     {
-        private IList<Rule> rules;
+        private readonly string initializer;
+        private readonly IList<Rule> rules;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Grammar"/> class.
         /// </summary>
         /// <param name="rules">The rules for this <see cref="Grammar"/>.</param>
-        public Grammar(IEnumerable<Rule> rules)
+        public Grammar(IEnumerable<Rule> rules, string initializer)
         {
             if (rules == null)
             {
@@ -31,6 +32,15 @@ namespace Pegasus.Expressions
             }
 
             this.rules = rules.ToList().AsReadOnly();
+            this.initializer = initializer;
+        }
+
+        /// <summary>
+        /// Gets the initializer for this <see cref="Grammar"/>.
+        /// </summary>
+        public string Initializer
+        {
+            get { return this.initializer; }
         }
 
         /// <summary>
