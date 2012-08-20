@@ -8,6 +8,7 @@
 
 namespace Pegasus.Tests
 {
+    using System.Collections.Generic;
     using System.Linq;
     using NUnit.Framework;
     using Pegasus.Compiler;
@@ -91,6 +92,39 @@ namespace Pegasus.Tests
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0004"));
+        }
+
+        [Test]
+        [TestCase("namespace")]
+        [TestCase("classname")]
+        public void Compile_WithDuplicateSetting_YieldsError(string settingName)
+        {
+            var grammar = new Grammar(new Rule[0], new[]
+            {
+                new KeyValuePair<string, string>(settingName, "OK"),
+                new KeyValuePair<string, string>(settingName, "OK"),
+            }, null);
+            var compiler = new PegCompiler();
+
+            var result = compiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0005"));
+        }
+
+        [Test]
+        public void Compile_WithUnrecognizedSetting_YieldsWarning()
+        {
+            var grammar = new Grammar(new Rule[0], new[]
+            {
+                new KeyValuePair<string, string>("barnacle", "OK"),
+            }, null);
+            var compiler = new PegCompiler();
+
+            var result = compiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0006"));
         }
     }
 }
