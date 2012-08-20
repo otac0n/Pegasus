@@ -82,8 +82,8 @@ namespace Pegasus.Tests
         [TestCase("a = b* a; b = 'OK';")]
         public void Compile_WithLeftRecursion_YieldsError(string subject)
         {
-            var parser = new PegParser();
-            var grammar = parser.Parse(subject).Value;
+            var parser = new Test.Parser();
+            var grammar = parser.Parse(subject);
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);

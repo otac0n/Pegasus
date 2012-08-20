@@ -18,10 +18,10 @@ namespace Pegasus
         public static void Main(string[] args)
         {
             var input = File.ReadAllText(args[0]);
-            var parser = new PegParser();
+            var parser = new Test.Parser();
             var grammar = parser.Parse(input);
             var compiler = new PegCompiler();
-            var result = compiler.Compile(grammar.Value);
+            var result = compiler.Compile(grammar);
             foreach (var error in result.Errors)
             {
                 Console.Error.WriteLine(error.ToString());

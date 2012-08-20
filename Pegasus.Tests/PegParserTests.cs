@@ -17,9 +17,9 @@ namespace Pegasus.Tests
         public void Parse_WithPegGrammar_Works()
         {
             var subject = File.ReadAllText("peg.peg");
-            var parser = new PegParser();
+            var parser = new Test.Parser();
 
-            var result = parser.Parse(subject, 0);
+            var result = parser.Parse(subject);
             Assert.That(result, Is.Not.Null);
         }
     }
