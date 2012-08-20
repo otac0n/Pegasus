@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------
 
 namespace Pegasus.Parser
-
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +17,6 @@ namespace Pegasus.Parser
 
     [System.CodeDom.Compiler.GeneratedCode("Pegasus", "1.0.0.0")]
     public partial class PegParser
-
     {
         private Cursor rightmostErrorCursor = null;
         private List<string> rightmostErrors = new List<string>();

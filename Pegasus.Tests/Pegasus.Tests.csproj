@@ -56,8 +56,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Pegasus\peg.peg">
-      <Link>peg.peg</Link>
+    <None Include="..\Pegasus\Parser\PegParser.peg">
+      <Link>PegParser.peg</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

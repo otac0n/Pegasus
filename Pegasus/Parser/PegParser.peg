@@ -1,5 +1,5 @@
-﻿@namespace Pegasus.Parser
-@classname PegParser
+﻿@namespace Pegasus.Parser;
+@classname PegParser;
 @using System.Linq;
 @using Pegasus.Expressions;
 
