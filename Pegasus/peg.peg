@@ -1,31 +1,33 @@
 ﻿{
+    using System.Linq;
     using Pegasus.Expressions;
 }
 
 grammar
   = <Grammar> __ initializer:initializer? rules:rule+ {
         return new Grammar(
-            rules: rules,
-            initializer: initializer != null ? null : initializer.Value);
+            rules: rules.Value,
+            initializer: initializer.Value.SingleOrDefault());
     }
 
 initializer
   = code:action semicolon? {
-        return ((CodeExpression)code.Value).Code;
+        return code.Value;
     }
 
 rule
   = <Rule> name:identifier displayName:string? equals expression:expression semicolon? {
         return new Rule(
             name: name.Value,
-            displayName: displayName != null ? displayName.Value : null,
+            displayName: displayName.Value.SingleOrDefault(),
             expression: expression.Value);
     }
 
 expression
   = <Expression> type:type? choice:choice {
-        return type != null
-            ? new TypedExpression(choice.Value, type.Value)
+        var typeValue = type.Value.SingleOrDefault();
+        return typeValue != null
+            ? new TypedExpression(typeValue, choice.Value)
             : choice.Value;
     }
 
@@ -35,66 +37,66 @@ type
     }
 
 choice
-  = <Expression> head:sequence tail:(slash sequence)* {
-        if (tail.Count == 0)
+  = <Expression> head:sequence tail:(<Expression> slash sequence:sequence { return sequence.Value; })* {
+        if (tail.Value.Count == 0)
         {
-            return head;
+            return head.Value;
         }
         else
         {
-            return new SequenceExpression(new [] { head }.Concat(tail));
+            return (Expression)new SequenceExpression(new [] { head.Value }.Concat(tail.Value));
         }
     }
 
 sequence
   = <Expression> elements:labeled* code:action {
-        return new SequenceExpression(elements.Concat(code));
+        return (Expression)new SequenceExpression(elements.Value.Concat(new Expression[] { new CodeExpression(code.Value) }));
     }
   / elements:labeled* {
-        if (elements.Count == 1)
+        if (elements.Value.Count == 1)
         {
-            return elements[0];
+            return elements.Value[0];
         }
         else
         {
-            return new SequenceExpression(elements);
+            return new SequenceExpression(elements.Value);
         }
     }
 
 labeled
   = <Expression> label:identifier colon expression:prefixed {
-        return new PrefixedExpression(label.Value, expression.Value);
+        return (Expression)new PrefixedExpression(label.Value, expression.Value);
     }
   / prefixed
 
 prefixed
   = <Expression> and expression:suffixed {
-        return new AndExpression(expression.Value);
+        return (Expression)new AndExpression(expression.Value);
     }
   / not expression:suffixed {
-        return new NotExpression(expression.Value);
+        return (Expression)new NotExpression(expression.Value);
     }
   / suffixed
 
 suffixed
   = <Expression> expression:primary question {
-        return new RepetitionExpression(expression, min: 0, max: 1);
+        return (Expression)new RepetitionExpression(expression.Value, min: 0, max: 1);
     }
   / expression:primary star {
-        return new RepetitionExpression(expression, min: 0, max: null);
+        return (Expression)new RepetitionExpression(expression.Value, min: 0, max: null);
     }
   / expression:primary plus {
-        return new RepetitionExpression(expression, min: 1, max: null);
+        return (Expression)new RepetitionExpression(expression.Value, min: 1, max: null);
     }
   / primary
 
 primary
   = <Expression> name:identifier !(string? equals) {
-        return new NameExpression(name);
+        return (Expression)new NameExpression(name.Value);
     }
   / literal
   / class
-  / dot { return new WildcardExpression(); }
+  / dot { return (Expression)new WildcardExpression(); }
   / lparen expression:expression rparen { return expression.Value; }
 
 /* "Lexical" elements */
@@ -106,7 +108,7 @@ braced
   = "{" parts:(braced / nonBraceCharacters)* "}"
 
 nonBraceCharacters
-  = chars:nonBraceCharacter+
+  = chars:nonBraceCharacter+ { return string.Join("", chars.Value); }
 
 nonBraceCharacter
   = [^{}]
@@ -143,7 +145,7 @@ gt        = ">" __ { return "."; }
  */
 identifier "identifier"
   = head:(letter / "_" / "$") tail:(letter / digit / "_" / "$")* __ {
-        return head + string.Join("", tail);
+        return head.Value + string.Join("", tail.Value);
     }
 
 dotted "dotted identifier"
@@ -157,15 +159,15 @@ segment
  * vaguely).
  */
 literal "literal"
-  = value:(doubleQuotedString / singleQuotedString) flags:"i"? __ {
-        return new LiteralExpression(value, ignoreCase: flags != null && flags.Value == "i");
+  = <Expression> value:(doubleQuotedString / singleQuotedString) flags:"i"? __ {
+        return (Expression)new LiteralExpression(value.Value, ignoreCase: flags.Value.SingleOrDefault() == "i");
     }
 
 string "string"
-  = string:(doubleQuotedString / singleQuotedString) __ { return @string; }
+  = string:(doubleQuotedString / singleQuotedString) __ { return @string.Value; }
 
 doubleQuotedString
-  = '"' chars:doubleQuotedCharacter* '"' { return string.join("", chars); }
+  = '"' chars:doubleQuotedCharacter* '"' { return string.Join("", chars.Value); }
 
 doubleQuotedCharacter
   = simpleDoubleQuotedCharacter
@@ -176,10 +178,10 @@ doubleQuotedCharacter
   / eolEscapeSequence
 
 simpleDoubleQuotedCharacter
-  = !('"' / "\\" / eolChar) char_:. { return char_; }
+  = !('"' / "\\" / eolChar) char_:. { return char_.Value; }
 
 singleQuotedString
-  = "'" chars:singleQuotedCharacter* "'" { return string.join("", chars); }
+  = "'" chars:singleQuotedCharacter* "'" { return string.Join("", chars.Value); }
 
 singleQuotedCharacter
   = simpleSingleQuotedCharacter
@@ -190,24 +192,24 @@ singleQuotedCharacter
   / eolEscapeSequence
 
 simpleSingleQuotedCharacter
-  = !("'" / "\\" / eolChar) char_:. { return char_; }
+  = !("'" / "\\" / eolChar) char_:. { return char_.Value; }
 
 class "character class"
-  = <ClassExpression> "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __ {
-        return new ClassExpression(
-            parts,
-            negated: inverted != null && inverted.Value == "^",
-            ignoreCase: flags != null && flags.Value == "i");
+  = <Expression> "[" inverted:"^"? parts:(<CharacterRange> classCharacterRange / classCharacter)* "]" flags:"i"? __ {
+        return (Expression)new ClassExpression(
+            parts.Value,
+            negated: inverted.Value.SingleOrDefault() == "^",
+            ignoreCase: flags.Value.SingleOrDefault() == "i");
     }
 
 classCharacterRange
-  = <CharacterRange> begin:classCharacter "-" end:classCharacter {
-        return new CharacterRange(begin[0], end[0]);
+  = <CharacterRange> begin:bracketDelimitedCharacter "-" end:bracketDelimitedCharacter {
+        return new CharacterRange(begin.Value[0], end.Value[0]);
     }
 
 classCharacter
   = <CharacterRange> char_:bracketDelimitedCharacter {
-        return new CharacterRange(char_[0], char_[0]);
+        return new CharacterRange(char_.Value[0], char_.Value[0]);
     }
 
 bracketDelimitedCharacter
@@ -219,11 +221,11 @@ bracketDelimitedCharacter
   / eolEscapeSequence
 
 simpleBracketDelimitedCharacter
-  = !("]" / "\\" / eolChar) char_:. { return char_; }
+  = !("]" / "\\" / eolChar) char_:. { return char_.Value; }
 
 simpleEscapeSequence
   = "\\" !(digit / "x" / "u" / eolChar) char_:. {
-        return char_
+        return char_.Value
             .Replace("b", "\b")
             .Replace("f", "\f")
             .Replace("n", "\n")
@@ -246,7 +248,7 @@ unicodeEscapeSequence
     }
 
 eolEscapeSequence
-  = "\\" eol:eol { return eol; }
+  = "\\" eol:eol { return eol.Value; }
 
 digit
   = [0-9]
