@@ -15,7 +15,7 @@ namespace Pegasus.Compiler
 
     internal class ReportSettingsIssuesPass : CompilePass
     {
-        private static readonly Dictionary<string, bool> knownSettings = new Dictionary<string, bool>
+        private static readonly Dictionary<string, bool> KnownSettings = new Dictionary<string, bool>
         {
             { "namespace", true },
             { "classname", true },
@@ -29,7 +29,7 @@ namespace Pegasus.Compiler
             foreach (var setting in grammar.Settings)
             {
                 bool singleAllowed;
-                if (knownSettings.TryGetValue(setting.Key, out singleAllowed))
+                if (KnownSettings.TryGetValue(setting.Key, out singleAllowed))
                 {
                     if (singleAllowed && !seenSettings.Add(setting.Key))
                     {

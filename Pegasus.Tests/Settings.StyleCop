@@ -1,6 +1,6 @@
-<StyleCopSettings Version="4.3">
+<StyleCopSettings Version="105">
   <Analyzers>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.NamingRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.NamingRules">
       <Rules>
         <Rule Name="ElementMustBeginWithUpperCaseLetter">
           <RuleSettings>
@@ -20,7 +20,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.MaintainabilityRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.MaintainabilityRules">
       <Rules>
         <Rule Name="FieldsMustBePrivate">
           <RuleSettings>
@@ -28,6 +28,16 @@
           </RuleSettings>
         </Rule>
         <Rule Name="StatementMustNotUseUnnecessaryParenthesis">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
+      <AnalyzerSettings />
+    </Analyzer>
+    <Analyzer AnalyzerId="StyleCop.CSharp.ReadabilityRules">
+      <Rules>
+        <Rule Name="ParameterMustNotSpanMultipleLines">
           <RuleSettings>
             <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>

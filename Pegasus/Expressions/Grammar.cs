@@ -25,6 +25,8 @@ namespace Pegasus.Expressions
         /// Initializes a new instance of the <see cref="Grammar"/> class.
         /// </summary>
         /// <param name="rules">The rules for this <see cref="Grammar"/>.</param>
+        /// <param name="settings">A collection of <see cref="KeyValuePair{TKey, TValue}"/> to be used as the settings for the compiler.</param>
+        /// <param name="initializer">A section of code to be emitted at the top of the generated compiler.</param>
         public Grammar(IEnumerable<Rule> rules, IEnumerable<KeyValuePair<string, string>> settings, string initializer)
         {
             if (rules == null)

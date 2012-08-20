@@ -79,6 +79,7 @@ namespace Pegasus.Compiler
                 }
             }
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength", Justification = "Empty strings and null strings are logically distinct in this method.")]
             private bool IsExpressionZeroWidth(Expression expression)
             {
                 ChoiceExpression choiceExpression;

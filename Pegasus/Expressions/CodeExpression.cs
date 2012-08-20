@@ -18,11 +18,9 @@ namespace Pegasus.Expressions
         private readonly string code;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClassExpression"/> class.
+        /// Initializes a new instance of the <see cref="CodeExpression"/> class.
         /// </summary>
-        /// <param name="ranges">The ranges that match.</param>
-        /// <param name="negated">A value indicating whether or not the expression is negated.</param>
-        /// <param name="ignoreCase">A value indicating whether or not the expression should ignore case differences when matching.</param>
+        /// <param name="code">The literal code to be contained by this expression.</param>
         public CodeExpression(string code)
         {
             if (code == null)

@@ -19,8 +19,10 @@ namespace Pegasus.Expressions
         private readonly Expression expression;
 
         /// <summary>
-        /// Initializes an new instance of the <see cref="TypedExpression"/> class.
+        /// Initializes a new instance of the <see cref="TypedExpression"/> class.
         /// </summary>
+        /// <param name="type">The specific type of the wrapped expression.</param>
+        /// <param name="expression">The wrapped expression.</param>
         public TypedExpression(string type, Expression expression)
         {
             if (string.IsNullOrEmpty(type))

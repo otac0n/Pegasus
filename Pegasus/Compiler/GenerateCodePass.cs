@@ -19,6 +19,7 @@ namespace Pegasus.Compiler
 
     internal class GenerateCodePass : CompilePass
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "StringWriter.Dispose is idempotent.")]
         public override void Run(Grammar grammar, CompileResult result)
         {
             using (var stringWriter = new StringWriter())
@@ -32,9 +33,10 @@ namespace Pegasus.Compiler
         private class GenerateCodeExpressionTreeWlaker : ExpressionTreeWalker
         {
             private readonly IndentedTextWriter code;
+            private readonly CompileResult result;
             private Grammar grammar;
             private int id;
-            private readonly CompileResult result;
+            private string currentResultName = null;
 
             public GenerateCodeExpressionTreeWlaker(CompileResult result, IndentedTextWriter codeWriter)
             {
@@ -44,10 +46,8 @@ namespace Pegasus.Compiler
 
             private int Id
             {
-                get { return id++; }
+                get { return this.id++; }
             }
-
-            private string currentResultName = null;
 
             private static HashSet<string> keywords = new HashSet<string>
             {
@@ -97,7 +97,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("// the code is regenerated.");
                 this.code.WriteLine("// </auto-generated>");
                 this.code.WriteLine("// -----------------------------------------------------------------------");
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
 
                 var @namespace = grammar.Settings.Where(s => s.Key == "namespace").Select(s => s.Value).SingleOrDefault() ?? "Parsers";
                 var classname = grammar.Settings.Where(s => s.Key == "classname").Select(s => s.Value).SingleOrDefault() ?? "Parser";
@@ -119,7 +119,7 @@ namespace Pegasus.Compiler
                     this.code.Write(grammar.Initializer);
                 }
 
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
 
                 this.code.WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"" + assemblyName.Name + "\", \"" + assemblyName.Version + "\")]");
                 this.code.WriteLine("public partial class " + EscapeName(classname));
@@ -127,9 +127,9 @@ namespace Pegasus.Compiler
                 this.code.Indent++;
                 this.code.WriteLine("private Cursor rightmostErrorCursor = null;");
                 this.code.WriteLine("private List<string> rightmostErrors = new List<string>();");
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
 
-                var type = GetResultType(grammar.Rules[0].Expression);
+                var type = this.GetResultType(grammar.Rules[0].Expression);
 
                 this.code.WriteLine("public " + type + " Parse(string subject)");
                 this.code.WriteLine("{");
@@ -148,7 +148,7 @@ namespace Pegasus.Compiler
 
                 base.WalkGrammar(grammar);
 
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
                 this.code.WriteLine("private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -171,7 +171,7 @@ namespace Pegasus.Compiler
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
                 this.code.WriteLine("private IParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, string readableRanges, bool negated = false, bool ignoreCase = false)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -220,7 +220,7 @@ namespace Pegasus.Compiler
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
                 this.code.WriteLine("private IParseResult<string> ParseAny(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -238,7 +238,7 @@ namespace Pegasus.Compiler
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
                 this.code.WriteLine("private IParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<T> wrappedCode)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -247,7 +247,7 @@ namespace Pegasus.Compiler
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
                 this.code.WriteLine("private T ValueOrDefault<T>(IParseResult<T> result)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -259,7 +259,7 @@ namespace Pegasus.Compiler
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
                 this.code.WriteLine("private void ReportError(Cursor cursor, string expected)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -293,7 +293,7 @@ namespace Pegasus.Compiler
             {
                 var type = this.GetResultType(rule.Expression);
 
-                this.code.WriteLineNoTabs("");
+                this.code.WriteLineNoTabs(string.Empty);
                 this.code.WriteLine("private IParseResult<" + type + "> " + EscapeName(rule.Name) + "(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -311,7 +311,7 @@ namespace Pegasus.Compiler
 
             protected override void WalkLiteralExpression(LiteralExpression literalExpression)
             {
-                this.code.WriteLine(this.currentResultName + " = this.ParseLiteral(ref cursor, " + ToLiteral(literalExpression.Value) + (literalExpression.IgnoreCase ? ", ignoreCase: true" : "") + ");");
+                this.code.WriteLine(this.currentResultName + " = this.ParseLiteral(ref cursor, " + ToLiteral(literalExpression.Value) + (literalExpression.IgnoreCase ? ", ignoreCase: true" : string.Empty) + ");");
             }
 
             protected override void WalkWildcardExpression(WildcardExpression wildcardExpression)
@@ -466,12 +466,12 @@ namespace Pegasus.Compiler
 
             protected override void WalkAndExpression(AndExpression andExpression)
             {
-                WalkAssertionExpression(andExpression.Expression, mustMatch: true);
+                this.WalkAssertionExpression(andExpression.Expression, mustMatch: true);
             }
 
             protected override void WalkNotExpression(NotExpression notExpression)
             {
-                WalkAssertionExpression(notExpression.Expression, mustMatch: false);
+                this.WalkAssertionExpression(notExpression.Expression, mustMatch: false);
             }
 
             private void WalkAssertionExpression(Expression expression, bool mustMatch)
@@ -532,6 +532,7 @@ namespace Pegasus.Compiler
                         sb.Append("\\u").Append(((int)c).ToString("x4"));
                     }
                 }
+
                 sb.Append("\"");
                 return sb.ToString();
             }
