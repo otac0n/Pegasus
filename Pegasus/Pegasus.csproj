@@ -75,6 +75,7 @@
     <Compile Include="Expressions\TypedExpression.cs" />
     <Compile Include="Expressions\WildcardExpression.cs" />
     <Compile Include="Parser\Cursor.cs" />
+    <Compile Include="Parser\IParseResult{T}.cs" />
     <Compile Include="Parser\ParseResult{T}.cs" />
     <Compile Include="Parser\PegParser.cs">
       <DependentUpon>PegParser.peg</DependentUpon>

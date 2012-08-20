@@ -149,7 +149,7 @@ namespace Pegasus.Compiler
                 base.WalkGrammar(grammar);
 
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false)");
+                this.code.WriteLine("private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("if (cursor.Location + literal.Length <= cursor.Subject.Length)");
@@ -172,7 +172,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, string readableRanges, bool negated = false, bool ignoreCase = false)");
+                this.code.WriteLine("private IParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, string readableRanges, bool negated = false, bool ignoreCase = false)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("if (cursor.Location + 1 <= cursor.Subject.Length)");
@@ -221,7 +221,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResult<string> ParseAny(ref Cursor cursor)");
+                this.code.WriteLine("private IParseResult<string> ParseAny(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("if (cursor.Location + 1 <= cursor.Subject.Length)");
@@ -239,7 +239,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<T> wrappedCode)");
+                this.code.WriteLine("private IParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<T> wrappedCode)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("var len = endCursor.Location - startCursor.Location;");
@@ -248,7 +248,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private T ValueOrDefault<T>(ParseResult<T> result)");
+                this.code.WriteLine("private T ValueOrDefault<T>(IParseResult<T> result)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("return result == null");
@@ -294,12 +294,12 @@ namespace Pegasus.Compiler
                 var type = this.GetResultType(rule.Expression);
 
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResult<" + type + "> " + EscapeName(rule.Name) + "(ref Cursor cursor)");
+                this.code.WriteLine("private IParseResult<" + type + "> " + EscapeName(rule.Name) + "(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
                 this.currentResultName = "r" + this.Id;
-                this.code.WriteLine("ParseResult<" + type + "> " + this.currentResultName + " = null;");
+                this.code.WriteLine("IParseResult<" + type + "> " + this.currentResultName + " = null;");
                 base.WalkRule(rule);
                 this.code.WriteLine("return " + this.currentResultName + ";");
                 this.currentResultName = null;
@@ -365,7 +365,7 @@ namespace Pegasus.Compiler
                 {
                     var localType = this.GetResultType(expression);
                     this.currentResultName = "r" + this.Id;
-                    this.code.WriteLine("ParseResult<" + localType + "> " + this.currentResultName + " = null;");
+                    this.code.WriteLine("IParseResult<" + localType + "> " + this.currentResultName + " = null;");
                     this.WalkExpression(expression);
                     this.code.WriteLine("if (" + this.currentResultName + " != null)");
                     this.code.WriteLine("{");
@@ -430,7 +430,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("while (" + (repetitionExpression.Max.HasValue ? listName + ".Count < " + repetitionExpression.Max : "true") + ")");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("ParseResult<" + type + "> " + this.currentResultName + " = null;");
+                this.code.WriteLine("IParseResult<" + type + "> " + this.currentResultName + " = null;");
                 this.WalkExpression(repetitionExpression.Expression);
                 this.code.WriteLine("if (" + this.currentResultName + " != null)");
                 this.code.WriteLine("{");
@@ -482,7 +482,7 @@ namespace Pegasus.Compiler
                 var oldResultName = this.currentResultName;
                 this.currentResultName = "r" + this.Id;
                 var type = this.GetResultType(expression);
-                this.code.WriteLine("ParseResult<string> " + this.currentResultName + " = null;");
+                this.code.WriteLine("IParseResult<string> " + this.currentResultName + " = null;");
                 this.WalkExpression(expression);
 
                 this.code.WriteLine("cursor = startCursor" + startId + ";");

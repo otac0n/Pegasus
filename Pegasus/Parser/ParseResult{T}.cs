@@ -14,7 +14,7 @@ namespace Pegasus.Parser
     /// Encapsulates the success or failure of a particular parsing operation along with the result of operation.
     /// </summary>
     /// <typeparam name="T">The type of the parsing operation's result.</typeparam>
-    public class ParseResult<T> : IEquatable<ParseResult<T>>
+    public class ParseResult<T> : IParseResult<T>, IEquatable<ParseResult<T>>
     {
         private readonly int length;
         private readonly T value;

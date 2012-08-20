@@ -47,13 +47,13 @@ choice
         }
         else
         {
-            return (Expression)new ChoiceExpression(new [] { head }.Concat(tail));
+            return new ChoiceExpression(new [] { head }.Concat(tail));
         }
     }
 
 sequence
   = <Expression> elements:labeled* code:action {
-        return (Expression)new SequenceExpression(elements.Concat(new Expression[] { new CodeExpression(code) }));
+        return new SequenceExpression(elements.Concat(new Expression[] { new CodeExpression(code) }));
     }
   / elements:labeled* {
         if (elements.Count == 1)
@@ -68,38 +68,38 @@ sequence
 
 labeled
   = <Expression> label:identifier colon expression:prefixed {
-        return (Expression)new PrefixedExpression(label, expression);
+        return new PrefixedExpression(label, expression);
     }
   / prefixed
 
 prefixed
   = <Expression> and expression:suffixed {
-        return (Expression)new AndExpression(expression);
+        return new AndExpression(expression);
     }
   / not expression:suffixed {
-        return (Expression)new NotExpression(expression);
+        return new NotExpression(expression);
     }
   / suffixed
 
 suffixed
   = <Expression> expression:primary question {
-        return (Expression)new RepetitionExpression(expression, min: 0, max: 1);
+        return new RepetitionExpression(expression, min: 0, max: 1);
     }
   / expression:primary star {
-        return (Expression)new RepetitionExpression(expression, min: 0, max: null);
+        return new RepetitionExpression(expression, min: 0, max: null);
     }
   / expression:primary plus {
-        return (Expression)new RepetitionExpression(expression, min: 1, max: null);
+        return new RepetitionExpression(expression, min: 1, max: null);
     }
   / primary
 
 primary
   = <Expression> name:identifier !(string? equals) {
-        return (Expression)new NameExpression(name);
+        return new NameExpression(name);
     }
   / literal
   / class
-  / dot { return (Expression)new WildcardExpression(); }
+  / dot { return new WildcardExpression(); }
   / lparen expression:expression rparen { return expression; }
 
 /* "Lexical" elements */
@@ -163,7 +163,7 @@ segment
  */
 literal "literal"
   = <Expression> value:(doubleQuotedString / singleQuotedString) flags:"i"? __ {
-        return (Expression)new LiteralExpression(value, ignoreCase: flags.SingleOrDefault() == "i");
+        return new LiteralExpression(value, ignoreCase: flags.SingleOrDefault() == "i");
     }
 
 string "string"
@@ -199,7 +199,7 @@ simpleSingleQuotedCharacter
 
 class "character class"
   = <Expression> "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __ {
-        return (Expression)new ClassExpression(
+        return new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
             ignoreCase: flags.SingleOrDefault() == "i");
