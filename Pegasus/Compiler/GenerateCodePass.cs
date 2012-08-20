@@ -509,17 +509,17 @@ namespace Pegasus.Compiler
 
             private string GetResultType(Expression expression)
             {
-                //ChoiceExpression choiceExpression;
+                ChoiceExpression choiceExpression;
                 NameExpression nameExpression;
                 PrefixedExpression prefixedExpression;
                 RepetitionExpression repetitionExpression;
-                //SequenceExpression sequenceExpression;
                 TypedExpression typedExpression;
 
-                //if ((choiceExpression = expression as ChoiceExpression) != null)
-                //{
-                //} else
-                if ((nameExpression = expression as NameExpression) != null)
+                if ((choiceExpression = expression as ChoiceExpression) != null)
+                {
+                    return this.GetResultType(choiceExpression.Choices.First());
+                }
+                else if ((nameExpression = expression as NameExpression) != null)
                 {
                     var rule = this.grammar.Rules.Where(r => r.Name == nameExpression.Name).Single();
                     return this.GetResultType(rule.Expression);
@@ -532,9 +532,6 @@ namespace Pegasus.Compiler
                 {
                     return "IList<" + this.GetResultType(repetitionExpression.Expression) + ">";
                 }
-                //else if ((sequenceExpression = expression as SequenceExpression) != null)
-                //{
-                //}
                 else if ((typedExpression = expression as TypedExpression) != null)
                 {
                     return typedExpression.Type;

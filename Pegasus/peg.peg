@@ -195,7 +195,7 @@ simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) char_:. { return char_.Value; }
 
 class "character class"
-  = <Expression> "[" inverted:"^"? parts:(<CharacterRange> classCharacterRange / classCharacter)* "]" flags:"i"? __ {
+  = <Expression> "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __ {
         return (Expression)new ClassExpression(
             parts.Value,
             negated: inverted.Value.SingleOrDefault() == "^",
