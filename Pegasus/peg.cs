@@ -1087,7 +1087,7 @@ namespace Test
         private ParseResult<string> nonBraceCharacter(ref Cursor cursor)
         {
             ParseResult<string> r0 = null;
-            r0 = this.ParseClass(ref cursor, "{{}}", negated: true);
+            r0 = this.ParseClass(ref cursor, "{{}}", "[^{}]", negated: true);
             return r0;
         }
 
@@ -2660,14 +2660,14 @@ namespace Test
         private ParseResult<string> digit(ref Cursor cursor)
         {
             ParseResult<string> r0 = null;
-            r0 = this.ParseClass(ref cursor, "09");
+            r0 = this.ParseClass(ref cursor, "09", "[0-9]");
             return r0;
         }
 
         private ParseResult<string> hexDigit(ref Cursor cursor)
         {
             ParseResult<string> r0 = null;
-            r0 = this.ParseClass(ref cursor, "09afAF");
+            r0 = this.ParseClass(ref cursor, "09afAF", "[0-9a-fA-F]");
             return r0;
         }
 
@@ -2688,14 +2688,14 @@ namespace Test
         private ParseResult<string> lowerCaseLetter(ref Cursor cursor)
         {
             ParseResult<string> r0 = null;
-            r0 = this.ParseClass(ref cursor, "az");
+            r0 = this.ParseClass(ref cursor, "az", "[a-z]");
             return r0;
         }
 
         private ParseResult<string> upperCaseLetter(ref Cursor cursor)
         {
             ParseResult<string> r0 = null;
-            r0 = this.ParseClass(ref cursor, "AZ");
+            r0 = this.ParseClass(ref cursor, "AZ", "[A-Z]");
             return r0;
         }
 
@@ -2946,14 +2946,14 @@ namespace Test
         private ParseResult<string> eolChar(ref Cursor cursor)
         {
             ParseResult<string> r0 = null;
-            r0 = this.ParseClass(ref cursor, "\n\n\r\r\u2028\u2028\u2029\u2029");
+            r0 = this.ParseClass(ref cursor, "\n\n\r\r\u2028\u2028\u2029\u2029", "[\\n\\r\\u2028\\u2029]");
             return r0;
         }
 
         private ParseResult<string> whitespace(ref Cursor cursor)
         {
             ParseResult<string> r0 = null;
-            r0 = this.ParseClass(ref cursor, "  \t\t\v\v\f\f\u00a0\u00a0\ufeff\ufeff\u1680\u1680\u180e\u180e\u2000\u200a\u202f\u202f\u205f\u205f\u3000\u3000");
+            r0 = this.ParseClass(ref cursor, "  \t\t\v\v\f\f\u00a0\u00a0\ufeff\ufeff\u1680\u1680\u180e\u180e\u2000\u200a\u202f\u202f\u205f\u205f\u3000\u3000", "[ \\t\\v\\f\\u00a0\\ufeff\\u1680\\u180e\\u2000-\\u200a\\u202f\\u205f\\u3000]");
             return r0;
         }
 
@@ -2973,7 +2973,7 @@ namespace Test
             return null;
         }
 
-        private ParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, bool negated = false, bool ignoreCase = false)
+        private ParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, string readableRanges, bool negated = false, bool ignoreCase = false)
         {
             if (cursor.Location + 1 <= cursor.Subject.Length)
             {
@@ -3003,7 +3003,7 @@ namespace Test
                     return result;
                 }
             }
-            this.ReportError(cursor, "[" + (negated ? "^" : "")  + characterRanges + "]");
+            this.ReportError(cursor, readableRanges);
             return null;
         }
 

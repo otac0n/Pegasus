@@ -164,7 +164,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
-                this.code.WriteLine("private ParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, bool negated = false, bool ignoreCase = false)");
+                this.code.WriteLine("private ParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, string readableRanges, bool negated = false, bool ignoreCase = false)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("if (cursor.Location + 1 <= cursor.Subject.Length)");
@@ -207,7 +207,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
                 this.code.Indent--;
                 this.code.WriteLine("}");
-                this.code.WriteLine("this.ReportError(cursor, \"[\" + (negated ? \"^\" : \"\")  + characterRanges + \"]\");");
+                this.code.WriteLine("this.ReportError(cursor, readableRanges);");
                 this.code.WriteLine("return null;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
@@ -318,7 +318,16 @@ namespace Pegasus.Compiler
 
             protected override void WalkClassExpression(ClassExpression classExpression)
             {
-                this.code.WriteLine(this.currentResultName + " = this.ParseClass(ref cursor, " + ToLiteral(string.Join(string.Empty, classExpression.Ranges.SelectMany(r => new[] { r.Min, r.Max }))) + (classExpression.Negated ? ", negated: true" : "") + (classExpression.IgnoreCase ? ", ignoreCase: true" : "") + ");");
+                var ranges =
+                    string.Join(string.Empty, classExpression.Ranges.SelectMany(r => new[] { r.Min, r.Max }));
+                var readable =
+                    "[" +
+                    (classExpression.Negated ? "^" : string.Empty) +
+                    string.Join(string.Empty, classExpression.Ranges.Select(r => r.Min == r.Max ? r.Min.ToString() : r.Min + "-" + r.Max)) +
+                    "]" +
+                    (classExpression.IgnoreCase ? "i" : string.Empty);
+
+                this.code.WriteLine(this.currentResultName + " = this.ParseClass(ref cursor, " + ToLiteral(ranges) + ", " + ToLiteral(readable).Replace(@"\", @"\\") + (classExpression.Negated ? ", negated: true" : string.Empty) + (classExpression.IgnoreCase ? ", ignoreCase: true" : string.Empty) + ");");
             }
 
             protected override void WalkCodeExpression(CodeExpression codeExpression)
