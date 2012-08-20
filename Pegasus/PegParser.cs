@@ -1048,7 +1048,13 @@ namespace Pegasus
                     cursor = cursor.Advance(any1);
 
                     var len = cursor - startCursor;
-                    return new ParseResult<char>(len, any1.Value[0]);
+                    return new ParseResult<char>(len, any1.Value
+                        .Replace("b", "\b")
+                        .Replace("f", "\f")
+                        .Replace("n", "\n")
+                        .Replace("r", "\r")
+                        .Replace("t", "\t")
+                        .Replace("v", "\v")[0]);
                 }
                 else
                 {
