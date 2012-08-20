@@ -41,13 +41,13 @@ namespace Test
             r2 = this.__(ref cursor);
             if (r2 != null)
             {
-                ParseResult<IList<string>> r3 = null;
+                ParseResult<IList<KeyValuePair<string, string>>> r3 = null;
                 var startCursor4 = cursor;
-                var l5 = new List<string>();
-                while (l5.Count < 1)
+                var l5 = new List<KeyValuePair<string, string>>();
+                while (true)
                 {
-                    ParseResult<string> r6 = null;
-                    r6 = this.initializer(ref cursor);
+                    ParseResult<KeyValuePair<string, string>> r6 = null;
+                    r6 = this.setting(ref cursor);
                     if (r6 != null)
                     {
                         l5.Add(r6.Value);
@@ -60,22 +60,22 @@ namespace Test
                 if (l5.Count >= 0)
                 {
                     var len = cursor.Location - startCursor4.Location;
-                    r3 = new ParseResult<IList<string>>(len, l5.AsReadOnly());
+                    r3 = new ParseResult<IList<KeyValuePair<string, string>>>(len, l5.AsReadOnly());
                 }
                 else
                 {
                     cursor = startCursor4;
                 }
-                var initializer = ValueOrDefault(r3);
+                var settings = ValueOrDefault(r3);
                 if (r3 != null)
                 {
-                    ParseResult<IList<Rule>> r7 = null;
+                    ParseResult<IList<string>> r7 = null;
                     var startCursor8 = cursor;
-                    var l9 = new List<Rule>();
-                    while (true)
+                    var l9 = new List<string>();
+                    while (l9.Count < 1)
                     {
-                        ParseResult<Rule> r10 = null;
-                        r10 = this.rule(ref cursor);
+                        ParseResult<string> r10 = null;
+                        r10 = this.initializer(ref cursor);
                         if (r10 != null)
                         {
                             l9.Add(r10.Value);
@@ -85,26 +85,140 @@ namespace Test
                             break;
                         }
                     }
-                    if (l9.Count >= 1)
+                    if (l9.Count >= 0)
                     {
                         var len = cursor.Location - startCursor8.Location;
-                        r7 = new ParseResult<IList<Rule>>(len, l9.AsReadOnly());
+                        r7 = new ParseResult<IList<string>>(len, l9.AsReadOnly());
                     }
                     else
                     {
                         cursor = startCursor8;
                     }
-                    var rules = ValueOrDefault(r7);
+                    var initializer = ValueOrDefault(r7);
                     if (r7 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
+                        ParseResult<IList<Rule>> r11 = null;
+                        var startCursor12 = cursor;
+                        var l13 = new List<Rule>();
+                        while (true)
                         {
-                            
+                            ParseResult<Rule> r14 = null;
+                            r14 = this.rule(ref cursor);
+                            if (r14 != null)
+                            {
+                                l13.Add(r14.Value);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        if (l13.Count >= 1)
+                        {
+                            var len = cursor.Location - startCursor12.Location;
+                            r11 = new ParseResult<IList<Rule>>(len, l13.AsReadOnly());
+                        }
+                        else
+                        {
+                            cursor = startCursor12;
+                        }
+                        var rules = ValueOrDefault(r11);
+                        if (r11 != null)
+                        {
+                            r0 = this.ReturnHelper(startCursor1, cursor, () =>
+                            {
+                                
         return new Grammar(
             rules: rules,
             initializer: initializer.SingleOrDefault());
     
-                        });
+                            });
+                        }
+                        else
+                        {
+                            cursor = startCursor1;
+                        }
+                    }
+                    else
+                    {
+                        cursor = startCursor1;
+                    }
+                }
+                else
+                {
+                    cursor = startCursor1;
+                }
+            }
+            else
+            {
+                cursor = startCursor1;
+            }
+            return r0;
+        }
+
+        private ParseResult<KeyValuePair<string, string>> setting(ref Cursor cursor)
+        {
+            ParseResult<KeyValuePair<string, string>> r0 = null;
+            var startCursor1 = cursor;
+            ParseResult<string> r2 = null;
+            r2 = this.ParseLiteral(ref cursor, "@");
+            if (r2 != null)
+            {
+                ParseResult<string> r3 = null;
+                r3 = this.identifier(ref cursor);
+                var key = ValueOrDefault(r3);
+                if (r3 != null)
+                {
+                    ParseResult<string> r4 = null;
+                    if (r4 == null)
+                    {
+                        r4 = this.@string(ref cursor);
+                    }
+                    if (r4 == null)
+                    {
+                        r4 = this.dotted(ref cursor);
+                    }
+                    var value = ValueOrDefault(r4);
+                    if (r4 != null)
+                    {
+                        ParseResult<IList<string>> r5 = null;
+                        var startCursor6 = cursor;
+                        var l7 = new List<string>();
+                        while (l7.Count < 1)
+                        {
+                            ParseResult<string> r8 = null;
+                            r8 = this.semicolon(ref cursor);
+                            if (r8 != null)
+                            {
+                                l7.Add(r8.Value);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        if (l7.Count >= 0)
+                        {
+                            var len = cursor.Location - startCursor6.Location;
+                            r5 = new ParseResult<IList<string>>(len, l7.AsReadOnly());
+                        }
+                        else
+                        {
+                            cursor = startCursor6;
+                        }
+                        if (r5 != null)
+                        {
+                            r0 = this.ReturnHelper(startCursor1, cursor, () =>
+                            {
+                                
+        return new KeyValuePair<string, string>(key, value);
+    
+                            });
+                        }
+                        else
+                        {
+                            cursor = startCursor1;
+                        }
                     }
                     else
                     {
