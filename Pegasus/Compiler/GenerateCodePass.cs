@@ -453,15 +453,15 @@ namespace Pegasus.Compiler
                 var oldResultName = this.currentResultName;
                 this.currentResultName = "r" + this.Id;
                 var type = this.GetResultType(expression);
-                this.code.WriteLine("ParseResult<" + type + "> " + this.currentResultName + " = null;");
+                this.code.WriteLine("ParseResult<string> " + this.currentResultName + " = null;");
                 this.WalkExpression(expression);
 
                 this.code.WriteLine("cursor = startCursor" + startId + ";");
 
-                this.code.WriteLine("if (" + this.currentResultName + " " + (mustMatch ? "==" : "!=") + " null)");
+                this.code.WriteLine("if (" + this.currentResultName + " " + (mustMatch ? "!=" : "==") + " null)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine(oldResultName + " = new ParseResult<" + type + ">(0, " + this.currentResultName + ".Value);");
+                this.code.WriteLine(oldResultName + " = new ParseResult<string>(0, string.Empty);");
                 this.currentResultName = oldResultName;
                 this.code.Indent--;
                 this.code.WriteLine("}");
@@ -509,30 +509,20 @@ namespace Pegasus.Compiler
 
             private string GetResultType(Expression expression)
             {
-                AndExpression andExpression;
                 //ChoiceExpression choiceExpression;
                 NameExpression nameExpression;
-                NotExpression notExpression;
                 PrefixedExpression prefixedExpression;
                 RepetitionExpression repetitionExpression;
                 //SequenceExpression sequenceExpression;
                 TypedExpression typedExpression;
 
-                if ((andExpression = expression as AndExpression) != null)
-                {
-                    return this.GetResultType(andExpression.Expression);
-                }
-                //else if ((choiceExpression = expression as ChoiceExpression) != null)
+                //if ((choiceExpression = expression as ChoiceExpression) != null)
                 //{
-                //}
-                else if ((nameExpression = expression as NameExpression) != null)
+                //} else
+                if ((nameExpression = expression as NameExpression) != null)
                 {
                     var rule = this.grammar.Rules.Where(r => r.Name == nameExpression.Name).Single();
                     return this.GetResultType(rule.Expression);
-                }
-                else if ((notExpression = expression as NotExpression) != null)
-                {
-                    return this.GetResultType(notExpression.Expression);
                 }
                 else if ((prefixedExpression = expression as PrefixedExpression) != null)
                 {
