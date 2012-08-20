@@ -44,7 +44,7 @@ choice
         }
         else
         {
-            return (Expression)new SequenceExpression(new [] { head.Value }.Concat(tail.Value));
+            return (Expression)new ChoiceExpression(new [] { head.Value }.Concat(tail.Value));
         }
     }
 
@@ -239,12 +239,12 @@ zeroEscapeSequence
 
 hexEscapeSequence
   = "\\x" h1:hexDigit h2:hexDigit {
-        return ((char)Convert.ToInt32(h1.Value + h2.Value)).ToString();
+        return ((char)Convert.ToInt32(h1.Value + h2.Value, 16)).ToString();
     }
 
 unicodeEscapeSequence
   = "\\u" h1:hexDigit h2:hexDigit h3:hexDigit h4:hexDigit {
-        return ((char)Convert.ToInt32(h1.Value + h2.Value + h3.Value + h4.Value)).ToString();
+        return ((char)Convert.ToInt32(h1.Value + h2.Value + h3.Value + h4.Value, 16)).ToString();
     }
 
 eolEscapeSequence
