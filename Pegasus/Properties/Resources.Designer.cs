@@ -95,5 +95,23 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0004_LEFT_RECURSION_DETECTED", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The setting &apos;{0}&apos; has already been specified..
+        /// </summary>
+        internal static string PEG0005_SETTING_ALREADY_SPECIFIED {
+            get {
+                return ResourceManager.GetString("PEG0005_SETTING_ALREADY_SPECIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The setting &apos;{0}&apos; is not recognized..
+        /// </summary>
+        internal static string PEG0006_SETTING_UNKNOWN {
+            get {
+                return ResourceManager.GetString("PEG0006_SETTING_UNKNOWN", resourceCulture);
+            }
+        }
     }
 }

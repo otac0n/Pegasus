@@ -12,13 +12,14 @@ namespace Pegasus
     using System.IO;
     using System.Linq;
     using Pegasus.Compiler;
+    using Pegasus.Parser;
 
     internal class Program
     {
         public static void Main(string[] args)
         {
             var input = File.ReadAllText(args[0]);
-            var parser = new Test.Parser();
+            var parser = new PegParser();
             var grammar = parser.Parse(input);
             var compiler = new PegCompiler();
             var result = compiler.Compile(grammar);

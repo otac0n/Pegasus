@@ -10,6 +10,7 @@ namespace Pegasus.Tests
 {
     using System.IO;
     using NUnit.Framework;
+    using Pegasus.Parser;
 
     public class PegParserTests
     {
@@ -17,7 +18,7 @@ namespace Pegasus.Tests
         public void Parse_WithPegGrammar_Works()
         {
             var subject = File.ReadAllText("peg.peg");
-            var parser = new Test.Parser();
+            var parser = new PegParser();
 
             var result = parser.Parse(subject);
             Assert.That(result, Is.Not.Null);

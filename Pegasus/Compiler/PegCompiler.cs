@@ -8,6 +8,7 @@
 
 namespace Pegasus.Compiler
 {
+    using System.Linq;
     using Pegasus.Expressions;
 
     /// <summary>
@@ -17,6 +18,7 @@ namespace Pegasus.Compiler
     {
         private readonly CompilePass[] passes = new CompilePass[]
         {
+            new ReportSettingsIssuesPass(),
             new ReportNoRulesPass(),
             new ReportMissingRulesPass(),
             new ReportDuplicateRulesPass(),
@@ -37,7 +39,7 @@ namespace Pegasus.Compiler
             {
                 pass.Run(grammar, result);
 
-                if (result.Errors.Count > 0)
+                if (result.Errors.Any(e => !e.IsWarning))
                 {
                     break;
                 }

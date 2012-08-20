@@ -12,6 +12,7 @@ namespace Pegasus.Tests
     using NUnit.Framework;
     using Pegasus.Compiler;
     using Pegasus.Expressions;
+    using Pegasus.Parser;
 
     public class PegCompilerTests
     {
@@ -21,7 +22,7 @@ namespace Pegasus.Tests
             var grammar = new Grammar(new[]
             {
                 new Rule("start", null, new LiteralExpression("OK")),
-            }, null);
+            }, null, null);
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -31,7 +32,7 @@ namespace Pegasus.Tests
         [Test]
         public void Compile_WithNoRules_YieldsError()
         {
-            var grammar = new Grammar(Enumerable.Empty<Rule>(), null);
+            var grammar = new Grammar(Enumerable.Empty<Rule>(), null, null);
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -47,7 +48,7 @@ namespace Pegasus.Tests
             {
                 new Rule("a", null, new LiteralExpression("a")),
                 new Rule("a", null, new LiteralExpression("b")),
-            }, null);
+            }, null, null);
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -62,7 +63,7 @@ namespace Pegasus.Tests
             var grammar = new Grammar(new[]
             {
                 new Rule("a", null, new NameExpression("b")),
-            }, null);
+            }, null, null);
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -82,7 +83,7 @@ namespace Pegasus.Tests
         [TestCase("a = b* a; b = 'OK';")]
         public void Compile_WithLeftRecursion_YieldsError(string subject)
         {
-            var parser = new Test.Parser();
+            var parser = new PegParser();
             var grammar = parser.Parse(subject);
             var compiler = new PegCompiler();
 

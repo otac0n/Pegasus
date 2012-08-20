@@ -129,4 +129,11 @@
   <data name="PEG0004_LEFT_RECURSION_DETECTED" xml:space="preserve">
     <value>The rules '{0}' are left-recursive.</value>
   </data>
+  <data name="PEG0005_SETTING_ALREADY_SPECIFIED" xml:space="preserve">
+    <value>The setting '{0}' has already been specified.</value>
+  </data>
+  <data name="PEG0006_SETTING_UNKNOWN" xml:space="preserve">
+    <value>The setting '{0}' is not recognized.</value>
+    <comment>warning</comment>
+  </data>
 </root>

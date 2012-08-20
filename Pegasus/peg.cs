@@ -7,17 +7,18 @@
 // </auto-generated>
 // -----------------------------------------------------------------------
 
-namespace Test
+namespace Pegasus.Parser
+
 {
     using System;
     using System.Collections.Generic;
     using Pegasus;
-    
     using System.Linq;
     using Pegasus.Expressions;
 
-[System.CodeDom.Compiler.GeneratedCode("Pegasus", "1.0.0.0")]
-    public partial class Parser
+    [System.CodeDom.Compiler.GeneratedCode("Pegasus", "1.0.0.0")]
+    public partial class PegParser
+
     {
         private Cursor rightmostErrorCursor = null;
         private List<string> rightmostErrors = new List<string>();
@@ -128,9 +129,7 @@ namespace Test
                             r0 = this.ReturnHelper(startCursor1, cursor, () =>
                             {
                                 
-        return new Grammar(
-            rules: rules,
-            initializer: initializer.SingleOrDefault());
+        return new Grammar(rules, settings, initializer.SingleOrDefault());
     
                             });
                         }

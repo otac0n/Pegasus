@@ -99,12 +99,20 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("// -----------------------------------------------------------------------");
                 this.code.WriteLineNoTabs("");
 
-                this.code.WriteLine("namespace Test");
+                var @namespace = grammar.Settings.Where(s => s.Key == "namespace").Select(s => s.Value).SingleOrDefault() ?? "Parsers";
+                var classname = grammar.Settings.Where(s => s.Key == "classname").Select(s => s.Value).SingleOrDefault() ?? "Parser";
+
+                this.code.WriteLine("namespace " + @namespace);
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("using System;");
                 this.code.WriteLine("using System.Collections.Generic;");
                 this.code.WriteLine("using Pegasus;");
+
+                foreach (var @using in grammar.Settings.Where(s => s.Key == "using").Select(s => s.Value))
+                {
+                    this.code.WriteLine("using " + @using + ";");
+                }
 
                 if (grammar.Initializer != null)
                 {
@@ -114,7 +122,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLineNoTabs("");
 
                 this.code.WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"" + assemblyName.Name + "\", \"" + assemblyName.Version + "\")]");
-                this.code.WriteLine("public partial class Parser");
+                this.code.WriteLine("public partial class " + EscapeName(classname));
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("private Cursor rightmostErrorCursor = null;");
