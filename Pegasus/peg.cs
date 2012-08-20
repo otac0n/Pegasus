@@ -1681,12 +1681,73 @@ namespace Test
                         r9 = this.dotted(ref cursor);
                         if (r9 != null)
                         {
-                            ParseResult<string> r10 = null;
-                            r10 = this.gt(ref cursor);
+                            ParseResult<IList<string>> r10 = null;
+                            var startCursor11 = cursor;
+                            var l12 = new List<string>();
+                            while (true)
+                            {
+                                ParseResult<string> r13 = null;
+                                var startCursor14 = cursor;
+                                ParseResult<string> r15 = null;
+                                r15 = this.ParseLiteral(ref cursor, ",");
+                                if (r15 != null)
+                                {
+                                    ParseResult<IList<string>> r16 = null;
+                                    r16 = this.__(ref cursor);
+                                    if (r16 != null)
+                                    {
+                                        ParseResult<string> r17 = null;
+                                        r17 = this.dotted(ref cursor);
+                                        if (r17 != null)
+                                        {
+                                            var len = cursor.Location - startCursor14.Location;
+                                            r13 = new ParseResult<string>(len, cursor.Subject.Substring(startCursor14.Location, len));
+                                        }
+                                        else
+                                        {
+                                            cursor = startCursor14;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        cursor = startCursor14;
+                                    }
+                                }
+                                else
+                                {
+                                    cursor = startCursor14;
+                                }
+                                if (r13 != null)
+                                {
+                                    l12.Add(r13.Value);
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            if (l12.Count >= 0)
+                            {
+                                var len = cursor.Location - startCursor11.Location;
+                                r10 = new ParseResult<IList<string>>(len, l12.AsReadOnly());
+                            }
+                            else
+                            {
+                                cursor = startCursor11;
+                            }
                             if (r10 != null)
                             {
-                                var len = cursor.Location - startCursor7.Location;
-                                r6 = new ParseResult<string>(len, cursor.Subject.Substring(startCursor7.Location, len));
+                                ParseResult<string> r18 = null;
+                                r18 = this.gt(ref cursor);
+                                if (r18 != null)
+                                {
+                                    var len = cursor.Location - startCursor7.Location;
+                                    r6 = new ParseResult<string>(len, cursor.Subject.Substring(startCursor7.Location, len));
+                                }
+                                else
+                                {
+                                    cursor = startCursor7;
+                                }
                             }
                             else
                             {

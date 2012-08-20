@@ -152,7 +152,7 @@ dotted "dotted identifier"
   = segment (dot segment)*
 
 segment
-  = identifier (lt dotted gt)?
+  = identifier (lt dotted ("," __ dotted)* gt)?
 
 /*
  * Modeled after ECMA-262, 5th ed., 7.8.4. (syntax & semantics, rules only
