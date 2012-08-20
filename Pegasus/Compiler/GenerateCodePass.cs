@@ -240,6 +240,18 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs("");
+                this.code.WriteLine("private T ValueOrDefault<T>(ParseResult<T> result)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("return result == null");
+                this.code.Indent++;
+                this.code.WriteLine("? default(T)");
+                this.code.WriteLine(": result.Value;");
+                this.code.Indent--;
+                this.code.Indent--;
+                this.code.WriteLine("}");
+
+                this.code.WriteLineNoTabs("");
                 this.code.WriteLine("private void ReportError(Cursor cursor, string expected)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -471,7 +483,7 @@ namespace Pegasus.Compiler
             {
                 this.WalkExpression(prefixedExpression.Expression);
 
-                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix) + " = " + this.currentResultName + ";");
+                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix) + " = ValueOrDefault(" + this.currentResultName + ");");
             }
 
             private static Dictionary<char, string> simpleEscapeChars = new Dictionary<char, string>()

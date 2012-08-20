@@ -66,7 +66,7 @@ namespace Test
                 {
                     cursor = startCursor4;
                 }
-                var initializer = r3;
+                var initializer = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<IList<Rule>> r7 = null;
@@ -94,15 +94,15 @@ namespace Test
                     {
                         cursor = startCursor8;
                     }
-                    var rules = r7;
+                    var rules = ValueOrDefault(r7);
                     if (r7 != null)
                     {
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
         return new Grammar(
-            rules: rules.Value,
-            initializer: initializer.Value.SingleOrDefault());
+            rules: rules,
+            initializer: initializer.SingleOrDefault());
     
                         });
                     }
@@ -129,7 +129,7 @@ namespace Test
             var startCursor1 = cursor;
             ParseResult<string> r2 = null;
             r2 = this.action(ref cursor);
-            var code = r2;
+            var code = ValueOrDefault(r2);
             if (r2 != null)
             {
                 ParseResult<IList<string>> r3 = null;
@@ -162,7 +162,7 @@ namespace Test
                     r0 = this.ReturnHelper(startCursor1, cursor, () =>
                     {
                         
-        return code.Value;
+        return code;
     
                     });
                 }
@@ -184,7 +184,7 @@ namespace Test
             var startCursor1 = cursor;
             ParseResult<string> r2 = null;
             r2 = this.identifier(ref cursor);
-            var name = r2;
+            var name = ValueOrDefault(r2);
             if (r2 != null)
             {
                 ParseResult<IList<string>> r3 = null;
@@ -212,7 +212,7 @@ namespace Test
                 {
                     cursor = startCursor4;
                 }
-                var displayName = r3;
+                var displayName = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<string> r7 = null;
@@ -221,7 +221,7 @@ namespace Test
                     {
                         ParseResult<Expression> r8 = null;
                         r8 = this.expression(ref cursor);
-                        var expression = r8;
+                        var expression = ValueOrDefault(r8);
                         if (r8 != null)
                         {
                             ParseResult<IList<string>> r9 = null;
@@ -255,9 +255,9 @@ namespace Test
                                 {
                                     
         return new Rule(
-            name: name.Value,
-            displayName: displayName.Value.SingleOrDefault(),
-            expression: expression.Value);
+            name: name,
+            displayName: displayName.SingleOrDefault(),
+            expression: expression);
     
                                 });
                             }
@@ -317,21 +317,21 @@ namespace Test
             {
                 cursor = startCursor3;
             }
-            var type = r2;
+            var type = ValueOrDefault(r2);
             if (r2 != null)
             {
                 ParseResult<Expression> r6 = null;
                 r6 = this.choice(ref cursor);
-                var choice = r6;
+                var choice = ValueOrDefault(r6);
                 if (r6 != null)
                 {
                     r0 = this.ReturnHelper(startCursor1, cursor, () =>
                     {
                         
-        var typeValue = type.Value.SingleOrDefault();
+        var typeValue = type.SingleOrDefault();
         return typeValue != null
-            ? new TypedExpression(typeValue, choice.Value)
-            : choice.Value;
+            ? new TypedExpression(typeValue, choice)
+            : choice;
     
                     });
                 }
@@ -357,7 +357,7 @@ namespace Test
             {
                 ParseResult<string> r3 = null;
                 r3 = this.dotted(ref cursor);
-                var dotted = r3;
+                var dotted = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<string> r4 = null;
@@ -367,7 +367,7 @@ namespace Test
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return dotted.Value;
+        return dotted;
     
                         });
                     }
@@ -394,7 +394,7 @@ namespace Test
             var startCursor1 = cursor;
             ParseResult<Expression> r2 = null;
             r2 = this.sequence(ref cursor);
-            var head = r2;
+            var head = ValueOrDefault(r2);
             if (r2 != null)
             {
                 ParseResult<IList<Expression>> r3 = null;
@@ -410,12 +410,12 @@ namespace Test
                     {
                         ParseResult<Expression> r9 = null;
                         r9 = this.sequence(ref cursor);
-                        var sequence = r9;
+                        var sequence = ValueOrDefault(r9);
                         if (r9 != null)
                         {
                             r6 = this.ReturnHelper(startCursor7, cursor, () =>
                             {
-                                 return sequence.Value; 
+                                 return sequence; 
                             });
                         }
                         else
@@ -445,19 +445,19 @@ namespace Test
                 {
                     cursor = startCursor4;
                 }
-                var tail = r3;
+                var tail = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     r0 = this.ReturnHelper(startCursor1, cursor, () =>
                     {
                         
-        if (tail.Value.Count == 0)
+        if (tail.Count == 0)
         {
-            return head.Value;
+            return head;
         }
         else
         {
-            return (Expression)new ChoiceExpression(new [] { head.Value }.Concat(tail.Value));
+            return (Expression)new ChoiceExpression(new [] { head }.Concat(tail));
         }
     
                     });
@@ -505,18 +505,18 @@ namespace Test
                 {
                     cursor = startCursor3;
                 }
-                var elements = r2;
+                var elements = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     ParseResult<string> r6 = null;
                     r6 = this.action(ref cursor);
-                    var code = r6;
+                    var code = ValueOrDefault(r6);
                     if (r6 != null)
                     {
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return (Expression)new SequenceExpression(elements.Value.Concat(new Expression[] { new CodeExpression(code.Value) }));
+        return (Expression)new SequenceExpression(elements.Concat(new Expression[] { new CodeExpression(code) }));
     
                         });
                     }
@@ -558,19 +558,19 @@ namespace Test
                 {
                     cursor = startCursor9;
                 }
-                var elements = r8;
+                var elements = ValueOrDefault(r8);
                 if (r8 != null)
                 {
                     r0 = this.ReturnHelper(startCursor7, cursor, () =>
                     {
                         
-        if (elements.Value.Count == 1)
+        if (elements.Count == 1)
         {
-            return elements.Value[0];
+            return elements[0];
         }
         else
         {
-            return new SequenceExpression(elements.Value);
+            return new SequenceExpression(elements);
         }
     
                     });
@@ -591,7 +591,7 @@ namespace Test
                 var startCursor1 = cursor;
                 ParseResult<string> r2 = null;
                 r2 = this.identifier(ref cursor);
-                var label = r2;
+                var label = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     ParseResult<string> r3 = null;
@@ -600,13 +600,13 @@ namespace Test
                     {
                         ParseResult<Expression> r4 = null;
                         r4 = this.prefixed(ref cursor);
-                        var expression = r4;
+                        var expression = ValueOrDefault(r4);
                         if (r4 != null)
                         {
                             r0 = this.ReturnHelper(startCursor1, cursor, () =>
                             {
                                 
-        return (Expression)new PrefixedExpression(label.Value, expression.Value);
+        return (Expression)new PrefixedExpression(label, expression);
     
                             });
                         }
@@ -644,13 +644,13 @@ namespace Test
                 {
                     ParseResult<Expression> r3 = null;
                     r3 = this.suffixed(ref cursor);
-                    var expression = r3;
+                    var expression = ValueOrDefault(r3);
                     if (r3 != null)
                     {
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return (Expression)new AndExpression(expression.Value);
+        return (Expression)new AndExpression(expression);
     
                         });
                     }
@@ -673,13 +673,13 @@ namespace Test
                 {
                     ParseResult<Expression> r6 = null;
                     r6 = this.suffixed(ref cursor);
-                    var expression = r6;
+                    var expression = ValueOrDefault(r6);
                     if (r6 != null)
                     {
                         r0 = this.ReturnHelper(startCursor4, cursor, () =>
                         {
                             
-        return (Expression)new NotExpression(expression.Value);
+        return (Expression)new NotExpression(expression);
     
                         });
                     }
@@ -708,7 +708,7 @@ namespace Test
                 var startCursor1 = cursor;
                 ParseResult<Expression> r2 = null;
                 r2 = this.primary(ref cursor);
-                var expression = r2;
+                var expression = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     ParseResult<string> r3 = null;
@@ -718,7 +718,7 @@ namespace Test
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return (Expression)new RepetitionExpression(expression.Value, min: 0, max: 1);
+        return (Expression)new RepetitionExpression(expression, min: 0, max: 1);
     
                         });
                     }
@@ -737,7 +737,7 @@ namespace Test
                 var startCursor4 = cursor;
                 ParseResult<Expression> r5 = null;
                 r5 = this.primary(ref cursor);
-                var expression = r5;
+                var expression = ValueOrDefault(r5);
                 if (r5 != null)
                 {
                     ParseResult<string> r6 = null;
@@ -747,7 +747,7 @@ namespace Test
                         r0 = this.ReturnHelper(startCursor4, cursor, () =>
                         {
                             
-        return (Expression)new RepetitionExpression(expression.Value, min: 0, max: null);
+        return (Expression)new RepetitionExpression(expression, min: 0, max: null);
     
                         });
                     }
@@ -766,7 +766,7 @@ namespace Test
                 var startCursor7 = cursor;
                 ParseResult<Expression> r8 = null;
                 r8 = this.primary(ref cursor);
-                var expression = r8;
+                var expression = ValueOrDefault(r8);
                 if (r8 != null)
                 {
                     ParseResult<string> r9 = null;
@@ -776,7 +776,7 @@ namespace Test
                         r0 = this.ReturnHelper(startCursor7, cursor, () =>
                         {
                             
-        return (Expression)new RepetitionExpression(expression.Value, min: 1, max: null);
+        return (Expression)new RepetitionExpression(expression, min: 1, max: null);
     
                         });
                     }
@@ -805,7 +805,7 @@ namespace Test
                 var startCursor1 = cursor;
                 ParseResult<string> r2 = null;
                 r2 = this.identifier(ref cursor);
-                var name = r2;
+                var name = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     ParseResult<string> r3 = null;
@@ -865,7 +865,7 @@ namespace Test
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return (Expression)new NameExpression(name.Value);
+        return (Expression)new NameExpression(name);
     
                         });
                     }
@@ -913,7 +913,7 @@ namespace Test
                 {
                     ParseResult<Expression> r16 = null;
                     r16 = this.expression(ref cursor);
-                    var expression = r16;
+                    var expression = ValueOrDefault(r16);
                     if (r16 != null)
                     {
                         ParseResult<string> r17 = null;
@@ -922,7 +922,7 @@ namespace Test
                         {
                             r0 = this.ReturnHelper(startCursor14, cursor, () =>
                             {
-                                 return expression.Value; 
+                                 return expression; 
                             });
                         }
                         else
@@ -949,7 +949,7 @@ namespace Test
             var startCursor1 = cursor;
             ParseResult<string> r2 = null;
             r2 = this.braced(ref cursor);
-            var braced = r2;
+            var braced = ValueOrDefault(r2);
             if (r2 != null)
             {
                 ParseResult<IList<string>> r3 = null;
@@ -958,7 +958,7 @@ namespace Test
                 {
                     r0 = this.ReturnHelper(startCursor1, cursor, () =>
                     {
-                         return braced.Value.Substring(1, braced.Value.Length - 2); 
+                         return braced.Substring(1, braced.Length - 2); 
                     });
                 }
                 else
@@ -1013,7 +1013,7 @@ namespace Test
                 {
                     cursor = startCursor4;
                 }
-                var parts = r3;
+                var parts = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<string> r7 = null;
@@ -1069,12 +1069,12 @@ namespace Test
             {
                 cursor = startCursor3;
             }
-            var chars = r2;
+            var chars = ValueOrDefault(r2);
             if (r2 != null)
             {
                 r0 = this.ReturnHelper(startCursor1, cursor, () =>
                 {
-                     return string.Join("", chars.Value); 
+                     return string.Join("", chars); 
                 });
             }
             else
@@ -1514,7 +1514,7 @@ namespace Test
             {
                 r2 = this.ParseLiteral(ref cursor, "$");
             }
-            var head = r2;
+            var head = ValueOrDefault(r2);
             if (r2 != null)
             {
                 ParseResult<IList<string>> r3 = null;
@@ -1557,7 +1557,7 @@ namespace Test
                 {
                     cursor = startCursor4;
                 }
-                var tail = r3;
+                var tail = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<IList<string>> r7 = null;
@@ -1567,7 +1567,7 @@ namespace Test
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return head.Value + string.Join("", tail.Value);
+        return head + string.Join("", tail);
     
                         });
                     }
@@ -1750,7 +1750,7 @@ namespace Test
             {
                 r2 = this.singleQuotedString(ref cursor);
             }
-            var value = r2;
+            var value = ValueOrDefault(r2);
             if (r2 != null)
             {
                 ParseResult<IList<string>> r3 = null;
@@ -1778,7 +1778,7 @@ namespace Test
                 {
                     cursor = startCursor4;
                 }
-                var flags = r3;
+                var flags = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<IList<string>> r7 = null;
@@ -1788,7 +1788,7 @@ namespace Test
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return (Expression)new LiteralExpression(value.Value, ignoreCase: flags.Value.SingleOrDefault() == "i");
+        return (Expression)new LiteralExpression(value, ignoreCase: flags.SingleOrDefault() == "i");
     
                         });
                     }
@@ -1822,7 +1822,7 @@ namespace Test
             {
                 r2 = this.singleQuotedString(ref cursor);
             }
-            var @string = r2;
+            var @string = ValueOrDefault(r2);
             if (r2 != null)
             {
                 ParseResult<IList<string>> r3 = null;
@@ -1831,7 +1831,7 @@ namespace Test
                 {
                     r0 = this.ReturnHelper(startCursor1, cursor, () =>
                     {
-                         return @string.Value; 
+                         return @string; 
                     });
                 }
                 else
@@ -1879,7 +1879,7 @@ namespace Test
                 {
                     cursor = startCursor4;
                 }
-                var chars = r3;
+                var chars = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<string> r7 = null;
@@ -1888,7 +1888,7 @@ namespace Test
                     {
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
-                             return string.Join("", chars.Value); 
+                             return string.Join("", chars); 
                         });
                     }
                     else
@@ -1966,12 +1966,12 @@ namespace Test
             {
                 ParseResult<string> r5 = null;
                 r5 = this.ParseAny(ref cursor);
-                var char_ = r5;
+                var char_ = ValueOrDefault(r5);
                 if (r5 != null)
                 {
                     r0 = this.ReturnHelper(startCursor1, cursor, () =>
                     {
-                         return char_.Value; 
+                         return char_; 
                     });
                 }
                 else
@@ -2019,7 +2019,7 @@ namespace Test
                 {
                     cursor = startCursor4;
                 }
-                var chars = r3;
+                var chars = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<string> r7 = null;
@@ -2028,7 +2028,7 @@ namespace Test
                     {
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
-                             return string.Join("", chars.Value); 
+                             return string.Join("", chars); 
                         });
                     }
                     else
@@ -2106,12 +2106,12 @@ namespace Test
             {
                 ParseResult<string> r5 = null;
                 r5 = this.ParseAny(ref cursor);
-                var char_ = r5;
+                var char_ = ValueOrDefault(r5);
                 if (r5 != null)
                 {
                     r0 = this.ReturnHelper(startCursor1, cursor, () =>
                     {
-                         return char_.Value; 
+                         return char_; 
                     });
                 }
                 else
@@ -2159,7 +2159,7 @@ namespace Test
                 {
                     cursor = startCursor4;
                 }
-                var inverted = r3;
+                var inverted = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<IList<CharacterRange>> r7 = null;
@@ -2194,7 +2194,7 @@ namespace Test
                     {
                         cursor = startCursor8;
                     }
-                    var parts = r7;
+                    var parts = ValueOrDefault(r7);
                     if (r7 != null)
                     {
                         ParseResult<string> r11 = null;
@@ -2226,7 +2226,7 @@ namespace Test
                             {
                                 cursor = startCursor13;
                             }
-                            var flags = r12;
+                            var flags = ValueOrDefault(r12);
                             if (r12 != null)
                             {
                                 ParseResult<IList<string>> r16 = null;
@@ -2237,9 +2237,9 @@ namespace Test
                                     {
                                         
         return (Expression)new ClassExpression(
-            parts.Value,
-            negated: inverted.Value.SingleOrDefault() == "^",
-            ignoreCase: flags.Value.SingleOrDefault() == "i");
+            parts,
+            negated: inverted.SingleOrDefault() == "^",
+            ignoreCase: flags.SingleOrDefault() == "i");
     
                                     });
                                 }
@@ -2281,7 +2281,7 @@ namespace Test
             var startCursor1 = cursor;
             ParseResult<string> r2 = null;
             r2 = this.bracketDelimitedCharacter(ref cursor);
-            var begin = r2;
+            var begin = ValueOrDefault(r2);
             if (r2 != null)
             {
                 ParseResult<string> r3 = null;
@@ -2290,13 +2290,13 @@ namespace Test
                 {
                     ParseResult<string> r4 = null;
                     r4 = this.bracketDelimitedCharacter(ref cursor);
-                    var end = r4;
+                    var end = ValueOrDefault(r4);
                     if (r4 != null)
                     {
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return new CharacterRange(begin.Value[0], end.Value[0]);
+        return new CharacterRange(begin[0], end[0]);
     
                         });
                     }
@@ -2323,13 +2323,13 @@ namespace Test
             var startCursor1 = cursor;
             ParseResult<string> r2 = null;
             r2 = this.bracketDelimitedCharacter(ref cursor);
-            var char_ = r2;
+            var char_ = ValueOrDefault(r2);
             if (r2 != null)
             {
                 r0 = this.ReturnHelper(startCursor1, cursor, () =>
                 {
                     
-        return new CharacterRange(char_.Value[0], char_.Value[0]);
+        return new CharacterRange(char_[0], char_[0]);
     
                 });
             }
@@ -2398,12 +2398,12 @@ namespace Test
             {
                 ParseResult<string> r5 = null;
                 r5 = this.ParseAny(ref cursor);
-                var char_ = r5;
+                var char_ = ValueOrDefault(r5);
                 if (r5 != null)
                 {
                     r0 = this.ReturnHelper(startCursor1, cursor, () =>
                     {
-                         return char_.Value; 
+                         return char_; 
                     });
                 }
                 else
@@ -2454,13 +2454,13 @@ namespace Test
                 {
                     ParseResult<string> r6 = null;
                     r6 = this.ParseAny(ref cursor);
-                    var char_ = r6;
+                    var char_ = ValueOrDefault(r6);
                     if (r6 != null)
                     {
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return char_.Value
+        return char_
             .Replace("b", "\b")
             .Replace("f", "\f")
             .Replace("n", "\n")
@@ -2533,18 +2533,18 @@ namespace Test
             {
                 ParseResult<string> r3 = null;
                 r3 = this.hexDigit(ref cursor);
-                var h1 = r3;
+                var h1 = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<string> r4 = null;
                     r4 = this.hexDigit(ref cursor);
-                    var h2 = r4;
+                    var h2 = ValueOrDefault(r4);
                     if (r4 != null)
                     {
                         r0 = this.ReturnHelper(startCursor1, cursor, () =>
                         {
                             
-        return ((char)Convert.ToInt32(h1.Value + h2.Value, 16)).ToString();
+        return ((char)Convert.ToInt32(h1 + h2, 16)).ToString();
     
                         });
                     }
@@ -2575,28 +2575,28 @@ namespace Test
             {
                 ParseResult<string> r3 = null;
                 r3 = this.hexDigit(ref cursor);
-                var h1 = r3;
+                var h1 = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     ParseResult<string> r4 = null;
                     r4 = this.hexDigit(ref cursor);
-                    var h2 = r4;
+                    var h2 = ValueOrDefault(r4);
                     if (r4 != null)
                     {
                         ParseResult<string> r5 = null;
                         r5 = this.hexDigit(ref cursor);
-                        var h3 = r5;
+                        var h3 = ValueOrDefault(r5);
                         if (r5 != null)
                         {
                             ParseResult<string> r6 = null;
                             r6 = this.hexDigit(ref cursor);
-                            var h4 = r6;
+                            var h4 = ValueOrDefault(r6);
                             if (r6 != null)
                             {
                                 r0 = this.ReturnHelper(startCursor1, cursor, () =>
                                 {
                                     
-        return ((char)Convert.ToInt32(h1.Value + h2.Value + h3.Value + h4.Value, 16)).ToString();
+        return ((char)Convert.ToInt32(h1 + h2 + h3 + h4, 16)).ToString();
     
                                 });
                             }
@@ -2637,12 +2637,12 @@ namespace Test
             {
                 ParseResult<string> r3 = null;
                 r3 = this.eol(ref cursor);
-                var eol = r3;
+                var eol = ValueOrDefault(r3);
                 if (r3 != null)
                 {
                     r0 = this.ReturnHelper(startCursor1, cursor, () =>
                     {
-                         return eol.Value; 
+                         return eol; 
                     });
                 }
                 else
@@ -3024,6 +3024,13 @@ namespace Test
         {
             var len = endCursor.Location - startCursor.Location;
             return new ParseResult<T>(len, wrappedCode());
+        }
+
+        private T ValueOrDefault<T>(ParseResult<T> result)
+        {
+            return result == null
+                ? default(T)
+                : result.Value;
         }
 
         private void ReportError(Cursor cursor, string expected)
