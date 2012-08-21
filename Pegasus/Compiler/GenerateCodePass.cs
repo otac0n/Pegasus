@@ -382,12 +382,7 @@ namespace Pegasus.Compiler
                 }
                 else
                 {
-                    this.code.WriteLine(this.currentResultName + " = this.ReturnHelper(startCursor" + startId + ", cursor, () =>");
-                    this.code.WriteLine("{");
-                    this.code.Indent++;
-                    this.code.WriteLine(codeExpression.Code);
-                    this.code.Indent--;
-                    this.code.WriteLine("});");
+                    this.code.WriteLine(this.currentResultName + " = this.ReturnHelper(startCursor" + startId + ", cursor, () => " + codeExpression.Code + ");");
                 }
 
                 for (int i = 0; i < sequence.Count; i++)

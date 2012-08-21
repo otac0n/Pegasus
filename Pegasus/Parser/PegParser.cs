@@ -124,12 +124,9 @@ namespace Pegasus.Parser
                         var rules = ValueOrDefault(r11);
                         if (r11 != null)
                         {
-                            r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                            {
-                                
-        return new Grammar(rules, settings, initializer.SingleOrDefault());
-    
-                            });
+                            r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new Grammar(rules, settings, initializer.SingleOrDefault())
+    );
                         }
                         else
                         {
@@ -205,12 +202,9 @@ namespace Pegasus.Parser
                         }
                         if (r5 != null)
                         {
-                            r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                            {
-                                
-        return new KeyValuePair<string, string>(key, value);
-    
-                            });
+                            r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new KeyValuePair<string, string>(key, value)
+    );
                         }
                         else
                         {
@@ -270,12 +264,7 @@ namespace Pegasus.Parser
                 }
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                        
-        return code;
-    
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  code );
                 }
                 else
                 {
@@ -362,15 +351,12 @@ namespace Pegasus.Parser
                             }
                             if (r9 != null)
                             {
-                                r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                                {
-                                    
-        return new Rule(
+                                r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new Rule(
             name: name,
             displayName: displayName.SingleOrDefault(),
-            expression: expression);
-    
-                                });
+            expression: expression)
+    );
                             }
                             else
                             {
@@ -436,15 +422,12 @@ namespace Pegasus.Parser
                 var choice = ValueOrDefault(r6);
                 if (r6 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                        
+                    r0 = this.ReturnHelper(startCursor1, cursor, () => {
         var typeValue = type.SingleOrDefault();
         return typeValue != null
             ? new TypedExpression(typeValue, choice)
             : choice;
-    
-                    });
+    });
                 }
                 else
                 {
@@ -475,12 +458,7 @@ namespace Pegasus.Parser
                     r4 = this.gt(ref cursor);
                     if (r4 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return dotted;
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () =>  dotted );
                     }
                     else
                     {
@@ -524,10 +502,7 @@ namespace Pegasus.Parser
                         var sequence = ValueOrDefault(r9);
                         if (r9 != null)
                         {
-                            r6 = this.ReturnHelper(startCursor7, cursor, () =>
-                            {
-                                 return sequence; 
-                            });
+                            r6 = this.ReturnHelper(startCursor7, cursor, () =>  sequence );
                         }
                         else
                         {
@@ -559,19 +534,11 @@ namespace Pegasus.Parser
                 var tail = ValueOrDefault(r3);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                        
-        if (tail.Count == 0)
-        {
-            return head;
-        }
-        else
-        {
-            return new ChoiceExpression(new [] { head }.Concat(tail));
-        }
-    
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        tail.Count == 0
+            ? head
+            : new ChoiceExpression(new [] { head }.Concat(tail))
+    );
                 }
                 else
                 {
@@ -624,12 +591,9 @@ namespace Pegasus.Parser
                     var code = ValueOrDefault(r6);
                     if (r6 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return new SequenceExpression(elements.Concat(new Expression[] { new CodeExpression(code) }));
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new SequenceExpression(elements.Concat(new Expression[] { new CodeExpression(code) }))
+    );
                     }
                     else
                     {
@@ -672,19 +636,11 @@ namespace Pegasus.Parser
                 var elements = ValueOrDefault(r8);
                 if (r8 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor7, cursor, () =>
-                    {
-                        
-        if (elements.Count == 1)
-        {
-            return elements[0];
-        }
-        else
-        {
-            return new SequenceExpression(elements);
-        }
-    
-                    });
+                    r0 = this.ReturnHelper(startCursor7, cursor, () => 
+        elements.Count == 1
+            ? elements[0]
+            : new SequenceExpression(elements)
+    );
                 }
                 else
                 {
@@ -714,12 +670,9 @@ namespace Pegasus.Parser
                         var expression = ValueOrDefault(r4);
                         if (r4 != null)
                         {
-                            r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                            {
-                                
-        return new PrefixedExpression(label, expression);
-    
-                            });
+                            r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new PrefixedExpression(label, expression)
+    );
                         }
                         else
                         {
@@ -758,12 +711,9 @@ namespace Pegasus.Parser
                     var expression = ValueOrDefault(r3);
                     if (r3 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return new AndExpression(expression);
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new AndExpression(expression)
+    );
                     }
                     else
                     {
@@ -787,12 +737,9 @@ namespace Pegasus.Parser
                     var expression = ValueOrDefault(r6);
                     if (r6 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor4, cursor, () =>
-                        {
-                            
-        return new NotExpression(expression);
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor4, cursor, () => 
+        new NotExpression(expression)
+    );
                     }
                     else
                     {
@@ -826,12 +773,9 @@ namespace Pegasus.Parser
                     r3 = this.question(ref cursor);
                     if (r3 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return new RepetitionExpression(expression, min: 0, max: 1);
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new RepetitionExpression(expression, min: 0, max: 1)
+    );
                     }
                     else
                     {
@@ -855,12 +799,9 @@ namespace Pegasus.Parser
                     r6 = this.star(ref cursor);
                     if (r6 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor4, cursor, () =>
-                        {
-                            
-        return new RepetitionExpression(expression, min: 0, max: null);
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor4, cursor, () => 
+        new RepetitionExpression(expression, min: 0, max: null)
+    );
                     }
                     else
                     {
@@ -884,12 +825,9 @@ namespace Pegasus.Parser
                     r9 = this.plus(ref cursor);
                     if (r9 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor7, cursor, () =>
-                        {
-                            
-        return new RepetitionExpression(expression, min: 1, max: null);
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor7, cursor, () => 
+        new RepetitionExpression(expression, min: 1, max: null)
+    );
                     }
                     else
                     {
@@ -973,12 +911,7 @@ namespace Pegasus.Parser
                     }
                     if (r3 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return new NameExpression(name);
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () =>  new NameExpression(name) );
                     }
                     else
                     {
@@ -1005,10 +938,7 @@ namespace Pegasus.Parser
                 r13 = this.dot(ref cursor);
                 if (r13 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor12, cursor, () =>
-                    {
-                         return new WildcardExpression(); 
-                    });
+                    r0 = this.ReturnHelper(startCursor12, cursor, () =>  new WildcardExpression() );
                 }
                 else
                 {
@@ -1031,10 +961,7 @@ namespace Pegasus.Parser
                         r17 = this.rparen(ref cursor);
                         if (r17 != null)
                         {
-                            r0 = this.ReturnHelper(startCursor14, cursor, () =>
-                            {
-                                 return expression; 
-                            });
+                            r0 = this.ReturnHelper(startCursor14, cursor, () =>  expression );
                         }
                         else
                         {
@@ -1067,10 +994,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return braced.Substring(1, braced.Length - 2); 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  braced.Substring(1, braced.Length - 2) );
                 }
                 else
                 {
@@ -1183,10 +1107,7 @@ namespace Pegasus.Parser
             var chars = ValueOrDefault(r2);
             if (r2 != null)
             {
-                r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                {
-                     return string.Join("", chars); 
-                });
+                r0 = this.ReturnHelper(startCursor1, cursor, () =>  string.Join("", chars) );
             }
             else
             {
@@ -1214,10 +1135,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "="; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "=" );
                 }
                 else
                 {
@@ -1243,10 +1161,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return ":"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  ":" );
                 }
                 else
                 {
@@ -1272,10 +1187,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return ";"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  ";" );
                 }
                 else
                 {
@@ -1301,10 +1213,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "/"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "/" );
                 }
                 else
                 {
@@ -1330,10 +1239,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "&"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "&" );
                 }
                 else
                 {
@@ -1359,10 +1265,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "!"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "!" );
                 }
                 else
                 {
@@ -1388,10 +1291,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "?"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "?" );
                 }
                 else
                 {
@@ -1417,10 +1317,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "*"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "*" );
                 }
                 else
                 {
@@ -1446,10 +1343,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "+"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "+" );
                 }
                 else
                 {
@@ -1475,10 +1369,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "("; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "(" );
                 }
                 else
                 {
@@ -1504,10 +1395,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return ")"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  ")" );
                 }
                 else
                 {
@@ -1533,10 +1421,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "."; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "." );
                 }
                 else
                 {
@@ -1562,10 +1447,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "."; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "." );
                 }
                 else
                 {
@@ -1591,10 +1473,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "."; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "." );
                 }
                 else
                 {
@@ -1675,12 +1554,7 @@ namespace Pegasus.Parser
                     r7 = this.__(ref cursor);
                     if (r7 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return head + string.Join("", tail);
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () =>  head + string.Join("", tail) );
                     }
                     else
                     {
@@ -1957,12 +1831,9 @@ namespace Pegasus.Parser
                     r7 = this.__(ref cursor);
                     if (r7 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return new LiteralExpression(value, ignoreCase: flags.SingleOrDefault() == "i");
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new LiteralExpression(value, ignoreCase: flags.SingleOrDefault() == "i")
+    );
                     }
                     else
                     {
@@ -2001,10 +1872,7 @@ namespace Pegasus.Parser
                 r3 = this.__(ref cursor);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return @string; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  @string );
                 }
                 else
                 {
@@ -2058,10 +1926,7 @@ namespace Pegasus.Parser
                     r7 = this.ParseLiteral(ref cursor, "\"");
                     if (r7 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                             return string.Join("", chars); 
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () =>  string.Join("", chars) );
                     }
                     else
                     {
@@ -2138,13 +2003,10 @@ namespace Pegasus.Parser
             {
                 IParseResult<string> r5 = null;
                 r5 = this.ParseAny(ref cursor);
-                var char_ = ValueOrDefault(r5);
+                var @char = ValueOrDefault(r5);
                 if (r5 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return char_; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  @char );
                 }
                 else
                 {
@@ -2198,10 +2060,7 @@ namespace Pegasus.Parser
                     r7 = this.ParseLiteral(ref cursor, "\'");
                     if (r7 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                             return string.Join("", chars); 
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () =>  string.Join("", chars) );
                     }
                     else
                     {
@@ -2278,13 +2137,10 @@ namespace Pegasus.Parser
             {
                 IParseResult<string> r5 = null;
                 r5 = this.ParseAny(ref cursor);
-                var char_ = ValueOrDefault(r5);
+                var @char = ValueOrDefault(r5);
                 if (r5 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return char_; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  @char );
                 }
                 else
                 {
@@ -2405,15 +2261,12 @@ namespace Pegasus.Parser
                                 r16 = this.__(ref cursor);
                                 if (r16 != null)
                                 {
-                                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                                    {
-                                        
-        return new ClassExpression(
+                                    r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
-            ignoreCase: flags.SingleOrDefault() == "i");
-    
-                                    });
+            ignoreCase: flags.SingleOrDefault() == "i")
+    );
                                 }
                                 else
                                 {
@@ -2465,12 +2318,9 @@ namespace Pegasus.Parser
                     var end = ValueOrDefault(r4);
                     if (r4 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return new CharacterRange(begin[0], end[0]);
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new CharacterRange(begin[0], end[0])
+    );
                     }
                     else
                     {
@@ -2498,12 +2348,9 @@ namespace Pegasus.Parser
             var char_ = ValueOrDefault(r2);
             if (r2 != null)
             {
-                r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                {
-                    
-        return new CharacterRange(char_[0], char_[0]);
-    
-                });
+                r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        new CharacterRange(char_[0], char_[0])
+    );
             }
             else
             {
@@ -2570,13 +2417,10 @@ namespace Pegasus.Parser
             {
                 IParseResult<string> r5 = null;
                 r5 = this.ParseAny(ref cursor);
-                var char_ = ValueOrDefault(r5);
+                var @char = ValueOrDefault(r5);
                 if (r5 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return char_; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  @char );
                 }
                 else
                 {
@@ -2626,21 +2470,18 @@ namespace Pegasus.Parser
                 {
                     IParseResult<string> r6 = null;
                     r6 = this.ParseAny(ref cursor);
-                    var char_ = ValueOrDefault(r6);
+                    var @char = ValueOrDefault(r6);
                     if (r6 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return char_
+                        r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        @char
             .Replace("b", "\b")
             .Replace("f", "\f")
             .Replace("n", "\n")
             .Replace("r", "\r")
             .Replace("t", "\t")
-            .Replace("v", "\v");
-    
-                        });
+            .Replace("v", "\v")
+    );
                     }
                     else
                     {
@@ -2678,10 +2519,7 @@ namespace Pegasus.Parser
                 }
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return "\x00"; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  "\x00" );
                 }
                 else
                 {
@@ -2713,12 +2551,9 @@ namespace Pegasus.Parser
                     var h2 = ValueOrDefault(r4);
                     if (r4 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                        {
-                            
-        return ((char)Convert.ToInt32(h1 + h2, 16)).ToString();
-    
-                        });
+                        r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        ((char)Convert.ToInt32(h1 + h2, 16)).ToString()
+    );
                     }
                     else
                     {
@@ -2765,12 +2600,9 @@ namespace Pegasus.Parser
                             var h4 = ValueOrDefault(r6);
                             if (r6 != null)
                             {
-                                r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                                {
-                                    
-        return ((char)Convert.ToInt32(h1 + h2 + h3 + h4, 16)).ToString();
-    
-                                });
+                                r0 = this.ReturnHelper(startCursor1, cursor, () => 
+        ((char)Convert.ToInt32(h1 + h2 + h3 + h4, 16)).ToString()
+    );
                             }
                             else
                             {
@@ -2812,10 +2644,7 @@ namespace Pegasus.Parser
                 var eol = ValueOrDefault(r3);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor1, cursor, () =>
-                    {
-                         return eol; 
-                    });
+                    r0 = this.ReturnHelper(startCursor1, cursor, () =>  eol );
                 }
                 else
                 {
