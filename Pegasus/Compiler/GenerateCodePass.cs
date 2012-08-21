@@ -101,6 +101,7 @@ namespace Pegasus.Compiler
 
                 var @namespace = grammar.Settings.Where(s => s.Key == "namespace").Select(s => s.Value).SingleOrDefault() ?? "Parsers";
                 var classname = grammar.Settings.Where(s => s.Key == "classname").Select(s => s.Value).SingleOrDefault() ?? "Parser";
+                var accessibility = grammar.Settings.Where(s => s.Key == "accessibility").Select(s => s.Value).SingleOrDefault() ?? "public";
 
                 this.code.WriteLine("namespace " + @namespace);
                 this.code.WriteLine("{");
@@ -122,7 +123,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLineNoTabs(string.Empty);
 
                 this.code.WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"" + assemblyName.Name + "\", \"" + assemblyName.Version + "\")]");
-                this.code.WriteLine("public partial class " + EscapeName(classname));
+                this.code.WriteLine(accessibility + " partial class " + EscapeName(classname));
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("private Cursor rightmostErrorCursor = null;");

@@ -19,6 +19,7 @@ namespace Pegasus.Compiler
         {
             { "namespace", true },
             { "classname", true },
+            { "accessibility", true },
             { "using", false },
         };
 
