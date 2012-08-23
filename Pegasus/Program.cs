@@ -30,7 +30,7 @@ namespace Pegasus
 
             if (!result.Errors.Any(e => !e.IsWarning))
             {
-                File.WriteAllText(Path.GetFileNameWithoutExtension(args[0]) + ".cs", result.Code);
+                File.WriteAllText(args[0] + ".cs", result.Code);
             }
         }
     }

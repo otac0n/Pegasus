@@ -77,7 +77,7 @@
     <Compile Include="Parser\Cursor.cs" />
     <Compile Include="Parser\IParseResult{T}.cs" />
     <Compile Include="Parser\ParseResult{T}.cs" />
-    <Compile Include="Parser\PegParser.cs">
+    <Compile Include="Parser\PegParser.peg.cs">
       <DependentUpon>PegParser.peg</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
