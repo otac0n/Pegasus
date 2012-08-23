@@ -67,17 +67,6 @@ namespace Pegasus.Parser
         }
 
         /// <summary>
-        /// Subtracts one <see cref="Cursor"/> instance from another and returns an integer.
-        /// </summary>
-        /// <param name="a">A <see cref="Cursor"/> (the minuend).</param>
-        /// <param name="b">A <see cref="Cursor"/> (the subtrahend).</param>
-        /// <returns>An integer that is the number of characters between <paramref name="a"/> and <paramref name="b"/>; that is, <paramref name="a"/> minus <paramref name="b"/>.</returns>
-        public static int operator -(Cursor a, Cursor b)
-        {
-            return a.Location - b.Location;
-        }
-
-        /// <summary>
         /// Determines whether two specified cursors represent the same location.
         /// </summary>
         /// <param name="a">The first <see cref="Cursor"/> to compare, or null.</param>
