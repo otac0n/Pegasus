@@ -95,7 +95,7 @@ braced
   = "{" parts:(braced / nonBraceCharacters)* "}"
 
 nonBraceCharacters
-  = chars:nonBraceCharacter+ { string.Join("", chars) }
+  = chars:nonBraceCharacter+ { string.Concat(chars) }
 
 nonBraceCharacter
   = [^{}]
@@ -134,7 +134,7 @@ rbracket  = "]" __ { "]" }
  * easier, there is no "philosophical" reason behind them.
  */
 identifier "identifier"
-  = head:(letter / "_" / "$") tail:(letter / digit / "_" / "$")* __ { head + string.Join("", tail) }
+  = head:(letter / "_" / "$") tail:(letter / digit / "_" / "$")* __ { head + string.Concat(tail) }
 
 /*
  * Modeled after C# Language Specification, Version 4.0, appendix B.2, but simplified:
@@ -188,7 +188,7 @@ string "string"
   = string:(doubleQuotedString / singleQuotedString) __ { @string }
 
 doubleQuotedString
-  = '"' chars:doubleQuotedCharacter* '"' { string.Join("", chars) }
+  = '"' chars:doubleQuotedCharacter* '"' { string.Concat(chars) }
 
 doubleQuotedCharacter
   = simpleDoubleQuotedCharacter
@@ -202,7 +202,7 @@ simpleDoubleQuotedCharacter
   = !('"' / "\\" / eolChar) char:. { @char }
 
 singleQuotedString
-  = "'" chars:singleQuotedCharacter* "'" { string.Join("", chars) }
+  = "'" chars:singleQuotedCharacter* "'" { string.Concat(chars) }
 
 singleQuotedCharacter
   = simpleSingleQuotedCharacter
