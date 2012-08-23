@@ -9,7 +9,7 @@ grammar
     }
 
 setting
-  = <KeyValuePair<string, string>> "@" key:identifier value:(string / dotted) semicolon? {
+  = <KeyValuePair<string, string>> "@" key:identifier value:(string / type) semicolon? {
         new KeyValuePair<string, string>(key, value)
     }
 
@@ -25,15 +25,15 @@ rule
     }
 
 expression
-  = <Expression> type:type? choice:choice {{
+  = <Expression> type:expressionType? choice:choice {{
         var typeValue = type.SingleOrDefault();
         return typeValue != null
             ? new TypedExpression(typeValue, choice)
             : choice;
     }}
 
-type
-  = lt dotted:dotted gt { dotted }
+expressionType
+  = lt name:type gt { name }
 
 choice
   = <Expression> head:sequence tail:(<Expression> slash sequence:sequence { sequence })* {
@@ -114,6 +114,9 @@ rparen    = ")" __ { ")" }
 dot       = "." __ { "." }
 lt        = "<" __ { "." }
 gt        = ">" __ { "." }
+comma     = "," __ { "," }
+lbracket  = "[" __ { "[" }
+rbracket  = "]" __ { "]" }
 
 /*
  * Modeled after ECMA-262, 5th ed., 7.6, but much simplified:
@@ -133,11 +136,44 @@ gt        = ">" __ { "." }
 identifier "identifier"
   = head:(letter / "_" / "$") tail:(letter / digit / "_" / "$")* __ { head + string.Join("", tail) }
 
-dotted "dotted identifier"
-  = segment (dot segment)*
+/*
+ * Modeled after C# Language Specification, Version 4.0, appendix B.2, but simplified:
+ *
+ * * the "identifier" class is as above.
+ *
+ * * no support for qualified namespaces. ("global::System.String", for example)
+ *
+ * * no support for \u characters directly in the name.
+ *
+ * Again, these simplifications are simply for ease of implementation.
+ */
 
-segment
-  = identifier (lt dotted ("," __ dotted)* gt)?
+type
+  = type:nonArrayType ranks:rankSpecifiers* { type + string.Concat(ranks) }
+
+nonArrayType
+  = nullableType
+  / typeName
+
+nullableType
+  = type:typeName question { type + "?" }
+
+rankSpecifiers
+  = lbracket dimensions:dimSeparator? rbracket { "[" + dimensions.SingleOrDefault() + "]" }
+
+dimSeparator
+  = commas:comma+ { new string(',', commas.Count) }
+
+typeName
+  = ident:identifier args:typeArgumentList? dot rest:typeName { ident + args.SingleOrDefault() + "." + rest }
+  / ident:identifier args:typeArgumentList? { ident + args.SingleOrDefault() }
+
+typeArgumentList
+  = lt args:typeArguments gt { "<" + args + ">" }
+
+typeArguments
+  = type:type comma rest:typeArguments { type + ", " + rest }
+  / type
 
 /*
  * Modeled after ECMA-262, 5th ed., 7.8.4. (syntax & semantics, rules only
