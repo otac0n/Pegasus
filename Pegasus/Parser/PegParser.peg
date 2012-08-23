@@ -1,7 +1,7 @@
-﻿@namespace Pegasus.Parser;
-@classname PegParser;
-@using System.Linq;
-@using Pegasus.Expressions;
+﻿@namespace Pegasus.Parser
+@classname PegParser
+@using System.Linq
+@using Pegasus.Expressions
 
 grammar
   = <Grammar> __ settings:setting* initializer:initializer? rules:rule* {
