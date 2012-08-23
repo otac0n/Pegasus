@@ -11,7 +11,6 @@ namespace Pegasus.Parser
 {
     using System;
     using System.Collections.Generic;
-    using Pegasus;
     using System.Linq;
     using Pegasus.Expressions;
 
