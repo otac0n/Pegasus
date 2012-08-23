@@ -112,7 +112,7 @@ namespace Pegasus.Parser
                                 break;
                             }
                         }
-                        if (l13.Count >= 1)
+                        if (l13.Count >= 0)
                         {
                             var len = cursor.Location - startCursor12.Location;
                             r11 = new ParseResult<IList<Rule>>(len, l13.AsReadOnly());
