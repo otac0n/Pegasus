@@ -94,6 +94,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Parser\PegParser.peg" />
+    <None Include="Pegasus.targets">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
