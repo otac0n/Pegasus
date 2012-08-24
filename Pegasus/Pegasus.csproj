@@ -42,6 +42,8 @@
     <StartupObject>Pegasus.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +51,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CompileManager.cs" />
+    <Compile Include="CompilePegGrammar.cs" />
     <Compile Include="Compiler\CompilePass.cs" />
     <Compile Include="Compiler\CompileResult.cs" />
     <Compile Include="Compiler\ExpressionTreeWalker.cs" />
