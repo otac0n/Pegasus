@@ -48,6 +48,7 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CompileManager.cs" />
     <Compile Include="Compiler\CompilePass.cs" />
     <Compile Include="Compiler\CompileResult.cs" />
     <Compile Include="Compiler\ExpressionTreeWalker.cs" />
