@@ -134,10 +134,10 @@ namespace Pegasus.Compiler
 
                 var type = this.GetResultType(grammar.Rules[0].Expression);
 
-                this.code.WriteLine("public " + type + " Parse(string subject)");
+                this.code.WriteLine("public " + type + " Parse(string subject, string fileName = null)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("var cursor = new Cursor(subject, 0);");
+                this.code.WriteLine("var cursor = new Cursor(subject, 0, fileName);");
                 this.code.WriteLine("var result = this." + EscapeName(grammar.Rules[0].Name) + "(ref cursor);");
                 this.code.WriteLine("if (result == null)");
                 this.code.WriteLine("{");

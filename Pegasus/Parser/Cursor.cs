@@ -16,6 +16,7 @@ namespace Pegasus.Parser
     public class Cursor : IEquatable<Cursor>
     {
         private readonly int column;
+        private readonly string fileName;
         private readonly int line;
         private readonly int location;
         private readonly bool inTransition;
@@ -26,7 +27,8 @@ namespace Pegasus.Parser
         /// </summary>
         /// <param name="subject">The parsing subject.</param>
         /// <param name="location">The location within the parsing subject.</param>
-        public Cursor(string subject, int location)
+        /// <param name="fileName">The filename of the subject.</param>
+        public Cursor(string subject, int location, string fileName = null)
         {
             if (subject == null)
             {
@@ -40,6 +42,7 @@ namespace Pegasus.Parser
 
             this.subject = subject;
             this.location = location;
+            this.fileName = fileName;
 
             var line = 1;
             var column = 1;
@@ -51,10 +54,11 @@ namespace Pegasus.Parser
             this.inTransition = inTransition;
         }
 
-        private Cursor(string subject, int location, int line, int column, bool inTransition)
+        private Cursor(string subject, int location, string fileName, int line, int column, bool inTransition)
         {
             this.subject = subject;
             this.location = location;
+            this.fileName = fileName;
             this.line = line;
             this.column = column;
             this.inTransition = inTransition;
@@ -66,6 +70,14 @@ namespace Pegasus.Parser
         public int Column
         {
             get { return this.column; }
+        }
+
+        /// <summary>
+        /// Gets the filename of the parsing subject.
+        /// </summary>
+        public string FileName
+        {
+            get { return this.fileName; }
         }
 
         /// <summary>
@@ -104,7 +116,7 @@ namespace Pegasus.Parser
             var inTransition = this.inTransition;
             TrackLines(this.subject, this.location, count, ref line, ref column, ref inTransition);
 
-            return new Cursor(this.subject, this.location + count, line, column, inTransition);
+            return new Cursor(this.subject, this.location + count, this.fileName, line, column, inTransition);
         }
 
         private static void TrackLines(string subject, int start, int count, ref int line, ref int column, ref bool inTransition)
@@ -199,7 +211,8 @@ namespace Pegasus.Parser
         {
             return !object.ReferenceEquals(other, null) &&
                 this.location == other.location &&
-                this.subject == other.subject;
+                this.subject == other.subject &&
+                this.fileName == other.fileName;
         }
 
         /// <summary>
@@ -211,6 +224,7 @@ namespace Pegasus.Parser
             int hash = 0x51ED270B;
             hash = (hash * -0x25555529) + this.subject.GetHashCode();
             hash = (hash * -0x25555529) + this.location.GetHashCode();
+            hash = (hash * -0x25555529) + (this.fileName == null ? 0 : this.fileName.GetHashCode());
 
             return hash;
         }

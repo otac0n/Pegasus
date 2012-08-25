@@ -22,7 +22,7 @@ namespace Pegasus
 
             var subject = File.ReadAllText(inputFile);
             var parser = new PegParser();
-            var grammar = parser.Parse(subject);
+            var grammar = parser.Parse(subject, fileName: inputFile);
             var compiler = new PegCompiler();
             var result = compiler.Compile(grammar);
 

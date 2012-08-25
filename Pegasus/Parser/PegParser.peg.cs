@@ -20,9 +20,9 @@ namespace Pegasus.Parser
         private Cursor rightmostErrorCursor = null;
         private List<string> rightmostErrors = new List<string>();
 
-        public Grammar Parse(string subject)
+        public Grammar Parse(string subject, string fileName = null)
         {
-            var cursor = new Cursor(subject, 0);
+            var cursor = new Cursor(subject, 0, fileName);
             var result = this.grammar(ref cursor);
             if (result == null)
             {
