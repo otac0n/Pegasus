@@ -40,6 +40,7 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<IList<KeyValuePair<string, string>>> r2 = null;
+                var settingsStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<KeyValuePair<string, string>>();
                 while (true)
@@ -63,10 +64,12 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var settingsEnd = cursor;
                 var settings = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     IParseResult<IList<string>> r4 = null;
+                    var initializerStart = cursor;
                     var startCursor2 = cursor;
                     var l1 = new List<string>();
                     while (l1.Count < 1)
@@ -90,10 +93,12 @@ namespace Pegasus.Parser
                     {
                         cursor = startCursor2;
                     }
+                    var initializerEnd = cursor;
                     var initializer = ValueOrDefault(r4);
                     if (r4 != null)
                     {
                         IParseResult<IList<Rule>> r6 = null;
+                        var rulesStart = cursor;
                         var startCursor3 = cursor;
                         var l2 = new List<Rule>();
                         while (true)
@@ -117,6 +122,7 @@ namespace Pegasus.Parser
                         {
                             cursor = startCursor3;
                         }
+                        var rulesEnd = cursor;
                         var rules = ValueOrDefault(r6);
                         if (r6 != null)
                         {
@@ -155,11 +161,14 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<string> r2 = null;
+                var keyStart = cursor;
                 r2 = this.identifier(ref cursor);
+                var keyEnd = cursor;
                 var key = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     IParseResult<string> r3 = null;
+                    var valueStart = cursor;
                     if (r3 == null)
                     {
                         r3 = this.@string(ref cursor);
@@ -168,6 +177,7 @@ namespace Pegasus.Parser
                     {
                         r3 = this.type(ref cursor);
                     }
+                    var valueEnd = cursor;
                     var value = ValueOrDefault(r3);
                     if (r3 != null)
                     {
@@ -228,7 +238,9 @@ namespace Pegasus.Parser
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var codeStart = cursor;
             r1 = this.action(ref cursor);
+            var codeEnd = cursor;
             var code = ValueOrDefault(r1);
             if (r1 != null)
             {
@@ -277,11 +289,14 @@ namespace Pegasus.Parser
             IParseResult<Rule> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var nameStart = cursor;
             r1 = this.identifier(ref cursor);
+            var nameEnd = cursor;
             var name = ValueOrDefault(r1);
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var displayNameStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (l0.Count < 1)
@@ -305,6 +320,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var displayNameEnd = cursor;
                 var displayName = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -313,7 +329,9 @@ namespace Pegasus.Parser
                     if (r4 != null)
                     {
                         IParseResult<Expression> r5 = null;
+                        var expressionStart = cursor;
                         r5 = this.expression(ref cursor);
+                        var expressionEnd = cursor;
                         var expression = ValueOrDefault(r5);
                         if (r5 != null)
                         {
@@ -382,6 +400,7 @@ namespace Pegasus.Parser
             IParseResult<Expression> r0 = null;
             var startCursor0 = cursor;
             IParseResult<IList<string>> r1 = null;
+            var typeStart = cursor;
             var startCursor1 = cursor;
             var l0 = new List<string>();
             while (l0.Count < 1)
@@ -405,11 +424,14 @@ namespace Pegasus.Parser
             {
                 cursor = startCursor1;
             }
+            var typeEnd = cursor;
             var type = ValueOrDefault(r1);
             if (r1 != null)
             {
                 IParseResult<Expression> r3 = null;
+                var choiceStart = cursor;
                 r3 = this.choice(ref cursor);
+                var choiceEnd = cursor;
                 var choice = ValueOrDefault(r3);
                 if (r3 != null)
                 {
@@ -441,7 +463,9 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<string> r2 = null;
+                var nameStart = cursor;
                 r2 = this.type(ref cursor);
+                var nameEnd = cursor;
                 var name = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -473,11 +497,14 @@ namespace Pegasus.Parser
             IParseResult<Expression> r0 = null;
             var startCursor0 = cursor;
             IParseResult<Expression> r1 = null;
+            var headStart = cursor;
             r1 = this.sequence(ref cursor);
+            var headEnd = cursor;
             var head = ValueOrDefault(r1);
             if (r1 != null)
             {
                 IParseResult<IList<Expression>> r2 = null;
+                var tailStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<Expression>();
                 while (true)
@@ -489,7 +516,9 @@ namespace Pegasus.Parser
                     if (r4 != null)
                     {
                         IParseResult<Expression> r5 = null;
+                        var sequenceStart = cursor;
                         r5 = this.sequence(ref cursor);
+                        var sequenceEnd = cursor;
                         var sequence = ValueOrDefault(r5);
                         if (r5 != null)
                         {
@@ -521,6 +550,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var tailEnd = cursor;
                 var tail = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -549,6 +579,7 @@ namespace Pegasus.Parser
             {
                 var startCursor0 = cursor;
                 IParseResult<IList<Expression>> r1 = null;
+                var elementsStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<Expression>();
                 while (true)
@@ -572,11 +603,14 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var elementsEnd = cursor;
                 var elements = ValueOrDefault(r1);
                 if (r1 != null)
                 {
                     IParseResult<string> r3 = null;
+                    var codeStart = cursor;
                     r3 = this.action(ref cursor);
+                    var codeEnd = cursor;
                     var code = ValueOrDefault(r3);
                     if (r3 != null)
                     {
@@ -598,6 +632,7 @@ namespace Pegasus.Parser
             {
                 var startCursor2 = cursor;
                 IParseResult<IList<Expression>> r4 = null;
+                var elementsStart = cursor;
                 var startCursor3 = cursor;
                 var l1 = new List<Expression>();
                 while (true)
@@ -621,6 +656,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor3;
                 }
+                var elementsEnd = cursor;
                 var elements = ValueOrDefault(r4);
                 if (r4 != null)
                 {
@@ -645,7 +681,9 @@ namespace Pegasus.Parser
             {
                 var startCursor0 = cursor;
                 IParseResult<string> r1 = null;
+                var labelStart = cursor;
                 r1 = this.identifier(ref cursor);
+                var labelEnd = cursor;
                 var label = ValueOrDefault(r1);
                 if (r1 != null)
                 {
@@ -654,7 +692,9 @@ namespace Pegasus.Parser
                     if (r2 != null)
                     {
                         IParseResult<Expression> r3 = null;
+                        var expressionStart = cursor;
                         r3 = this.prefixed(ref cursor);
+                        var expressionEnd = cursor;
                         var expression = ValueOrDefault(r3);
                         if (r3 != null)
                         {
@@ -695,7 +735,9 @@ namespace Pegasus.Parser
                 if (r1 != null)
                 {
                     IParseResult<Expression> r2 = null;
+                    var expressionStart = cursor;
                     r2 = this.suffixed(ref cursor);
+                    var expressionEnd = cursor;
                     var expression = ValueOrDefault(r2);
                     if (r2 != null)
                     {
@@ -721,7 +763,9 @@ namespace Pegasus.Parser
                 if (r3 != null)
                 {
                     IParseResult<Expression> r4 = null;
+                    var expressionStart = cursor;
                     r4 = this.suffixed(ref cursor);
+                    var expressionEnd = cursor;
                     var expression = ValueOrDefault(r4);
                     if (r4 != null)
                     {
@@ -753,7 +797,9 @@ namespace Pegasus.Parser
             {
                 var startCursor0 = cursor;
                 IParseResult<Expression> r1 = null;
+                var expressionStart = cursor;
                 r1 = this.primary(ref cursor);
+                var expressionEnd = cursor;
                 var expression = ValueOrDefault(r1);
                 if (r1 != null)
                 {
@@ -779,7 +825,9 @@ namespace Pegasus.Parser
             {
                 var startCursor1 = cursor;
                 IParseResult<Expression> r3 = null;
+                var expressionStart = cursor;
                 r3 = this.primary(ref cursor);
+                var expressionEnd = cursor;
                 var expression = ValueOrDefault(r3);
                 if (r3 != null)
                 {
@@ -805,7 +853,9 @@ namespace Pegasus.Parser
             {
                 var startCursor2 = cursor;
                 IParseResult<Expression> r5 = null;
+                var expressionStart = cursor;
                 r5 = this.primary(ref cursor);
+                var expressionEnd = cursor;
                 var expression = ValueOrDefault(r5);
                 if (r5 != null)
                 {
@@ -841,7 +891,9 @@ namespace Pegasus.Parser
             {
                 var startCursor0 = cursor;
                 IParseResult<string> r1 = null;
+                var nameStart = cursor;
                 r1 = this.identifier(ref cursor);
+                var nameEnd = cursor;
                 var name = ValueOrDefault(r1);
                 if (r1 != null)
                 {
@@ -940,7 +992,9 @@ namespace Pegasus.Parser
                 if (r8 != null)
                 {
                     IParseResult<Expression> r9 = null;
+                    var expressionStart = cursor;
                     r9 = this.expression(ref cursor);
+                    var expressionEnd = cursor;
                     var expression = ValueOrDefault(r9);
                     if (r9 != null)
                     {
@@ -973,7 +1027,9 @@ namespace Pegasus.Parser
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var bracedStart = cursor;
             r1 = this.braced(ref cursor);
+            var bracedEnd = cursor;
             var braced = ValueOrDefault(r1);
             if (r1 != null)
             {
@@ -1004,6 +1060,7 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var partsStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (true)
@@ -1034,6 +1091,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var partsEnd = cursor;
                 var parts = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -1066,6 +1124,7 @@ namespace Pegasus.Parser
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
             IParseResult<IList<string>> r1 = null;
+            var charsStart = cursor;
             var startCursor1 = cursor;
             var l0 = new List<string>();
             while (true)
@@ -1089,6 +1148,7 @@ namespace Pegasus.Parser
             {
                 cursor = startCursor1;
             }
+            var charsEnd = cursor;
             var chars = ValueOrDefault(r1);
             if (r1 != null)
             {
@@ -1555,6 +1615,7 @@ namespace Pegasus.Parser
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var headStart = cursor;
             if (r1 == null)
             {
                 r1 = this.letter(ref cursor);
@@ -1567,10 +1628,12 @@ namespace Pegasus.Parser
             {
                 r1 = this.ParseLiteral(ref cursor, "$");
             }
+            var headEnd = cursor;
             var head = ValueOrDefault(r1);
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var tailStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (true)
@@ -1609,6 +1672,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var tailEnd = cursor;
                 var tail = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -1640,11 +1704,14 @@ namespace Pegasus.Parser
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var typeStart = cursor;
             r1 = this.nonArrayType(ref cursor);
+            var typeEnd = cursor;
             var type = ValueOrDefault(r1);
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var ranksStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (true)
@@ -1668,6 +1735,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var ranksEnd = cursor;
                 var ranks = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -1704,7 +1772,9 @@ namespace Pegasus.Parser
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var typeStart = cursor;
             r1 = this.typeName(ref cursor);
+            var typeEnd = cursor;
             var type = ValueOrDefault(r1);
             if (r1 != null)
             {
@@ -1735,6 +1805,7 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var dimensionsStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (l0.Count < 1)
@@ -1758,6 +1829,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var dimensionsEnd = cursor;
                 var dimensions = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -1789,6 +1861,7 @@ namespace Pegasus.Parser
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
             IParseResult<IList<string>> r1 = null;
+            var commasStart = cursor;
             var startCursor1 = cursor;
             var l0 = new List<string>();
             while (true)
@@ -1812,6 +1885,7 @@ namespace Pegasus.Parser
             {
                 cursor = startCursor1;
             }
+            var commasEnd = cursor;
             var commas = ValueOrDefault(r1);
             if (r1 != null)
             {
@@ -1831,11 +1905,14 @@ namespace Pegasus.Parser
             {
                 var startCursor0 = cursor;
                 IParseResult<string> r1 = null;
+                var identStart = cursor;
                 r1 = this.identifier(ref cursor);
+                var identEnd = cursor;
                 var ident = ValueOrDefault(r1);
                 if (r1 != null)
                 {
                     IParseResult<IList<string>> r2 = null;
+                    var argsStart = cursor;
                     var startCursor1 = cursor;
                     var l0 = new List<string>();
                     while (l0.Count < 1)
@@ -1859,6 +1936,7 @@ namespace Pegasus.Parser
                     {
                         cursor = startCursor1;
                     }
+                    var argsEnd = cursor;
                     var args = ValueOrDefault(r2);
                     if (r2 != null)
                     {
@@ -1867,7 +1945,9 @@ namespace Pegasus.Parser
                         if (r4 != null)
                         {
                             IParseResult<string> r5 = null;
+                            var restStart = cursor;
                             r5 = this.typeName(ref cursor);
+                            var restEnd = cursor;
                             var rest = ValueOrDefault(r5);
                             if (r5 != null)
                             {
@@ -1897,11 +1977,14 @@ namespace Pegasus.Parser
             {
                 var startCursor2 = cursor;
                 IParseResult<string> r6 = null;
+                var identStart = cursor;
                 r6 = this.identifier(ref cursor);
+                var identEnd = cursor;
                 var ident = ValueOrDefault(r6);
                 if (r6 != null)
                 {
                     IParseResult<IList<string>> r7 = null;
+                    var argsStart = cursor;
                     var startCursor3 = cursor;
                     var l1 = new List<string>();
                     while (l1.Count < 1)
@@ -1925,6 +2008,7 @@ namespace Pegasus.Parser
                     {
                         cursor = startCursor3;
                     }
+                    var argsEnd = cursor;
                     var args = ValueOrDefault(r7);
                     if (r7 != null)
                     {
@@ -1952,7 +2036,9 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<string> r2 = null;
+                var argsStart = cursor;
                 r2 = this.typeArguments(ref cursor);
+                var argsEnd = cursor;
                 var args = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -1986,7 +2072,9 @@ namespace Pegasus.Parser
             {
                 var startCursor0 = cursor;
                 IParseResult<string> r1 = null;
+                var typeStart = cursor;
                 r1 = this.type(ref cursor);
+                var typeEnd = cursor;
                 var type = ValueOrDefault(r1);
                 if (r1 != null)
                 {
@@ -1995,7 +2083,9 @@ namespace Pegasus.Parser
                     if (r2 != null)
                     {
                         IParseResult<string> r3 = null;
+                        var restStart = cursor;
                         r3 = this.typeArguments(ref cursor);
+                        var restEnd = cursor;
                         var rest = ValueOrDefault(r3);
                         if (r3 != null)
                         {
@@ -2028,6 +2118,7 @@ namespace Pegasus.Parser
             IParseResult<Expression> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var valueStart = cursor;
             if (r1 == null)
             {
                 r1 = this.doubleQuotedString(ref cursor);
@@ -2036,10 +2127,12 @@ namespace Pegasus.Parser
             {
                 r1 = this.singleQuotedString(ref cursor);
             }
+            var valueEnd = cursor;
             var value = ValueOrDefault(r1);
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var flagsStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (l0.Count < 1)
@@ -2063,6 +2156,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var flagsEnd = cursor;
                 var flags = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -2096,6 +2190,7 @@ namespace Pegasus.Parser
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var stringStart = cursor;
             if (r1 == null)
             {
                 r1 = this.doubleQuotedString(ref cursor);
@@ -2104,6 +2199,7 @@ namespace Pegasus.Parser
             {
                 r1 = this.singleQuotedString(ref cursor);
             }
+            var stringEnd = cursor;
             var @string = ValueOrDefault(r1);
             if (r1 != null)
             {
@@ -2134,6 +2230,7 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var charsStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (true)
@@ -2157,6 +2254,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var charsEnd = cursor;
                 var chars = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -2240,7 +2338,9 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<string> r3 = null;
+                var charStart = cursor;
                 r3 = this.ParseAny(ref cursor);
+                var charEnd = cursor;
                 var @char = ValueOrDefault(r3);
                 if (r3 != null)
                 {
@@ -2267,6 +2367,7 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var charsStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (true)
@@ -2290,6 +2391,7 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var charsEnd = cursor;
                 var chars = ValueOrDefault(r2);
                 if (r2 != null)
                 {
@@ -2373,7 +2475,9 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<string> r3 = null;
+                var charStart = cursor;
                 r3 = this.ParseAny(ref cursor);
+                var charEnd = cursor;
                 var @char = ValueOrDefault(r3);
                 if (r3 != null)
                 {
@@ -2400,6 +2504,7 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var invertedStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (l0.Count < 1)
@@ -2423,10 +2528,12 @@ namespace Pegasus.Parser
                 {
                     cursor = startCursor1;
                 }
+                var invertedEnd = cursor;
                 var inverted = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     IParseResult<IList<CharacterRange>> r4 = null;
+                    var partsStart = cursor;
                     var startCursor2 = cursor;
                     var l1 = new List<CharacterRange>();
                     while (true)
@@ -2457,6 +2564,7 @@ namespace Pegasus.Parser
                     {
                         cursor = startCursor2;
                     }
+                    var partsEnd = cursor;
                     var parts = ValueOrDefault(r4);
                     if (r4 != null)
                     {
@@ -2465,6 +2573,7 @@ namespace Pegasus.Parser
                         if (r6 != null)
                         {
                             IParseResult<IList<string>> r7 = null;
+                            var flagsStart = cursor;
                             var startCursor3 = cursor;
                             var l2 = new List<string>();
                             while (l2.Count < 1)
@@ -2488,6 +2597,7 @@ namespace Pegasus.Parser
                             {
                                 cursor = startCursor3;
                             }
+                            var flagsEnd = cursor;
                             var flags = ValueOrDefault(r7);
                             if (r7 != null)
                             {
@@ -2539,7 +2649,9 @@ namespace Pegasus.Parser
             IParseResult<CharacterRange> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var beginStart = cursor;
             r1 = this.bracketDelimitedCharacter(ref cursor);
+            var beginEnd = cursor;
             var begin = ValueOrDefault(r1);
             if (r1 != null)
             {
@@ -2548,7 +2660,9 @@ namespace Pegasus.Parser
                 if (r2 != null)
                 {
                     IParseResult<string> r3 = null;
+                    var endStart = cursor;
                     r3 = this.bracketDelimitedCharacter(ref cursor);
+                    var endEnd = cursor;
                     var end = ValueOrDefault(r3);
                     if (r3 != null)
                     {
@@ -2578,7 +2692,9 @@ namespace Pegasus.Parser
             IParseResult<CharacterRange> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
+            var char_Start = cursor;
             r1 = this.bracketDelimitedCharacter(ref cursor);
+            var char_End = cursor;
             var char_ = ValueOrDefault(r1);
             if (r1 != null)
             {
@@ -2650,7 +2766,9 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<string> r3 = null;
+                var charStart = cursor;
                 r3 = this.ParseAny(ref cursor);
+                var charEnd = cursor;
                 var @char = ValueOrDefault(r3);
                 if (r3 != null)
                 {
@@ -2703,7 +2821,9 @@ namespace Pegasus.Parser
                 if (r2 != null)
                 {
                     IParseResult<string> r4 = null;
+                    var charStart = cursor;
                     r4 = this.ParseAny(ref cursor);
+                    var charEnd = cursor;
                     var @char = ValueOrDefault(r4);
                     if (r4 != null)
                     {
@@ -2776,12 +2896,16 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<string> r2 = null;
+                var h1Start = cursor;
                 r2 = this.hexDigit(ref cursor);
+                var h1End = cursor;
                 var h1 = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     IParseResult<string> r3 = null;
+                    var h2Start = cursor;
                     r3 = this.hexDigit(ref cursor);
+                    var h2End = cursor;
                     var h2 = ValueOrDefault(r3);
                     if (r3 != null)
                     {
@@ -2815,22 +2939,30 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<string> r2 = null;
+                var h1Start = cursor;
                 r2 = this.hexDigit(ref cursor);
+                var h1End = cursor;
                 var h1 = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     IParseResult<string> r3 = null;
+                    var h2Start = cursor;
                     r3 = this.hexDigit(ref cursor);
+                    var h2End = cursor;
                     var h2 = ValueOrDefault(r3);
                     if (r3 != null)
                     {
                         IParseResult<string> r4 = null;
+                        var h3Start = cursor;
                         r4 = this.hexDigit(ref cursor);
+                        var h3End = cursor;
                         var h3 = ValueOrDefault(r4);
                         if (r4 != null)
                         {
                             IParseResult<string> r5 = null;
+                            var h4Start = cursor;
                             r5 = this.hexDigit(ref cursor);
+                            var h4End = cursor;
                             var h4 = ValueOrDefault(r5);
                             if (r5 != null)
                             {
@@ -2874,7 +3006,9 @@ namespace Pegasus.Parser
             if (r1 != null)
             {
                 IParseResult<string> r2 = null;
+                var eolStart = cursor;
                 r2 = this.eol(ref cursor);
+                var eolEnd = cursor;
                 var eol = ValueOrDefault(r2);
                 if (r2 != null)
                 {

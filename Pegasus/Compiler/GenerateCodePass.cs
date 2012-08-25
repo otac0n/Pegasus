@@ -498,8 +498,9 @@ namespace Pegasus.Compiler
 
             protected override void WalkPrefixedExpression(PrefixedExpression prefixedExpression)
             {
+                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix + "Start") + " = cursor;");
                 this.WalkExpression(prefixedExpression.Expression);
-
+                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix + "End") + " = cursor;");
                 this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix) + " = ValueOrDefault(" + this.currentResultName + ");");
             }
 
