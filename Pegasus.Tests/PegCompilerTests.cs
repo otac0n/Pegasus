@@ -28,7 +28,7 @@ namespace Pegasus.Tests
         [Test]
         public void Compile_WithNoRules_YieldsError()
         {
-            var grammar = new PegParser().Parse("");
+            var grammar = new PegParser().Parse(" ");
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);

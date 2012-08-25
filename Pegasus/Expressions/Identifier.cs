@@ -11,12 +11,21 @@ namespace Pegasus.Expressions
     using System;
     using Pegasus.Parser;
 
+    /// <summary>
+    /// Represents a lexical identifier.
+    /// </summary>
     public class Identifier
     {
         private readonly Cursor end;
         private readonly string name;
         private readonly Cursor start;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Identifier"/> class.
+        /// </summary>
+        /// <param name="name">The name of the <see cref="Identifier"/>.</param>
+        /// <param name="start">The cursor just before the <see cref="Identifier"/>.</param>
+        /// <param name="end">The cursor just after the <see cref="Identifier"/>.</param>
         public Identifier(string name, Cursor start, Cursor end)
         {
             if (string.IsNullOrEmpty(name))
@@ -29,16 +38,25 @@ namespace Pegasus.Expressions
             this.end = end;
         }
 
+        /// <summary>
+        /// Gets the cursor just after the <see cref="Identifier"/>.
+        /// </summary>
         public Cursor End
         {
             get { return this.end; }
         }
 
+        /// <summary>
+        /// Gets name of the <see cref="Identifier"/>.
+        /// </summary>
         public string Name
         {
             get { return this.name; }
         }
 
+        /// <summary>
+        /// Gets the cursor just before the <see cref="Identifier"/>.
+        /// </summary>
         public Cursor Start
         {
             get { return this.start; }
