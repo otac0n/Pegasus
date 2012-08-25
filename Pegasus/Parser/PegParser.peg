@@ -134,7 +134,7 @@ rbracket  = "]" __ { "]" }
  * easier, there is no "philosophical" reason behind them.
  */
 identifier "identifier"
-  = head:(letter / "_" / "$") tail:(letter / digit / "_" / "$")* __ { head + string.Concat(tail) }
+  = name:(!digit (letter / digit / "_" / "$")+) __ { name }
 
 /*
  * Modeled after C# Language Specification, Version 4.0, appendix B.2, but simplified:
@@ -147,7 +147,6 @@ identifier "identifier"
  *
  * Again, these simplifications are simply for ease of implementation.
  */
-
 type
   = type:nonArrayType ranks:rankSpecifiers* { type + string.Concat(ranks) }
 

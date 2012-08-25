@@ -1615,77 +1615,81 @@ namespace Pegasus.Parser
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
-            var headStart = cursor;
-            if (r1 == null)
+            var nameStart = cursor;
+            var startCursor1 = cursor;
+            IParseResult<string> r2 = null;
+            var startCursor2 = cursor;
+            IParseResult<string> r3 = null;
+            r3 = this.digit(ref cursor);
+            cursor = startCursor2;
+            if (r3 == null)
             {
-                r1 = this.letter(ref cursor);
+                r2 = new ParseResult<string>(cursor, cursor, string.Empty);
             }
-            if (r1 == null)
+            if (r2 != null)
             {
-                r1 = this.ParseLiteral(ref cursor, "_");
-            }
-            if (r1 == null)
-            {
-                r1 = this.ParseLiteral(ref cursor, "$");
-            }
-            var headEnd = cursor;
-            var head = ValueOrDefault(r1);
-            if (r1 != null)
-            {
-                IParseResult<IList<string>> r2 = null;
-                var tailStart = cursor;
-                var startCursor1 = cursor;
+                IParseResult<IList<string>> r4 = null;
+                var startCursor3 = cursor;
                 var l0 = new List<string>();
                 while (true)
                 {
-                    IParseResult<string> r3 = null;
-                    if (r3 == null)
+                    IParseResult<string> r5 = null;
+                    if (r5 == null)
                     {
-                        r3 = this.letter(ref cursor);
+                        r5 = this.letter(ref cursor);
                     }
-                    if (r3 == null)
+                    if (r5 == null)
                     {
-                        r3 = this.digit(ref cursor);
+                        r5 = this.digit(ref cursor);
                     }
-                    if (r3 == null)
+                    if (r5 == null)
                     {
-                        r3 = this.ParseLiteral(ref cursor, "_");
+                        r5 = this.ParseLiteral(ref cursor, "_");
                     }
-                    if (r3 == null)
+                    if (r5 == null)
                     {
-                        r3 = this.ParseLiteral(ref cursor, "$");
+                        r5 = this.ParseLiteral(ref cursor, "$");
                     }
-                    if (r3 != null)
+                    if (r5 != null)
                     {
-                        l0.Add(r3.Value);
+                        l0.Add(r5.Value);
                     }
                     else
                     {
                         break;
                     }
                 }
-                if (l0.Count >= 0)
+                if (l0.Count >= 1)
                 {
-                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                    r4 = new ParseResult<IList<string>>(startCursor3, cursor, l0.AsReadOnly());
+                }
+                else
+                {
+                    cursor = startCursor3;
+                }
+                if (r4 != null)
+                {
+                    var len = cursor.Location - startCursor1.Location;
+                    r1 = new ParseResult<string>(startCursor1, cursor, cursor.Subject.Substring(startCursor1.Location, len));
                 }
                 else
                 {
                     cursor = startCursor1;
                 }
-                var tailEnd = cursor;
-                var tail = ValueOrDefault(r2);
-                if (r2 != null)
+            }
+            else
+            {
+                cursor = startCursor1;
+            }
+            var nameEnd = cursor;
+            var name = ValueOrDefault(r1);
+            if (r1 != null)
+            {
+                IParseResult<IList<string>> r6 = null;
+                r6 = this.__(ref cursor);
+                if (r6 != null)
                 {
-                    IParseResult<IList<string>> r4 = null;
-                    r4 = this.__(ref cursor);
-                    if (r4 != null)
-                    {
-                        r0 = this.ReturnHelper(startCursor0, cursor, () =>  head + string.Concat(tail) );
-                    }
-                    else
-                    {
-                        cursor = startCursor0;
-                    }
+                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  name );
                 }
                 else
                 {
