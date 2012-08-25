@@ -14,14 +14,14 @@ namespace Pegasus.Expressions
     public class PrefixedExpression : Expression
     {
         private readonly Expression expression;
-        private readonly string prefix;
+        private readonly Identifier prefix;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrefixedExpression"/> class.
         /// </summary>
         /// <param name="prefix">The name given to this expression as a prefix.</param>
         /// <param name="expression">The expression that has been prefixed.</param>
-        public PrefixedExpression(string prefix, Expression expression)
+        public PrefixedExpression(Identifier prefix, Expression expression)
         {
             this.prefix = prefix;
             this.expression = expression;
@@ -38,7 +38,7 @@ namespace Pegasus.Expressions
         /// <summary>
         /// Gets the name given to this expression as a prefix.
         /// </summary>
-        public string Prefix
+        public Identifier Prefix
         {
             get { return this.prefix; }
         }

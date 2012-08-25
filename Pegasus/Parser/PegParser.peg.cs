@@ -39,13 +39,13 @@ namespace Pegasus.Parser
             r1 = this.__(ref cursor);
             if (r1 != null)
             {
-                IParseResult<IList<KeyValuePair<string, string>>> r2 = null;
+                IParseResult<IList<KeyValuePair<Identifier, string>>> r2 = null;
                 var settingsStart = cursor;
                 var startCursor1 = cursor;
-                var l0 = new List<KeyValuePair<string, string>>();
+                var l0 = new List<KeyValuePair<Identifier, string>>();
                 while (true)
                 {
-                    IParseResult<KeyValuePair<string, string>> r3 = null;
+                    IParseResult<KeyValuePair<Identifier, string>> r3 = null;
                     r3 = this.setting(ref cursor);
                     if (r3 != null)
                     {
@@ -58,7 +58,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    r2 = new ParseResult<IList<KeyValuePair<string, string>>>(startCursor1, cursor, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<KeyValuePair<Identifier, string>>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -152,15 +152,15 @@ namespace Pegasus.Parser
             return r0;
         }
 
-        private IParseResult<KeyValuePair<string, string>> setting(ref Cursor cursor)
+        private IParseResult<KeyValuePair<Identifier, string>> setting(ref Cursor cursor)
         {
-            IParseResult<KeyValuePair<string, string>> r0 = null;
+            IParseResult<KeyValuePair<Identifier, string>> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
             r1 = this.ParseLiteral(ref cursor, "@");
             if (r1 != null)
             {
-                IParseResult<string> r2 = null;
+                IParseResult<Identifier> r2 = null;
                 var keyStart = cursor;
                 r2 = this.identifier(ref cursor);
                 var keyEnd = cursor;
@@ -208,7 +208,7 @@ namespace Pegasus.Parser
                         if (r4 != null)
                         {
                             r0 = this.ReturnHelper(startCursor0, cursor, () => 
-        new KeyValuePair<string, string>(key, value)
+        new KeyValuePair<Identifier, string>(key, value)
     );
                         }
                         else
@@ -288,7 +288,7 @@ namespace Pegasus.Parser
         {
             IParseResult<Rule> r0 = null;
             var startCursor0 = cursor;
-            IParseResult<string> r1 = null;
+            IParseResult<Identifier> r1 = null;
             var nameStart = cursor;
             r1 = this.identifier(ref cursor);
             var nameEnd = cursor;
@@ -363,7 +363,7 @@ namespace Pegasus.Parser
                             {
                                 r0 = this.ReturnHelper(startCursor0, cursor, () => 
         new Rule(
-            name: name,
+            identifier: name,
             displayName: displayName.SingleOrDefault(),
             expression: expression)
     );
@@ -680,7 +680,7 @@ namespace Pegasus.Parser
             if (r0 == null)
             {
                 var startCursor0 = cursor;
-                IParseResult<string> r1 = null;
+                IParseResult<Identifier> r1 = null;
                 var labelStart = cursor;
                 r1 = this.identifier(ref cursor);
                 var labelEnd = cursor;
@@ -890,7 +890,7 @@ namespace Pegasus.Parser
             if (r0 == null)
             {
                 var startCursor0 = cursor;
-                IParseResult<string> r1 = null;
+                IParseResult<Identifier> r1 = null;
                 var nameStart = cursor;
                 r1 = this.identifier(ref cursor);
                 var nameEnd = cursor;
@@ -1610,9 +1610,9 @@ namespace Pegasus.Parser
             return r0;
         }
 
-        private IParseResult<string> identifier(ref Cursor cursor)
+        private IParseResult<Identifier> identifier(ref Cursor cursor)
         {
-            IParseResult<string> r0 = null;
+            IParseResult<Identifier> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
             var nameStart = cursor;
@@ -1689,7 +1689,7 @@ namespace Pegasus.Parser
                 r6 = this.__(ref cursor);
                 if (r6 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  name );
+                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  new Identifier(name, nameStart, nameEnd) );
                 }
                 else
                 {
@@ -1908,7 +1908,7 @@ namespace Pegasus.Parser
             if (r0 == null)
             {
                 var startCursor0 = cursor;
-                IParseResult<string> r1 = null;
+                IParseResult<Identifier> r1 = null;
                 var identStart = cursor;
                 r1 = this.identifier(ref cursor);
                 var identEnd = cursor;
@@ -1955,7 +1955,7 @@ namespace Pegasus.Parser
                             var rest = ValueOrDefault(r5);
                             if (r5 != null)
                             {
-                                r0 = this.ReturnHelper(startCursor0, cursor, () =>  ident + args.SingleOrDefault() + "." + rest );
+                                r0 = this.ReturnHelper(startCursor0, cursor, () =>  ident.Name + args.SingleOrDefault() + "." + rest );
                             }
                             else
                             {
@@ -1980,7 +1980,7 @@ namespace Pegasus.Parser
             if (r0 == null)
             {
                 var startCursor2 = cursor;
-                IParseResult<string> r6 = null;
+                IParseResult<Identifier> r6 = null;
                 var identStart = cursor;
                 r6 = this.identifier(ref cursor);
                 var identEnd = cursor;
@@ -2016,7 +2016,7 @@ namespace Pegasus.Parser
                     var args = ValueOrDefault(r7);
                     if (r7 != null)
                     {
-                        r0 = this.ReturnHelper(startCursor2, cursor, () =>  ident + args.SingleOrDefault() );
+                        r0 = this.ReturnHelper(startCursor2, cursor, () =>  ident.Name + args.SingleOrDefault() );
                     }
                     else
                     {

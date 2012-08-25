@@ -23,7 +23,7 @@ namespace Pegasus.Tests
             var grammar = new Grammar(
                 new[]
                 {
-                    new Rule("start", null, new LiteralExpression("OK")),
+                    new Rule(new Identifier("start", null, null), null, new LiteralExpression("OK")),
                 },
                 null,
                 null);
@@ -51,8 +51,8 @@ namespace Pegasus.Tests
             var grammar = new Grammar(
                 new[]
                 {
-                    new Rule("a", null, new LiteralExpression("a")),
-                    new Rule("a", null, new LiteralExpression("b")),
+                    new Rule(new Identifier("a", null, null), null, new LiteralExpression("a")),
+                    new Rule(new Identifier("a", null, null), null, new LiteralExpression("b")),
                 },
                 null,
                 null);
@@ -70,7 +70,7 @@ namespace Pegasus.Tests
             var grammar = new Grammar(
                 new[]
                 {
-                    new Rule("a", null, new NameExpression("b")),
+                    new Rule(new Identifier("a", null, null), null, new NameExpression(new Identifier("b", null, null))),
                 },
                 null,
                 null);
@@ -112,8 +112,8 @@ namespace Pegasus.Tests
                 new Rule[0],
                 new[]
                 {
-                    new KeyValuePair<string, string>(settingName, "OK"),
-                    new KeyValuePair<string, string>(settingName, "OK"),
+                    new KeyValuePair<Identifier, string>(new Identifier(settingName, null, null), "OK"),
+                    new KeyValuePair<Identifier, string>(new Identifier(settingName, null, null), "OK"),
                 },
                 null);
             var compiler = new PegCompiler();
@@ -129,7 +129,7 @@ namespace Pegasus.Tests
         {
             var grammar = new Grammar(
                 new Rule[0],
-                new[] { new KeyValuePair<string, string>("barnacle", "OK") },
+                new[] { new KeyValuePair<Identifier, string>(new Identifier("barnacle", null, null), "OK") },
                 null);
             var compiler = new PegCompiler();
 

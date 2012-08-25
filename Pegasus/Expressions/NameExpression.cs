@@ -8,35 +8,28 @@
 
 namespace Pegasus.Expressions
 {
-    using System;
-
     /// <summary>
     /// Represents a reference to another expression by name.
     /// </summary>
     public class NameExpression : Expression
     {
-        private readonly string name;
+        private readonly Identifier identifier;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NameExpression"/> class.
         /// </summary>
-        /// <param name="name">The name of the referenced expression.</param>
-        public NameExpression(string name)
+        /// <param name="identifier">The name of the referenced expression.</param>
+        public NameExpression(Identifier identifier)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name");
-            }
-
-            this.name = name;
+            this.identifier = identifier;
         }
 
         /// <summary>
         /// Gets the name of the referenced expression.
         /// </summary>
-        public string Name
+        public Identifier Identifier
         {
-            get { return this.name; }
+            get { return this.identifier; }
         }
     }
 }

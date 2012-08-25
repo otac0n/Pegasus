@@ -30,18 +30,18 @@ namespace Pegasus.Compiler
             foreach (var setting in grammar.Settings)
             {
                 bool singleAllowed;
-                if (KnownSettings.TryGetValue(setting.Key, out singleAllowed))
+                if (KnownSettings.TryGetValue(setting.Key.Name, out singleAllowed))
                 {
-                    if (singleAllowed && !seenSettings.Add(setting.Key))
+                    if (singleAllowed && !seenSettings.Add(setting.Key.Name))
                     {
                         result.Errors.Add(
-                            new CompilerError(string.Empty, 0, 0, "PEG0005", string.Format(Resources.PEG0005_SETTING_ALREADY_SPECIFIED, setting.Key)));
+                            new CompilerError(string.Empty, 0, 0, "PEG0005", string.Format(Resources.PEG0005_SETTING_ALREADY_SPECIFIED, setting.Key.Name)));
                     }
                 }
                 else
                 {
                     result.Errors.Add(
-                        new CompilerError(string.Empty, 0, 0, "PEG0006", string.Format(Resources.PEG0006_SETTING_UNKNOWN, setting.Key)) { IsWarning = true });
+                        new CompilerError(string.Empty, 0, 0, "PEG0006", string.Format(Resources.PEG0006_SETTING_UNKNOWN, setting.Key.Name)) { IsWarning = true });
                 }
             }
         }

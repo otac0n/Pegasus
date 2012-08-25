@@ -32,7 +32,7 @@ namespace Pegasus.Compiler
 
             public LeftRecursionExpressionTreeWalker(Grammar grammar, CompileResult result)
             {
-                this.rules = grammar.Rules.ToDictionary(r => r.Name);
+                this.rules = grammar.Rules.ToDictionary(r => r.Identifier.Name);
                 this.result = result;
             }
 
@@ -50,11 +50,11 @@ namespace Pegasus.Compiler
 
             protected override void WalkNameExpression(NameExpression nameExpression)
             {
-                var rule = this.rules[nameExpression.Name];
+                var rule = this.rules[nameExpression.Identifier.Name];
                 if (this.ruleStack.Contains(rule))
                 {
                     this.ruleStack.Push(rule);
-                    var names = string.Join(" -> ", this.ruleStack.Reverse().SkipWhile(r => r != rule).Select(r => r.Name));
+                    var names = string.Join(" -> ", this.ruleStack.Reverse().SkipWhile(r => r != rule).Select(r => r.Identifier.Name));
                     this.ruleStack.Pop();
 
                     this.result.Errors.Add(

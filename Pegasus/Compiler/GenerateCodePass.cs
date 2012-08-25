@@ -102,9 +102,9 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("// -----------------------------------------------------------------------");
                 this.code.WriteLineNoTabs(string.Empty);
 
-                var @namespace = grammar.Settings.Where(s => s.Key == "namespace").Select(s => s.Value).SingleOrDefault() ?? "Parsers";
-                var classname = grammar.Settings.Where(s => s.Key == "classname").Select(s => s.Value).SingleOrDefault() ?? "Parser";
-                var accessibility = grammar.Settings.Where(s => s.Key == "accessibility").Select(s => s.Value).SingleOrDefault() ?? "public";
+                var @namespace = grammar.Settings.Where(s => s.Key.Name == "namespace").Select(s => s.Value).SingleOrDefault() ?? "Parsers";
+                var classname = grammar.Settings.Where(s => s.Key.Name == "classname").Select(s => s.Value).SingleOrDefault() ?? "Parser";
+                var accessibility = grammar.Settings.Where(s => s.Key.Name == "accessibility").Select(s => s.Value).SingleOrDefault() ?? "public";
 
                 this.code.WriteLine("namespace " + @namespace);
                 this.code.WriteLine("{");
@@ -112,7 +112,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("using System;");
                 this.code.WriteLine("using System.Collections.Generic;");
 
-                foreach (var @using in grammar.Settings.Where(s => s.Key == "using").Select(s => s.Value))
+                foreach (var @using in grammar.Settings.Where(s => s.Key.Name == "using").Select(s => s.Value))
                 {
                     this.code.WriteLine("using " + @using + ";");
                 }
@@ -138,7 +138,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("var cursor = new Cursor(subject, 0, fileName);");
-                this.code.WriteLine("var result = this." + EscapeName(grammar.Rules[0].Name) + "(ref cursor);");
+                this.code.WriteLine("var result = this." + EscapeName(grammar.Rules[0].Identifier.Name) + "(ref cursor);");
                 this.code.WriteLine("if (result == null)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -299,7 +299,7 @@ namespace Pegasus.Compiler
                 var type = this.GetResultType(rule.Expression);
 
                 this.code.WriteLineNoTabs(string.Empty);
-                this.code.WriteLine("private IParseResult<" + type + "> " + EscapeName(rule.Name) + "(ref Cursor cursor)");
+                this.code.WriteLine("private IParseResult<" + type + "> " + EscapeName(rule.Identifier.Name) + "(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
@@ -327,7 +327,7 @@ namespace Pegasus.Compiler
 
             protected override void WalkNameExpression(NameExpression nameExpression)
             {
-                this.code.WriteLine(this.currentResultName + " = this." + EscapeName(nameExpression.Name) + "(ref cursor);");
+                this.code.WriteLine(this.currentResultName + " = this." + EscapeName(nameExpression.Identifier.Name) + "(ref cursor);");
             }
 
             protected override void WalkClassExpression(ClassExpression classExpression)
@@ -498,10 +498,10 @@ namespace Pegasus.Compiler
 
             protected override void WalkPrefixedExpression(PrefixedExpression prefixedExpression)
             {
-                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix + "Start") + " = cursor;");
+                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix.Name + "Start") + " = cursor;");
                 this.WalkExpression(prefixedExpression.Expression);
-                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix + "End") + " = cursor;");
-                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix) + " = ValueOrDefault(" + this.currentResultName + ");");
+                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix.Name + "End") + " = cursor;");
+                this.code.WriteLine("var " + EscapeName(prefixedExpression.Prefix.Name) + " = ValueOrDefault(" + this.currentResultName + ");");
             }
 
             private static Dictionary<char, string> simpleEscapeChars = new Dictionary<char, string>()
@@ -552,7 +552,7 @@ namespace Pegasus.Compiler
                 }
                 else if ((nameExpression = expression as NameExpression) != null)
                 {
-                    var rule = this.grammar.Rules.Where(r => r.Name == nameExpression.Name).Single();
+                    var rule = this.grammar.Rules.Where(r => r.Identifier.Name == nameExpression.Identifier.Name).Single();
                     return this.GetResultType(rule.Expression);
                 }
                 else if ((prefixedExpression = expression as PrefixedExpression) != null)

@@ -28,13 +28,13 @@ namespace Pegasus.Compiler
 
             public MissingRuleExpressionTreeWalker(Grammar grammar, CompileResult result)
             {
-                this.knownRules = new HashSet<string>(grammar.Rules.Select(r => r.Name));
+                this.knownRules = new HashSet<string>(grammar.Rules.Select(r => r.Identifier.Name));
                 this.result = result;
             }
 
             protected override void WalkNameExpression(NameExpression nameExpression)
             {
-                var name = nameExpression.Name;
+                var name = nameExpression.Identifier.Name;
                 if (!this.knownRules.Contains(name))
                 {
                     this.result.Errors.Add(

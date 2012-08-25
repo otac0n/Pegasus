@@ -9,8 +9,8 @@ grammar
     }
 
 setting
-  = <KeyValuePair<string, string>> "@" key:identifier value:(string / type) semicolon? {
-        new KeyValuePair<string, string>(key, value)
+  = <KeyValuePair<Identifier, string>> "@" key:identifier value:(string / type) semicolon? {
+        new KeyValuePair<Identifier, string>(key, value)
     }
 
 initializer
@@ -19,7 +19,7 @@ initializer
 rule
   = <Rule> name:identifier displayName:string? equals expression:expression semicolon? {
         new Rule(
-            name: name,
+            identifier: name,
             displayName: displayName.SingleOrDefault(),
             expression: expression)
     }
@@ -134,7 +134,7 @@ rbracket  = "]" __ { "]" }
  * easier, there is no "philosophical" reason behind them.
  */
 identifier "identifier"
-  = name:(!digit (letter / digit / "_" / "$")+) __ { name }
+  = <Identifier> name:(!digit (letter / digit / "_" / "$")+) __ { new Identifier(name, nameStart, nameEnd) }
 
 /*
  * Modeled after C# Language Specification, Version 4.0, appendix B.2, but simplified:
@@ -164,8 +164,8 @@ dimSeparator
   = commas:comma+ { new string(',', commas.Count) }
 
 typeName
-  = ident:identifier args:typeArgumentList? dot rest:typeName { ident + args.SingleOrDefault() + "." + rest }
-  / ident:identifier args:typeArgumentList? { ident + args.SingleOrDefault() }
+  = ident:identifier args:typeArgumentList? dot rest:typeName { ident.Name + args.SingleOrDefault() + "." + rest }
+  / ident:identifier args:typeArgumentList? { ident.Name + args.SingleOrDefault() }
 
 typeArgumentList
   = lt args:typeArguments gt { "<" + args + ">" }
