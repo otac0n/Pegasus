@@ -65,7 +65,7 @@ namespace Pegasus.Parser
         /// </summary>
         public int Column
         {
-            get { return this.location; }
+            get { return this.column; }
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Pegasus.Parser
         /// </summary>
         public int Line
         {
-            get { return this.location; }
+            get { return this.line; }
         }
 
         /// <summary>
