@@ -16,7 +16,8 @@ namespace Pegasus.Parser
     /// <typeparam name="T">The type of the parsing operation's result.</typeparam>
     public class ParseResult<T> : IParseResult<T>, IEquatable<ParseResult<T>>
     {
-        private readonly int length;
+        private readonly Cursor endCursor;
+        private readonly Cursor startCursor;
         private readonly T value;
 
         /// <summary>
@@ -25,22 +26,35 @@ namespace Pegasus.Parser
         /// <remarks>
         /// A non-null parse result indicates success, whereas a null result indicates failure.
         /// </remarks>
-        /// <param name="length">The lenght of the match.</param>
+        /// <param name="startCursor">The starting cursor of the match.</param>
+        /// <param name="endCursor">The ending cursor of the match.</param>
         /// <param name="value">The value of the match.</param>
-        public ParseResult(int length, T value)
+        public ParseResult(Cursor startCursor, Cursor endCursor, T value)
         {
-            this.length = length;
+            this.startCursor = startCursor;
+            this.endCursor = endCursor;
             this.value = value;
         }
 
         /// <summary>
-        /// Gets the number of bytes or characters consumed by the parsing operation.
+        /// Gets the ending cursor of the match.
         /// </summary>
-        public int Length
+        public Cursor EndCursor
         {
             get
             {
-                return this.length;
+                return this.endCursor;
+            }
+        }
+
+        /// <summary>
+        /// Gets the starting cursor of the match.
+        /// </summary>
+        public Cursor StartCursor
+        {
+            get
+            {
+                return this.startCursor;
             }
         }
 
@@ -95,7 +109,8 @@ namespace Pegasus.Parser
         public bool Equals(ParseResult<T> other)
         {
             return !object.ReferenceEquals(other, null) &&
-                this.length == other.length &&
+                this.startCursor == other.startCursor &&
+                this.endCursor == other.endCursor &&
                 object.Equals(this.value, other.value);
         }
 
@@ -106,7 +121,8 @@ namespace Pegasus.Parser
         public override int GetHashCode()
         {
             int hash = 0x51ED270B;
-            hash = (hash * -0x25555529) + this.length.GetHashCode();
+            hash = (hash * -0x25555529) + this.startCursor.GetHashCode();
+            hash = (hash * -0x25555529) + this.endCursor.GetHashCode();
             hash = (hash * -0x25555529) + (object.ReferenceEquals(this.value, null) ? 0 : this.value.GetHashCode());
 
             return hash;

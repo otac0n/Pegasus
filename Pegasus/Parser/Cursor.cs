@@ -58,12 +58,11 @@ namespace Pegasus.Parser
         /// <summary>
         /// Returns a new <see cref="Cursor"/> representing the location after consuming the given <see cref="ParseResult&lt;T&gt;"/>.
         /// </summary>
-        /// <typeparam name="T">The parse result's value type.</typeparam>
-        /// <param name="parseResult">The parse result.</param>
+        /// <param name="count">The number of characters to advance.</param>
         /// <returns>A <see cref="Cursor"/> that represents the location after consuming the given <see cref="ParseResult&lt;T&gt;"/>.</returns>
-        public Cursor Advance<T>(ParseResult<T> parseResult)
+        public Cursor Advance(int count)
         {
-            return new Cursor(this.subject, this.location + parseResult.Length);
+            return new Cursor(this.subject, this.location + count);
         }
 
         /// <summary>

@@ -15,9 +15,14 @@ namespace Pegasus.Parser
     public interface IParseResult<out T>
     {
         /// <summary>
-        /// Gets the number of bytes or characters consumed by the parsing operation.
+        /// Gets the ending cursor of the match.
         /// </summary>
-        int Length { get; }
+        Cursor EndCursor { get; }
+
+        /// <summary>
+        /// Gets the starting cursor of the match.
+        /// </summary>
+        Cursor StartCursor { get; }
 
         /// <summary>
         /// Gets the resulting value of the parsing operation.

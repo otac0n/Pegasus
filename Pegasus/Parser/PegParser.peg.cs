@@ -57,8 +57,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<KeyValuePair<string, string>>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<KeyValuePair<string, string>>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -85,8 +84,7 @@ namespace Pegasus.Parser
                     }
                     if (l1.Count >= 0)
                     {
-                        var len = cursor.Location - startCursor2.Location;
-                        r4 = new ParseResult<IList<string>>(len, l1.AsReadOnly());
+                        r4 = new ParseResult<IList<string>>(startCursor2, cursor, l1.AsReadOnly());
                     }
                     else
                     {
@@ -113,8 +111,7 @@ namespace Pegasus.Parser
                         }
                         if (l2.Count >= 0)
                         {
-                            var len = cursor.Location - startCursor3.Location;
-                            r6 = new ParseResult<IList<Rule>>(len, l2.AsReadOnly());
+                            r6 = new ParseResult<IList<Rule>>(startCursor3, cursor, l2.AsReadOnly());
                         }
                         else
                         {
@@ -192,8 +189,7 @@ namespace Pegasus.Parser
                         }
                         if (l0.Count >= 0)
                         {
-                            var len = cursor.Location - startCursor1.Location;
-                            r4 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                            r4 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                         }
                         else
                         {
@@ -254,8 +250,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -304,8 +299,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -341,8 +335,7 @@ namespace Pegasus.Parser
                             }
                             if (l1.Count >= 0)
                             {
-                                var len = cursor.Location - startCursor2.Location;
-                                r6 = new ParseResult<IList<string>>(len, l1.AsReadOnly());
+                                r6 = new ParseResult<IList<string>>(startCursor2, cursor, l1.AsReadOnly());
                             }
                             else
                             {
@@ -406,8 +399,7 @@ namespace Pegasus.Parser
             }
             if (l0.Count >= 0)
             {
-                var len = cursor.Location - startCursor1.Location;
-                r1 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
             }
             else
             {
@@ -523,8 +515,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<Expression>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<Expression>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -575,8 +566,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r1 = new ParseResult<IList<Expression>>(len, l0.AsReadOnly());
+                    r1 = new ParseResult<IList<Expression>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -625,8 +615,7 @@ namespace Pegasus.Parser
                 }
                 if (l1.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor3.Location;
-                    r4 = new ParseResult<IList<Expression>>(len, l1.AsReadOnly());
+                    r4 = new ParseResult<IList<Expression>>(startCursor3, cursor, l1.AsReadOnly());
                 }
                 else
                 {
@@ -878,8 +867,7 @@ namespace Pegasus.Parser
                     }
                     if (l0.Count >= 0)
                     {
-                        var len = cursor.Location - startCursor3.Location;
-                        r4 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                        r4 = new ParseResult<IList<string>>(startCursor3, cursor, l0.AsReadOnly());
                     }
                     else
                     {
@@ -892,7 +880,7 @@ namespace Pegasus.Parser
                         if (r6 != null)
                         {
                             var len = cursor.Location - startCursor2.Location;
-                            r3 = new ParseResult<string>(len, cursor.Subject.Substring(startCursor2.Location, len));
+                            r3 = new ParseResult<string>(startCursor2, cursor, cursor.Subject.Substring(startCursor2.Location, len));
                         }
                         else
                         {
@@ -906,7 +894,7 @@ namespace Pegasus.Parser
                     cursor = startCursor1;
                     if (r3 == null)
                     {
-                        r2 = new ParseResult<string>(0, string.Empty);
+                        r2 = new ParseResult<string>(cursor, cursor, string.Empty);
                     }
                     if (r2 != null)
                     {
@@ -1040,8 +1028,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -1055,7 +1042,7 @@ namespace Pegasus.Parser
                     if (r4 != null)
                     {
                         var len = cursor.Location - startCursor0.Location;
-                        r0 = new ParseResult<string>(len, cursor.Subject.Substring(startCursor0.Location, len));
+                        r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
                     }
                     else
                     {
@@ -1096,8 +1083,7 @@ namespace Pegasus.Parser
             }
             if (l0.Count >= 1)
             {
-                var len = cursor.Location - startCursor1.Location;
-                r1 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
             }
             else
             {
@@ -1617,8 +1603,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -1677,8 +1662,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -1768,8 +1752,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -1823,8 +1806,7 @@ namespace Pegasus.Parser
             }
             if (l0.Count >= 1)
             {
-                var len = cursor.Location - startCursor1.Location;
-                r1 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
             }
             else
             {
@@ -1871,8 +1853,7 @@ namespace Pegasus.Parser
                     }
                     if (l0.Count >= 0)
                     {
-                        var len = cursor.Location - startCursor1.Location;
-                        r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                        r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                     }
                     else
                     {
@@ -1938,8 +1919,7 @@ namespace Pegasus.Parser
                     }
                     if (l1.Count >= 0)
                     {
-                        var len = cursor.Location - startCursor3.Location;
-                        r7 = new ParseResult<IList<string>>(len, l1.AsReadOnly());
+                        r7 = new ParseResult<IList<string>>(startCursor3, cursor, l1.AsReadOnly());
                     }
                     else
                     {
@@ -2077,8 +2057,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -2172,8 +2151,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -2257,7 +2235,7 @@ namespace Pegasus.Parser
             cursor = startCursor1;
             if (r2 == null)
             {
-                r1 = new ParseResult<string>(0, string.Empty);
+                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
             }
             if (r1 != null)
             {
@@ -2306,8 +2284,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -2391,7 +2368,7 @@ namespace Pegasus.Parser
             cursor = startCursor1;
             if (r2 == null)
             {
-                r1 = new ParseResult<string>(0, string.Empty);
+                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
             }
             if (r1 != null)
             {
@@ -2440,8 +2417,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -2475,8 +2451,7 @@ namespace Pegasus.Parser
                     }
                     if (l1.Count >= 0)
                     {
-                        var len = cursor.Location - startCursor2.Location;
-                        r4 = new ParseResult<IList<CharacterRange>>(len, l1.AsReadOnly());
+                        r4 = new ParseResult<IList<CharacterRange>>(startCursor2, cursor, l1.AsReadOnly());
                     }
                     else
                     {
@@ -2507,8 +2482,7 @@ namespace Pegasus.Parser
                             }
                             if (l2.Count >= 0)
                             {
-                                var len = cursor.Location - startCursor3.Location;
-                                r7 = new ParseResult<IList<string>>(len, l2.AsReadOnly());
+                                r7 = new ParseResult<IList<string>>(startCursor3, cursor, l2.AsReadOnly());
                             }
                             else
                             {
@@ -2671,7 +2645,7 @@ namespace Pegasus.Parser
             cursor = startCursor1;
             if (r2 == null)
             {
-                r1 = new ParseResult<string>(0, string.Empty);
+                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
             }
             if (r1 != null)
             {
@@ -2724,7 +2698,7 @@ namespace Pegasus.Parser
                 cursor = startCursor1;
                 if (r3 == null)
                 {
-                    r2 = new ParseResult<string>(0, string.Empty);
+                    r2 = new ParseResult<string>(cursor, cursor, string.Empty);
                 }
                 if (r2 != null)
                 {
@@ -2775,7 +2749,7 @@ namespace Pegasus.Parser
                 cursor = startCursor1;
                 if (r3 == null)
                 {
-                    r2 = new ParseResult<string>(0, string.Empty);
+                    r2 = new ParseResult<string>(cursor, cursor, string.Empty);
                 }
                 if (r2 != null)
                 {
@@ -2991,8 +2965,7 @@ namespace Pegasus.Parser
             }
             if (l0.Count >= 0)
             {
-                var len = cursor.Location - startCursor0.Location;
-                r0 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                r0 = new ParseResult<IList<string>>(startCursor0, cursor, l0.AsReadOnly());
             }
             else
             {
@@ -3037,7 +3010,7 @@ namespace Pegasus.Parser
                     cursor = startCursor3;
                     if (r5 == null)
                     {
-                        r4 = new ParseResult<string>(0, string.Empty);
+                        r4 = new ParseResult<string>(cursor, cursor, string.Empty);
                     }
                     if (r4 != null)
                     {
@@ -3046,7 +3019,7 @@ namespace Pegasus.Parser
                         if (r6 != null)
                         {
                             var len = cursor.Location - startCursor2.Location;
-                            r3 = new ParseResult<string>(len, cursor.Subject.Substring(startCursor2.Location, len));
+                            r3 = new ParseResult<string>(startCursor2, cursor, cursor.Subject.Substring(startCursor2.Location, len));
                         }
                         else
                         {
@@ -3068,8 +3041,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -3078,7 +3050,7 @@ namespace Pegasus.Parser
                 if (r2 != null)
                 {
                     var len = cursor.Location - startCursor0.Location;
-                    r0 = new ParseResult<string>(len, cursor.Subject.Substring(startCursor0.Location, len));
+                    r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
                 }
                 else
                 {
@@ -3114,7 +3086,7 @@ namespace Pegasus.Parser
                     cursor = startCursor3;
                     if (r5 == null)
                     {
-                        r4 = new ParseResult<string>(0, string.Empty);
+                        r4 = new ParseResult<string>(cursor, cursor, string.Empty);
                     }
                     if (r4 != null)
                     {
@@ -3123,7 +3095,7 @@ namespace Pegasus.Parser
                         if (r6 != null)
                         {
                             var len = cursor.Location - startCursor2.Location;
-                            r3 = new ParseResult<string>(len, cursor.Subject.Substring(startCursor2.Location, len));
+                            r3 = new ParseResult<string>(startCursor2, cursor, cursor.Subject.Substring(startCursor2.Location, len));
                         }
                         else
                         {
@@ -3145,8 +3117,7 @@ namespace Pegasus.Parser
                 }
                 if (l0.Count >= 0)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = new ParseResult<IList<string>>(len, l0.AsReadOnly());
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
                 }
                 else
                 {
@@ -3159,7 +3130,7 @@ namespace Pegasus.Parser
                     if (r7 != null)
                     {
                         var len = cursor.Location - startCursor0.Location;
-                        r0 = new ParseResult<string>(len, cursor.Subject.Substring(startCursor0.Location, len));
+                        r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
                     }
                     else
                     {
@@ -3225,8 +3196,9 @@ namespace Pegasus.Parser
                 var substr = cursor.Subject.Substring(cursor.Location, literal.Length);
                 if (ignoreCase ? substr.Equals(literal, StringComparison.OrdinalIgnoreCase) : substr == literal)
                 {
-                    var result = new ParseResult<string>(substr.Length, substr);
-                    cursor = cursor.Advance(result);
+                    var endCursor = cursor.Advance(substr.Length);
+                    var result = new ParseResult<string>(cursor, endCursor, substr);
+                    cursor = endCursor;
                     return result;
                 }
             }
@@ -3259,8 +3231,9 @@ namespace Pegasus.Parser
                 }
                 if (match ^ negated)
                 {
-                    var result = new ParseResult<string>(1, cursor.Subject.Substring(cursor.Location, 1));
-                    cursor = cursor.Advance(result);
+                    var endCursor = cursor.Advance(1);
+                    var result = new ParseResult<string>(cursor, endCursor, cursor.Subject.Substring(cursor.Location, 1));
+                    cursor = endCursor;
                     return result;
                 }
             }
@@ -3273,8 +3246,9 @@ namespace Pegasus.Parser
             if (cursor.Location + 1 <= cursor.Subject.Length)
             {
                 var substr = cursor.Subject.Substring(cursor.Location, 1);
-                var result = new ParseResult<string>(1, substr);
-                cursor = cursor.Advance(result);
+                var endCursor = cursor.Advance(1);
+                var result = new ParseResult<string>(cursor, endCursor, substr);
+                cursor = endCursor;
                 return result;
             }
             this.ReportError(cursor, "any character");
@@ -3283,8 +3257,7 @@ namespace Pegasus.Parser
 
         private IParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<T> wrappedCode)
         {
-            var len = endCursor.Location - startCursor.Location;
-            return new ParseResult<T>(len, wrappedCode());
+            return new ParseResult<T>(startCursor, endCursor, wrappedCode());
         }
 
         private T ValueOrDefault<T>(IParseResult<T> result)

@@ -162,8 +162,9 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("if (ignoreCase ? substr.Equals(literal, StringComparison.OrdinalIgnoreCase) : substr == literal)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("var result = new ParseResult<string>(substr.Length, substr);");
-                this.code.WriteLine("cursor = cursor.Advance(result);");
+                this.code.WriteLine("var endCursor = cursor.Advance(substr.Length);");
+                this.code.WriteLine("var result = new ParseResult<string>(cursor, endCursor, substr);");
+                this.code.WriteLine("cursor = endCursor;");
                 this.code.WriteLine("return result;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
@@ -211,8 +212,9 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("if (match ^ negated)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("var result = new ParseResult<string>(1, cursor.Subject.Substring(cursor.Location, 1));");
-                this.code.WriteLine("cursor = cursor.Advance(result);");
+                this.code.WriteLine("var endCursor = cursor.Advance(1);");
+                this.code.WriteLine("var result = new ParseResult<string>(cursor, endCursor, cursor.Subject.Substring(cursor.Location, 1));");
+                this.code.WriteLine("cursor = endCursor;");
                 this.code.WriteLine("return result;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
@@ -231,8 +233,9 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("var substr = cursor.Subject.Substring(cursor.Location, 1);");
-                this.code.WriteLine("var result = new ParseResult<string>(1, substr);");
-                this.code.WriteLine("cursor = cursor.Advance(result);");
+                this.code.WriteLine("var endCursor = cursor.Advance(1);");
+                this.code.WriteLine("var result = new ParseResult<string>(cursor, endCursor, substr);");
+                this.code.WriteLine("cursor = endCursor;");
                 this.code.WriteLine("return result;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
@@ -245,8 +248,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("private IParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<T> wrappedCode)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("var len = endCursor.Location - startCursor.Location;");
-                this.code.WriteLine("return new ParseResult<T>(len, wrappedCode());");
+                this.code.WriteLine("return new ParseResult<T>(startCursor, endCursor, wrappedCode());");
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
@@ -381,7 +383,7 @@ namespace Pegasus.Compiler
                 if (codeExpression == null)
                 {
                     this.code.WriteLine("var len = cursor.Location - " + startCursorName + ".Location;");
-                    this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(len, cursor.Subject.Substring(" + startCursorName + ".Location, len));");
+                    this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(" + startCursorName + ", cursor, cursor.Subject.Substring(" + startCursorName + ".Location, len));");
                 }
                 else
                 {
@@ -451,8 +453,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("if (" + listName + ".Count >= " + repetitionExpression.Min + ")");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("var len = cursor.Location - " + startCursorName + ".Location;");
-                this.code.WriteLine(this.currentResultName + " = new ParseResult<" + this.GetResultType(repetitionExpression) + ">(len, " + listName + ".AsReadOnly());");
+                this.code.WriteLine(this.currentResultName + " = new ParseResult<" + this.GetResultType(repetitionExpression) + ">(" + startCursorName + ", cursor, " + listName + ".AsReadOnly());");
                 this.code.Indent--;
                 this.code.WriteLine("}");
                 this.code.WriteLine("else");
@@ -489,7 +490,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("if (" + this.currentResultName + " " + (mustMatch ? "!=" : "==") + " null)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine(oldResultName + " = new ParseResult<string>(0, string.Empty);");
+                this.code.WriteLine(oldResultName + " = new ParseResult<string>(cursor, cursor, string.Empty);");
                 this.currentResultName = oldResultName;
                 this.code.Indent--;
                 this.code.WriteLine("}");
