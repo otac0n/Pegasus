@@ -15,7 +15,10 @@ namespace Pegasus.Parser
     /// </summary>
     public class Cursor : IEquatable<Cursor>
     {
+        private readonly int column;
+        private readonly int line;
         private readonly int location;
+        private readonly bool inTransition;
         private readonly string subject;
 
         /// <summary>
@@ -37,6 +40,40 @@ namespace Pegasus.Parser
 
             this.subject = subject;
             this.location = location;
+
+            var line = 1;
+            var column = 1;
+            var inTransition = false;
+            TrackLines(this.subject, 0, location, ref line, ref column, ref inTransition);
+
+            this.line = line;
+            this.column = column;
+            this.inTransition = inTransition;
+        }
+
+        private Cursor(string subject, int location, int line, int column, bool inTransition)
+        {
+            this.subject = subject;
+            this.location = location;
+            this.line = line;
+            this.column = column;
+            this.inTransition = inTransition;
+        }
+
+        /// <summary>
+        /// Gets the column number represented by the location.
+        /// </summary>
+        public int Column
+        {
+            get { return this.location; }
+        }
+
+        /// <summary>
+        /// Gets the line number of the cursor.
+        /// </summary>
+        public int Line
+        {
+            get { return this.location; }
         }
 
         /// <summary>
@@ -62,7 +99,63 @@ namespace Pegasus.Parser
         /// <returns>A <see cref="Cursor"/> that represents the location after consuming the given <see cref="ParseResult&lt;T&gt;"/>.</returns>
         public Cursor Advance(int count)
         {
-            return new Cursor(this.subject, this.location + count);
+            var line = this.line;
+            var column = this.column;
+            var inTransition = this.inTransition;
+            TrackLines(this.subject, this.location, count, ref line, ref column, ref inTransition);
+
+            return new Cursor(this.subject, this.location + count, line, column, inTransition);
+        }
+
+        private static void TrackLines(string subject, int start, int count, ref int line, ref int column, ref bool inTransition)
+        {
+            if (count == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                var c = subject[start + i];
+                if (c == '\r' || c == '\n')
+                {
+                    if (inTransition)
+                    {
+                        inTransition = false;
+                        line++;
+                        column = 1;
+                    }
+                    else if (subject.Length <= start + i + 1)
+                    {
+                        line++;
+                        column = 1;
+                    }
+                    else
+                    {
+                        var peek = subject[start + i + 1];
+                        if ((c == '\r' && peek == '\n') ||
+                            (c == '\n' && peek == '\r'))
+                        {
+                            inTransition = true;
+                            column++;
+                        }
+                        else
+                        {
+                            line++;
+                            column = 1;
+                        }
+                    }
+                }
+                else if (c == '\u2028' || c == '\u2029')
+                {
+                    line++;
+                    column = 1;
+                }
+                else
+                {
+                    column++;
+                }
+            }
         }
 
         /// <summary>
