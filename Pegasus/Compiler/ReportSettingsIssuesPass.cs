@@ -34,14 +34,16 @@ namespace Pegasus.Compiler
                 {
                     if (singleAllowed && !seenSettings.Add(setting.Key.Name))
                     {
+                        var cursor = setting.Key.Start;
                         result.Errors.Add(
-                            new CompilerError(string.Empty, 0, 0, "PEG0005", string.Format(Resources.PEG0005_SETTING_ALREADY_SPECIFIED, setting.Key.Name)));
+                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0005", string.Format(Resources.PEG0005_SETTING_ALREADY_SPECIFIED, setting.Key.Name)));
                     }
                 }
                 else
                 {
+                    var cursor = setting.Key.Start;
                     result.Errors.Add(
-                        new CompilerError(string.Empty, 0, 0, "PEG0006", string.Format(Resources.PEG0006_SETTING_UNKNOWN, setting.Key.Name)) { IsWarning = true });
+                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0006", string.Format(Resources.PEG0006_SETTING_UNKNOWN, setting.Key.Name)) { IsWarning = true });
                 }
             }
         }

@@ -18,8 +18,9 @@ namespace Pegasus.Compiler
         {
             if (grammar.Rules.Count == 0)
             {
+                var cursor = grammar.End;
                 result.Errors.Add(
-                    new CompilerError(string.Empty, 0, 0, "PEG0001", Resources.PEG0001_NO_RULES_DEFINED));
+                    new CompilerError(cursor.FileName, 0, 0, "PEG0001", Resources.PEG0001_NO_RULES_DEFINED));
             }
         }
     }

@@ -57,8 +57,9 @@ namespace Pegasus.Compiler
                     var names = string.Join(" -> ", this.ruleStack.Reverse().SkipWhile(r => r != rule).Select(r => r.Identifier.Name));
                     this.ruleStack.Pop();
 
+                    var cursor = rule.Identifier.Start;
                     this.result.Errors.Add(
-                        new CompilerError(string.Empty, 0, 0, "PEG0004", string.Format(Resources.PEG0004_LEFT_RECURSION_DETECTED, names)));
+                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0004", string.Format(Resources.PEG0004_LEFT_RECURSION_DETECTED, names)));
                 }
                 else
                 {

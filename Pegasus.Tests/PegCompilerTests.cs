@@ -8,11 +8,9 @@
 
 namespace Pegasus.Tests
 {
-    using System.Collections.Generic;
     using System.Linq;
     using NUnit.Framework;
     using Pegasus.Compiler;
-    using Pegasus.Expressions;
     using Pegasus.Parser;
 
     public class PegCompilerTests
@@ -20,14 +18,7 @@ namespace Pegasus.Tests
         [Test]
         public void Compile_WithSingleSimpleRule_Succeeds()
         {
-            var grammar = new Grammar(
-                new[]
-                {
-                    new Rule(new Identifier("start", null, null), null, new LiteralExpression("OK")),
-                },
-                null,
-                null,
-                null);
+            var grammar = new PegParser().Parse("start = 'OK'");
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -37,7 +28,7 @@ namespace Pegasus.Tests
         [Test]
         public void Compile_WithNoRules_YieldsError()
         {
-            var grammar = new Grammar(Enumerable.Empty<Rule>(), null, null, null);
+            var grammar = new PegParser().Parse("");
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -49,15 +40,7 @@ namespace Pegasus.Tests
         [Test]
         public void Compile_WithDuplicateDefinition_YieldsError()
         {
-            var grammar = new Grammar(
-                new[]
-                {
-                    new Rule(new Identifier("a", null, null), null, new LiteralExpression("a")),
-                    new Rule(new Identifier("a", null, null), null, new LiteralExpression("b")),
-                },
-                null,
-                null,
-                null);
+            var grammar = new PegParser().Parse("a = 'a'; a = 'b';");
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -69,14 +52,7 @@ namespace Pegasus.Tests
         [Test]
         public void Compile_WithMissingRuleDefinition_YieldsError()
         {
-            var grammar = new Grammar(
-                new[]
-                {
-                    new Rule(new Identifier("a", null, null), null, new NameExpression(new Identifier("b", null, null))),
-                },
-                null,
-                null,
-                null);
+            var grammar = new PegParser().Parse("a = b");
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -111,15 +87,7 @@ namespace Pegasus.Tests
         [TestCase("classname")]
         public void Compile_WithDuplicateSetting_YieldsError(string settingName)
         {
-            var grammar = new Grammar(
-                new Rule[0],
-                new[]
-                {
-                    new KeyValuePair<Identifier, string>(new Identifier(settingName, null, null), "OK"),
-                    new KeyValuePair<Identifier, string>(new Identifier(settingName, null, null), "OK"),
-                },
-                null,
-                null);
+            var grammar = new PegParser().Parse("@" + settingName + " OK; @" + settingName + " OK;");
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
@@ -131,11 +99,7 @@ namespace Pegasus.Tests
         [Test]
         public void Compile_WithUnrecognizedSetting_YieldsWarning()
         {
-            var grammar = new Grammar(
-                new Rule[0],
-                new[] { new KeyValuePair<Identifier, string>(new Identifier("barnacle", null, null), "OK") },
-                null,
-                null);
+            var grammar = new PegParser().Parse("@barnacle OK");
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);

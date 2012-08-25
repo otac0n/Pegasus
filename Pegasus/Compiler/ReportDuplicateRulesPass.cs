@@ -23,8 +23,9 @@ namespace Pegasus.Compiler
             {
                 if (!knownRules.Add(rule.Identifier.Name))
                 {
+                    var cursor = rule.Identifier.Start;
                     result.Errors.Add(
-                        new CompilerError(string.Empty, 0, 0, "PEG0002", string.Format(Resources.PEG0002_RULE_ALREADY_DEFINED, rule.Identifier.Name)));
+                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0002", string.Format(Resources.PEG0002_RULE_ALREADY_DEFINED, rule.Identifier.Name)));
                 }
             }
         }
