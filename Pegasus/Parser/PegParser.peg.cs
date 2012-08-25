@@ -127,7 +127,7 @@ namespace Pegasus.Parser
                         if (r6 != null)
                         {
                             r0 = this.ReturnHelper(startCursor0, cursor, () => 
-        new Grammar(rules, settings, initializer.SingleOrDefault())
+        new Grammar(rules, settings, initializer.SingleOrDefault(), rulesEnd)
     );
                         }
                         else

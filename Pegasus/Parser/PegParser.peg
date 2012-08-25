@@ -5,7 +5,7 @@
 
 grammar
   = <Grammar> __ settings:setting* initializer:initializer? rules:rule* {
-        new Grammar(rules, settings, initializer.SingleOrDefault())
+        new Grammar(rules, settings, initializer.SingleOrDefault(), rulesEnd)
     }
 
 setting
