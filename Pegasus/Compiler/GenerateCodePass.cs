@@ -138,9 +138,6 @@ namespace Pegasus.Compiler
                 this.code.WriteLine(accessibility + " partial class " + EscapeName(classname));
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("private Cursor rightmostErrorCursor = null;");
-                this.code.WriteLine("private HashSet<string> rightmostErrors = new HashSet<string>();");
-                this.code.WriteLineNoTabs(string.Empty);
 
                 var type = this.GetResultType(grammar.Rules[0].Expression);
 
@@ -152,7 +149,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("if (result == null)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("throw new InvalidOperationException(\"Expected \" + string.Join(\", \", this.rightmostErrors) + \".\");");
+                this.code.WriteLine("throw ExceptionHelper(cursor, () => \"Failed to parse '" + grammar.Rules[0].Identifier.Name + "'.\");");
                 this.code.Indent--;
                 this.code.WriteLine("}");
                 this.code.WriteLine("return result.Value;");
@@ -180,13 +177,12 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
                 this.code.Indent--;
                 this.code.WriteLine("}");
-                this.code.WriteLine("this.ReportError(cursor, \"'\" + literal + \"'\");");
                 this.code.WriteLine("return null;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs(string.Empty);
-                this.code.WriteLine("private IParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, string readableRanges, bool negated = false, bool ignoreCase = false)");
+                this.code.WriteLine("private IParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, bool negated = false, bool ignoreCase = false)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("if (cursor.Location + 1 <= cursor.Subject.Length)");
@@ -230,7 +226,6 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
                 this.code.Indent--;
                 this.code.WriteLine("}");
-                this.code.WriteLine("this.ReportError(cursor, readableRanges);");
                 this.code.WriteLine("return null;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
@@ -249,7 +244,6 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("return result;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
-                this.code.WriteLine("this.ReportError(cursor, \"any character\");");
                 this.code.WriteLine("return null;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
@@ -263,11 +257,22 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs(string.Empty);
-                this.code.WriteLine("private Exception ExceptionHelper<T>(Cursor cursor, Func<string> wrappedCode)");
+                this.code.WriteLine("private Exception ExceptionHelper(Cursor cursor, Func<string> wrappedCode)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("var ex = new FormatException(wrappedCode());");
                 this.code.WriteLine("ex.Data[\"cursor\"] = cursor;");
+                this.code.WriteLine("return ex;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+
+                this.code.WriteLineNoTabs(string.Empty);
+                this.code.WriteLine("private Exception ExceptionHelper(Cursor cursor, Func<Tuple<string, Cursor>> wrappedCode)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("var parts = wrappedCode();");
+                this.code.WriteLine("var ex = new FormatException(parts.Item1);");
+                this.code.WriteLine("ex.Data[\"cursor\"] = parts.Item2;");
                 this.code.WriteLine("return ex;");
                 this.code.Indent--;
                 this.code.WriteLine("}");
@@ -281,27 +286,6 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("? default(T)");
                 this.code.WriteLine(": result.Value;");
                 this.code.Indent--;
-                this.code.Indent--;
-                this.code.WriteLine("}");
-
-                this.code.WriteLineNoTabs(string.Empty);
-                this.code.WriteLine("private void ReportError(Cursor cursor, string expected)");
-                this.code.WriteLine("{");
-                this.code.Indent++;
-                this.code.WriteLine("if (this.rightmostErrorCursor != null && this.rightmostErrorCursor.Location > cursor.Location)");
-                this.code.WriteLine("{");
-                this.code.Indent++;
-                this.code.WriteLine("return;");
-                this.code.Indent--;
-                this.code.WriteLine("}");
-                this.code.WriteLine("if (this.rightmostErrorCursor == null || this.rightmostErrorCursor.Location < cursor.Location)");
-                this.code.WriteLine("{");
-                this.code.Indent++;
-                this.code.WriteLine("this.rightmostErrorCursor = cursor;");
-                this.code.WriteLine("this.rightmostErrors.Clear();");
-                this.code.Indent--;
-                this.code.WriteLine("}");
-                this.code.WriteLine("this.rightmostErrors.Add(expected);");
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
@@ -352,16 +336,8 @@ namespace Pegasus.Compiler
 
             protected override void WalkClassExpression(ClassExpression classExpression)
             {
-                var ranges =
-                    string.Join(string.Empty, classExpression.Ranges.SelectMany(r => new[] { r.Min, r.Max }));
-                var readable =
-                    "[" +
-                    (classExpression.Negated ? "^" : string.Empty) +
-                    string.Join(string.Empty, classExpression.Ranges.Select(r => r.Min == r.Max ? r.Min.ToString() : r.Min + "-" + r.Max)) +
-                    "]" +
-                    (classExpression.IgnoreCase ? "i" : string.Empty);
-
-                this.code.WriteLine(this.currentResultName + " = this.ParseClass(ref cursor, " + ToLiteral(ranges) + ", " + ToLiteral(readable).Replace(@"\", @"\\") + (classExpression.Negated ? ", negated: true" : string.Empty) + (classExpression.IgnoreCase ? ", ignoreCase: true" : string.Empty) + ");");
+                var ranges = string.Join(string.Empty, classExpression.Ranges.SelectMany(r => new[] { r.Min, r.Max }));
+                this.code.WriteLine(this.currentResultName + " = this.ParseClass(ref cursor, " + ToLiteral(ranges) + (classExpression.Negated ? ", negated: true" : string.Empty) + (classExpression.IgnoreCase ? ", ignoreCase: true" : string.Empty) + ");");
             }
 
             protected override void WalkCodeExpression(CodeExpression codeExpression)
