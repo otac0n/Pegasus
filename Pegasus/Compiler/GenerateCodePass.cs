@@ -139,7 +139,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("private Cursor rightmostErrorCursor = null;");
-                this.code.WriteLine("private List<string> rightmostErrors = new List<string>();");
+                this.code.WriteLine("private HashSet<string> rightmostErrors = new HashSet<string>();");
                 this.code.WriteLineNoTabs(string.Empty);
 
                 var type = this.GetResultType(grammar.Rules[0].Expression);

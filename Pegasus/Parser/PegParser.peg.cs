@@ -18,7 +18,7 @@ namespace Pegasus.Parser
     public partial class PegParser
     {
         private Cursor rightmostErrorCursor = null;
-        private List<string> rightmostErrors = new List<string>();
+        private HashSet<string> rightmostErrors = new HashSet<string>();
 
         public Grammar Parse(string subject, string fileName = null)
         {
