@@ -4,7 +4,7 @@
 @using Pegasus.Expressions
 
 grammar
-  = <Grammar> __ settings:setting* initializer:initializer? rules:rule* {
+  = <Grammar> __ settings:setting* initializer:initializer? rules:rule* !. {
         new Grammar(rules, settings, initializer.SingleOrDefault(), rulesEnd)
     }
 

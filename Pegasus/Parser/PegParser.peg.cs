@@ -126,9 +126,25 @@ namespace Pegasus.Parser
                         var rules = ValueOrDefault(r6);
                         if (r6 != null)
                         {
-                            r0 = this.ReturnHelper(startCursor0, cursor, () => 
+                            IParseResult<string> r8 = null;
+                            var startCursor4 = cursor;
+                            IParseResult<string> r9 = null;
+                            r9 = this.ParseAny(ref cursor);
+                            cursor = startCursor4;
+                            if (r9 == null)
+                            {
+                                r8 = new ParseResult<string>(cursor, cursor, string.Empty);
+                            }
+                            if (r8 != null)
+                            {
+                                r0 = this.ReturnHelper(startCursor0, cursor, () => 
         new Grammar(rules, settings, initializer.SingleOrDefault(), rulesEnd)
     );
+                            }
+                            else
+                            {
+                                cursor = startCursor0;
+                            }
                         }
                         else
                         {
