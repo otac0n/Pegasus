@@ -139,4 +139,7 @@
   <data name="PEG0007_PREFIX_ALREADY_DECLARED" xml:space="preserve">
     <value>A prefix '{0}' cannot be declared here because it would give a different meaning to '{0}' which is already declared in the current scope.</value>
   </data>
+  <data name="PEG0008_UNEXPECTED_END_OF_INPUT" xml:space="preserve">
+    <value>Unexpected character '{0}'.</value>
+  </data>
 </root>

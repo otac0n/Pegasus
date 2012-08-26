@@ -11,7 +11,9 @@ namespace Pegasus
     using System;
     using System.CodeDom.Compiler;
     using System.IO;
+    using System.Text.RegularExpressions;
     using Pegasus.Compiler;
+    using Pegasus.Expressions;
     using Pegasus.Parser;
 
     internal static class CompileManager
@@ -22,7 +24,27 @@ namespace Pegasus
 
             var subject = File.ReadAllText(inputFile);
             var parser = new PegParser();
-            var grammar = parser.Parse(subject, fileName: inputFile);
+            Grammar grammar;
+            try
+            {
+                grammar = parser.Parse(subject, fileName: inputFile);
+            }
+            catch (FormatException ex)
+            {
+                var cursor = ex.Data["cursor"] as Cursor;
+                if (cursor != null)
+                {
+                    if (Regex.IsMatch(ex.Message, @"^PEG\d+:"))
+                    {
+                        var parts = ex.Message.Split(new[] { ':' }, 2);
+                        logError(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, parts[0], parts[1]));
+                        return;
+                    }
+                }
+
+                throw;
+            }
+
             var compiler = new PegCompiler();
             var result = compiler.Compile(grammar);
 

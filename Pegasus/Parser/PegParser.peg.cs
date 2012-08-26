@@ -13,6 +13,7 @@ namespace Pegasus.Parser
     using System.Collections.Generic;
     using System.Linq;
     using Pegasus.Expressions;
+    using Pegasus.Properties;
 
     [System.CodeDom.Compiler.GeneratedCode("Pegasus", "1.0.0.0")]
     public partial class PegParser
@@ -3467,7 +3468,7 @@ namespace Pegasus.Parser
                 var unexpected = ValueOrDefault(r2);
                 if (r2 != null)
                 {
-                    throw this.ExceptionHelper(cursor, () =>  Tuple.Create(string.Format("Unexpected character '{0}'", unexpected), unexpectedStart) );
+                    throw this.ExceptionHelper(cursor, () =>  Tuple.Create("PEG0008:" + string.Format(Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected), unexpectedStart) );
                 }
                 else
                 {

@@ -2,6 +2,7 @@
 @classname PegParser
 @using System.Linq
 @using Pegasus.Expressions
+@using Pegasus.Properties
 
 grammar
   = <Grammar> __ settings:setting* initializer:initializer? rules:rule* EOF {
@@ -325,4 +326,4 @@ whitespace "whitespace"
 
 EOF
   = !.
-  / unexpected:. #{ Tuple.Create(string.Format("Unexpected character '{0}'", unexpected), unexpectedStart) }
+  / unexpected:. #{ Tuple.Create("PEG0008:" + string.Format(Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected), unexpectedStart) }

@@ -122,5 +122,14 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0007_PREFIX_ALREADY_DECLARED", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected character &apos;{0}&apos;..
+        /// </summary>
+        internal static string PEG0008_UNEXPECTED_END_OF_INPUT {
+            get {
+                return ResourceManager.GetString("PEG0008_UNEXPECTED_END_OF_INPUT", resourceCulture);
+            }
+        }
     }
 }
