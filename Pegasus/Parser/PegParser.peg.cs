@@ -124,14 +124,7 @@ namespace Pegasus.Parser
                         if (r6 != null)
                         {
                             IParseResult<string> r8 = null;
-                            var startCursor4 = cursor;
-                            IParseResult<string> r9 = null;
-                            r9 = this.ParseAny(ref cursor);
-                            cursor = startCursor4;
-                            if (r9 == null)
-                            {
-                                r8 = new ParseResult<string>(cursor, cursor, string.Empty);
-                            }
+                            r8 = this.EOF(ref cursor);
                             if (r8 != null)
                             {
                                 r0 = this.ReturnHelper(startCursor0, cursor, () => 
@@ -3447,6 +3440,40 @@ namespace Pegasus.Parser
         {
             IParseResult<string> r0 = null;
             r0 = this.ParseClass(ref cursor, "  \t\t\v\v\f\f\u00a0\u00a0\ufeff\ufeff\u1680\u1680\u180e\u180e\u2000\u200a\u202f\u202f\u205f\u205f\u3000\u3000");
+            return r0;
+        }
+
+        private IParseResult<string> EOF(ref Cursor cursor)
+        {
+            IParseResult<string> r0 = null;
+            if (r0 == null)
+            {
+                var startCursor0 = cursor;
+                IParseResult<string> r1 = null;
+                r1 = this.ParseAny(ref cursor);
+                cursor = startCursor0;
+                if (r1 == null)
+                {
+                    r0 = new ParseResult<string>(cursor, cursor, string.Empty);
+                }
+            }
+            if (r0 == null)
+            {
+                var startCursor1 = cursor;
+                IParseResult<string> r2 = null;
+                var unexpectedStart = cursor;
+                r2 = this.ParseAny(ref cursor);
+                var unexpectedEnd = cursor;
+                var unexpected = ValueOrDefault(r2);
+                if (r2 != null)
+                {
+                    throw this.ExceptionHelper(cursor, () =>  Tuple.Create(string.Format("Unexpected character '{0}'", unexpected), unexpectedStart) );
+                }
+                else
+                {
+                    cursor = startCursor1;
+                }
+            }
             return r0;
         }
 

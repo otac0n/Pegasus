@@ -4,7 +4,7 @@
 @using Pegasus.Expressions
 
 grammar
-  = <Grammar> __ settings:setting* initializer:initializer? rules:rule* !. {
+  = <Grammar> __ settings:setting* initializer:initializer? rules:rule* EOF {
         new Grammar(rules, settings, initializer.SingleOrDefault(), rulesEnd)
     }
 
@@ -322,3 +322,7 @@ eolChar
 /* Modeled after ECMA-262, 5th ed., 7.2. */
 whitespace "whitespace"
   = [ \t\v\f\u00A0\uFEFF\u1680\u180E\u2000-\u200A\u202F\u205F\u3000]
+
+EOF
+  = !.
+  / unexpected:. #{ Tuple.Create(string.Format("Unexpected character '{0}'", unexpected), unexpectedStart) }
