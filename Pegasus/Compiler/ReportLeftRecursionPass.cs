@@ -90,7 +90,7 @@ namespace Pegasus.Compiler
                 RepetitionExpression repetitionExpression;
                 SequenceExpression sequenceExpression;
 
-                if (expression is AndExpression)
+                if (expression is AndCodeExpression || expression is AndExpression)
                 {
                     return true;
                 }
@@ -114,7 +114,7 @@ namespace Pegasus.Compiler
                 {
                     return false; // this.IsExpressionZeroWidth(this.rules[nameExpression.Name]);
                 }
-                else if (expression is NotExpression)
+                else if (expression is NotCodeExpression || expression is NotExpression)
                 {
                     return true;
                 }

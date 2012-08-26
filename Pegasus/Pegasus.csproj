@@ -62,6 +62,7 @@
     <Compile Include="Compiler\ReportMissingRulesPass.cs" />
     <Compile Include="Compiler\ReportNoRulesPass.cs" />
     <Compile Include="Compiler\ReportSettingsIssuesPass.cs" />
+    <Compile Include="Expressions\AndCodeExpression.cs" />
     <Compile Include="Expressions\AndExpression.cs" />
     <Compile Include="Expressions\CharacterRange.cs" />
     <Compile Include="Expressions\ChoiceExpression.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Expressions\Identifier.cs" />
     <Compile Include="Expressions\LiteralExpression.cs" />
     <Compile Include="Expressions\NameExpression.cs" />
+    <Compile Include="Expressions\NotCodeExpression.cs" />
     <Compile Include="Expressions\NotExpression.cs" />
     <Compile Include="Expressions\PrefixedExpression.cs" />
     <Compile Include="Expressions\RepetitionExpression.cs" />

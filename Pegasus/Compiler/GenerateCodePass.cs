@@ -464,14 +464,34 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
             }
 
+            protected override void WalkAndCodeExpression(AndCodeExpression andCodeExpression)
+            {
+                this.WalkAssertionExpression(andCodeExpression.Code, mustMatch: true);
+            }
+
             protected override void WalkAndExpression(AndExpression andExpression)
             {
                 this.WalkAssertionExpression(andExpression.Expression, mustMatch: true);
             }
 
+            protected override void WalkNotCodeExpression(NotCodeExpression notCodeExpression)
+            {
+                this.WalkAssertionExpression(notCodeExpression.Code, mustMatch: false);
+            }
+
             protected override void WalkNotExpression(NotExpression notExpression)
             {
                 this.WalkAssertionExpression(notExpression.Expression, mustMatch: false);
+            }
+
+            private void WalkAssertionExpression(string code, bool mustMatch)
+            {
+                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!(") + code + (mustMatch ? string.Empty : ")") + ")");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(cursor, cursor, string.Empty);");
+                this.code.Indent--;
+                this.code.WriteLine("}");
             }
 
             private void WalkAssertionExpression(Expression expression, bool mustMatch)

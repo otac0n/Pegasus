@@ -59,8 +59,14 @@ labeled
   / prefixed
 
 prefixed
-  = <Expression> and expression:suffixed {
+  = <Expression> and code:action {
+        new AndCodeExpression(code)
+    }
+  / and expression:suffixed {
         new AndExpression(expression)
+    }
+  / not code:action {
+        new NotCodeExpression(code)
     }
   / not expression:suffixed {
         new NotExpression(expression)

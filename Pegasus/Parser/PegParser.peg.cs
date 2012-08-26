@@ -734,15 +734,15 @@ namespace Pegasus.Parser
                 r1 = this.and(ref cursor);
                 if (r1 != null)
                 {
-                    IParseResult<Expression> r2 = null;
-                    var expressionStart = cursor;
-                    r2 = this.suffixed(ref cursor);
-                    var expressionEnd = cursor;
-                    var expression = ValueOrDefault(r2);
+                    IParseResult<string> r2 = null;
+                    var codeStart = cursor;
+                    r2 = this.action(ref cursor);
+                    var codeEnd = cursor;
+                    var code = ValueOrDefault(r2);
                     if (r2 != null)
                     {
                         r0 = this.ReturnHelper(startCursor0, cursor, () => 
-        new AndExpression(expression)
+        new AndCodeExpression(code)
     );
                     }
                     else
@@ -759,7 +759,7 @@ namespace Pegasus.Parser
             {
                 var startCursor1 = cursor;
                 IParseResult<string> r3 = null;
-                r3 = this.not(ref cursor);
+                r3 = this.and(ref cursor);
                 if (r3 != null)
                 {
                     IParseResult<Expression> r4 = null;
@@ -770,7 +770,7 @@ namespace Pegasus.Parser
                     if (r4 != null)
                     {
                         r0 = this.ReturnHelper(startCursor1, cursor, () => 
-        new NotExpression(expression)
+        new AndExpression(expression)
     );
                     }
                     else
@@ -781,6 +781,62 @@ namespace Pegasus.Parser
                 else
                 {
                     cursor = startCursor1;
+                }
+            }
+            if (r0 == null)
+            {
+                var startCursor2 = cursor;
+                IParseResult<string> r5 = null;
+                r5 = this.not(ref cursor);
+                if (r5 != null)
+                {
+                    IParseResult<string> r6 = null;
+                    var codeStart = cursor;
+                    r6 = this.action(ref cursor);
+                    var codeEnd = cursor;
+                    var code = ValueOrDefault(r6);
+                    if (r6 != null)
+                    {
+                        r0 = this.ReturnHelper(startCursor2, cursor, () => 
+        new NotCodeExpression(code)
+    );
+                    }
+                    else
+                    {
+                        cursor = startCursor2;
+                    }
+                }
+                else
+                {
+                    cursor = startCursor2;
+                }
+            }
+            if (r0 == null)
+            {
+                var startCursor3 = cursor;
+                IParseResult<string> r7 = null;
+                r7 = this.not(ref cursor);
+                if (r7 != null)
+                {
+                    IParseResult<Expression> r8 = null;
+                    var expressionStart = cursor;
+                    r8 = this.suffixed(ref cursor);
+                    var expressionEnd = cursor;
+                    var expression = ValueOrDefault(r8);
+                    if (r8 != null)
+                    {
+                        r0 = this.ReturnHelper(startCursor3, cursor, () => 
+        new NotExpression(expression)
+    );
+                    }
+                    else
+                    {
+                        cursor = startCursor3;
+                    }
+                }
+                else
+                {
+                    cursor = startCursor3;
                 }
             }
             if (r0 == null)

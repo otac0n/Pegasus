@@ -28,12 +28,14 @@ namespace Pegasus.Compiler
 
         public virtual void WalkExpression(Expression expression)
         {
+            AndCodeExpression andCodeExpression;
             AndExpression andExpression;
             ChoiceExpression choiceExpression;
             ClassExpression classExpression;
             CodeExpression codeExpression;
             LiteralExpression literalExpression;
             NameExpression nameExpression;
+            NotCodeExpression notCodeExpression;
             NotExpression notExpression;
             PrefixedExpression prefixedExpression;
             RepetitionExpression repetitionExpression;
@@ -41,7 +43,11 @@ namespace Pegasus.Compiler
             TypedExpression typedExpression;
             WildcardExpression wildcardExpression;
 
-            if ((andExpression = expression as AndExpression) != null)
+            if ((andCodeExpression = expression as AndCodeExpression) != null)
+            {
+                this.WalkAndCodeExpression(andCodeExpression);
+            }
+            else if ((andExpression = expression as AndExpression) != null)
             {
                 this.WalkAndExpression(andExpression);
             }
@@ -64,6 +70,10 @@ namespace Pegasus.Compiler
             else if ((nameExpression = expression as NameExpression) != null)
             {
                 this.WalkNameExpression(nameExpression);
+            }
+            else if ((notCodeExpression = expression as NotCodeExpression) != null)
+            {
+                this.WalkNotCodeExpression(notCodeExpression);
             }
             else if ((notExpression = expression as NotExpression) != null)
             {
@@ -95,6 +105,10 @@ namespace Pegasus.Compiler
             }
         }
 
+        protected virtual void WalkAndCodeExpression(AndCodeExpression andCodeExpression)
+        {
+        }
+
         protected virtual void WalkAndExpression(AndExpression andExpression)
         {
             this.WalkExpression(andExpression.Expression);
@@ -121,6 +135,10 @@ namespace Pegasus.Compiler
         }
 
         protected virtual void WalkNameExpression(NameExpression nameExpression)
+        {
+        }
+
+        protected virtual void WalkNotCodeExpression(NotCodeExpression notCodeExpression)
         {
         }
 
