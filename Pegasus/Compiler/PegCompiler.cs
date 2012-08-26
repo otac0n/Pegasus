@@ -8,7 +8,10 @@
 
 namespace Pegasus.Compiler
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using Pegasus.Expressions;
 
     /// <summary>
@@ -16,28 +19,17 @@ namespace Pegasus.Compiler
     /// </summary>
     public class PegCompiler
     {
-        private readonly CompilePass[][] passes =
+        private static readonly IList<Type> passTypes;
+
+        static PegCompiler()
         {
-            new CompilePass[]
-            {
-                new ReportSettingsIssuesPass(),
-                new ReportNoRulesPass(),
-            },
-            new CompilePass[]
-            {
-                new ReportMissingRulesPass(),
-                new ReportDuplicateRulesPass(),
-                new ReportConflictingNamesPass(),
-            },
-            new CompilePass[]
-            {
-                new ReportLeftRecursionPass(),
-            },
-            new CompilePass[]
-            {
-                new GenerateCodePass(),
-            },
-        };
+            passTypes = Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(CompilePass)))
+                .ToList()
+                .AsReadOnly();
+        }
 
         /// <summary>
         /// Compiles a PEG grammar into a program.
@@ -48,16 +40,26 @@ namespace Pegasus.Compiler
         {
             var result = new CompileResult();
 
-            foreach (var passSet in this.passes)
+            var passes = passTypes.Select(t => (CompilePass)Activator.CreateInstance(t)).ToList();
+            while (true)
             {
-                foreach (var pass in passSet)
-                {
-                    pass.Run(grammar, result);
-                }
+                var existingErrors = new HashSet<string>(result.Errors.Select(e => e.ErrorNumber));
+                var pendingErrors = new HashSet<string>(passes.SelectMany(p => p.ErrorsProduced));
 
-                if (result.Errors.Any(e => !e.IsWarning))
+                var nextPasses = passes
+                    .Where(p => !p.BlockedByErrors.Any(e => existingErrors.Contains(e)))
+                    .Where(p => !p.BlockedByErrors.Any(e => pendingErrors.Contains(e)))
+                    .ToList();
+
+                if (nextPasses.Count == 0)
                 {
                     break;
+                }
+
+                foreach (var pass in nextPasses)
+                {
+                    pass.Run(grammar, result);
+                    passes.Remove(pass);
                 }
             }
 

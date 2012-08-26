@@ -16,6 +16,16 @@ namespace Pegasus.Compiler
 
     internal class ReportMissingRulesPass : CompilePass
     {
+        public override IList<string> ErrorsProduced
+        {
+            get { return new[] { "PEG0003" }; }
+        }
+
+        public override IList<string> BlockedByErrors
+        {
+            get { return new[] { "PEG0001" }; }
+        }
+
         public override void Run(Grammar grammar, CompileResult result)
         {
             new MissingRuleExpressionTreeWalker(grammar, result).WalkGrammar(grammar);

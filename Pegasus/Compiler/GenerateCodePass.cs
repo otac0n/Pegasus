@@ -19,6 +19,16 @@ namespace Pegasus.Compiler
 
     internal class GenerateCodePass : CompilePass
     {
+        public override IList<string> ErrorsProduced
+        {
+            get { return new string[0]; }
+        }
+
+        public override IList<string> BlockedByErrors
+        {
+            get { return new[] { "PEG0001", "PEG0002", "PEG0003", "PEG0004", "PEG0005", "PEG0007" }; }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "StringWriter.Dispose is idempotent.")]
         public override void Run(Grammar grammar, CompileResult result)
         {

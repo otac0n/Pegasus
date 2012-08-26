@@ -99,7 +99,7 @@ namespace Pegasus.Tests
         [Test]
         public void Compile_WithUnrecognizedSetting_YieldsWarning()
         {
-            var grammar = new PegParser().Parse("@barnacle OK");
+            var grammar = new PegParser().Parse("@barnacle OK; a = 'OK';");
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
