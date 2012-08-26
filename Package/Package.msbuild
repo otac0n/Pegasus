@@ -10,7 +10,7 @@
     <MSBuild Projects="$(SolutionDir)Pegasus.sln" Properties="Configuration=$(Configuration)" Targets="Rebuild" />
   </Target>
   <Target Name="Package" DependsOnTargets="Build">
-    <MakeDir Directories="bin;obj;obj\content" />
+    <MakeDir Directories="bin;obj;obj\content\Pegasus.Common" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\tools" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.targets" DestinationFolder="obj\tools" />
     <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\readme.txt" />
@@ -25,9 +25,9 @@
       <ParseResult>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\ParseResult{T}.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</ParseResult>
     </PropertyGroup>
     <WriteLinesToFile File="obj\Pegasus.nuspec" Lines="$(NuSpec)" />
-    <WriteLinesToFile File="obj\content\Cursor.cs" Lines="$(Cursor)" />
-    <WriteLinesToFile File="obj\content\IParseResult.cs" Lines="$(IParseResult)" />
-    <WriteLinesToFile File="obj\content\ParseResult.cs" Lines="$(ParseResult)" />
+    <WriteLinesToFile File="obj\content\Pegasus.Common\Cursor.cs" Lines="$(Cursor)" />
+    <WriteLinesToFile File="obj\content\Pegasus.Common\IParseResult.cs" Lines="$(IParseResult)" />
+    <WriteLinesToFile File="obj\content\Pegasus.Common\ParseResult.cs" Lines="$(ParseResult)" />
     <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\Pegasus.nuspec -OutputDir bin\" />
   </Target>
 </Project>
