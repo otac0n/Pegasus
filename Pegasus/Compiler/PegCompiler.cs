@@ -16,15 +16,27 @@ namespace Pegasus.Compiler
     /// </summary>
     public class PegCompiler
     {
-        private readonly CompilePass[] passes = new CompilePass[]
+        private readonly CompilePass[][] passes =
         {
-            new ReportSettingsIssuesPass(),
-            new ReportNoRulesPass(),
-            new ReportMissingRulesPass(),
-            new ReportDuplicateRulesPass(),
-            new ReportLeftRecursionPass(),
-            new ReportConflictingNamesPass(),
-            new GenerateCodePass(),
+            new CompilePass[]
+            {
+                new ReportSettingsIssuesPass(),
+                new ReportNoRulesPass(),
+            },
+            new CompilePass[]
+            {
+                new ReportMissingRulesPass(),
+                new ReportDuplicateRulesPass(),
+                new ReportConflictingNamesPass(),
+            },
+            new CompilePass[]
+            {
+                new ReportLeftRecursionPass(),
+            },
+            new CompilePass[]
+            {
+                new GenerateCodePass(),
+            },
         };
 
         /// <summary>
@@ -36,9 +48,12 @@ namespace Pegasus.Compiler
         {
             var result = new CompileResult();
 
-            foreach (var pass in this.passes)
+            foreach (var passSet in this.passes)
             {
-                pass.Run(grammar, result);
+                foreach (var pass in passSet)
+                {
+                    pass.Run(grammar, result);
+                }
 
                 if (result.Errors.Any(e => !e.IsWarning))
                 {

@@ -87,7 +87,7 @@ namespace Pegasus.Tests
         [TestCase("classname")]
         public void Compile_WithDuplicateSetting_YieldsError(string settingName)
         {
-            var grammar = new PegParser().Parse("@" + settingName + " OK; @" + settingName + " OK;");
+            var grammar = new PegParser().Parse("@" + settingName + " OK; @" + settingName + " OK; a = 'OK';");
             var compiler = new PegCompiler();
 
             var result = compiler.Compile(grammar);
