@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Pegasus</id>
+    <owners>John Gietzen</owners>
+    <authors>John Gietzen; David Majda (peg.js syntax)</authors>
+    <projectUrl>https://github.com/otac0n/Pegasus</projectUrl>
+    <description>A PEG (Parsing Expression Grammar) Style parser compiler that integrates with MSBuild / Visual Studio.  Inspired by the excellent peg.js project.</description>
+    <version></version>
+  </metadata>
+</package>

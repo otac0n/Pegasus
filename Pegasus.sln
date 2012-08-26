@@ -19,6 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A29EA5
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{88F83132-C588-4868-B767-E29AEAAFF2D4}"
+	ProjectSection(SolutionItems) = preProject
+		Package\Package.msbuild = Package\Package.msbuild
+		Package\Pegasus.nuspec = Package\Pegasus.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

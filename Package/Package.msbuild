@@ -1,0 +1,31 @@
+<Project DefaultTargets="Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SolutionDir>..\</SolutionDir>
+    <Configuration>Release</Configuration>
+  </PropertyGroup>
+  <Target Name="Clean">
+    <RemoveDir Directories="obj;bin" />
+  </Target>
+  <Target Name="Build" DependsOnTargets="Clean">
+    <MSBuild Projects="$(SolutionDir)Pegasus.sln" Properties="Configuration=$(Configuration)" Targets="Rebuild" />
+  </Target>
+  <Target Name="Package" DependsOnTargets="Build">
+    <MakeDir Directories="bin;obj;obj\content" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\tools" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.targets" DestinationFolder="obj\tools" />
+    <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\readme.txt" />
+    <PropertyGroup>
+      <AssemblyInfo>$([System.IO.File]::ReadAllText("$(SolutionDir)SharedAssemblyInfo.cs"))</AssemblyInfo>
+      <AssemblyVersion>$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfo), "AssemblyVersion\(\"(\d+\.\d+\.\d+)\.\d+\"\)").Groups[1].Value)</AssemblyVersion>
+      <NuSpec>$([System.IO.File]::ReadAllText("Pegasus.nuspec").Replace("&lt;version&gt;&lt;/version&gt;", "&lt;version&gt;$(AssemblyVersion)&lt;/version&gt;"))</NuSpec>
+      <Cursor>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\Cursor.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</Cursor>
+      <IParseResult>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\IParseResult{T}.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</IParseResult>
+      <ParseResult>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\ParseResult{T}.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</ParseResult>
+    </PropertyGroup>
+    <WriteLinesToFile File="obj\Pegasus.nuspec" Lines="$(NuSpec)" />
+    <WriteLinesToFile File="obj\content\Cursor.cs" Lines="$(Cursor)" />
+    <WriteLinesToFile File="obj\content\IParseResult.cs" Lines="$(IParseResult)" />
+    <WriteLinesToFile File="obj\content\ParseResult.cs" Lines="$(ParseResult)" />
+    <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\Pegasus.nuspec -OutputDir bin\" />
+  </Target>
+</Project>
