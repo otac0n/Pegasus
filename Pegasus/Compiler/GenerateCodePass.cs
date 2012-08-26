@@ -263,6 +263,16 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs(string.Empty);
+                this.code.WriteLine("private Exception ExceptionHelper<T>(Cursor cursor, Func<string> wrappedCode)");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("var ex = new FormatException(wrappedCode());");
+                this.code.WriteLine("ex.Data[\"cursor\"] = cursor;");
+                this.code.WriteLine("return ex;");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+
+                this.code.WriteLineNoTabs(string.Empty);
                 this.code.WriteLine("private T ValueOrDefault<T>(IParseResult<T> result)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -397,7 +407,14 @@ namespace Pegasus.Compiler
                 }
                 else
                 {
-                    this.code.WriteLine(this.currentResultName + " = this.ReturnHelper(" + startCursorName + ", cursor, () => " + codeExpression.Code + ");");
+                    if (codeExpression.CodeType == CodeType.Result)
+                    {
+                        this.code.WriteLine(this.currentResultName + " = this.ReturnHelper(" + startCursorName + ", cursor, () => " + codeExpression.Code + ");");
+                    }
+                    else if (codeExpression.CodeType == CodeType.Error)
+                    {
+                        this.code.WriteLine("throw this.ExceptionHelper(cursor, () => " + codeExpression.Code + ");");
+                    }
                 }
 
                 for (int i = 0; i < sequence.Count; i++)

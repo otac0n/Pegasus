@@ -255,7 +255,7 @@ namespace Pegasus.Parser
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
             var codeStart = cursor;
-            r1 = this.action(ref cursor);
+            r1 = this.code(ref cursor);
             var codeEnd = cursor;
             var code = ValueOrDefault(r1);
             if (r1 != null)
@@ -623,7 +623,7 @@ namespace Pegasus.Parser
                 var elements = ValueOrDefault(r1);
                 if (r1 != null)
                 {
-                    IParseResult<string> r3 = null;
+                    IParseResult<Expression> r3 = null;
                     var codeStart = cursor;
                     r3 = this.action(ref cursor);
                     var codeEnd = cursor;
@@ -631,7 +631,7 @@ namespace Pegasus.Parser
                     if (r3 != null)
                     {
                         r0 = this.ReturnHelper(startCursor0, cursor, () => 
-        new SequenceExpression(elements.Concat(new Expression[] { new CodeExpression(code) }))
+        new SequenceExpression(elements.Concat(new Expression[] { code }))
     );
                     }
                     else
@@ -752,7 +752,7 @@ namespace Pegasus.Parser
                 {
                     IParseResult<string> r2 = null;
                     var codeStart = cursor;
-                    r2 = this.action(ref cursor);
+                    r2 = this.code(ref cursor);
                     var codeEnd = cursor;
                     var code = ValueOrDefault(r2);
                     if (r2 != null)
@@ -808,7 +808,7 @@ namespace Pegasus.Parser
                 {
                     IParseResult<string> r6 = null;
                     var codeStart = cursor;
-                    r6 = this.action(ref cursor);
+                    r6 = this.code(ref cursor);
                     var codeEnd = cursor;
                     var code = ValueOrDefault(r6);
                     if (r6 != null)
@@ -1094,7 +1094,61 @@ namespace Pegasus.Parser
             return r0;
         }
 
-        private IParseResult<string> action(ref Cursor cursor)
+        private IParseResult<Expression> action(ref Cursor cursor)
+        {
+            IParseResult<Expression> r0 = null;
+            var startCursor0 = cursor;
+            IParseResult<IList<string>> r1 = null;
+            var prefixStart = cursor;
+            var startCursor1 = cursor;
+            var l0 = new List<string>();
+            while (l0.Count < 1)
+            {
+                IParseResult<string> r2 = null;
+                r2 = this.ParseLiteral(ref cursor, "#");
+                if (r2 != null)
+                {
+                    l0.Add(r2.Value);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (l0.Count >= 0)
+            {
+                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+            }
+            else
+            {
+                cursor = startCursor1;
+            }
+            var prefixEnd = cursor;
+            var prefix = ValueOrDefault(r1);
+            if (r1 != null)
+            {
+                IParseResult<string> r3 = null;
+                var codeStart = cursor;
+                r3 = this.code(ref cursor);
+                var codeEnd = cursor;
+                var code = ValueOrDefault(r3);
+                if (r3 != null)
+                {
+                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  new CodeExpression(code, prefix.SingleOrDefault() == "#" ? CodeType.Error : CodeType.Result) );
+                }
+                else
+                {
+                    cursor = startCursor0;
+                }
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
+            return r0;
+        }
+
+        private IParseResult<string> code(ref Cursor cursor)
         {
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
@@ -3468,6 +3522,13 @@ namespace Pegasus.Parser
         private IParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<T> wrappedCode)
         {
             return new ParseResult<T>(startCursor, endCursor, wrappedCode());
+        }
+
+        private Exception ExceptionHelper<T>(Cursor cursor, Func<string> wrappedCode)
+        {
+            var ex = new FormatException(wrappedCode());
+            ex.Data["cursor"] = cursor;
+            return ex;
         }
 
         private T ValueOrDefault<T>(IParseResult<T> result)

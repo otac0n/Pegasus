@@ -14,7 +14,7 @@ setting
     }
 
 initializer
-  = code:action semicolon? { code }
+  = code:code semicolon? { code }
 
 rule
   = <Rule> name:identifier displayName:string? equals expression:expression semicolon? {
@@ -44,7 +44,7 @@ choice
 
 sequence
   = <Expression> elements:labeled* code:action {
-        new SequenceExpression(elements.Concat(new Expression[] { new CodeExpression(code) }))
+        new SequenceExpression(elements.Concat(new Expression[] { code }))
     }
   / elements:labeled* {
         elements.Count == 1
@@ -59,13 +59,13 @@ labeled
   / prefixed
 
 prefixed
-  = <Expression> and code:action {
+  = <Expression> and code:code {
         new AndCodeExpression(code)
     }
   / and expression:suffixed {
         new AndExpression(expression)
     }
-  / not code:action {
+  / not code:code {
         new NotCodeExpression(code)
     }
   / not expression:suffixed {
@@ -94,7 +94,10 @@ primary
 
 /* "Lexical" elements */
 
-action "action"
+action
+  = <Expression> prefix:"#"? code:code { new CodeExpression(code, prefix.SingleOrDefault() == "#" ? CodeType.Error : CodeType.Result) }
+
+code
   = braced:braced __ { braced.Substring(1, braced.Length - 2) }
 
 braced
