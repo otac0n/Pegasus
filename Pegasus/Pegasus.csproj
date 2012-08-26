@@ -57,6 +57,7 @@
     <Compile Include="Compiler\ExpressionTreeWalker.cs" />
     <Compile Include="Compiler\GenerateCodePass.cs" />
     <Compile Include="Compiler\PegCompiler.cs" />
+    <Compile Include="Compiler\ReportConflictingNamesPass.cs" />
     <Compile Include="Compiler\ReportDuplicateRulesPass.cs" />
     <Compile Include="Compiler\ReportLeftRecursionPass.cs" />
     <Compile Include="Compiler\ReportMissingRulesPass.cs" />

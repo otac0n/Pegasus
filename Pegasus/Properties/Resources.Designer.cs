@@ -113,5 +113,14 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0006_SETTING_UNKNOWN", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A prefix &apos;{0}&apos; cannot be declared here because it would give a different meaning to &apos;{0}&apos; which is already declared in the current scope..
+        /// </summary>
+        internal static string PEG0007_PREFIX_ALREADY_DECLARED {
+            get {
+                return ResourceManager.GetString("PEG0007_PREFIX_ALREADY_DECLARED", resourceCulture);
+            }
+        }
     }
 }
