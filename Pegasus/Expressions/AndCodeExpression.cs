@@ -16,7 +16,7 @@ namespace Pegasus.Expressions
         private readonly string code;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AndCodeExpression"/>.
+        /// Initializes a new instance of the <see cref="AndCodeExpression"/> class.
         /// </summary>
         /// <param name="code">The code to execute for the assertion.</param>
         public AndCodeExpression(string code)

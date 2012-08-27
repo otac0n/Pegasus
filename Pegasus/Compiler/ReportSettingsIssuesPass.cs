@@ -16,16 +16,6 @@ namespace Pegasus.Compiler
 
     internal class ReportSettingsIssuesPass : CompilePass
     {
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "PEG0006", "PEG0012" }; }
-        }
-
-        public override IList<string> BlockedByErrors
-        {
-            get { return new string[0]; }
-        }
-
         private static readonly Dictionary<string, bool> KnownSettings = new Dictionary<string, bool>
         {
             { "namespace", true },
@@ -39,6 +29,16 @@ namespace Pegasus.Compiler
         {
             { "accessibility", @"\s*(public|internal)\s*" },
         };
+
+        public override IList<string> ErrorsProduced
+        {
+            get { return new[] { "PEG0006", "PEG0012" }; }
+        }
+
+        public override IList<string> BlockedByErrors
+        {
+            get { return new string[0]; }
+        }
 
         public override void Run(Grammar grammar, CompileResult result)
         {

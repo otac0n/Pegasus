@@ -22,7 +22,6 @@ namespace Pegasus.Expressions
         /// Initializes a new instance of the <see cref="Rule"/> class.
         /// </summary>
         /// <param name="identifier">The identifier that represents the <see cref="Rule"/>.</param>
-        /// <param name="displayName">The display name of the <see cref="Rule"/>.</param>
         /// <param name="expression">The expression that this <see cref="Rule"/> represents.</param>
         public Rule(Identifier identifier, Expression expression)
         {
