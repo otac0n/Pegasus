@@ -1089,43 +1089,30 @@ namespace Pegasus.Parser
         {
             IParseResult<Expression> r0 = null;
             var startCursor0 = cursor;
-            IParseResult<IList<string>> r1 = null;
-            var prefixStart = cursor;
-            var startCursor1 = cursor;
-            var l0 = new List<string>();
-            while (l0.Count < 1)
+            IParseResult<string> r1 = null;
+            var typeStart = cursor;
+            if (r1 == null)
             {
-                IParseResult<string> r2 = null;
-                r2 = this.ParseLiteral(ref cursor, "#ERROR", ignoreCase: true);
-                if (r2 != null)
-                {
-                    l0.Add(r2.Value);
-                }
-                else
-                {
-                    break;
-                }
+                r1 = this.ParseLiteral(ref cursor, "#ERROR", ignoreCase: true);
             }
-            if (l0.Count >= 0)
+            if (r1 == null)
             {
-                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                var startCursor1 = cursor;
+                var len = cursor.Location - startCursor1.Location;
+                r1 = new ParseResult<string>(startCursor1, cursor, cursor.Subject.Substring(startCursor1.Location, len));
             }
-            else
-            {
-                cursor = startCursor1;
-            }
-            var prefixEnd = cursor;
-            var prefix = ValueOrDefault(r1);
+            var typeEnd = cursor;
+            var type = ValueOrDefault(r1);
             if (r1 != null)
             {
-                IParseResult<string> r3 = null;
+                IParseResult<string> r2 = null;
                 var codeStart = cursor;
-                r3 = this.code(ref cursor);
+                r2 = this.code(ref cursor);
                 var codeEnd = cursor;
-                var code = ValueOrDefault(r3);
-                if (r3 != null)
+                var code = ValueOrDefault(r2);
+                if (r2 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  new CodeExpression(code, prefix.Select(s => s.ToUpperInvariant()).SingleOrDefault() == "#ERROR" ? CodeType.Error : CodeType.Result) );
+                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  new CodeExpression(code, type.ToUpperInvariant() == "#ERROR" ? CodeType.Error : CodeType.Result) );
                 }
                 else
                 {

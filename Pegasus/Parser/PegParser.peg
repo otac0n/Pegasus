@@ -93,10 +93,10 @@ primary
   / dot { new WildcardExpression() }
   / lparen expression:expression rparen { expression }
 
-/* "Lexical" elements */
-
 action
-  = <Expression> prefix:"#ERROR"i? code:code { new CodeExpression(code, prefix.Select(s => s.ToUpperInvariant()).SingleOrDefault() == "#ERROR" ? CodeType.Error : CodeType.Result) }
+  = <Expression> type:("#ERROR"i / ) code:code { new CodeExpression(code, type.ToUpperInvariant() == "#ERROR" ? CodeType.Error : CodeType.Result) }
+
+/* "Lexical" elements */
 
 code
   = braced:braced __ { braced.Substring(1, braced.Length - 2) }
