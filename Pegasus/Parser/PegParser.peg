@@ -10,7 +10,7 @@ grammar
     }
 
 setting
-  = <KeyValuePair<Identifier, string>> "@" key:identifier value:(string / type) semicolon? {
+  = <KeyValuePair<Identifier, string>> "@" key:identifier value:(string / code / type) semicolon? {
         new KeyValuePair<Identifier, string>(key, value)
     }
 

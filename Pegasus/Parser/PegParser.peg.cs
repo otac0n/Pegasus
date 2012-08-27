@@ -182,6 +182,10 @@ namespace Pegasus.Parser
                     }
                     if (r3 == null)
                     {
+                        r3 = this.code(ref cursor);
+                    }
+                    if (r3 == null)
+                    {
                         r3 = this.type(ref cursor);
                     }
                     var valueEnd = cursor;
