@@ -240,12 +240,43 @@ namespace Pegasus.Parser
             }
             if (r1 != null)
             {
-                IParseResult<string> r3 = null;
-                r3 = this.equals(ref cursor);
+                IParseResult<IList<Identifier>> r3 = null;
+                var startCursor2 = cursor;
+                var l1 = new List<Identifier>();
+                while (true)
+                {
+                    IParseResult<Identifier> r4 = null;
+                    r4 = this.ruleFlag(ref cursor);
+                    if (r4 != null)
+                    {
+                        l1.Add(r4.Value);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if (l1.Count >= 0)
+                {
+                    r3 = new ParseResult<IList<Identifier>>(startCursor2, cursor, l1.AsReadOnly());
+                }
+                else
+                {
+                    cursor = startCursor2;
+                }
                 if (r3 != null)
                 {
-                    var len = cursor.Location - startCursor0.Location;
-                    r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                    IParseResult<string> r5 = null;
+                    r5 = this.equals(ref cursor);
+                    if (r5 != null)
+                    {
+                        var len = cursor.Location - startCursor0.Location;
+                        r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                    }
+                    else
+                    {
+                        cursor = startCursor0;
+                    }
                 }
                 else
                 {
@@ -299,49 +330,84 @@ namespace Pegasus.Parser
                 var type = ValueOrDefault(r2);
                 if (r2 != null)
                 {
-                    IParseResult<string> r4 = null;
-                    r4 = this.equals(ref cursor);
-                    if (r4 != null)
+                    IParseResult<IList<Identifier>> r4 = null;
+                    var flagsStart = cursor;
+                    var startCursor2 = cursor;
+                    var l1 = new List<Identifier>();
+                    while (true)
                     {
-                        IParseResult<Expression> r5 = null;
-                        var expressionStart = cursor;
-                        r5 = this.expression(ref cursor);
-                        var expressionEnd = cursor;
-                        var expression = ValueOrDefault(r5);
+                        IParseResult<Identifier> r5 = null;
+                        r5 = this.ruleFlag(ref cursor);
                         if (r5 != null)
                         {
-                            IParseResult<IList<string>> r6 = null;
-                            var startCursor2 = cursor;
-                            var l1 = new List<string>();
-                            while (l1.Count < 1)
+                            l1.Add(r5.Value);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if (l1.Count >= 0)
+                    {
+                        r4 = new ParseResult<IList<Identifier>>(startCursor2, cursor, l1.AsReadOnly());
+                    }
+                    else
+                    {
+                        cursor = startCursor2;
+                    }
+                    var flagsEnd = cursor;
+                    var flags = ValueOrDefault(r4);
+                    if (r4 != null)
+                    {
+                        IParseResult<string> r6 = null;
+                        r6 = this.equals(ref cursor);
+                        if (r6 != null)
+                        {
+                            IParseResult<Expression> r7 = null;
+                            var expressionStart = cursor;
+                            r7 = this.expression(ref cursor);
+                            var expressionEnd = cursor;
+                            var expression = ValueOrDefault(r7);
+                            if (r7 != null)
                             {
-                                IParseResult<string> r7 = null;
-                                r7 = this.semicolon(ref cursor);
-                                if (r7 != null)
+                                IParseResult<IList<string>> r8 = null;
+                                var startCursor3 = cursor;
+                                var l2 = new List<string>();
+                                while (l2.Count < 1)
                                 {
-                                    l1.Add(r7.Value);
+                                    IParseResult<string> r9 = null;
+                                    r9 = this.semicolon(ref cursor);
+                                    if (r9 != null)
+                                    {
+                                        l2.Add(r9.Value);
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                if (l2.Count >= 0)
+                                {
+                                    r8 = new ParseResult<IList<string>>(startCursor3, cursor, l2.AsReadOnly());
                                 }
                                 else
                                 {
-                                    break;
+                                    cursor = startCursor3;
                                 }
-                            }
-                            if (l1.Count >= 0)
-                            {
-                                r6 = new ParseResult<IList<string>>(startCursor2, cursor, l1.AsReadOnly());
-                            }
-                            else
-                            {
-                                cursor = startCursor2;
-                            }
-                            if (r6 != null)
-                            {
-                                r0 = this.ReturnHelper(startCursor0, cursor, () => {
+                                if (r8 != null)
+                                {
+                                    r0 = this.ReturnHelper(startCursor0, cursor, () => {
         var typeValue = type.SingleOrDefault();
         return new Rule(
             identifier: name,
-            expression: typeValue != null ? new TypedExpression(typeValue, expression) : expression);
+            expression: typeValue != null ? new TypedExpression(typeValue, expression) : expression,
+            flags: flags);
     });
+                                }
+                                else
+                                {
+                                    cursor = startCursor0;
+                                }
                             }
                             else
                             {
@@ -357,6 +423,35 @@ namespace Pegasus.Parser
                     {
                         cursor = startCursor0;
                     }
+                }
+                else
+                {
+                    cursor = startCursor0;
+                }
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
+            return r0;
+        }
+
+        private IParseResult<Identifier> ruleFlag(ref Cursor cursor)
+        {
+            IParseResult<Identifier> r0 = null;
+            var startCursor0 = cursor;
+            IParseResult<string> r1 = null;
+            r1 = this.ParseLiteral(ref cursor, "-");
+            if (r1 != null)
+            {
+                IParseResult<Identifier> r2 = null;
+                var flagStart = cursor;
+                r2 = this.identifier(ref cursor);
+                var flagEnd = cursor;
+                var flag = ValueOrDefault(r2);
+                if (r2 != null)
+                {
+                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  flag );
                 }
                 else
                 {

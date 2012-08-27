@@ -62,6 +62,7 @@
     <Compile Include="Compiler\ReportLeftRecursionPass.cs" />
     <Compile Include="Compiler\ReportMissingRulesPass.cs" />
     <Compile Include="Compiler\ReportNoRulesPass.cs" />
+    <Compile Include="Compiler\ReportRuleFlagsIssuesPass.cs" />
     <Compile Include="Compiler\ReportSettingsIssuesPass.cs" />
     <Compile Include="Expressions\AndCodeExpression.cs" />
     <Compile Include="Expressions\AndExpression.cs" />

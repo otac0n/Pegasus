@@ -9,6 +9,8 @@
 namespace Pegasus.Expressions
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Represents a parse rule.
@@ -16,6 +18,7 @@ namespace Pegasus.Expressions
     public class Rule
     {
         private readonly Expression expression;
+        private readonly IList<Identifier> flags;
         private readonly Identifier identifier;
 
         /// <summary>
@@ -23,7 +26,8 @@ namespace Pegasus.Expressions
         /// </summary>
         /// <param name="identifier">The identifier that represents the <see cref="Rule"/>.</param>
         /// <param name="expression">The expression that this <see cref="Rule"/> represents.</param>
-        public Rule(Identifier identifier, Expression expression)
+        /// <param name="flags" >The flags to be set on this <see cref="Rule"/>.</param>
+        public Rule(Identifier identifier, Expression expression, IEnumerable<Identifier> flags)
         {
             if (expression == null)
             {
@@ -32,6 +36,7 @@ namespace Pegasus.Expressions
 
             this.identifier = identifier;
             this.expression = expression;
+            this.flags = flags.ToList().AsReadOnly();
         }
 
         /// <summary>
@@ -40,6 +45,14 @@ namespace Pegasus.Expressions
         public Expression Expression
         {
             get { return this.expression; }
+        }
+
+        /// <summary>
+        /// Gets the flags that have been set on this <see cref="Rule"/>.
+        /// </summary>
+        public IList<Identifier> Flags
+        {
+            get { return this.flags; }
         }
 
         /// <summary>

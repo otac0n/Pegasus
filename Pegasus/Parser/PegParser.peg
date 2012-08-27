@@ -15,15 +15,19 @@ setting <KeyValuePair<Identifier, string>>
     }
 
 rulePreamble
-  = expressionType? equals
+  = expressionType? ruleFlag* equals
 
 rule <Rule>
-  = name:identifier type:expressionType? equals expression:expression semicolon? {{
+  = name:identifier type:expressionType? flags:ruleFlag* equals expression:expression semicolon? {{
         var typeValue = type.SingleOrDefault();
         return new Rule(
             identifier: name,
-            expression: typeValue != null ? new TypedExpression(typeValue, expression) : expression);
+            expression: typeValue != null ? new TypedExpression(typeValue, expression) : expression,
+            flags: flags);
     }}
+
+ruleFlag <Identifier>
+  = "-" flag:identifier { flag }
 
 expression <Expression>
   = choice:choice

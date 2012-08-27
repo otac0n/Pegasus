@@ -167,5 +167,14 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0012_SETTING_VALUE_INVALID", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The flag &apos;{0}&apos; is not recognized..
+        /// </summary>
+        internal static string PEG0013_FLAG_UNKNOWN {
+            get {
+                return ResourceManager.GetString("PEG0013_FLAG_UNKNOWN", resourceCulture);
+            }
+        }
     }
 }
