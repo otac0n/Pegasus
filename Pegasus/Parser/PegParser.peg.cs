@@ -1096,7 +1096,7 @@ namespace Pegasus.Parser
             while (l0.Count < 1)
             {
                 IParseResult<string> r2 = null;
-                r2 = this.ParseLiteral(ref cursor, "#");
+                r2 = this.ParseLiteral(ref cursor, "#ERROR", ignoreCase: true);
                 if (r2 != null)
                 {
                     l0.Add(r2.Value);
@@ -1125,7 +1125,7 @@ namespace Pegasus.Parser
                 var code = ValueOrDefault(r3);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  new CodeExpression(code, prefix.SingleOrDefault() == "#" ? CodeType.Error : CodeType.Result) );
+                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  new CodeExpression(code, prefix.Select(s => s.ToUpperInvariant()).SingleOrDefault() == "#ERROR" ? CodeType.Error : CodeType.Result) );
                 }
                 else
                 {
