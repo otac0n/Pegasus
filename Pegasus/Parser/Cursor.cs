@@ -13,6 +13,7 @@ namespace Pegasus.Parser
     /// <summary>
     /// Represents a location within a parsing subject.
     /// </summary>
+    [Serializable]
     public class Cursor : IEquatable<Cursor>
     {
         private readonly int column;
