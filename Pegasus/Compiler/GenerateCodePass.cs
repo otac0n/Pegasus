@@ -100,6 +100,7 @@ namespace Pegasus.Compiler
             public override void WalkGrammar(Grammar grammar)
             {
                 this.grammar = grammar;
+                var settings = grammar.Settings.ToLookup(s => s.Key.Name, s => s.Value);
 
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
                 this.code.WriteLine("// -----------------------------------------------------------------------");
@@ -112,9 +113,9 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("// -----------------------------------------------------------------------");
                 this.code.WriteLineNoTabs(string.Empty);
 
-                var @namespace = grammar.Settings.Where(s => s.Key.Name == "namespace").Select(s => s.Value).SingleOrDefault() ?? "Parsers";
-                var classname = grammar.Settings.Where(s => s.Key.Name == "classname").Select(s => s.Value).SingleOrDefault() ?? "Parser";
-                var accessibility = grammar.Settings.Where(s => s.Key.Name == "accessibility").Select(s => s.Value).SingleOrDefault() ?? "public";
+                var @namespace = settings["namespace"].SingleOrDefault() ?? "Parsers";
+                var classname = settings["classname"].SingleOrDefault() ?? "Parser";
+                var accessibility = settings["accessibility"].SingleOrDefault() ?? "public";
 
                 this.code.WriteLine("namespace " + @namespace);
                 this.code.WriteLine("{");
@@ -122,7 +123,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("using System;");
                 this.code.WriteLine("using System.Collections.Generic;");
 
-                foreach (var @using in grammar.Settings.Where(s => s.Key.Name == "using").Select(s => s.Value))
+                foreach (var @using in settings["using"])
                 {
                     this.code.WriteLine("using " + @using + ";");
                 }
@@ -134,7 +135,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
-                foreach (var members in grammar.Settings.Where(s => s.Key.Name == "members").Select(s => s.Value))
+                foreach (var members in settings["members"])
                 {
                     this.code.WriteLineNoTabs(members);
                     this.code.WriteLineNoTabs(string.Empty);
