@@ -267,17 +267,6 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs(string.Empty);
-                this.code.WriteLine("private Exception ExceptionHelper(Cursor cursor, Func<Tuple<string, Cursor>> wrappedCode)");
-                this.code.WriteLine("{");
-                this.code.Indent++;
-                this.code.WriteLine("var parts = wrappedCode();");
-                this.code.WriteLine("var ex = new FormatException(parts.Item1);");
-                this.code.WriteLine("ex.Data[\"cursor\"] = parts.Item2;");
-                this.code.WriteLine("return ex;");
-                this.code.Indent--;
-                this.code.WriteLine("}");
-
-                this.code.WriteLineNoTabs(string.Empty);
                 this.code.WriteLine("private T ValueOrDefault<T>(IParseResult<T> result)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
@@ -389,7 +378,7 @@ namespace Pegasus.Compiler
                     }
                     else if (codeExpression.CodeType == CodeType.Error)
                     {
-                        this.code.WriteLine("throw this.ExceptionHelper(cursor, () => " + codeExpression.Code + ");");
+                        this.code.WriteLine("throw this.ExceptionHelper(" + startCursorName + ", () => " + codeExpression.Code + ");");
                     }
                 }
 

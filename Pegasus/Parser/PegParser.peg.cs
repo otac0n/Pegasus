@@ -1207,7 +1207,7 @@ namespace Pegasus.Parser
                     if (r4 == null)
                     {
                         var startCursor2 = cursor;
-                        throw this.ExceptionHelper(cursor, () =>  "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE );
+                        throw this.ExceptionHelper(startCursor2, () =>  "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE );
                     }
                     if (r4 != null)
                     {
@@ -2382,7 +2382,7 @@ namespace Pegasus.Parser
                     if (r4 == null)
                     {
                         var startCursor2 = cursor;
-                        throw this.ExceptionHelper(cursor, () =>  "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING );
+                        throw this.ExceptionHelper(startCursor2, () =>  "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING );
                     }
                     if (r4 != null)
                     {
@@ -2527,7 +2527,7 @@ namespace Pegasus.Parser
                     if (r4 == null)
                     {
                         var startCursor2 = cursor;
-                        throw this.ExceptionHelper(cursor, () =>  "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING );
+                        throw this.ExceptionHelper(startCursor2, () =>  "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING );
                     }
                     if (r4 != null)
                     {
@@ -2708,7 +2708,7 @@ namespace Pegasus.Parser
                         if (r6 == null)
                         {
                             var startCursor3 = cursor;
-                            throw this.ExceptionHelper(cursor, () =>  "PEG0010:" + Resources.PEG0010_UNTERNIMATED_CLASS );
+                            throw this.ExceptionHelper(startCursor3, () =>  "PEG0010:" + Resources.PEG0010_UNTERNIMATED_CLASS );
                         }
                         if (r6 != null)
                         {
@@ -3487,7 +3487,7 @@ namespace Pegasus.Parser
                 var unexpected = ValueOrDefault(r2);
                 if (r2 != null)
                 {
-                    throw this.ExceptionHelper(cursor, () =>  Tuple.Create("PEG0008:" + string.Format(Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected), unexpectedStart) );
+                    throw this.ExceptionHelper(startCursor1, () =>  "PEG0008:" + string.Format(Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected) );
                 }
                 else
                 {
@@ -3569,14 +3569,6 @@ namespace Pegasus.Parser
         {
             var ex = new FormatException(wrappedCode());
             ex.Data["cursor"] = cursor;
-            return ex;
-        }
-
-        private Exception ExceptionHelper(Cursor cursor, Func<Tuple<string, Cursor>> wrappedCode)
-        {
-            var parts = wrappedCode();
-            var ex = new FormatException(parts.Item1);
-            ex.Data["cursor"] = parts.Item2;
             return ex;
         }
 
