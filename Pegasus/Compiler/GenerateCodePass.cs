@@ -47,6 +47,7 @@ namespace Pegasus.Compiler
             private readonly Dictionary<string, int> variables = new Dictionary<string, int>();
             private Grammar grammar;
             private string currentResultName = null;
+            private bool packrat = false;
 
             public GenerateCodeExpressionTreeWlaker(CompileResult result, IndentedTextWriter codeWriter)
             {
@@ -141,11 +142,25 @@ namespace Pegasus.Compiler
                     this.code.WriteLineNoTabs(string.Empty);
                 }
 
+                if (this.packrat)
+                {
+                    this.code.WriteLine("private Dictionary<string, object> storage;");
+                }
+
                 var type = this.GetResultType(grammar.Rules[0].Expression);
 
                 this.code.WriteLine("public " + type + " Parse(string subject, string fileName = null)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
+
+                if (this.packrat)
+                {
+                    this.code.WriteLine("try");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                    this.code.WriteLine("this.storage = new Dictionary<string, object>();");
+                }
+
                 this.code.WriteLine("var cursor = new Cursor(subject, 0, fileName);");
                 this.code.WriteLine("var result = this." + EscapeName(grammar.Rules[0].Identifier.Name) + "(ref cursor);");
                 this.code.WriteLine("if (result == null)");
@@ -155,6 +170,19 @@ namespace Pegasus.Compiler
                 this.code.Indent--;
                 this.code.WriteLine("}");
                 this.code.WriteLine("return result.Value;");
+
+                if (this.packrat)
+                {
+                    this.code.Indent--;
+                    this.code.WriteLine("}");
+                    this.code.WriteLine("finally");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                    this.code.WriteLine("this.storage = null;");
+                    this.code.Indent--;
+                    this.code.WriteLine("}");
+                }
+
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
@@ -300,7 +328,32 @@ namespace Pegasus.Compiler
 
                 this.currentResultName = this.CreateVariable("r");
                 this.code.WriteLine("IParseResult<" + type + "> " + this.currentResultName + " = null;");
+
+                if (this.packrat)
+                {
+                    this.code.WriteLine("var storageKey = " + ToLiteral(rule.Identifier.Name + ":") + " + cursor.Location;");
+                    this.code.WriteLine("if (this.storage.ContainsKey(storageKey))");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                    this.code.WriteLine(this.currentResultName + " = (IParseResult<" + type + ">)this.storage[storageKey];");
+                    this.code.WriteLine("if (" + this.currentResultName + " != null)");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                    this.code.WriteLine("cursor = " + this.currentResultName + ".EndCursor;");
+                    this.code.Indent--;
+                    this.code.WriteLine("}");
+                    this.code.WriteLine("return " + this.currentResultName + ";");
+                    this.code.Indent--;
+                    this.code.WriteLine("}");
+                }
+
                 base.WalkRule(rule);
+
+                if (this.packrat)
+                {
+                    this.code.WriteLine("this.storage[storageKey] = " + this.currentResultName + ";");
+                }
+
                 this.code.WriteLine("return " + this.currentResultName + ";");
                 this.currentResultName = null;
 
