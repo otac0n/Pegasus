@@ -14,6 +14,9 @@ setting <KeyValuePair<Identifier, string>>
         new KeyValuePair<Identifier, string>(key, value)
     }
 
+rulePreamble
+  = expressionType? equals
+
 rule <Rule>
   = name:identifier type:expressionType? equals expression:expression semicolon? {{
         var typeValue = type.SingleOrDefault();
@@ -79,7 +82,7 @@ suffixed <Expression>
   / primary
 
 primary <Expression>
-  = name:identifier !(expressionType? equals) { new NameExpression(name) }
+  = name:identifier !(rulePreamble) { new NameExpression(name) }
   / literal
   / class
   / dot { new WildcardExpression() }
