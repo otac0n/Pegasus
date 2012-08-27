@@ -102,7 +102,7 @@ code
   = braced:braced __ { braced.Substring(1, braced.Length - 2) }
 
 braced
-  = "{" parts:(braced / nonBraceCharacters)* ("}" / #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE })
+  = "{" parts:(nonBraceCharacters / braced)* ("}" / #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE })
 
 nonBraceCharacters
   = chars:nonBraceCharacter+ { string.Concat(chars) }

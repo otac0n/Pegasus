@@ -1172,11 +1172,11 @@ namespace Pegasus.Parser
                     IParseResult<string> r3 = null;
                     if (r3 == null)
                     {
-                        r3 = this.braced(ref cursor);
+                        r3 = this.nonBraceCharacters(ref cursor);
                     }
                     if (r3 == null)
                     {
-                        r3 = this.nonBraceCharacters(ref cursor);
+                        r3 = this.braced(ref cursor);
                     }
                     if (r3 != null)
                     {
