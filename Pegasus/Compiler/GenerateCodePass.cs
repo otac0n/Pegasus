@@ -26,7 +26,7 @@ namespace Pegasus.Compiler
 
         public override IList<string> BlockedByErrors
         {
-            get { return new[] { "PEG0001", "PEG0002", "PEG0003", "PEG0004", "PEG0005", "PEG0007" }; }
+            get { return new[] { "PEG0001", "PEG0002", "PEG0003", "PEG0004", "PEG0005", "PEG0007", "PEG0012" }; }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "StringWriter.Dispose is idempotent.")]

@@ -158,5 +158,14 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0011_UNTERNIMATED_CODE", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value &apos;{0}&apos; is invalid for the &apos;{1}&apos; setting..
+        /// </summary>
+        internal static string PEG0012_SETTING_VALUE_INVALID {
+            get {
+                return ResourceManager.GetString("PEG0012_SETTING_VALUE_INVALID", resourceCulture);
+            }
+        }
     }
 }

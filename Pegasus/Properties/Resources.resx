@@ -151,4 +151,7 @@
   <data name="PEG0011_UNTERNIMATED_CODE" xml:space="preserve">
     <value>Unterminated code section.</value>
   </data>
+  <data name="PEG0012_SETTING_VALUE_INVALID" xml:space="preserve">
+    <value>The value '{0}' is invalid for the '{1}' setting.</value>
+  </data>
 </root>
