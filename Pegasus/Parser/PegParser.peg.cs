@@ -1213,7 +1213,15 @@ namespace Pegasus.Parser
                 if (r2 != null)
                 {
                     IParseResult<string> r4 = null;
-                    r4 = this.ParseLiteral(ref cursor, "}");
+                    if (r4 == null)
+                    {
+                        r4 = this.ParseLiteral(ref cursor, "}");
+                    }
+                    if (r4 == null)
+                    {
+                        var startCursor2 = cursor;
+                        throw this.ExceptionHelper(cursor, () =>  "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE );
+                    }
                     if (r4 != null)
                     {
                         var len = cursor.Location - startCursor0.Location;
@@ -2380,7 +2388,15 @@ namespace Pegasus.Parser
                 if (r2 != null)
                 {
                     IParseResult<string> r4 = null;
-                    r4 = this.ParseLiteral(ref cursor, "\"");
+                    if (r4 == null)
+                    {
+                        r4 = this.ParseLiteral(ref cursor, "\"");
+                    }
+                    if (r4 == null)
+                    {
+                        var startCursor2 = cursor;
+                        throw this.ExceptionHelper(cursor, () =>  "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING );
+                    }
                     if (r4 != null)
                     {
                         r0 = this.ReturnHelper(startCursor0, cursor, () =>  string.Concat(chars) );
@@ -2517,7 +2533,15 @@ namespace Pegasus.Parser
                 if (r2 != null)
                 {
                     IParseResult<string> r4 = null;
-                    r4 = this.ParseLiteral(ref cursor, "\'");
+                    if (r4 == null)
+                    {
+                        r4 = this.ParseLiteral(ref cursor, "\'");
+                    }
+                    if (r4 == null)
+                    {
+                        var startCursor2 = cursor;
+                        throw this.ExceptionHelper(cursor, () =>  "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING );
+                    }
                     if (r4 != null)
                     {
                         r0 = this.ReturnHelper(startCursor0, cursor, () =>  string.Concat(chars) );
@@ -2690,12 +2714,20 @@ namespace Pegasus.Parser
                     if (r4 != null)
                     {
                         IParseResult<string> r6 = null;
-                        r6 = this.ParseLiteral(ref cursor, "]");
+                        if (r6 == null)
+                        {
+                            r6 = this.ParseLiteral(ref cursor, "]");
+                        }
+                        if (r6 == null)
+                        {
+                            var startCursor3 = cursor;
+                            throw this.ExceptionHelper(cursor, () =>  "PEG0010:" + Resources.PEG0010_UNTERNIMATED_CLASS );
+                        }
                         if (r6 != null)
                         {
                             IParseResult<IList<string>> r7 = null;
                             var flagsStart = cursor;
-                            var startCursor3 = cursor;
+                            var startCursor4 = cursor;
                             var l2 = new List<string>();
                             while (l2.Count < 1)
                             {
@@ -2712,11 +2744,11 @@ namespace Pegasus.Parser
                             }
                             if (l2.Count >= 0)
                             {
-                                r7 = new ParseResult<IList<string>>(startCursor3, cursor, l2.AsReadOnly());
+                                r7 = new ParseResult<IList<string>>(startCursor4, cursor, l2.AsReadOnly());
                             }
                             else
                             {
-                                cursor = startCursor3;
+                                cursor = startCursor4;
                             }
                             var flagsEnd = cursor;
                             var flags = ValueOrDefault(r7);

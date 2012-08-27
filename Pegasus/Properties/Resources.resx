@@ -142,4 +142,13 @@
   <data name="PEG0008_UNEXPECTED_END_OF_INPUT" xml:space="preserve">
     <value>Unexpected character '{0}'.</value>
   </data>
+  <data name="PEG0009_UNTERMINATED_STRING" xml:space="preserve">
+    <value>Unternimated string literal.</value>
+  </data>
+  <data name="PEG0010_UNTERNIMATED_CLASS" xml:space="preserve">
+    <value>Unterminated character class.</value>
+  </data>
+  <data name="PEG0011_UNTERNIMATED_CODE" xml:space="preserve">
+    <value>Unterminated code section.</value>
+  </data>
 </root>

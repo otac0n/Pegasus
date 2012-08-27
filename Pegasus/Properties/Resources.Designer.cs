@@ -131,5 +131,32 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0008_UNEXPECTED_END_OF_INPUT", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unternimated string literal..
+        /// </summary>
+        internal static string PEG0009_UNTERMINATED_STRING {
+            get {
+                return ResourceManager.GetString("PEG0009_UNTERMINATED_STRING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unterminated character class..
+        /// </summary>
+        internal static string PEG0010_UNTERNIMATED_CLASS {
+            get {
+                return ResourceManager.GetString("PEG0010_UNTERNIMATED_CLASS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unterminated code section..
+        /// </summary>
+        internal static string PEG0011_UNTERNIMATED_CODE {
+            get {
+                return ResourceManager.GetString("PEG0011_UNTERNIMATED_CODE", resourceCulture);
+            }
+        }
     }
 }

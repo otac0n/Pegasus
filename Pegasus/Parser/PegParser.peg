@@ -102,7 +102,7 @@ code
   = braced:braced __ { braced.Substring(1, braced.Length - 2) }
 
 braced
-  = "{" parts:(braced / nonBraceCharacters)* "}"
+  = "{" parts:(braced / nonBraceCharacters)* ("}" / #{ "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE })
 
 nonBraceCharacters
   = chars:nonBraceCharacter+ { string.Concat(chars) }
@@ -197,7 +197,7 @@ string "string"
   = string:(doubleQuotedString / singleQuotedString) __ { @string }
 
 doubleQuotedString
-  = '"' chars:doubleQuotedCharacter* '"' { string.Concat(chars) }
+  = '"' chars:doubleQuotedCharacter* ('"' / #{ "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING }) { string.Concat(chars) }
 
 doubleQuotedCharacter
   = simpleDoubleQuotedCharacter
@@ -211,7 +211,7 @@ simpleDoubleQuotedCharacter
   = !('"' / "\\" / eolChar) char:. { @char }
 
 singleQuotedString
-  = "'" chars:singleQuotedCharacter* "'" { string.Concat(chars) }
+  = "'" chars:singleQuotedCharacter* ("'" / #{ "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING }) { string.Concat(chars) }
 
 singleQuotedCharacter
   = simpleSingleQuotedCharacter
@@ -225,7 +225,7 @@ simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) char:. { @char }
 
 class "character class"
-  = <Expression> "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* "]" flags:"i"? __ {
+  = <Expression> "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* ("]" / #{ "PEG0010:" + Resources.PEG0010_UNTERNIMATED_CLASS }) flags:"i"? __ {
         new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
