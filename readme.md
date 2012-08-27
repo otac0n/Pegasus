@@ -23,25 +23,22 @@ Here is an example of a simple parser for mathematical expressions:
     @classname ExpressionParser
     @using Pegasus.Common
 
-    additive
-      = <decimal>
-        left:multiplicative "+" right:additive { left + right }
+    additive <decimal>
+      = left:multiplicative "+" right:additive { left + right }
       / left:multiplicative "-" right:additive { left - right }
       / multiplicative
 
-    multiplicative
-      = <decimal>
-        left:primary "*" right:multiplicative { left * right }
+    multiplicative <decimal>
+      = left:primary "*" right:multiplicative { left * right }
       / left:primary "/" right:multiplicative { left / right }
       / primary
 
-    primary
-      = <decimal>
-        decimal
+    primary <decimal>
+      = decimal
       / "(" additive:additive ")" { additive }
 
-    decimal
-      = <decimal> value:([0-9]+ ("." [0-9]+)?) { decimal.Parse(value) }
+    decimal <decimal>
+      = value:([0-9]+ ("." [0-9]+)?) { decimal.Parse(value) }
 
 This will take mathematical expressions as strings and evaluate them with the proper order of operations to produce a result as a decimal.
 

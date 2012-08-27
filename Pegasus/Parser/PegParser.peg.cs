@@ -221,48 +221,83 @@ namespace Pegasus.Parser
             var name = ValueOrDefault(r1);
             if (r1 != null)
             {
-                IParseResult<string> r2 = null;
-                r2 = this.equals(ref cursor);
-                if (r2 != null)
+                IParseResult<IList<string>> r2 = null;
+                var typeStart = cursor;
+                var startCursor1 = cursor;
+                var l0 = new List<string>();
+                while (l0.Count < 1)
                 {
-                    IParseResult<Expression> r3 = null;
-                    var expressionStart = cursor;
-                    r3 = this.expression(ref cursor);
-                    var expressionEnd = cursor;
-                    var expression = ValueOrDefault(r3);
+                    IParseResult<string> r3 = null;
+                    r3 = this.expressionType(ref cursor);
                     if (r3 != null)
                     {
-                        IParseResult<IList<string>> r4 = null;
-                        var startCursor1 = cursor;
-                        var l0 = new List<string>();
-                        while (l0.Count < 1)
+                        l0.Add(r3.Value);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if (l0.Count >= 0)
+                {
+                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                }
+                else
+                {
+                    cursor = startCursor1;
+                }
+                var typeEnd = cursor;
+                var type = ValueOrDefault(r2);
+                if (r2 != null)
+                {
+                    IParseResult<string> r4 = null;
+                    r4 = this.equals(ref cursor);
+                    if (r4 != null)
+                    {
+                        IParseResult<Expression> r5 = null;
+                        var expressionStart = cursor;
+                        r5 = this.expression(ref cursor);
+                        var expressionEnd = cursor;
+                        var expression = ValueOrDefault(r5);
+                        if (r5 != null)
                         {
-                            IParseResult<string> r5 = null;
-                            r5 = this.semicolon(ref cursor);
-                            if (r5 != null)
+                            IParseResult<IList<string>> r6 = null;
+                            var startCursor2 = cursor;
+                            var l1 = new List<string>();
+                            while (l1.Count < 1)
                             {
-                                l0.Add(r5.Value);
+                                IParseResult<string> r7 = null;
+                                r7 = this.semicolon(ref cursor);
+                                if (r7 != null)
+                                {
+                                    l1.Add(r7.Value);
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            if (l1.Count >= 0)
+                            {
+                                r6 = new ParseResult<IList<string>>(startCursor2, cursor, l1.AsReadOnly());
                             }
                             else
                             {
-                                break;
+                                cursor = startCursor2;
                             }
-                        }
-                        if (l0.Count >= 0)
-                        {
-                            r4 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
-                        }
-                        else
-                        {
-                            cursor = startCursor1;
-                        }
-                        if (r4 != null)
-                        {
-                            r0 = this.ReturnHelper(startCursor0, cursor, () => 
-        new Rule(
+                            if (r6 != null)
+                            {
+                                r0 = this.ReturnHelper(startCursor0, cursor, () => {
+        var typeValue = type.SingleOrDefault();
+        return new Rule(
             identifier: name,
-            expression: expression)
-    );
+            expression: typeValue != null ? new TypedExpression(typeValue, expression) : expression);
+    });
+                            }
+                            else
+                            {
+                                cursor = startCursor0;
+                            }
                         }
                         else
                         {
@@ -289,59 +324,10 @@ namespace Pegasus.Parser
         private IParseResult<Expression> expression(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
-            var startCursor0 = cursor;
-            IParseResult<IList<string>> r1 = null;
-            var typeStart = cursor;
-            var startCursor1 = cursor;
-            var l0 = new List<string>();
-            while (l0.Count < 1)
-            {
-                IParseResult<string> r2 = null;
-                r2 = this.expressionType(ref cursor);
-                if (r2 != null)
-                {
-                    l0.Add(r2.Value);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            if (l0.Count >= 0)
-            {
-                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
-            }
-            else
-            {
-                cursor = startCursor1;
-            }
-            var typeEnd = cursor;
-            var type = ValueOrDefault(r1);
-            if (r1 != null)
-            {
-                IParseResult<Expression> r3 = null;
-                var choiceStart = cursor;
-                r3 = this.choice(ref cursor);
-                var choiceEnd = cursor;
-                var choice = ValueOrDefault(r3);
-                if (r3 != null)
-                {
-                    r0 = this.ReturnHelper(startCursor0, cursor, () => {
-        var typeValue = type.SingleOrDefault();
-        return typeValue != null
-            ? new TypedExpression(typeValue, choice)
-            : choice;
-    });
-                }
-                else
-                {
-                    cursor = startCursor0;
-                }
-            }
-            else
-            {
-                cursor = startCursor0;
-            }
+            var choiceStart = cursor;
+            r0 = this.choice(ref cursor);
+            var choiceEnd = cursor;
+            var choice = ValueOrDefault(r0);
             return r0;
         }
 
@@ -847,7 +833,49 @@ namespace Pegasus.Parser
                     IParseResult<string> r2 = null;
                     var startCursor1 = cursor;
                     IParseResult<string> r3 = null;
-                    r3 = this.equals(ref cursor);
+                    var startCursor2 = cursor;
+                    IParseResult<IList<string>> r4 = null;
+                    var startCursor3 = cursor;
+                    var l0 = new List<string>();
+                    while (l0.Count < 1)
+                    {
+                        IParseResult<string> r5 = null;
+                        r5 = this.expressionType(ref cursor);
+                        if (r5 != null)
+                        {
+                            l0.Add(r5.Value);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if (l0.Count >= 0)
+                    {
+                        r4 = new ParseResult<IList<string>>(startCursor3, cursor, l0.AsReadOnly());
+                    }
+                    else
+                    {
+                        cursor = startCursor3;
+                    }
+                    if (r4 != null)
+                    {
+                        IParseResult<string> r6 = null;
+                        r6 = this.equals(ref cursor);
+                        if (r6 != null)
+                        {
+                            var len = cursor.Location - startCursor2.Location;
+                            r3 = new ParseResult<string>(startCursor2, cursor, cursor.Subject.Substring(startCursor2.Location, len));
+                        }
+                        else
+                        {
+                            cursor = startCursor2;
+                        }
+                    }
+                    else
+                    {
+                        cursor = startCursor2;
+                    }
                     cursor = startCursor1;
                     if (r3 == null)
                     {
@@ -877,51 +905,88 @@ namespace Pegasus.Parser
             }
             if (r0 == null)
             {
-                var startCursor2 = cursor;
-                IParseResult<string> r4 = null;
-                r4 = this.dot(ref cursor);
-                if (r4 != null)
+                var startCursor4 = cursor;
+                IParseResult<string> r7 = null;
+                r7 = this.dot(ref cursor);
+                if (r7 != null)
                 {
-                    r0 = this.ReturnHelper(startCursor2, cursor, () =>  new WildcardExpression() );
+                    r0 = this.ReturnHelper(startCursor4, cursor, () =>  new WildcardExpression() );
                 }
                 else
                 {
-                    cursor = startCursor2;
+                    cursor = startCursor4;
                 }
             }
             if (r0 == null)
             {
-                var startCursor3 = cursor;
-                IParseResult<string> r5 = null;
-                r5 = this.lparen(ref cursor);
-                if (r5 != null)
+                var startCursor5 = cursor;
+                IParseResult<string> r8 = null;
+                r8 = this.lparen(ref cursor);
+                if (r8 != null)
                 {
-                    IParseResult<Expression> r6 = null;
-                    var expressionStart = cursor;
-                    r6 = this.expression(ref cursor);
-                    var expressionEnd = cursor;
-                    var expression = ValueOrDefault(r6);
-                    if (r6 != null)
+                    IParseResult<IList<string>> r9 = null;
+                    var typeStart = cursor;
+                    var startCursor6 = cursor;
+                    var l1 = new List<string>();
+                    while (l1.Count < 1)
                     {
-                        IParseResult<string> r7 = null;
-                        r7 = this.rparen(ref cursor);
-                        if (r7 != null)
+                        IParseResult<string> r10 = null;
+                        r10 = this.expressionType(ref cursor);
+                        if (r10 != null)
                         {
-                            r0 = this.ReturnHelper(startCursor3, cursor, () =>  expression );
+                            l1.Add(r10.Value);
                         }
                         else
                         {
-                            cursor = startCursor3;
+                            break;
+                        }
+                    }
+                    if (l1.Count >= 0)
+                    {
+                        r9 = new ParseResult<IList<string>>(startCursor6, cursor, l1.AsReadOnly());
+                    }
+                    else
+                    {
+                        cursor = startCursor6;
+                    }
+                    var typeEnd = cursor;
+                    var type = ValueOrDefault(r9);
+                    if (r9 != null)
+                    {
+                        IParseResult<Expression> r11 = null;
+                        var expressionStart = cursor;
+                        r11 = this.expression(ref cursor);
+                        var expressionEnd = cursor;
+                        var expression = ValueOrDefault(r11);
+                        if (r11 != null)
+                        {
+                            IParseResult<string> r12 = null;
+                            r12 = this.rparen(ref cursor);
+                            if (r12 != null)
+                            {
+                                r0 = this.ReturnHelper(startCursor5, cursor, () => {
+        var typeValue = type.SingleOrDefault();
+        return typeValue != null ? new TypedExpression(typeValue, expression) : expression;
+    });
+                            }
+                            else
+                            {
+                                cursor = startCursor5;
+                            }
+                        }
+                        else
+                        {
+                            cursor = startCursor5;
                         }
                     }
                     else
                     {
-                        cursor = startCursor3;
+                        cursor = startCursor5;
                     }
                 }
                 else
                 {
-                    cursor = startCursor3;
+                    cursor = startCursor5;
                 }
             }
             return r0;
