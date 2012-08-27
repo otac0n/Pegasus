@@ -26,13 +26,13 @@ rule <Rule>
             flags: flags);
     }}
 
-ruleFlag <Identifier>
+ruleFlag <Identifier> -memoize
   = "-" flag:identifier { flag }
 
 expression <Expression>
   = choice:choice
 
-expressionType
+expressionType -memoize
   = lt name:type gt { name }
 
 choice <Expression>
@@ -145,7 +145,7 @@ rbracket  = "]" __ { "]" }
  * The simplifications were made just to make the implementation little bit
  * easier, there is no "philosophical" reason behind them.
  */
-identifier <Identifier>
+identifier <Identifier> -memoize
   = name:(!digit (letter / digit / "_" / "$")+) __ { new Identifier(name, nameStart, nameEnd) }
 
 /*

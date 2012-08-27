@@ -18,15 +18,24 @@ namespace Pegasus.Parser
     [System.CodeDom.Compiler.GeneratedCode("Pegasus", "1.0.0.0")]
     public partial class PegParser
     {
+        private Dictionary<string, object> storage;
         public Grammar Parse(string subject, string fileName = null)
         {
-            var cursor = new Cursor(subject, 0, fileName);
-            var result = this.grammar(ref cursor);
-            if (result == null)
+            try
             {
-                throw ExceptionHelper(cursor, () => "Failed to parse 'grammar'.");
+                this.storage = new Dictionary<string, object>();
+                var cursor = new Cursor(subject, 0, fileName);
+                var result = this.grammar(ref cursor);
+                if (result == null)
+                {
+                    throw ExceptionHelper(cursor, () => "Failed to parse 'grammar'.");
+                }
+                return result.Value;
             }
-            return result.Value;
+            finally
+            {
+                this.storage = null;
+            }
         }
 
         private IParseResult<Grammar> grammar(ref Cursor cursor)
@@ -439,6 +448,16 @@ namespace Pegasus.Parser
         private IParseResult<Identifier> ruleFlag(ref Cursor cursor)
         {
             IParseResult<Identifier> r0 = null;
+            var storageKey = "ruleFlag:" + cursor.Location;
+            if (this.storage.ContainsKey(storageKey))
+            {
+                r0 = (IParseResult<Identifier>)this.storage[storageKey];
+                if (r0 != null)
+                {
+                    cursor = r0.EndCursor;
+                }
+                return r0;
+            }
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
             r1 = this.ParseLiteral(ref cursor, "-");
@@ -462,6 +481,7 @@ namespace Pegasus.Parser
             {
                 cursor = startCursor0;
             }
+            this.storage[storageKey] = r0;
             return r0;
         }
 
@@ -478,6 +498,16 @@ namespace Pegasus.Parser
         private IParseResult<string> expressionType(ref Cursor cursor)
         {
             IParseResult<string> r0 = null;
+            var storageKey = "expressionType:" + cursor.Location;
+            if (this.storage.ContainsKey(storageKey))
+            {
+                r0 = (IParseResult<string>)this.storage[storageKey];
+                if (r0 != null)
+                {
+                    cursor = r0.EndCursor;
+                }
+                return r0;
+            }
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
             r1 = this.lt(ref cursor);
@@ -510,6 +540,7 @@ namespace Pegasus.Parser
             {
                 cursor = startCursor0;
             }
+            this.storage[storageKey] = r0;
             return r0;
         }
 
@@ -1734,6 +1765,16 @@ namespace Pegasus.Parser
         private IParseResult<Identifier> identifier(ref Cursor cursor)
         {
             IParseResult<Identifier> r0 = null;
+            var storageKey = "identifier:" + cursor.Location;
+            if (this.storage.ContainsKey(storageKey))
+            {
+                r0 = (IParseResult<Identifier>)this.storage[storageKey];
+                if (r0 != null)
+                {
+                    cursor = r0.EndCursor;
+                }
+                return r0;
+            }
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
             var nameStart = cursor;
@@ -1821,6 +1862,7 @@ namespace Pegasus.Parser
             {
                 cursor = startCursor0;
             }
+            this.storage[storageKey] = r0;
             return r0;
         }
 
