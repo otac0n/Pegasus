@@ -15,10 +15,9 @@ setting
     }
 
 rule
-  = <Rule> name:identifier displayName:string? equals expression:expression semicolon? {
+  = <Rule> name:identifier equals expression:expression semicolon? {
         new Rule(
             identifier: name,
-            displayName: displayName.SingleOrDefault(),
             expression: expression)
     }
 
@@ -84,7 +83,7 @@ suffixed
   / primary
 
 primary
-  = <Expression> name:identifier !(string? equals) { new NameExpression(name) }
+  = <Expression> name:identifier !(equals) { new NameExpression(name) }
   / literal
   / class
   / dot { new WildcardExpression() }
@@ -140,7 +139,7 @@ rbracket  = "]" __ { "]" }
  * The simplifications were made just to make the implementation little bit
  * easier, there is no "philosophical" reason behind them.
  */
-identifier "identifier"
+identifier
   = <Identifier> name:(!digit (letter / digit / "_" / "$")+) __ { new Identifier(name, nameStart, nameEnd) }
 
 /*
@@ -185,12 +184,12 @@ typeArguments
  * Modeled after ECMA-262, 5th ed., 7.8.4. (syntax & semantics, rules only
  * vaguely).
  */
-literal "literal"
+literal
   = <Expression> value:(doubleQuotedString / singleQuotedString) flags:"i"? __ {
         new LiteralExpression(value, ignoreCase: flags.SingleOrDefault() == "i")
     }
 
-string "string"
+string
   = string:(doubleQuotedString / singleQuotedString) __ { @string }
 
 doubleQuotedString
@@ -221,7 +220,7 @@ singleQuotedCharacter
 simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) char:. { @char }
 
-class "character class"
+class
   = <Expression> "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* ("]" / #ERROR{ "PEG0010:" + Resources.PEG0010_UNTERNIMATED_CLASS }) flags:"i"? __ {
         new ClassExpression(
             parts,
@@ -296,7 +295,7 @@ upperCaseLetter
 __ = (whitespace / eol / comment)*
 
 /* Modeled after ECMA-262, 5th ed., 7.4. */
-comment "comment"
+comment
   = singleLineComment
   / multiLineComment
 
@@ -307,7 +306,7 @@ multiLineComment
   = "/*" (!"*/" .)* "*/"
 
 /* Modeled after ECMA-262, 5th ed., 7.3. */
-eol "end of line"
+eol
   = "\n"
   / "\r\n"
   / "\r"
@@ -318,7 +317,7 @@ eolChar
   = [\n\r\u2028\u2029]
 
 /* Modeled after ECMA-262, 5th ed., 7.2. */
-whitespace "whitespace"
+whitespace
   = [ \t\v\f\u00A0\uFEFF\u1680\u180E\u2000-\u200A\u202F\u205F\u3000]
 
 EOF

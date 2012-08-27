@@ -15,7 +15,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class Rule
     {
-        private readonly string displayName;
         private readonly Expression expression;
         private readonly Identifier identifier;
 
@@ -25,7 +24,7 @@ namespace Pegasus.Expressions
         /// <param name="identifier">The identifier that represents the <see cref="Rule"/>.</param>
         /// <param name="displayName">The display name of the <see cref="Rule"/>.</param>
         /// <param name="expression">The expression that this <see cref="Rule"/> represents.</param>
-        public Rule(Identifier identifier, string displayName, Expression expression)
+        public Rule(Identifier identifier, Expression expression)
         {
             if (expression == null)
             {
@@ -33,16 +32,7 @@ namespace Pegasus.Expressions
             }
 
             this.identifier = identifier;
-            this.displayName = displayName;
             this.expression = expression;
-        }
-
-        /// <summary>
-        /// Gets the display name of this <see cref="Rule"/>.
-        /// </summary>
-        public string DisplayName
-        {
-            get { return this.displayName ?? this.identifier.Name; }
         }
 
         /// <summary>
