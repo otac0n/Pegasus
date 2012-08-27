@@ -47,7 +47,6 @@ namespace Pegasus.Compiler
             private readonly Dictionary<string, int> variables = new Dictionary<string, int>();
             private Grammar grammar;
             private string currentResultName = null;
-            private bool packrat = false;
 
             public GenerateCodeExpressionTreeWlaker(CompileResult result, IndentedTextWriter codeWriter)
             {
@@ -142,7 +141,8 @@ namespace Pegasus.Compiler
                     this.code.WriteLineNoTabs(string.Empty);
                 }
 
-                if (this.packrat)
+                var memoize = grammar.Rules.SelectMany(r => r.Flags.Select(f => f.Name)).Any(f => f == "memoize");
+                if (memoize)
                 {
                     this.code.WriteLine("private Dictionary<string, object> storage;");
                 }
@@ -153,7 +153,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
-                if (this.packrat)
+                if (memoize)
                 {
                     this.code.WriteLine("try");
                     this.code.WriteLine("{");
@@ -171,7 +171,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
                 this.code.WriteLine("return result.Value;");
 
-                if (this.packrat)
+                if (memoize)
                 {
                     this.code.Indent--;
                     this.code.WriteLine("}");
@@ -329,7 +329,8 @@ namespace Pegasus.Compiler
                 this.currentResultName = this.CreateVariable("r");
                 this.code.WriteLine("IParseResult<" + type + "> " + this.currentResultName + " = null;");
 
-                if (this.packrat)
+                var memoize = rule.Flags.Any(f => f.Name == "memoize");
+                if (memoize)
                 {
                     this.code.WriteLine("var storageKey = " + ToLiteral(rule.Identifier.Name + ":") + " + cursor.Location;");
                     this.code.WriteLine("if (this.storage.ContainsKey(storageKey))");
@@ -349,7 +350,7 @@ namespace Pegasus.Compiler
 
                 base.WalkRule(rule);
 
-                if (this.packrat)
+                if (memoize)
                 {
                     this.code.WriteLine("this.storage[storageKey] = " + this.currentResultName + ";");
                 }

@@ -17,6 +17,7 @@ namespace Pegasus.Compiler
     {
         private static readonly HashSet<string> KnownFlags = new HashSet<string>
         {
+            "memoize",
         };
 
         public override IList<string> ErrorsProduced
