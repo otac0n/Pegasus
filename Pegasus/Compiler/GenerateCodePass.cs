@@ -127,17 +127,18 @@ namespace Pegasus.Compiler
                     this.code.WriteLine("using " + @using + ";");
                 }
 
-                if (grammar.Initializer != null)
-                {
-                    this.code.Write(grammar.Initializer);
-                }
-
                 this.code.WriteLineNoTabs(string.Empty);
 
                 this.code.WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"" + assemblyName.Name + "\", \"" + assemblyName.Version + "\")]");
                 this.code.WriteLine(accessibility + " partial class " + EscapeName(classname));
                 this.code.WriteLine("{");
                 this.code.Indent++;
+
+                foreach (var members in grammar.Settings.Where(s => s.Key.Name == "members").Select(s => s.Value))
+                {
+                    this.code.WriteLineNoTabs(members);
+                    this.code.WriteLineNoTabs(string.Empty);
+                }
 
                 var type = this.GetResultType(grammar.Rules[0].Expression);
 

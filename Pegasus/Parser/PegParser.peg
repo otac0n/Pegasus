@@ -5,17 +5,14 @@
 @using Pegasus.Properties
 
 grammar
-  = <Grammar> __ settings:setting* initializer:initializer? rules:rule* EOF {
-        new Grammar(rules, settings, initializer.SingleOrDefault(), rulesEnd)
+  = <Grammar> __ settings:setting* rules:rule* EOF {
+        new Grammar(rules, settings, rulesEnd)
     }
 
 setting
   = <KeyValuePair<Identifier, string>> "@" key:identifier value:(string / code / type) semicolon? {
         new KeyValuePair<Identifier, string>(key, value)
     }
-
-initializer
-  = code:code semicolon? { code }
 
 rule
   = <Rule> name:identifier displayName:string? equals expression:expression semicolon? {

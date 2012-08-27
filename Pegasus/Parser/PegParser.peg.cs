@@ -66,14 +66,14 @@ namespace Pegasus.Parser
                 var settings = ValueOrDefault(r2);
                 if (r2 != null)
                 {
-                    IParseResult<IList<string>> r4 = null;
-                    var initializerStart = cursor;
+                    IParseResult<IList<Rule>> r4 = null;
+                    var rulesStart = cursor;
                     var startCursor2 = cursor;
-                    var l1 = new List<string>();
-                    while (l1.Count < 1)
+                    var l1 = new List<Rule>();
+                    while (true)
                     {
-                        IParseResult<string> r5 = null;
-                        r5 = this.initializer(ref cursor);
+                        IParseResult<Rule> r5 = null;
+                        r5 = this.rule(ref cursor);
                         if (r5 != null)
                         {
                             l1.Add(r5.Value);
@@ -85,57 +85,23 @@ namespace Pegasus.Parser
                     }
                     if (l1.Count >= 0)
                     {
-                        r4 = new ParseResult<IList<string>>(startCursor2, cursor, l1.AsReadOnly());
+                        r4 = new ParseResult<IList<Rule>>(startCursor2, cursor, l1.AsReadOnly());
                     }
                     else
                     {
                         cursor = startCursor2;
                     }
-                    var initializerEnd = cursor;
-                    var initializer = ValueOrDefault(r4);
+                    var rulesEnd = cursor;
+                    var rules = ValueOrDefault(r4);
                     if (r4 != null)
                     {
-                        IParseResult<IList<Rule>> r6 = null;
-                        var rulesStart = cursor;
-                        var startCursor3 = cursor;
-                        var l2 = new List<Rule>();
-                        while (true)
-                        {
-                            IParseResult<Rule> r7 = null;
-                            r7 = this.rule(ref cursor);
-                            if (r7 != null)
-                            {
-                                l2.Add(r7.Value);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        if (l2.Count >= 0)
-                        {
-                            r6 = new ParseResult<IList<Rule>>(startCursor3, cursor, l2.AsReadOnly());
-                        }
-                        else
-                        {
-                            cursor = startCursor3;
-                        }
-                        var rulesEnd = cursor;
-                        var rules = ValueOrDefault(r6);
+                        IParseResult<string> r6 = null;
+                        r6 = this.EOF(ref cursor);
                         if (r6 != null)
                         {
-                            IParseResult<string> r8 = null;
-                            r8 = this.EOF(ref cursor);
-                            if (r8 != null)
-                            {
-                                r0 = this.ReturnHelper(startCursor0, cursor, () => 
-        new Grammar(rules, settings, initializer.SingleOrDefault(), rulesEnd)
+                            r0 = this.ReturnHelper(startCursor0, cursor, () => 
+        new Grammar(rules, settings, rulesEnd)
     );
-                            }
-                            else
-                            {
-                                cursor = startCursor0;
-                            }
                         }
                         else
                         {
@@ -231,57 +197,6 @@ namespace Pegasus.Parser
                     {
                         cursor = startCursor0;
                     }
-                }
-                else
-                {
-                    cursor = startCursor0;
-                }
-            }
-            else
-            {
-                cursor = startCursor0;
-            }
-            return r0;
-        }
-
-        private IParseResult<string> initializer(ref Cursor cursor)
-        {
-            IParseResult<string> r0 = null;
-            var startCursor0 = cursor;
-            IParseResult<string> r1 = null;
-            var codeStart = cursor;
-            r1 = this.code(ref cursor);
-            var codeEnd = cursor;
-            var code = ValueOrDefault(r1);
-            if (r1 != null)
-            {
-                IParseResult<IList<string>> r2 = null;
-                var startCursor1 = cursor;
-                var l0 = new List<string>();
-                while (l0.Count < 1)
-                {
-                    IParseResult<string> r3 = null;
-                    r3 = this.semicolon(ref cursor);
-                    if (r3 != null)
-                    {
-                        l0.Add(r3.Value);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                if (l0.Count >= 0)
-                {
-                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
-                }
-                else
-                {
-                    cursor = startCursor1;
-                }
-                if (r2 != null)
-                {
-                    r0 = this.ReturnHelper(startCursor0, cursor, () =>  code );
                 }
                 else
                 {

@@ -19,7 +19,6 @@ namespace Pegasus.Expressions
     public class Grammar
     {
         private readonly Cursor end;
-        private readonly string initializer;
         private readonly IList<Rule> rules;
         private readonly IList<KeyValuePair<Identifier, string>> settings;
 
@@ -28,9 +27,8 @@ namespace Pegasus.Expressions
         /// </summary>
         /// <param name="rules">The rules for this <see cref="Grammar"/>.</param>
         /// <param name="settings">A collection of <see cref="KeyValuePair{TKey, TValue}"/> to be used as the settings for the compiler.</param>
-        /// <param name="initializer">A section of code to be emitted at the top of the generated compiler.</param>
         /// <param name="end">The ending cursor for this <see cref="Grammar"/>.</param>
-        public Grammar(IEnumerable<Rule> rules, IEnumerable<KeyValuePair<Identifier, string>> settings, string initializer, Cursor end)
+        public Grammar(IEnumerable<Rule> rules, IEnumerable<KeyValuePair<Identifier, string>> settings, Cursor end)
         {
             if (rules == null)
             {
@@ -39,7 +37,6 @@ namespace Pegasus.Expressions
 
             this.rules = rules.ToList().AsReadOnly();
             this.settings = (settings ?? Enumerable.Empty<KeyValuePair<Identifier, string>>()).ToList().AsReadOnly();
-            this.initializer = initializer;
             this.end = end;
         }
 
@@ -49,14 +46,6 @@ namespace Pegasus.Expressions
         public Cursor End
         {
             get { return this.end; }
-        }
-
-        /// <summary>
-        /// Gets the initializer for this <see cref="Grammar"/>.
-        /// </summary>
-        public string Initializer
-        {
-            get { return this.initializer; }
         }
 
         /// <summary>
