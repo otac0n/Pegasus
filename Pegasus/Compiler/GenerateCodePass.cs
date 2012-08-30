@@ -433,7 +433,7 @@ namespace Pegasus.Compiler
                 {
                     if (codeExpression.CodeType == CodeType.Result)
                     {
-                        this.code.WriteLine(this.currentResultName + " = this.ReturnHelper(" + startCursorName + ", cursor, () => " + codeExpression.Code + ");");
+                        this.code.WriteLine(this.currentResultName + " = this.ReturnHelper<" + this.currentResultType + ">(" + startCursorName + ", cursor, () => " + codeExpression.Code + ");");
                     }
                     else if (codeExpression.CodeType == CodeType.Error)
                     {
