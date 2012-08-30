@@ -539,7 +539,7 @@ namespace Pegasus.Compiler
 
             private void WalkAssertionExpression(string code, bool mustMatch)
             {
-                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!(") + code + (mustMatch ? string.Empty : ")") + ")");
+                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<bool>(() => " + code + ")())");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(cursor, cursor, string.Empty);");
