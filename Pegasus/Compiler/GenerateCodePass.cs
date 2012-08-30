@@ -557,7 +557,7 @@ namespace Pegasus.Compiler
                 this.currentResultName = this.CreateVariable("r");
                 this.currentResultType = this.GetResultType(expression);
 
-                this.code.WriteLine("IParseResult<string> " + this.currentResultName + " = null;");
+                this.code.WriteLine("IParseResult<" + this.currentResultType + "> " + this.currentResultName + " = null;");
                 this.WalkExpression(expression);
 
                 this.code.WriteLine("cursor = " + startCursorName + ";");
