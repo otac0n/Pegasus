@@ -47,6 +47,7 @@ namespace Pegasus.Compiler
             private readonly Dictionary<string, int> variables = new Dictionary<string, int>();
             private Grammar grammar;
             private string currentResultName = null;
+            private string currentResultType = null;
 
             public GenerateCodeExpressionTreeWlaker(CompileResult result, IndentedTextWriter codeWriter)
             {
@@ -319,15 +320,15 @@ namespace Pegasus.Compiler
 
             protected override void WalkRule(Rule rule)
             {
-                var type = this.GetResultType(rule.Expression);
+                this.currentResultName = this.CreateVariable("r");
+                this.currentResultType = this.GetResultType(rule.Expression);
 
                 this.code.WriteLineNoTabs(string.Empty);
-                this.code.WriteLine("private IParseResult<" + type + "> " + EscapeName(rule.Identifier.Name) + "(ref Cursor cursor)");
+                this.code.WriteLine("private IParseResult<" + this.currentResultType + "> " + EscapeName(rule.Identifier.Name) + "(ref Cursor cursor)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
-                this.currentResultName = this.CreateVariable("r");
-                this.code.WriteLine("IParseResult<" + type + "> " + this.currentResultName + " = null;");
+                this.code.WriteLine("IParseResult<" + this.currentResultType + "> " + this.currentResultName + " = null;");
 
                 var memoize = rule.Flags.Any(f => f.Name == "memoize");
                 if (memoize)
@@ -336,7 +337,7 @@ namespace Pegasus.Compiler
                     this.code.WriteLine("if (this.storage.ContainsKey(storageKey))");
                     this.code.WriteLine("{");
                     this.code.Indent++;
-                    this.code.WriteLine(this.currentResultName + " = (IParseResult<" + type + ">)this.storage[storageKey];");
+                    this.code.WriteLine(this.currentResultName + " = (IParseResult<" + this.currentResultType + ">)this.storage[storageKey];");
                     this.code.WriteLine("if (" + this.currentResultName + " != null)");
                     this.code.WriteLine("{");
                     this.code.Indent++;
@@ -356,11 +357,11 @@ namespace Pegasus.Compiler
                 }
 
                 this.code.WriteLine("return " + this.currentResultName + ";");
-                this.currentResultName = null;
-
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
+                this.currentResultName = null;
+                this.currentResultType = null;
                 this.variables.Clear();
             }
 
@@ -396,6 +397,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("var " + startCursorName + " = cursor;");
 
                 var oldResultName = this.currentResultName;
+                var oldResultType = this.currentResultType;
 
                 var sequence = sequenceExpression.Sequence;
                 CodeExpression codeExpression = null;
@@ -410,9 +412,9 @@ namespace Pegasus.Compiler
 
                 foreach (var expression in sequence)
                 {
-                    var localType = this.GetResultType(expression);
                     this.currentResultName = this.CreateVariable("r");
-                    this.code.WriteLine("IParseResult<" + localType + "> " + this.currentResultName + " = null;");
+                    this.currentResultType = this.GetResultType(expression);
+                    this.code.WriteLine("IParseResult<" + this.currentResultType + "> " + this.currentResultName + " = null;");
                     this.WalkExpression(expression);
                     this.code.WriteLine("if (" + this.currentResultName + " != null)");
                     this.code.WriteLine("{");
@@ -420,6 +422,7 @@ namespace Pegasus.Compiler
                 }
 
                 this.currentResultName = oldResultName;
+                this.currentResultType = oldResultType;
 
                 if (codeExpression == null)
                 {
@@ -470,16 +473,17 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("var " + startCursorName + " = cursor;");
 
                 var listName = this.CreateVariable("l");
+
                 var oldResultName = this.currentResultName;
+                var oldResultType = this.currentResultType;
                 this.currentResultName = this.CreateVariable("r");
+                this.currentResultType = this.GetResultType(repetitionExpression.Expression);
 
-                var type = this.GetResultType(repetitionExpression.Expression);
-
-                this.code.WriteLine("var " + listName + " = new List<" + type + ">();");
+                this.code.WriteLine("var " + listName + " = new List<" + this.currentResultType + ">();");
                 this.code.WriteLine("while (" + (repetitionExpression.Max.HasValue ? listName + ".Count < " + repetitionExpression.Max : "true") + ")");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("IParseResult<" + type + "> " + this.currentResultName + " = null;");
+                this.code.WriteLine("IParseResult<" + this.currentResultType + "> " + this.currentResultName + " = null;");
                 this.WalkExpression(repetitionExpression.Expression);
                 this.code.WriteLine("if (" + this.currentResultName + " != null)");
                 this.code.WriteLine("{");
@@ -497,6 +501,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.currentResultName = oldResultName;
+                this.currentResultType = oldResultType;
 
                 this.code.WriteLine("if (" + listName + ".Count >= " + repetitionExpression.Min + ")");
                 this.code.WriteLine("{");
@@ -548,8 +553,10 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("var " + startCursorName + " = cursor;");
 
                 var oldResultName = this.currentResultName;
+                var oldResultType = this.currentResultType;
                 this.currentResultName = this.CreateVariable("r");
-                var type = this.GetResultType(expression);
+                this.currentResultType = this.GetResultType(expression);
+
                 this.code.WriteLine("IParseResult<string> " + this.currentResultName + " = null;");
                 this.WalkExpression(expression);
 
@@ -559,9 +566,11 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine(oldResultName + " = new ParseResult<string>(cursor, cursor, string.Empty);");
-                this.currentResultName = oldResultName;
                 this.code.Indent--;
                 this.code.WriteLine("}");
+
+                this.currentResultName = oldResultName;
+                this.currentResultType = oldResultType;
             }
 
             protected override void WalkPrefixedExpression(PrefixedExpression prefixedExpression)
