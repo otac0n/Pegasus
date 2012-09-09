@@ -104,7 +104,8 @@ code
   = braced:braced __ { braced.Substring(1, braced.Length - 2) }
 
 braced
-  = "{" parts:(nonBraceCharacters / braced)* ("}" / #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE })
+  = "{" parts:(nonBraceCharacters / braced)* "}"
+  / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE }
 
 nonBraceCharacters
   = chars:nonBraceCharacter+ { string.Concat(chars) }
@@ -199,7 +200,8 @@ string
   = string:(doubleQuotedString / singleQuotedString) __ { @string }
 
 doubleQuotedString
-  = '"' chars:doubleQuotedCharacter* ('"' / #ERROR{ "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING }) { string.Concat(chars) }
+  = '"' chars:doubleQuotedCharacter* '"' { string.Concat(chars) }
+  / '"' #ERROR{ "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING }
 
 doubleQuotedCharacter
   = simpleDoubleQuotedCharacter
@@ -213,7 +215,8 @@ simpleDoubleQuotedCharacter
   = !('"' / "\\" / eolChar) char:. { @char }
 
 singleQuotedString
-  = "'" chars:singleQuotedCharacter* ("'" / #ERROR{ "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING }) { string.Concat(chars) }
+  = "'" chars:singleQuotedCharacter* "'" { string.Concat(chars) }
+  / "'" #ERROR{ "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING }
 
 singleQuotedCharacter
   = simpleSingleQuotedCharacter
