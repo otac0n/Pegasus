@@ -52,7 +52,7 @@ sequence <Expression>
             : new SequenceExpression(elements)
     }
 
-labeled <Expression>
+labeled <Expression> -memoize
   = label:identifier colon expression:prefixed {
         new PrefixedExpression(label, expression)
     }
@@ -85,7 +85,7 @@ suffixed <Expression>
     }
   / primary
 
-primary <Expression>
+primary <Expression> -memoize
   = name:identifier !(rulePreamble) { new NameExpression(name) }
   / literal
   / class

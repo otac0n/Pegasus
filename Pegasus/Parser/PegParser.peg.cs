@@ -729,6 +729,16 @@ namespace Pegasus.Parser
         private IParseResult<Expression> labeled(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
+            var storageKey = "labeled:" + cursor.Location;
+            if (this.storage.ContainsKey(storageKey))
+            {
+                r0 = (IParseResult<Expression>)this.storage[storageKey];
+                if (r0 != null)
+                {
+                    cursor = r0.EndCursor;
+                }
+                return r0;
+            }
             if (r0 == null)
             {
                 var startCursor0 = cursor;
@@ -773,6 +783,7 @@ namespace Pegasus.Parser
             {
                 r0 = this.prefixed(ref cursor);
             }
+            this.storage[storageKey] = r0;
             return r0;
         }
 
@@ -995,6 +1006,16 @@ namespace Pegasus.Parser
         private IParseResult<Expression> primary(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
+            var storageKey = "primary:" + cursor.Location;
+            if (this.storage.ContainsKey(storageKey))
+            {
+                r0 = (IParseResult<Expression>)this.storage[storageKey];
+                if (r0 != null)
+                {
+                    cursor = r0.EndCursor;
+                }
+                return r0;
+            }
             if (r0 == null)
             {
                 var startCursor0 = cursor;
@@ -1122,6 +1143,7 @@ namespace Pegasus.Parser
                     cursor = startCursor3;
                 }
             }
+            this.storage[storageKey] = r0;
             return r0;
         }
 
