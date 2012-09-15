@@ -4,7 +4,7 @@
     <AvailableItemName Include="PegGrammar" />
   </ItemGroup>
   <UsingTask AssemblyFile="Pegasus.exe" TaskName="CompilePegGrammar" />
-  <Target Name="CompilePegGrammars" BeforeTargets="CoreCompile">
+  <Target Name="CompilePegGrammars" BeforeTargets="CoreCompile" Condition=" '$(NCrunch)' != '1' ">
     <CompilePegGrammar InputFile="%(PegGrammar.Identity)" Condition=" '@(PegGrammar)' != '' " />
   </Target>
 </Project>
