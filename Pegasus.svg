@@ -144,7 +144,7 @@
       <path
          sodipodi:nodetypes="cccc"
          id="path3896"
-         d="M 12,36 11.972727,32.054545 16,24 48,24"
+         d="M 12,36 12,32 16,24 48,24"
          style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:none;marker-mid:url(#DotS);marker-end:url(#SquareS)" />
       <path
          sodipodi:nodetypes="ccc"
@@ -172,7 +172,7 @@
       <path
          sodipodi:nodetypes="ccccc"
          id="path7338"
-         d="M 15,38 16.975726,38.04855 20,32 31.954545,32 36,32"
+         d="M 15,38 17,38 20,32 32,32 36,32"
          style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:none;marker-end:url(#DotS)" />
       <path
          sodipodi:nodetypes="cc"
