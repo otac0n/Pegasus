@@ -1191,35 +1191,6 @@ namespace Pegasus.Parser
         private IParseResult<string> code(ref Cursor cursor)
         {
             IParseResult<string> r0 = null;
-            var startCursor0 = cursor;
-            IParseResult<string> r1 = null;
-            var bracedStart = cursor;
-            r1 = this.braced(ref cursor);
-            var bracedEnd = cursor;
-            var braced = ValueOrDefault(r1);
-            if (r1 != null)
-            {
-                IParseResult<IList<string>> r2 = null;
-                r2 = this.__(ref cursor);
-                if (r2 != null)
-                {
-                    r0 = this.ReturnHelper<string>(startCursor0, cursor, () =>  braced.Substring(1, braced.Length - 2) );
-                }
-                else
-                {
-                    cursor = startCursor0;
-                }
-            }
-            else
-            {
-                cursor = startCursor0;
-            }
-            return r0;
-        }
-
-        private IParseResult<string> braced(ref Cursor cursor)
-        {
-            IParseResult<string> r0 = null;
             if (r0 == null)
             {
                 var startCursor0 = cursor;
@@ -1227,48 +1198,27 @@ namespace Pegasus.Parser
                 r1 = this.ParseLiteral(ref cursor, "{");
                 if (r1 != null)
                 {
-                    IParseResult<IList<string>> r2 = null;
-                    var partsStart = cursor;
-                    var startCursor1 = cursor;
-                    var l0 = new List<string>();
-                    while (true)
-                    {
-                        IParseResult<string> r3 = null;
-                        if (r3 == null)
-                        {
-                            r3 = this.nonBraceCharacters(ref cursor);
-                        }
-                        if (r3 == null)
-                        {
-                            r3 = this.braced(ref cursor);
-                        }
-                        if (r3 != null)
-                        {
-                            l0.Add(r3.Value);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    if (l0.Count >= 0)
-                    {
-                        r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
-                    }
-                    else
-                    {
-                        cursor = startCursor1;
-                    }
-                    var partsEnd = cursor;
-                    var parts = ValueOrDefault(r2);
+                    IParseResult<string> r2 = null;
+                    var contentsStart = cursor;
+                    r2 = this.braceContents(ref cursor);
+                    var contentsEnd = cursor;
+                    var contents = ValueOrDefault(r2);
                     if (r2 != null)
                     {
-                        IParseResult<string> r4 = null;
-                        r4 = this.ParseLiteral(ref cursor, "}");
-                        if (r4 != null)
+                        IParseResult<string> r3 = null;
+                        r3 = this.ParseLiteral(ref cursor, "}");
+                        if (r3 != null)
                         {
-                            var len = cursor.Location - startCursor0.Location;
-                            r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                            IParseResult<IList<string>> r4 = null;
+                            r4 = this.__(ref cursor);
+                            if (r4 != null)
+                            {
+                                r0 = this.ReturnHelper<string>(startCursor0, cursor, () =>  contents );
+                            }
+                            else
+                            {
+                                cursor = startCursor0;
+                            }
                         }
                         else
                         {
@@ -1287,17 +1237,95 @@ namespace Pegasus.Parser
             }
             if (r0 == null)
             {
-                var startCursor2 = cursor;
+                var startCursor1 = cursor;
                 IParseResult<string> r5 = null;
                 r5 = this.ParseLiteral(ref cursor, "{");
                 if (r5 != null)
                 {
-                    throw this.ExceptionHelper(startCursor2, () =>  "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE );
+                    throw this.ExceptionHelper(startCursor1, () =>  "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE );
                 }
                 else
                 {
-                    cursor = startCursor2;
+                    cursor = startCursor1;
                 }
+            }
+            return r0;
+        }
+
+        private IParseResult<string> braceContents(ref Cursor cursor)
+        {
+            IParseResult<string> r0 = null;
+            var startCursor0 = cursor;
+            IParseResult<IList<string>> r1 = null;
+            var partsStart = cursor;
+            var startCursor1 = cursor;
+            var l0 = new List<string>();
+            while (true)
+            {
+                IParseResult<string> r2 = null;
+                if (r2 == null)
+                {
+                    r2 = this.nonBraceCharacters(ref cursor);
+                }
+                if (r2 == null)
+                {
+                    var startCursor2 = cursor;
+                    IParseResult<string> r3 = null;
+                    r3 = this.ParseLiteral(ref cursor, "{");
+                    if (r3 != null)
+                    {
+                        IParseResult<string> r4 = null;
+                        r4 = this.braceContents(ref cursor);
+                        if (r4 != null)
+                        {
+                            IParseResult<string> r5 = null;
+                            r5 = this.ParseLiteral(ref cursor, "}");
+                            if (r5 != null)
+                            {
+                                var len = cursor.Location - startCursor2.Location;
+                                r2 = new ParseResult<string>(startCursor2, cursor, cursor.Subject.Substring(startCursor2.Location, len));
+                            }
+                            else
+                            {
+                                cursor = startCursor2;
+                            }
+                        }
+                        else
+                        {
+                            cursor = startCursor2;
+                        }
+                    }
+                    else
+                    {
+                        cursor = startCursor2;
+                    }
+                }
+                if (r2 != null)
+                {
+                    l0.Add(r2.Value);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (l0.Count >= 0)
+            {
+                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+            }
+            else
+            {
+                cursor = startCursor1;
+            }
+            var partsEnd = cursor;
+            var parts = ValueOrDefault(r1);
+            if (r1 != null)
+            {
+                r0 = this.ReturnHelper<string>(startCursor0, cursor, () =>  string.Concat(parts) );
+            }
+            else
+            {
+                cursor = startCursor0;
             }
             return r0;
         }

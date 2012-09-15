@@ -101,11 +101,11 @@ action <Expression>
 /* "Lexical" elements */
 
 code
-  = braced:braced __ { braced.Substring(1, braced.Length - 2) }
-
-braced
-  = "{" parts:(nonBraceCharacters / braced)* "}"
+  = "{" contents:braceContents "}" __ { contents }
   / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE }
+
+braceContents
+  = parts:(nonBraceCharacters / "{" braceContents "}")* { string.Concat(parts) }
 
 nonBraceCharacters
   = chars:nonBraceCharacter+ { string.Concat(chars) }
