@@ -433,11 +433,11 @@ namespace Pegasus.Compiler
                 {
                     if (codeExpression.CodeType == CodeType.Result)
                     {
-                        this.code.WriteLine(this.currentResultName + " = this.ReturnHelper<" + this.currentResultType + ">(" + startCursorName + ", cursor, () => " + codeExpression.Code + ");");
+                        this.code.WriteLine(this.currentResultName + " = this.ReturnHelper<" + this.currentResultType + ">(" + startCursorName + ", cursor, () => " + codeExpression.CodeSpan.Code + ");");
                     }
                     else if (codeExpression.CodeType == CodeType.Error)
                     {
-                        this.code.WriteLine("throw this.ExceptionHelper(" + startCursorName + ", () => " + codeExpression.Code + ");");
+                        this.code.WriteLine("throw this.ExceptionHelper(" + startCursorName + ", () => " + codeExpression.CodeSpan.Code + ");");
                     }
                 }
 
@@ -537,9 +537,9 @@ namespace Pegasus.Compiler
                 this.WalkAssertionExpression(notExpression.Expression, mustMatch: false);
             }
 
-            private void WalkAssertionExpression(string code, bool mustMatch)
+            private void WalkAssertionExpression(CodeSpan code, bool mustMatch)
             {
-                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<bool>(() => " + code + ")())");
+                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<bool>(() => " + code.Code + ")())");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(cursor, cursor, string.Empty);");

@@ -13,13 +13,13 @@ namespace Pegasus.Expressions
     /// </summary>
     public class AndCodeExpression : Expression
     {
-        private readonly string code;
+        private readonly CodeSpan code;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AndCodeExpression"/> class.
         /// </summary>
         /// <param name="code">The code to execute for the assertion.</param>
-        public AndCodeExpression(string code)
+        public AndCodeExpression(CodeSpan code)
         {
             this.code = code;
         }
@@ -27,7 +27,7 @@ namespace Pegasus.Expressions
         /// <summary>
         /// Gets the code expression to be used as an assertion.
         /// </summary>
-        public string Code
+        public CodeSpan Code
         {
             get { return this.code; }
         }
