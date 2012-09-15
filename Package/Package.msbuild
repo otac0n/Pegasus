@@ -19,7 +19,7 @@
     <PropertyGroup>
       <AssemblyInfo>$([System.IO.File]::ReadAllText("$(SolutionDir)SharedAssemblyInfo.cs"))</AssemblyInfo>
       <AssemblyVersion>$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfo), "AssemblyVersion\(\"(\d+\.\d+\.\d+)\.\d+\"\)").Groups[1].Value)</AssemblyVersion>
-      <NuSpec>$([System.IO.File]::ReadAllText("Pegasus.nuspec").Replace("$version$", $(AssemblyVersion)))</NuSpec>
+      <NuSpec>$([System.IO.File]::ReadAllText("Pegasus.nuspec").Replace("$version$", $(AssemblyVersion)).Replace("$version-short$", $([System.Text.RegularExpressions.Regex]::Replace($(AssemblyVersion), "\.0+$", ""))))</NuSpec>
       <Cursor>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\Cursor.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</Cursor>
       <IParseResult>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\IParseResult{T}.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</IParseResult>
       <ParseResult>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\ParseResult{T}.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</ParseResult>
