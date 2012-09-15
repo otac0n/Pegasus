@@ -70,6 +70,7 @@
     <Compile Include="Expressions\ChoiceExpression.cs" />
     <Compile Include="Expressions\ClassExpression.cs" />
     <Compile Include="Expressions\CodeExpression.cs" />
+    <Compile Include="Expressions\CodeSpan.cs" />
     <Compile Include="Expressions\Expression.cs" />
     <Compile Include="Expressions\Grammar.cs" />
     <Compile Include="Expressions\Identifier.cs" />

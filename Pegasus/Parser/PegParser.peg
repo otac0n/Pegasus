@@ -10,7 +10,7 @@ grammar <Grammar>
     }
 
 setting <KeyValuePair<Identifier, string>>
-  = "@" key:identifier value:(string / code / type) semicolon? {
+  = "@" key:identifier value:(string / code:code { code.Code } / type) semicolon? {
         new KeyValuePair<Identifier, string>(key, value)
     }
 
@@ -52,7 +52,7 @@ sequence <Expression>
             : new SequenceExpression(elements)
     }
 
-labeled <Expression>
+labeled <Expression> -memoize
   = label:identifier colon expression:prefixed {
         new PrefixedExpression(label, expression)
     }
@@ -85,7 +85,7 @@ suffixed <Expression>
     }
   / primary
 
-primary <Expression>
+primary <Expression> -memoize
   = name:identifier !(rulePreamble) { new NameExpression(name) }
   / literal
   / class
@@ -100,12 +100,12 @@ action <Expression>
 
 /* "Lexical" elements */
 
-code
-  = braced:braced __ { braced.Substring(1, braced.Length - 2) }
-
-braced
-  = "{" parts:(nonBraceCharacters / braced)* "}"
+code <CodeSpan>
+  = "{" contents:braceContents "}" __ { new CodeSpan(contents, contentsStart, contentsEnd) }
   / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE }
+
+braceContents
+  = parts:(nonBraceCharacters / "{" braceContents "}")* { string.Concat(parts) }
 
 nonBraceCharacters
   = chars:nonBraceCharacter+ { string.Concat(chars) }

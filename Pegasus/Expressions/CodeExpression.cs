@@ -31,31 +31,31 @@ namespace Pegasus.Expressions
     /// </summary>
     public class CodeExpression : Expression
     {
-        private readonly string code;
+        private readonly CodeSpan codeSpan;
         private readonly CodeType codeType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeExpression"/> class.
         /// </summary>
-        /// <param name="code">The literal code to be contained by this expression.</param>
+        /// <param name="codeSpan">The literal code to be contained by this expression.</param>
         /// <param name="codeType">The semantic usage of this expression.</param>
-        public CodeExpression(string code, CodeType codeType)
+        public CodeExpression(CodeSpan codeSpan, CodeType codeType)
         {
-            if (code == null)
+            if (codeSpan == null)
             {
                 throw new ArgumentNullException("code");
             }
 
-            this.code = code;
+            this.codeSpan = codeSpan;
             this.codeType = codeType;
         }
 
         /// <summary>
         /// Gets the code that this expression contains.
         /// </summary>
-        public string Code
+        public CodeSpan CodeSpan
         {
-            get { return this.code; }
+            get { return this.codeSpan; }
         }
 
         /// <summary>
