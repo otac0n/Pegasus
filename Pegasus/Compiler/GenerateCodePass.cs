@@ -564,7 +564,9 @@ namespace Pegasus.Compiler
 
             private void WalkAssertionExpression(CodeSpan code, bool mustMatch)
             {
-                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<Cursor, bool>(state => " + code.Code + ")(cursor))");
+                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<Cursor, bool>(state =>");
+                this.WriteCodeSpan(code);
+                this.code.WriteLine(")(cursor))");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(cursor, cursor, string.Empty);");
