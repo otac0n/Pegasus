@@ -1,6 +1,7 @@
 ﻿@namespace Pegasus.Parser
 @classname PegParser
 @using System.Linq
+@using System.Text.RegularExpressions
 @using Pegasus.Expressions
 @using Pegasus.Properties
 
@@ -9,9 +10,9 @@ grammar <Grammar>
         new Grammar(rules, settings, rulesEnd)
     }
 
-setting <KeyValuePair<Identifier, string>>
-  = "@" key:identifier value:(string / code:code { code.Code } / type) semicolon? {
-        new KeyValuePair<Identifier, string>(key, value)
+setting <KeyValuePair<Identifier, object>>
+  = "@" key:identifier value:(<object> string / code / type) semicolon? {
+        new KeyValuePair<Identifier, object>(key, value)
     }
 
 rulePreamble
@@ -32,7 +33,7 @@ ruleFlag <Identifier> -memoize
 expression <Expression>
   = choice:choice
 
-expressionType -memoize
+expressionType <CodeSpan> -memoize
   = lt name:type gt { name }
 
 choice <Expression>
@@ -166,32 +167,32 @@ identifier <Identifier> -memoize
  *
  * Again, these simplifications are simply for ease of implementation.
  */
-type
-  = type:nonArrayType ranks:rankSpecifiers* { type + string.Concat(ranks) }
+type <CodeSpan>
+  = type:(nonArrayType rankSpecifiers*) { new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
 
 nonArrayType
   = nullableType
   / typeName
 
 nullableType
-  = type:typeName question { type + "?" }
+  = typeName question
 
 rankSpecifiers
-  = lbracket dimensions:dimSeparator? rbracket { "[" + dimensions.SingleOrDefault() + "]" }
+  = lbracket dimSeparator? rbracket
 
 dimSeparator
-  = commas:comma+ { new string(',', commas.Count) }
+  = comma+
 
 typeName
-  = ident:identifier args:typeArgumentList? dot rest:typeName { ident.Name + args.SingleOrDefault() + "." + rest }
-  / ident:identifier args:typeArgumentList? { ident.Name + args.SingleOrDefault() }
+  = identifier typeArgumentList? dot typeName
+  / identifier typeArgumentList?
 
 typeArgumentList
-  = lt args:typeArguments gt { "<" + args + ">" }
+  = lt typeArguments gt
 
 typeArguments
-  = type:type comma rest:typeArguments { type + ", " + rest }
-  / type
+  = type comma typeArguments
+  / type ""
 
 /*
  * Modeled after ECMA-262, 5th ed., 7.8.4. (syntax & semantics, rules only

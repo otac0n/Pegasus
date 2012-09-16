@@ -47,7 +47,7 @@ namespace Pegasus.Compiler
             private readonly Dictionary<string, int> variables = new Dictionary<string, int>();
             private Grammar grammar;
             private string currentResultName = null;
-            private string currentResultType = null;
+            private object currentResultType = null;
 
             public GenerateCodeExpressionTreeWlaker(CompileResult result, IndentedTextWriter codeWriter)
             {
@@ -118,7 +118,8 @@ namespace Pegasus.Compiler
                 var classname = settings["classname"].SingleOrDefault() ?? "Parser";
                 var accessibility = settings["accessibility"].SingleOrDefault() ?? "public";
 
-                this.code.WriteLine("namespace " + @namespace);
+                this.code.WriteLine("namespace");
+                this.WriteCodeSpanOrString(@namespace);
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("using System;");
@@ -126,19 +127,30 @@ namespace Pegasus.Compiler
 
                 foreach (var @using in settings["using"])
                 {
-                    this.code.WriteLine("using " + @using + ";");
+                    this.code.WriteLine("using");
+                    this.WriteCodeSpanOrString(@using);
+                    this.code.WriteLine(";");
                 }
 
                 this.code.WriteLineNoTabs(string.Empty);
 
                 this.code.WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"" + assemblyName.Name + "\", \"" + assemblyName.Version + "\")]");
-                this.code.WriteLine(accessibility + " partial class " + EscapeName(classname));
+                this.code.WriteLine(accessibility + " partial class");
+                this.WriteCodeSpanOrString(classname, EscapeName);
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
                 foreach (var members in settings["members"])
                 {
-                    this.code.WriteLineNoTabs(members);
+                    if (members is CodeSpan)
+                    {
+                        this.WriteCodeSpan((CodeSpan)members);
+                    }
+                    else
+                    {
+                        this.code.WriteLineNoTabs(members.ToString());
+                    }
+
                     this.code.WriteLineNoTabs(string.Empty);
                 }
 
@@ -324,7 +336,17 @@ namespace Pegasus.Compiler
                 this.currentResultType = this.GetResultType(rule.Expression);
 
                 this.code.WriteLineNoTabs(string.Empty);
-                this.code.WriteLine("private IParseResult<" + this.currentResultType + "> " + EscapeName(rule.Identifier.Name) + "(ref Cursor cursor)");
+                if (rule.Expression is TypedExpression)
+                {
+                    this.code.WriteLine("private IParseResult<");
+                    this.WriteCodeSpanOrString(this.currentResultType);
+                    this.code.WriteLine("> " + EscapeName(rule.Identifier.Name) + "(ref Cursor cursor)");
+                }
+                else
+                {
+                    this.code.WriteLine("private IParseResult<" + this.currentResultType + "> " + EscapeName(rule.Identifier.Name) + "(ref Cursor cursor)");
+                }
+
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
@@ -426,9 +448,22 @@ namespace Pegasus.Compiler
 
                 foreach (var expression in sequence)
                 {
+                    bool isDefinition;
+
                     this.currentResultName = this.CreateVariable("r");
-                    this.currentResultType = this.GetResultType(expression);
-                    this.code.WriteLine("IParseResult<" + this.currentResultType + "> " + this.currentResultName + " = null;");
+                    this.currentResultType = this.GetResultType(expression, out isDefinition);
+
+                    if (this.currentResultType is CodeSpan && isDefinition)
+                    {
+                        this.code.WriteLine("IParseResult<");
+                        this.WriteCodeSpan((CodeSpan)this.currentResultType);
+                        this.code.WriteLine("> " + this.currentResultName + " = null;");
+                    }
+                    else
+                    {
+                        this.code.WriteLine("IParseResult<" + this.currentResultType + "> " + this.currentResultName + " = null;");
+                    }
+
                     this.WalkExpression(expression);
                     this.code.WriteLine("if (" + this.currentResultName + " != null)");
                     this.code.WriteLine("{");
@@ -469,6 +504,24 @@ namespace Pegasus.Compiler
                     this.code.WriteLine("cursor = " + startCursorName + ";");
                     this.code.Indent--;
                     this.code.WriteLine("}");
+                }
+            }
+
+            private void WriteCodeSpanOrString(object value, Func<string, string> stringTransform = null)
+            {
+                if (value is CodeSpan)
+                {
+                    this.WriteCodeSpan((CodeSpan)value);
+                }
+                else
+                {
+                    var @out = value.ToString();
+                    if (stringTransform != null)
+                    {
+                        @out = stringTransform(@out);
+                    }
+
+                    this.code.WriteLine(@out);
                 }
             }
 
@@ -564,7 +617,9 @@ namespace Pegasus.Compiler
 
             private void WalkAssertionExpression(CodeSpan code, bool mustMatch)
             {
-                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<Cursor, bool>(state => " + code.Code + ")(cursor))");
+                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<Cursor, bool>(state =>");
+                this.WriteCodeSpan(code);
+                this.code.WriteLine(")(cursor))");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(cursor, cursor, string.Empty);");
@@ -640,8 +695,16 @@ namespace Pegasus.Compiler
                 return sb.ToString();
             }
 
-            private string GetResultType(Expression expression)
+            private object GetResultType(Expression expression)
             {
+                bool waste;
+                return this.GetResultType(expression, out waste);
+            }
+
+            private object GetResultType(Expression expression, out bool isDefinition)
+            {
+                isDefinition = false;
+
                 ChoiceExpression choiceExpression;
                 NameExpression nameExpression;
                 PrefixedExpression prefixedExpression;
@@ -650,7 +713,7 @@ namespace Pegasus.Compiler
 
                 if ((choiceExpression = expression as ChoiceExpression) != null)
                 {
-                    return this.GetResultType(choiceExpression.Choices.First());
+                    return this.GetResultType(choiceExpression.Choices.First(), out isDefinition);
                 }
                 else if ((nameExpression = expression as NameExpression) != null)
                 {
@@ -659,14 +722,15 @@ namespace Pegasus.Compiler
                 }
                 else if ((prefixedExpression = expression as PrefixedExpression) != null)
                 {
-                    return this.GetResultType(prefixedExpression.Expression);
+                    return this.GetResultType(prefixedExpression.Expression, out isDefinition);
                 }
                 else if ((repetitionExpression = expression as RepetitionExpression) != null)
                 {
-                    return "IList<" + this.GetResultType(repetitionExpression.Expression) + ">";
+                    return "IList<" + this.GetResultType(repetitionExpression.Expression, out isDefinition) + ">";
                 }
                 else if ((typedExpression = expression as TypedExpression) != null)
                 {
+                    isDefinition = true;
                     return typedExpression.Type;
                 }
                 else

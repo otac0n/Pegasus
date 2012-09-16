@@ -20,7 +20,7 @@ namespace Pegasus.Expressions
     {
         private readonly Cursor end;
         private readonly IList<Rule> rules;
-        private readonly IList<KeyValuePair<Identifier, string>> settings;
+        private readonly IList<KeyValuePair<Identifier, object>> settings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Grammar"/> class.
@@ -28,7 +28,7 @@ namespace Pegasus.Expressions
         /// <param name="rules">The rules for this <see cref="Grammar"/>.</param>
         /// <param name="settings">A collection of <see cref="KeyValuePair{TKey, TValue}"/> to be used as the settings for the compiler.</param>
         /// <param name="end">The ending cursor for this <see cref="Grammar"/>.</param>
-        public Grammar(IEnumerable<Rule> rules, IEnumerable<KeyValuePair<Identifier, string>> settings, Cursor end)
+        public Grammar(IEnumerable<Rule> rules, IEnumerable<KeyValuePair<Identifier, object>> settings, Cursor end)
         {
             if (rules == null)
             {
@@ -36,7 +36,7 @@ namespace Pegasus.Expressions
             }
 
             this.rules = rules.ToList().AsReadOnly();
-            this.settings = (settings ?? Enumerable.Empty<KeyValuePair<Identifier, string>>()).ToList().AsReadOnly();
+            this.settings = (settings ?? Enumerable.Empty<KeyValuePair<Identifier, object>>()).ToList().AsReadOnly();
             this.end = end;
         }
 
@@ -59,7 +59,7 @@ namespace Pegasus.Expressions
         /// <summary>
         /// Gets the settings for this <see cref="Grammar"/>.
         /// </summary>
-        public IList<KeyValuePair<Identifier, string>> Settings
+        public IList<KeyValuePair<Identifier, object>> Settings
         {
             get { return this.settings; }
         }

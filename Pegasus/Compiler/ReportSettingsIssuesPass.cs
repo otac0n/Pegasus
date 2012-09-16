@@ -66,7 +66,7 @@ namespace Pegasus.Compiler
                 string pattern;
                 if (ValuePatterns.TryGetValue(setting.Key.Name, out pattern))
                 {
-                    if (!Regex.IsMatch(setting.Value, pattern))
+                    if (!Regex.IsMatch(setting.Value.ToString(), pattern))
                     {
                         result.Errors.Add(
                             new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0012", string.Format(Resources.PEG0012_SETTING_VALUE_INVALID, setting.Value, setting.Key.Name)));
