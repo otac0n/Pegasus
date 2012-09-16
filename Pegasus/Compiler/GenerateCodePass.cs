@@ -475,7 +475,7 @@ namespace Pegasus.Compiler
             private void WriteCodeSpan(CodeSpan codeSpan)
             {
                 this.code.WriteLineNoTabs("#line " + codeSpan.Start.Line + " \"" + Path.GetFileName(codeSpan.Start.FileName) + "\"");
-                this.code.WriteLineNoTabs(codeSpan.Code);
+                this.code.WriteLineNoTabs(new string(' ', codeSpan.Start.Column - 1) + codeSpan.Code);
                 this.code.WriteLineNoTabs("#line default");
             }
 
