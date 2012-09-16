@@ -2333,7 +2333,7 @@ namespace
             {
                 r0 = this.ReturnHelper<CodeSpan>(startCursor0, cursor, state =>
 #line 171 "PegParser.peg"
-                                          new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(type, @"(?<!,)\s+", "")) 
+                                          new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) 
 #line default
                 );
             }

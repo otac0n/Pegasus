@@ -168,7 +168,7 @@ identifier <Identifier> -memoize
  * Again, these simplifications are simply for ease of implementation.
  */
 type <CodeSpan>
-  = type:(nonArrayType rankSpecifiers*) { new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(type, @"(?<!,)\s+", "")) }
+  = type:(nonArrayType rankSpecifiers*) { new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
 
 nonArrayType
   = nullableType
