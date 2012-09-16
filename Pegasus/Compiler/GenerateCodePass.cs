@@ -440,7 +440,7 @@ namespace Pegasus.Compiler
                 if (sequence.Count > 0)
                 {
                     codeExpression = sequence[sequence.Count - 1] as CodeExpression;
-                    if (codeExpression != null)
+                    if (codeExpression != null && codeExpression.CodeType != CodeType.State)
                     {
                         sequence = sequence.Take(sequence.Count - 1).ToList();
                     }
