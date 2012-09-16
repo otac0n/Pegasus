@@ -118,7 +118,8 @@ namespace Pegasus.Compiler
                 var classname = settings["classname"].SingleOrDefault() ?? "Parser";
                 var accessibility = settings["accessibility"].SingleOrDefault() ?? "public";
 
-                this.code.WriteLine("namespace " + @namespace);
+                this.code.WriteLine("namespace");
+                this.WriteCodeSpanOrString(@namespace);
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("using System;");

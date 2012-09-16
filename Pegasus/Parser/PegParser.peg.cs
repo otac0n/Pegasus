@@ -7,7 +7,11 @@
 // </auto-generated>
 // -----------------------------------------------------------------------
 
-namespace Pegasus.Parser
+namespace
+#line 1 "PegParser.peg"
+           Pegasus.Parser
+
+#line default
 {
     using System;
     using System.Collections.Generic;
