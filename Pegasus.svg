@@ -1,192 +1,36 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="64"
-   height="64"
-   id="svg2816"
-   version="1.1"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="Pegasus.svg"
-   style="display:inline"
-   inkscape:export-xdpi="360"
-   inkscape:export-ydpi="360">
-  <defs
-     id="defs2818">
-    <marker
-       inkscape:stockid="SquareS"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="SquareS"
-       style="overflow:visible">
-      <path
-         id="path3978"
-         d="M -5,-5 -5,5 5,5 5,-5 -5,-5 z"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
-         transform="scale(0.2,0.2)" />
-    </marker>
-    <marker
-       inkscape:stockid="DotS"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="DotS"
-       style="overflow:visible">
-      <path
-         id="path3969"
-         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none;marker-end:none"
-         transform="matrix(0.2,0,0,0.2,1.48,0.2)" />
-    </marker>
-    <marker
-       inkscape:stockid="SquareM"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="SquareM"
-       style="overflow:visible">
-      <path
-         id="path3975"
-         d="M -5,-5 -5,5 5,5 5,-5 -5,-5 z"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
-         transform="scale(0.4,0.4)" />
-    </marker>
-    <marker
-       inkscape:stockid="DotM"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="DotM"
-       style="overflow:visible">
-      <path
-         id="path3966"
-         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none;marker-end:none"
-         transform="matrix(0.4,0,0,0.4,2.96,0.4)" />
-    </marker>
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 32 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="64 : 32 : 1"
-       inkscape:persp3d-origin="32 : 21.333333 : 1"
-       id="perspective2824" />
-    <inkscape:perspective
-       id="perspective2851"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-    <inkscape:perspective
-       id="perspective2893"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="15.556349"
-     inkscape:cx="22.808482"
-     inkscape:cy="34.460612"
-     inkscape:current-layer="layer5"
-     showgrid="true"
-     inkscape:document-units="px"
-     inkscape:grid-bbox="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1018"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:snap-global="false">
-    <inkscape:grid
-       type="xygrid"
-       id="grid2826"
-       empspacing="4"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata2821">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="Circuit">
-    <g
-       id="g12634"
-       transform="matrix(1.473865,0,0,1.4947301,-10.67737,-15.793364)">
-      <path
-         sodipodi:nodetypes="cccc"
-         id="path3896"
-         d="M 12,36 12,32 16,24 48,24"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:none;marker-mid:url(#DotS);marker-end:url(#SquareS)" />
-      <path
-         sodipodi:nodetypes="ccc"
-         id="path4536"
-         d="m 10,40 7,-14 29,0"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#DotS);marker-mid:none;marker-end:url(#DotS)" />
-      <path
-         sodipodi:nodetypes="ccccccc"
-         id="path5282"
-         d="m 12,40 6,-12 4,0 2,2 6,0 2,-2 11,0"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#DotS);marker-end:url(#DotS)" />
-      <path
-         id="path5844"
-         d="m 24,28 6,0"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#DotS);marker-end:url(#DotS)" />
-      <path
-         id="path6218"
-         d="m 14,40 5,-10 3,0"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#DotS);marker-end:url(#DotS)" />
-      <path
-         sodipodi:nodetypes="cc"
-         id="path6220"
-         d="m 32,30 8,0"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#DotS);marker-end:url(#SquareS)" />
-      <path
-         sodipodi:nodetypes="ccccc"
-         id="path7338"
-         d="M 15,38 17,38 20,32 32,32 36,32"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:none;marker-end:url(#DotS)" />
-      <path
-         sodipodi:nodetypes="cc"
-         id="path7340"
-         d="m 21,34 10,0"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#DotS);marker-end:url(#DotS)" />
-      <path
-         id="path7342"
-         d="m 20,36 5,0"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#DotS);marker-end:url(#DotS)" />
-      <path
-         id="path7344"
-         d="m 19,38 2,0"
-         style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#DotS);marker-end:url(#DotS)" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 18">
+    <g id="wing">
+        <path d="M 3,13 3,9 7,1 39,1" style="marker-mid:url(#circle);marker-end:url(#square)" />
+        <path d="M 1,17 8,3 37,3" style="marker-start:url(#circle);marker-end:url(#circle)" />
+        <path d="M 3,17 9,5 13,5 15,7 21,7 23,5 34,5" style="marker-start:url(#circle);marker-end:url(#circle)" />
+        <path d="M 15,5 21,5" style="marker-start:url(#circle);marker-end:url(#circle)" />
+        <path d="M 5,17 10,7 13,7" style="marker-start:url(#circle);marker-end:url(#circle)" />
+        <path d="M 23,7 31,7" style="marker-start:url(#circle);marker-end:url(#square)" />
+        <path d="M 6,15 8,15 11,9 23,9 27,9" style="marker-end:url(#circle)" />
+        <path d="M 12,11 22,11" style="marker-start:url(#circle);marker-end:url(#circle)" />
+        <path d="M 11,13 16,13" style="marker-start:url(#circle);marker-end:url(#circle)" />
+        <path d="M 10,15 12,15" style="marker-start:url(#circle);marker-end:url(#circle)" />
     </g>
-  </g>
+    <defs>
+        <marker id="square">
+            <rect x="-1" y="-1" width="2" height="2" class="in" />
+            <circle r="0.5" class="out" />
+        </marker>
+        <marker id="circle">
+            <circle r="1" class="in" />
+            <circle r="0.5" class="out" />
+        </marker>
+        <style type="text/css"><![CDATA[
+            #wing path
+            {
+                fill: none;
+                stroke: #000000;
+                stroke-width: 0.5;
+            }
+
+            marker { overflow: visible; }
+            marker .in  { fill: #000000; }
+            marker .out { fill: #ffffff; }
+        ]]></style>
+    </defs>
 </svg>
