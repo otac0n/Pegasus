@@ -9,6 +9,8 @@
 namespace Pegasus.Parser
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Represents a location within a parsing subject.
@@ -22,6 +24,8 @@ namespace Pegasus.Parser
         private readonly int location;
         private readonly bool inTransition;
         private readonly string subject;
+        private readonly IDictionary<string, object> state;
+        private readonly bool mutable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Cursor"/> class.
@@ -53,9 +57,11 @@ namespace Pegasus.Parser
             this.line = line;
             this.column = column;
             this.inTransition = inTransition;
+            this.state = new Dictionary<string, object>();
+            this.mutable = false;
         }
 
-        private Cursor(string subject, int location, string fileName, int line, int column, bool inTransition)
+        private Cursor(string subject, int location, string fileName, int line, int column, bool inTransition, IDictionary<string, object> state, bool mutable)
         {
             this.subject = subject;
             this.location = location;
@@ -63,6 +69,8 @@ namespace Pegasus.Parser
             this.line = line;
             this.column = column;
             this.inTransition = inTransition;
+            this.state = state;
+            this.mutable = mutable;
         }
 
         /// <summary>
@@ -98,11 +106,45 @@ namespace Pegasus.Parser
         }
 
         /// <summary>
+        /// Gets a hash code that varies with this cursor's state object.
+        /// </summary>
+        /// <remarks>This value, along with this cursor's location uniquely identify the parsing state.</remarks>
+        public int StateKey
+        {
+            get { return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(this.state); }
+        }
+
+        /// <summary>
         /// Gets the parsing subject.
         /// </summary>
         public string Subject
         {
             get { return this.subject; }
+        }
+
+        /// <summary>
+        /// Gets the state value with the specified key.
+        /// </summary>
+        /// <param name="key">The key of the state value.</param>
+        /// <returns>The state vale.</returns>
+        public dynamic this[string key]
+        {
+            get
+            {
+                object value;
+                this.state.TryGetValue(key, out value);
+                return value;
+            }
+
+            set
+            {
+                if (!this.mutable)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                this.state[key] = value;
+            }
         }
 
         /// <summary>
@@ -112,12 +154,27 @@ namespace Pegasus.Parser
         /// <returns>A <see cref="Cursor"/> that represents the location after consuming the given <see cref="ParseResult&lt;T&gt;"/>.</returns>
         public Cursor Advance(int count)
         {
+            if (this.mutable)
+            {
+                throw new InvalidOperationException();
+            }
+
             var line = this.line;
             var column = this.column;
             var inTransition = this.inTransition;
             TrackLines(this.subject, this.location, count, ref line, ref column, ref inTransition);
 
-            return new Cursor(this.subject, this.location + count, this.fileName, line, column, inTransition);
+            return new Cursor(this.subject, this.location + count, this.fileName, line, column, inTransition, this.state, this.mutable);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="Cursor"/> with the specified mutability.
+        /// </summary>
+        /// <param name="mutable">A value indicating whether or not the resulting <see cref="Cursor"/> should be mutable.</param>
+        /// <returns>A <see cref="Cursor"/> with the specified mutability.</returns>
+        public Cursor WithMutability(bool mutable)
+        {
+            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, this.state.ToDictionary(i => i.Key, i => i.Value), mutable);
         }
 
         private static void TrackLines(string subject, int start, int count, ref int line, ref int column, ref bool inTransition)

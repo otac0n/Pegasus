@@ -167,7 +167,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("if (result == null)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("throw ExceptionHelper(cursor, () => \"Failed to parse '" + grammar.Rules[0].Identifier.Name + "'.\");");
+                this.code.WriteLine("throw ExceptionHelper(cursor, state => \"Failed to parse '" + grammar.Rules[0].Identifier.Name + "'.\");");
                 this.code.Indent--;
                 this.code.WriteLine("}");
                 this.code.WriteLine("return result.Value;");
@@ -280,18 +280,18 @@ namespace Pegasus.Compiler
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs(string.Empty);
-                this.code.WriteLine("private IParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<T> wrappedCode)");
+                this.code.WriteLine("private IParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<Cursor, T> wrappedCode)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("return new ParseResult<T>(startCursor, endCursor, wrappedCode());");
+                this.code.WriteLine("return new ParseResult<T>(startCursor, endCursor, wrappedCode(endCursor));");
                 this.code.Indent--;
                 this.code.WriteLine("}");
 
                 this.code.WriteLineNoTabs(string.Empty);
-                this.code.WriteLine("private Exception ExceptionHelper(Cursor cursor, Func<string> wrappedCode)");
+                this.code.WriteLine("private Exception ExceptionHelper(Cursor cursor, Func<Cursor, string> wrappedCode)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("var ex = new FormatException(wrappedCode());");
+                this.code.WriteLine("var ex = new FormatException(wrappedCode(cursor));");
                 this.code.WriteLine("ex.Data[\"cursor\"] = cursor;");
                 this.code.WriteLine("return ex;");
                 this.code.Indent--;
@@ -333,7 +333,7 @@ namespace Pegasus.Compiler
                 var memoize = rule.Flags.Any(f => f.Name == "memoize");
                 if (memoize)
                 {
-                    this.code.WriteLine("var storageKey = " + ToLiteral(rule.Identifier.Name + ":") + " + cursor.Location;");
+                    this.code.WriteLine("var storageKey = " + ToLiteral(rule.Identifier.Name + ":") + " + cursor.StateKey + \":\" + cursor.Location;");
                     this.code.WriteLine("if (this.storage.ContainsKey(storageKey))");
                     this.code.WriteLine("{");
                     this.code.Indent++;
@@ -388,7 +388,21 @@ namespace Pegasus.Compiler
 
             protected override void WalkCodeExpression(CodeExpression codeExpression)
             {
-                throw new InvalidOperationException("Code expressions are only valid at the end of a sequence expression.");
+                if (codeExpression.CodeType != CodeType.State)
+                {
+                    throw new InvalidOperationException("Code expressions are only valid at the end of a sequence expression.");
+                }
+
+                var startCursorName = this.CreateVariable("startCursor");
+                this.code.WriteLine("var " + startCursorName + " = cursor;");
+                this.code.WriteLine("{");
+                this.code.Indent++;
+                this.code.WriteLine("var state = cursor.WithMutability(mutable: true);");
+                this.WriteCodeSpan(codeExpression.CodeSpan);
+                this.code.WriteLine("cursor = state.WithMutability(mutable: false);");
+                this.code.Indent--;
+                this.code.WriteLine("}");
+                this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(" + startCursorName + ", cursor, null);");
             }
 
             protected override void WalkSequenceExpression(SequenceExpression sequenceExpression)
@@ -433,13 +447,13 @@ namespace Pegasus.Compiler
                 {
                     if (codeExpression.CodeType == CodeType.Result)
                     {
-                        this.code.WriteLine(this.currentResultName + " = this.ReturnHelper<" + this.currentResultType + ">(" + startCursorName + ", cursor, () =>");
+                        this.code.WriteLine(this.currentResultName + " = this.ReturnHelper<" + this.currentResultType + ">(" + startCursorName + ", cursor, state =>");
                         this.WriteCodeSpan(codeExpression.CodeSpan);
                         this.code.WriteLine(");");
                     }
                     else if (codeExpression.CodeType == CodeType.Error)
                     {
-                        this.code.WriteLine("throw this.ExceptionHelper(" + startCursorName + ", () =>");
+                        this.code.WriteLine("throw this.ExceptionHelper(" + startCursorName + ", state =>");
                         this.WriteCodeSpan(codeExpression.CodeSpan);
                         this.code.WriteLine(");");
                     }
@@ -461,7 +475,7 @@ namespace Pegasus.Compiler
             private void WriteCodeSpan(CodeSpan codeSpan)
             {
                 this.code.WriteLineNoTabs("#line " + codeSpan.Start.Line + " \"" + Path.GetFileName(codeSpan.Start.FileName) + "\"");
-                this.code.WriteLineNoTabs(codeSpan.Code);
+                this.code.WriteLineNoTabs(new string(' ', codeSpan.Start.Column - 1) + codeSpan.Code);
                 this.code.WriteLineNoTabs("#line default");
             }
 
@@ -550,7 +564,7 @@ namespace Pegasus.Compiler
 
             private void WalkAssertionExpression(CodeSpan code, bool mustMatch)
             {
-                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<bool>(() => " + code.Code + ")())");
+                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<Cursor, bool>(state => " + code.Code + ")(cursor))");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(cursor, cursor, string.Empty);");

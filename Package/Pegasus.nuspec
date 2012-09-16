@@ -6,6 +6,7 @@
     <authors>John Gietzen; David Majda (peg.js syntax)</authors>
     <projectUrl>https://github.com/otac0n/Pegasus</projectUrl>
     <description>A PEG (Parsing Expression Grammar) Style parser compiler that integrates with MSBuild / Visual Studio.  Inspired by the excellent peg.js project.</description>
-    <version></version>
+    <version>$version$</version>
+    <iconUrl>https://raw.github.com/otac0n/Pegasus/v$version-short$/Pegasus.ico</iconUrl>
   </metadata>
 </package>
