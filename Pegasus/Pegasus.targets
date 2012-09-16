@@ -6,5 +6,8 @@
       <PEG Include="**\*.peg" />
     </ItemGroup>
     <CompilePegGrammar InputFile="%(PEG.Identity)" Condition=" '@(PEG)' != '' " />
+    <ItemGroup>
+      <Compile Include="@(PEG -> '%(Identity).cs')" Exclude="@(Compile)" />
+    </ItemGroup>
   </Target>
 </Project>
