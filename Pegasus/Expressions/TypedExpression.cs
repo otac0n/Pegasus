@@ -15,7 +15,7 @@ namespace Pegasus.Expressions
     /// </summary>
     public class TypedExpression : Expression
     {
-        private readonly string type;
+        private readonly CodeSpan type;
         private readonly Expression expression;
 
         /// <summary>
@@ -23,9 +23,9 @@ namespace Pegasus.Expressions
         /// </summary>
         /// <param name="type">The specific type of the wrapped expression.</param>
         /// <param name="expression">The wrapped expression.</param>
-        public TypedExpression(string type, Expression expression)
+        public TypedExpression(CodeSpan type, Expression expression)
         {
-            if (string.IsNullOrEmpty(type))
+            if (type == null)
             {
                 throw new ArgumentNullException("type");
             }
@@ -43,7 +43,7 @@ namespace Pegasus.Expressions
         /// <summary>
         /// Gets the specific type of the wrapped expression.
         /// </summary>
-        public string Type
+        public CodeSpan Type
         {
             get { return this.type; }
         }

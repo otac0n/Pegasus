@@ -18,6 +18,7 @@ namespace Pegasus.Expressions
         private readonly string code;
         private readonly Cursor end;
         private readonly Cursor start;
+        private readonly string value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeSpan"/> class.
@@ -25,11 +26,12 @@ namespace Pegasus.Expressions
         /// <param name="code">The string contents of the code span.</param>
         /// <param name="start">The start of the code region.</param>
         /// <param name="end">The end of the code region.</param>
-        public CodeSpan(string code, Cursor start, Cursor end)
+        public CodeSpan(string code, Cursor start, Cursor end, string value = null)
         {
             this.code = code;
             this.start = start;
             this.end = end;
+            this.value = value ?? code;
         }
 
         /// <summary>
@@ -54,6 +56,11 @@ namespace Pegasus.Expressions
         public Cursor Start
         {
             get { return this.start; }
+        }
+
+        public override string ToString()
+        {
+            return this.value;
         }
     }
 }
