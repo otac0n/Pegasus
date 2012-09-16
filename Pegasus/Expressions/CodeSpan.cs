@@ -26,6 +26,7 @@ namespace Pegasus.Expressions
         /// <param name="code">The string contents of the code span.</param>
         /// <param name="start">The start of the code region.</param>
         /// <param name="end">The end of the code region.</param>
+        /// <param name="value">The value of the code span.</param>
         public CodeSpan(string code, Cursor start, Cursor end, string value = null)
         {
             this.code = code;
@@ -58,6 +59,10 @@ namespace Pegasus.Expressions
             get { return this.start; }
         }
 
+        /// <summary>
+        /// Returns the string value of this <see cref="CodeSpan"/>.
+        /// </summary>
+        /// <returns>The string value of this <see cref="CodeSpan"/>.</returns>
         public override string ToString()
         {
             return this.value;
