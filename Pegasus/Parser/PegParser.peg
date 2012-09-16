@@ -57,6 +57,7 @@ labeled <Expression> -memoize
         new PrefixedExpression(label, expression)
     }
   / prefixed
+  / &"#STATE"i code:action { code }
 
 prefixed <Expression>
   = and code:code {
@@ -96,7 +97,12 @@ primary <Expression> -memoize
     }}
 
 action <Expression>
-  = type:("#ERROR"i / ) code:code { new CodeExpression(code, type.ToUpperInvariant() == "#ERROR" ? CodeType.Error : CodeType.Result) }
+  = type:actionType code:code { new CodeExpression(code, type) }
+
+actionType <CodeType>
+  = "#ERROR"i { CodeType.Error }
+  / "#STATE"i { CodeType.State }
+  /           { CodeType.Result }
 
 /* "Lexical" elements */
 

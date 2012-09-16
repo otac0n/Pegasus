@@ -106,6 +106,15 @@ namespace Pegasus.Parser
         }
 
         /// <summary>
+        /// Gets a hash code that varies with this cursor's state object.
+        /// </summary>
+        /// <remarks>This value, along with this cursor's location uniquely identify the parsing state.</remarks>
+        public int StateKey
+        {
+            get { return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(this.state); }
+        }
+
+        /// <summary>
         /// Gets the parsing subject.
         /// </summary>
         public string Subject

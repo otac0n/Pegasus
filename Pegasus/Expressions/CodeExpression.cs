@@ -24,6 +24,11 @@ namespace Pegasus.Expressions
         /// Indicates that the code should be used to throw an error.
         /// </summary>
         Error,
+
+        /// <summary>
+        /// Indicates that the code should be used to modify the current parser state.
+        /// </summary>
+        State,
     }
 
     /// <summary>
