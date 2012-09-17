@@ -118,8 +118,7 @@ namespace Pegasus.Compiler
                 var classname = settings["classname"].SingleOrDefault() ?? "Parser";
                 var accessibility = settings["accessibility"].SingleOrDefault() ?? "public";
 
-                this.code.WriteLine("namespace");
-                this.WriteCodeSpanOrString(@namespace);
+                this.WriteWrappedCode("namespace ", @namespace);
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine("using System;");
@@ -127,16 +126,14 @@ namespace Pegasus.Compiler
 
                 foreach (var @using in settings["using"])
                 {
-                    this.code.WriteLine("using");
-                    this.WriteCodeSpanOrString(@using);
-                    this.code.WriteLine(";");
+                    this.WriteWrappedCode("using ", @using, ";");
                 }
 
                 this.code.WriteLineNoTabs(string.Empty);
 
                 this.code.WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"" + assemblyName.Name + "\", \"" + assemblyName.Version + "\")]");
-                this.code.WriteLine(accessibility + " partial class");
-                this.WriteCodeSpanOrString(classname, EscapeName);
+                this.WriteWrappedCode(null, accessibility, " partial class");
+                this.WriteWrappedCode(null, classname, null, EscapeName);
                 this.code.WriteLine("{");
                 this.code.Indent++;
 
@@ -338,9 +335,7 @@ namespace Pegasus.Compiler
                 this.code.WriteLineNoTabs(string.Empty);
                 if (rule.Expression is TypedExpression)
                 {
-                    this.code.WriteLine("private IParseResult<");
-                    this.WriteCodeSpanOrString(this.currentResultType);
-                    this.code.WriteLine("> " + EscapeName(rule.Identifier.Name) + "(ref Cursor cursor)");
+                    this.WriteWrappedCode("private IParseResult<", this.currentResultType, "> " + EscapeName(rule.Identifier.Name) + "(ref Cursor cursor)");
                 }
                 else
                 {
@@ -440,7 +435,7 @@ namespace Pegasus.Compiler
                 if (sequence.Count > 0)
                 {
                     codeExpression = sequence[sequence.Count - 1] as CodeExpression;
-                    if (codeExpression != null)
+                    if (codeExpression != null && codeExpression.CodeType != CodeType.State)
                     {
                         sequence = sequence.Take(sequence.Count - 1).ToList();
                     }
@@ -453,11 +448,9 @@ namespace Pegasus.Compiler
                     this.currentResultName = this.CreateVariable("r");
                     this.currentResultType = this.GetResultType(expression, out isDefinition);
 
-                    if (this.currentResultType is CodeSpan && isDefinition)
+                    if (isDefinition)
                     {
-                        this.code.WriteLine("IParseResult<");
-                        this.WriteCodeSpan((CodeSpan)this.currentResultType);
-                        this.code.WriteLine("> " + this.currentResultName + " = null;");
+                        this.WriteWrappedCode("IParseResult<", this.currentResultType, "> " + this.currentResultName + " = null;");
                     }
                     else
                     {
@@ -482,15 +475,11 @@ namespace Pegasus.Compiler
                 {
                     if (codeExpression.CodeType == CodeType.Result)
                     {
-                        this.code.WriteLine(this.currentResultName + " = this.ReturnHelper<" + this.currentResultType + ">(" + startCursorName + ", cursor, state =>");
-                        this.WriteCodeSpan(codeExpression.CodeSpan);
-                        this.code.WriteLine(");");
+                        this.WriteWrappedCode(this.currentResultName + " = this.ReturnHelper<" + this.currentResultType + ">(" + startCursorName + ", cursor, state =>", codeExpression.CodeSpan, ");");
                     }
                     else if (codeExpression.CodeType == CodeType.Error)
                     {
-                        this.code.WriteLine("throw this.ExceptionHelper(" + startCursorName + ", state =>");
-                        this.WriteCodeSpan(codeExpression.CodeSpan);
-                        this.code.WriteLine(");");
+                        this.WriteWrappedCode("throw this.ExceptionHelper(" + startCursorName + ", state => ", codeExpression.CodeSpan, ");");
                     }
                 }
 
@@ -507,11 +496,21 @@ namespace Pegasus.Compiler
                 }
             }
 
-            private void WriteCodeSpanOrString(object value, Func<string, string> stringTransform = null)
+            private void WriteWrappedCode(string prefix, object value, string suffix = null, Func<string, string> stringTransform = null)
             {
                 if (value is CodeSpan)
                 {
+                    if (!string.IsNullOrEmpty(prefix))
+                    {
+                        this.code.WriteLine(prefix.TrimEnd());
+                    }
+
                     this.WriteCodeSpan((CodeSpan)value);
+
+                    if (!string.IsNullOrEmpty(suffix))
+                    {
+                        this.code.WriteLine(suffix.TrimStart());
+                    }
                 }
                 else
                 {
@@ -521,7 +520,7 @@ namespace Pegasus.Compiler
                         @out = stringTransform(@out);
                     }
 
-                    this.code.WriteLine(@out);
+                    this.code.WriteLine(string.Concat(prefix, @out, suffix));
                 }
             }
 
@@ -617,9 +616,7 @@ namespace Pegasus.Compiler
 
             private void WalkAssertionExpression(CodeSpan code, bool mustMatch)
             {
-                this.code.WriteLine("if (" + (mustMatch ? string.Empty : "!") + "new Func<Cursor, bool>(state =>");
-                this.WriteCodeSpan(code);
-                this.code.WriteLine(")(cursor))");
+                this.WriteWrappedCode("if (" + (mustMatch ? string.Empty : "!") + "new Func<Cursor, bool>(state => ", code, ")(cursor))");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine(this.currentResultName + " = new ParseResult<string>(cursor, cursor, string.Empty);");
