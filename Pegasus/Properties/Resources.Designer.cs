@@ -176,5 +176,14 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0013_FLAG_UNKNOWN", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid type definition..
+        /// </summary>
+        internal static string PEG0014_INVALID_TYPE {
+            get {
+                return ResourceManager.GetString("PEG0014_INVALID_TYPE", resourceCulture);
+            }
+        }
     }
 }

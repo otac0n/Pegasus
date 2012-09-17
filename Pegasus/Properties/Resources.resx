@@ -158,4 +158,7 @@
     <value>The flag '{0}' is not recognized.</value>
     <comment>warning</comment>
   </data>
+  <data name="PEG0014_INVALID_TYPE" xml:space="preserve">
+    <value>Invalid type definition.</value>
+  </data>
 </root>

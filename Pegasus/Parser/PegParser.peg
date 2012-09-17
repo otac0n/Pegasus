@@ -35,6 +35,7 @@ expression <Expression>
 
 expressionType <CodeSpan> -memoize
   = lt name:type gt { name }
+  / lt #ERROR{ "PEG0014:" + Resources.PEG0014_INVALID_TYPE }
 
 choice <Expression>
   = head:sequence tail:(<Expression>slash sequence:sequence { sequence })* {
