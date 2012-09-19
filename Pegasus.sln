@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{88F8
 		Package\Uninstall.ps1 = Package\Uninstall.ps1
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Common", "Pegasus.Common\Pegasus.Common.csproj", "{1FC19ADF-446F-4118-8189-C25AADF12397}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FC19ADF-446F-4118-8189-C25AADF12397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FC19ADF-446F-4118-8189-C25AADF12397}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FC19ADF-446F-4118-8189-C25AADF12397}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FC19ADF-446F-4118-8189-C25AADF12397}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

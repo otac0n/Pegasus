@@ -11,7 +11,7 @@ namespace Pegasus.Expressions
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Pegasus.Parser;
+    using Pegasus.Common;
 
     /// <summary>
     /// Represents a full set of grammar rules.

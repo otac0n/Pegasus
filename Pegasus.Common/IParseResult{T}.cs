@@ -6,7 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Pegasus.Parser
+namespace Pegasus.Common
 {
     /// <summary>
     /// Encapsulates the success or failure of a particular parsing operation along with the result of operation.

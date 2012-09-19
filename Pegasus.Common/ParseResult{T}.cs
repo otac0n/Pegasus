@@ -6,7 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Pegasus.Parser
+namespace Pegasus.Common
 {
     using System;
 

@@ -8,7 +8,7 @@
 
 namespace Pegasus.Expressions
 {
-    using Pegasus.Parser;
+    using Pegasus.Common;
 
     /// <summary>
     /// Tracks the contents and region of a code expression.

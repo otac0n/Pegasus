@@ -9,7 +9,7 @@
 namespace Pegasus.Tests
 {
     using NUnit.Framework;
-    using Pegasus.Parser;
+    using Pegasus.Common;
 
     public class ParseResultTests
     {

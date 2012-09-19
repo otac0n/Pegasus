@@ -87,9 +87,6 @@
     <Compile Include="Expressions\SequenceExpression.cs" />
     <Compile Include="Expressions\TypedExpression.cs" />
     <Compile Include="Expressions\WildcardExpression.cs" />
-    <Compile Include="Parser\Cursor.cs" />
-    <Compile Include="Parser\IParseResult{T}.cs" />
-    <Compile Include="Parser\ParseResult{T}.cs" />
     <Compile Include="Parser\PegParser.peg.cs">
       <DependentUpon>PegParser.peg</DependentUpon>
     </Compile>
@@ -112,6 +109,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
+      <Project>{1FC19ADF-446F-4118-8189-C25AADF12397}</Project>
+      <Name>Pegasus.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" Condition="Exists('$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets')" />

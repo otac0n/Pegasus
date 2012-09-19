@@ -12,6 +12,7 @@ namespace Pegasus
     using System.CodeDom.Compiler;
     using System.IO;
     using System.Text.RegularExpressions;
+    using Pegasus.Common;
     using Pegasus.Compiler;
     using Pegasus.Expressions;
     using Pegasus.Parser;

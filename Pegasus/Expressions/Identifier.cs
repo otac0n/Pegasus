@@ -9,7 +9,7 @@
 namespace Pegasus.Expressions
 {
     using System;
-    using Pegasus.Parser;
+    using Pegasus.Common;
 
     /// <summary>
     /// Represents a lexical identifier.

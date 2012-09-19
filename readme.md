@@ -23,7 +23,6 @@ Here is an example of a simple parser for mathematical expressions:
 
     @namespace MyProject
     @classname ExpressionParser
-    @using Pegasus.Common
 
     additive <decimal>
       = left:multiplicative "+" right:additive { left + right }

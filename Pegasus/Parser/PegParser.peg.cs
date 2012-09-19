@@ -15,6 +15,7 @@ namespace
 {
     using System;
     using System.Collections.Generic;
+    using Pegasus.Common;
     using
 #line 3 "PegParser.peg"
        System.Linq

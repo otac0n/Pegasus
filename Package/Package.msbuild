@@ -10,9 +10,12 @@
     <MSBuild Projects="$(SolutionDir)Pegasus.sln" Properties="Configuration=$(Configuration)" Targets="Rebuild" />
   </Target>
   <Target Name="Package" DependsOnTargets="Build">
-    <MakeDir Directories="bin;obj;obj\content\Pegasus.Common" />
+    <MakeDir Directories="bin;obj;obj\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\tools" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.targets" DestinationFolder="obj\tools" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\tools" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\lib\net40" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\readme.txt" />
     <Copy SourceFiles="Install.ps1" DestinationFolder="obj\tools" />
     <Copy SourceFiles="Uninstall.ps1" DestinationFolder="obj\tools" />
@@ -20,14 +23,8 @@
       <AssemblyInfo>$([System.IO.File]::ReadAllText("$(SolutionDir)SharedAssemblyInfo.cs"))</AssemblyInfo>
       <AssemblyVersion>$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfo), "AssemblyVersion\(\"(\d+\.\d+\.\d+)\.\d+\"\)").Groups[1].Value)</AssemblyVersion>
       <NuSpec>$([System.IO.File]::ReadAllText("Pegasus.nuspec").Replace("$version$", $(AssemblyVersion)).Replace("$version-short$", $([System.Text.RegularExpressions.Regex]::Replace($(AssemblyVersion), "\.0+$", ""))))</NuSpec>
-      <Cursor>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\Cursor.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</Cursor>
-      <IParseResult>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\IParseResult{T}.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</IParseResult>
-      <ParseResult>$([System.IO.File]::ReadAllText("$(SolutionDir)Pegasus\Parser\ParseResult{T}.cs").Replace("Pegasus.Parser", "Pegasus.Common"))</ParseResult>
     </PropertyGroup>
     <WriteLinesToFile File="obj\Pegasus.nuspec" Lines="$(NuSpec)" />
-    <WriteLinesToFile File="obj\content\Pegasus.Common\Cursor.cs" Lines="$(Cursor)" />
-    <WriteLinesToFile File="obj\content\Pegasus.Common\IParseResult.cs" Lines="$(IParseResult)" />
-    <WriteLinesToFile File="obj\content\Pegasus.Common\ParseResult.cs" Lines="$(ParseResult)" />
     <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\Pegasus.nuspec -OutputDir bin\" />
   </Target>
 </Project>

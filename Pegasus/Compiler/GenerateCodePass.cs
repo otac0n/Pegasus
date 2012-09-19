@@ -123,6 +123,7 @@ namespace Pegasus.Compiler
                 this.code.Indent++;
                 this.code.WriteLine("using System;");
                 this.code.WriteLine("using System.Collections.Generic;");
+                this.code.WriteLine("using Pegasus.Common;");
 
                 foreach (var @using in settings["using"])
                 {
