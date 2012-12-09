@@ -148,6 +148,28 @@ namespace Pegasus.Common
         }
 
         /// <summary>
+        /// Determines whether two specified cursors represent the same location.
+        /// </summary>
+        /// <param name="a">The first <see cref="Cursor"/> to compare, or null.</param>
+        /// <param name="b">The second <see cref="Cursor"/> to compare, or null.</param>
+        /// <returns>true if the value of <paramref name="a"/> is the same as the value of <paramref name="b"/>; otherwise, false.</returns>
+        public static bool operator ==(Cursor a, Cursor b)
+        {
+            return object.Equals(a, b);
+        }
+
+        /// <summary>
+        /// Determines whether two specified cursors represent different locations.
+        /// </summary>
+        /// <param name="a">The first <see cref="Cursor"/> to compare, or null.</param>
+        /// <param name="b">The second <see cref="Cursor"/> to compare, or null.</param>
+        /// <returns>true if the value of <paramref name="a"/> is different from the value of <paramref name="b"/>; otherwise, false.</returns>
+        public static bool operator !=(Cursor a, Cursor b)
+        {
+            return !object.Equals(a, b);
+        }
+
+        /// <summary>
         /// Returns a new <see cref="Cursor"/> representing the location after consuming the given <see cref="ParseResult&lt;T&gt;"/>.
         /// </summary>
         /// <param name="count">The number of characters to advance.</param>
@@ -175,6 +197,43 @@ namespace Pegasus.Common
         public Cursor WithMutability(bool mutable)
         {
             return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, this.state.ToDictionary(i => i.Key, i => i.Value), mutable);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current <see cref="Cursor"/>.
+        /// </summary>
+        /// <param name="obj">An object to compare with this <see cref="Cursor"/>.</param>
+        /// <returns>true if the objects are considered equal; otherwise, false.</returns>
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as Cursor);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="Cursor"/> is equal to the current <see cref="Cursor"/>.
+        /// </summary>
+        /// <param name="other">A <see cref="Cursor"/> to compare with this <see cref="Cursor"/>.</param>
+        /// <returns>true if the cursors represent the same location; otherwise, false.</returns>
+        public bool Equals(Cursor other)
+        {
+            return !object.ReferenceEquals(other, null) &&
+                this.location == other.location &&
+                this.subject == other.subject &&
+                this.fileName == other.fileName;
+        }
+
+        /// <summary>
+        /// Serves as a hash function for this <see cref="Cursor"/>.
+        /// </summary>
+        /// <returns>A hash code for the current <see cref="Cursor"/>.</returns>
+        public override int GetHashCode()
+        {
+            int hash = 0x51ED270B;
+            hash = (hash * -0x25555529) + this.subject.GetHashCode();
+            hash = (hash * -0x25555529) + this.location.GetHashCode();
+            hash = (hash * -0x25555529) + (this.fileName == null ? 0 : this.fileName.GetHashCode());
+
+            return hash;
         }
 
         private static void TrackLines(string subject, int start, int count, ref int line, ref int column, ref bool inTransition)
@@ -226,65 +285,6 @@ namespace Pegasus.Common
                     column++;
                 }
             }
-        }
-
-        /// <summary>
-        /// Determines whether two specified cursors represent the same location.
-        /// </summary>
-        /// <param name="a">The first <see cref="Cursor"/> to compare, or null.</param>
-        /// <param name="b">The second <see cref="Cursor"/> to compare, or null.</param>
-        /// <returns>true if the value of <paramref name="a"/> is the same as the value of <paramref name="b"/>; otherwise, false.</returns>
-        public static bool operator ==(Cursor a, Cursor b)
-        {
-            return object.Equals(a, b);
-        }
-
-        /// <summary>
-        /// Determines whether two specified cursors represent different locations.
-        /// </summary>
-        /// <param name="a">The first <see cref="Cursor"/> to compare, or null.</param>
-        /// <param name="b">The second <see cref="Cursor"/> to compare, or null.</param>
-        /// <returns>true if the value of <paramref name="a"/> is different from the value of <paramref name="b"/>; otherwise, false.</returns>
-        public static bool operator !=(Cursor a, Cursor b)
-        {
-            return !object.Equals(a, b);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current <see cref="Cursor"/>.
-        /// </summary>
-        /// <param name="obj">An object to compare with this <see cref="Cursor"/>.</param>
-        /// <returns>true if the objects are considered equal; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as Cursor);
-        }
-
-        /// <summary>
-        /// Determines whether the specified <see cref="Cursor"/> is equal to the current <see cref="Cursor"/>.
-        /// </summary>
-        /// <param name="other">A <see cref="Cursor"/> to compare with this <see cref="Cursor"/>.</param>
-        /// <returns>true if the cursors represent the same location; otherwise, false.</returns>
-        public bool Equals(Cursor other)
-        {
-            return !object.ReferenceEquals(other, null) &&
-                this.location == other.location &&
-                this.subject == other.subject &&
-                this.fileName == other.fileName;
-        }
-
-        /// <summary>
-        /// Serves as a hash function for this <see cref="Cursor"/>.
-        /// </summary>
-        /// <returns>A hash code for the current <see cref="Cursor"/>.</returns>
-        public override int GetHashCode()
-        {
-            int hash = 0x51ED270B;
-            hash = (hash * -0x25555529) + this.subject.GetHashCode();
-            hash = (hash * -0x25555529) + this.location.GetHashCode();
-            hash = (hash * -0x25555529) + (this.fileName == null ? 0 : this.fileName.GetHashCode());
-
-            return hash;
         }
     }
 }

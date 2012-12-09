@@ -19,11 +19,11 @@ namespace Pegasus.Compiler
     /// </summary>
     public class PegCompiler
     {
-        private static readonly IList<Type> passTypes;
+        private static readonly IList<Type> PassTypes;
 
         static PegCompiler()
         {
-            passTypes = Assembly
+            PassTypes = Assembly
                 .GetExecutingAssembly()
                 .GetTypes()
                 .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(CompilePass)))
@@ -40,7 +40,7 @@ namespace Pegasus.Compiler
         {
             var result = new CompileResult();
 
-            var passes = passTypes.Select(t => (CompilePass)Activator.CreateInstance(t)).ToList();
+            var passes = PassTypes.Select(t => (CompilePass)Activator.CreateInstance(t)).ToList();
             while (true)
             {
                 var existingErrors = new HashSet<string>(result.Errors.Select(e => e.ErrorNumber));

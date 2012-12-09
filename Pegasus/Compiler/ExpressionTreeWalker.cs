@@ -21,11 +21,6 @@ namespace Pegasus.Compiler
             }
         }
 
-        protected virtual void WalkRule(Rule rule)
-        {
-            this.WalkExpression(rule.Expression);
-        }
-
         public virtual void WalkExpression(Expression expression)
         {
             AndCodeExpression andCodeExpression;
@@ -103,6 +98,11 @@ namespace Pegasus.Compiler
             {
                 throw new ArgumentException(string.Format("Unknown expression type '{0}'.", expression.GetType()), "expression");
             }
+        }
+
+        protected virtual void WalkRule(Rule rule)
+        {
+            this.WalkExpression(rule.Expression);
         }
 
         protected virtual void WalkAndCodeExpression(AndCodeExpression andCodeExpression)
