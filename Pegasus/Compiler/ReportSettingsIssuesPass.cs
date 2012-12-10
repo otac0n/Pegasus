@@ -10,6 +10,7 @@ namespace Pegasus.Compiler
 {
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Text.RegularExpressions;
     using Pegasus.Expressions;
     using Pegasus.Properties;
@@ -54,13 +55,13 @@ namespace Pegasus.Compiler
                     if (singleAllowed && !seenSettings.Add(setting.Key.Name))
                     {
                         result.Errors.Add(
-                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0005", string.Format(Resources.PEG0005_SETTING_ALREADY_SPECIFIED, setting.Key.Name)));
+                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0005", string.Format(CultureInfo.CurrentCulture, Resources.PEG0005_SETTING_ALREADY_SPECIFIED, setting.Key.Name)));
                     }
                 }
                 else
                 {
                     result.Errors.Add(
-                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0006", string.Format(Resources.PEG0006_SETTING_UNKNOWN, setting.Key.Name)) { IsWarning = true });
+                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0006", string.Format(CultureInfo.CurrentCulture, Resources.PEG0006_SETTING_UNKNOWN, setting.Key.Name)) { IsWarning = true });
                 }
 
                 string pattern;
@@ -69,7 +70,7 @@ namespace Pegasus.Compiler
                     if (!Regex.IsMatch(setting.Value.ToString(), pattern))
                     {
                         result.Errors.Add(
-                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0012", string.Format(Resources.PEG0012_SETTING_VALUE_INVALID, setting.Value, setting.Key.Name)));
+                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0012", string.Format(CultureInfo.CurrentCulture, Resources.PEG0012_SETTING_VALUE_INVALID, setting.Value, setting.Key.Name)));
                     }
                 }
             }

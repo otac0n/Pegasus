@@ -10,6 +10,7 @@ namespace Pegasus.Compiler
 {
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Globalization;
     using Pegasus.Expressions;
     using Pegasus.Properties;
 
@@ -40,7 +41,7 @@ namespace Pegasus.Compiler
                     {
                         var cursor = flag.Start;
                         result.Errors.Add(
-                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0013", string.Format(Resources.PEG0013_FLAG_UNKNOWN, flag.Name)) { IsWarning = true });
+                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0013", string.Format(CultureInfo.CurrentCulture, Resources.PEG0013_FLAG_UNKNOWN, flag.Name)) { IsWarning = true });
                     }
                 }
             }

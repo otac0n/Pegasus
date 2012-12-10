@@ -11,6 +11,7 @@ namespace Pegasus.Compiler
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using Pegasus.Expressions;
     using Pegasus.Properties;
@@ -69,7 +70,7 @@ namespace Pegasus.Compiler
 
                     var cursor = rule.Identifier.Start;
                     this.result.Errors.Add(
-                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0004", string.Format(Resources.PEG0004_LEFT_RECURSION_DETECTED, names)));
+                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0004", string.Format(CultureInfo.CurrentCulture, Resources.PEG0004_LEFT_RECURSION_DETECTED, names)));
                 }
                 else
                 {
@@ -146,7 +147,7 @@ namespace Pegasus.Compiler
                 }
                 else
                 {
-                    throw new ArgumentException(string.Format("Unknown expression type '{0}'.", expression.GetType()), "expression");
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Unknown expression type '{0}'.", expression.GetType()), "expression");
                 }
             }
         }

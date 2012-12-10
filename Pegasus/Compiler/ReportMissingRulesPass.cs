@@ -10,6 +10,7 @@ namespace Pegasus.Compiler
 {
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using Pegasus.Expressions;
     using Pegasus.Properties;
@@ -49,7 +50,7 @@ namespace Pegasus.Compiler
                 {
                     var cursor = nameExpression.Identifier.Start;
                     this.result.Errors.Add(
-                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0003", string.Format(Resources.PEG0003_RULE_DOES_NOT_EXIST, name)));
+                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0003", string.Format(CultureInfo.CurrentCulture, Resources.PEG0003_RULE_DOES_NOT_EXIST, name)));
                 }
             }
         }

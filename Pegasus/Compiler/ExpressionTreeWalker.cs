@@ -9,6 +9,7 @@
 namespace Pegasus.Compiler
 {
     using System;
+    using System.Globalization;
     using Pegasus.Expressions;
 
     internal abstract class ExpressionTreeWalker
@@ -96,7 +97,7 @@ namespace Pegasus.Compiler
             }
             else
             {
-                throw new ArgumentException(string.Format("Unknown expression type '{0}'.", expression.GetType()), "expression");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Unknown expression type '{0}'.", expression.GetType()), "expression");
             }
         }
 

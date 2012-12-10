@@ -10,6 +10,7 @@ namespace Pegasus.Compiler
 {
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Globalization;
     using Pegasus.Expressions;
     using Pegasus.Properties;
 
@@ -66,7 +67,7 @@ namespace Pegasus.Compiler
                 {
                     var cursor = prefixedExpression.Prefix.Start;
                     this.result.Errors.Add(
-                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0007", string.Format(Resources.PEG0007_PREFIX_ALREADY_DECLARED, prefixedExpression.Prefix.Name)));
+                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0007", string.Format(CultureInfo.CurrentCulture, Resources.PEG0007_PREFIX_ALREADY_DECLARED, prefixedExpression.Prefix.Name)));
                 }
 
                 base.WalkPrefixedExpression(prefixedExpression);

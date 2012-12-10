@@ -11,6 +11,7 @@ namespace Pegasus.Compiler
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -32,7 +33,7 @@ namespace Pegasus.Compiler
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "StringWriter.Dispose is idempotent.")]
         public override void Run(Grammar grammar, CompileResult result)
         {
-            using (var stringWriter = new StringWriter())
+            using (var stringWriter = new StringWriter(CultureInfo.InvariantCulture))
             using (var codeWriter = new IndentedTextWriter(stringWriter))
             {
                 new GenerateCodeExpressionTreeWlaker(codeWriter).WalkGrammar(grammar);
@@ -592,7 +593,7 @@ namespace Pegasus.Compiler
                     }
                     else
                     {
-                        sb.Append("\\u").Append(((int)c).ToString("x4"));
+                        sb.Append("\\u").Append(((int)c).ToString("x4", CultureInfo.InvariantCulture));
                     }
                 }
 
