@@ -2,7 +2,9 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System;
 
 [assembly: AssemblyTitle("Pegasus.Common")]
 [assembly: AssemblyDescription("")]
 [assembly: Guid("c978cd6c-16d4-41f4-b07e-a2fbb786613c")]
+[assembly: CLSCompliant(true)]
