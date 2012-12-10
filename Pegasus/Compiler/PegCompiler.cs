@@ -28,7 +28,7 @@ namespace Pegasus.Compiler
         /// Compiles a PEG grammar into a program.
         /// </summary>
         /// <param name="grammar">The grammar to compile.</param>
-        /// <returns>A <see cref="CompileResult"/> containing the errors or results of compilation.</returns>
+        /// <returns>A <see cref="CompileResult"/> containing the errors, warnings, and results of compilation.</returns>
         public static CompileResult Compile(Grammar grammar)
         {
             var result = new CompileResult();

@@ -12,7 +12,7 @@ namespace Pegasus.Compiler
     using System.Collections.Generic;
 
     /// <summary>
-    /// Encapsulates the results of and errors from compilation of a PEG grammar.
+    /// Encapsulates the results and errors from the compilation of a PEG grammar.
     /// </summary>
     public class CompileResult
     {
