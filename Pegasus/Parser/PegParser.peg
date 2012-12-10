@@ -1,5 +1,6 @@
 ﻿@namespace Pegasus.Parser
 @classname PegParser
+@using System.Globalization
 @using System.Linq
 @using System.Text.RegularExpressions
 @using Pegasus.Expressions
@@ -339,4 +340,4 @@ whitespace
 
 EOF
   = !.
-  / unexpected:. #ERROR{ "PEG0008:" + string.Format(Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected) }
+  / unexpected:. #ERROR{ "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected) }

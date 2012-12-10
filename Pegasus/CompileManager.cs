@@ -33,14 +33,11 @@ namespace Pegasus
             catch (FormatException ex)
             {
                 var cursor = ex.Data["cursor"] as Cursor;
-                if (cursor != null)
+                if (cursor != null && Regex.IsMatch(ex.Message, @"^PEG\d+:"))
                 {
-                    if (Regex.IsMatch(ex.Message, @"^PEG\d+:"))
-                    {
-                        var parts = ex.Message.Split(new[] { ':' }, 2);
-                        logError(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, parts[0], parts[1]));
-                        return;
-                    }
+                    var parts = ex.Message.Split(new[] { ':' }, 2);
+                    logError(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, parts[0], parts[1]));
+                    return;
                 }
 
                 throw;
