@@ -43,6 +43,7 @@ namespace Pegasus.Expressions
         /// <summary>
         /// Gets the specific type of the wrapped expression.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "Since 'GetType' is defined on the root object type, this is not a confusing usage.")]
         public CodeSpan Type
         {
             get { return this.type; }

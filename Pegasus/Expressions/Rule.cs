@@ -27,6 +27,7 @@ namespace Pegasus.Expressions
         /// <param name="identifier">The identifier that represents the <see cref="Rule"/>.</param>
         /// <param name="expression">The expression that this <see cref="Rule"/> represents.</param>
         /// <param name="flags" >The flags to be set on this <see cref="Rule"/>.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "flags", Justification = "The usage of 'flags' here is intentional and desired.")]
         public Rule(Identifier identifier, Expression expression, IEnumerable<Identifier> flags)
         {
             if (expression == null)
@@ -50,6 +51,7 @@ namespace Pegasus.Expressions
         /// <summary>
         /// Gets the flags that have been set on this <see cref="Rule"/>.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "The usage of 'Flags' here is intentional and desired.")]
         public IList<Identifier> Flags
         {
             get { return this.flags; }
