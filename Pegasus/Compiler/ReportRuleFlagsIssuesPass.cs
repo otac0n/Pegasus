@@ -8,9 +8,7 @@
 
 namespace Pegasus.Compiler
 {
-    using System.CodeDom.Compiler;
     using System.Collections.Generic;
-    using System.Globalization;
     using Pegasus.Expressions;
     using Pegasus.Properties;
 
@@ -40,8 +38,7 @@ namespace Pegasus.Compiler
                     if (!KnownFlags.Contains(flag.Name))
                     {
                         var cursor = flag.Start;
-                        result.Errors.Add(
-                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0013", string.Format(CultureInfo.CurrentCulture, Resources.PEG0013_FLAG_UNKNOWN, flag.Name)) { IsWarning = true });
+                        result.AddWarning(cursor, () => Resources.PEG0013_FLAG_UNKNOWN, flag.Name);
                     }
                 }
             }

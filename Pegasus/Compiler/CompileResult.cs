@@ -8,8 +8,12 @@
 
 namespace Pegasus.Compiler
 {
+    using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
+    using Pegasus.Common;
+    using System.Globalization;
 
     /// <summary>
     /// Encapsulates the results and errors from the compilation of a PEG grammar.
@@ -33,5 +37,23 @@ namespace Pegasus.Compiler
         /// Gets or sets the code resulting from compilation.
         /// </summary>
         public string Code { get; set; }
+
+        internal void AddError(Cursor cursor, Expression<Func<string>> error, params object[] args)
+        {
+            this.AddCompilerError(cursor, error, args, isWarning: false);
+        }
+
+        internal void AddWarning(Cursor cursor, Expression<Func<string>> error, params object[] args)
+        {
+            this.AddCompilerError(cursor, error, args, isWarning: true);
+        }
+
+        private void AddCompilerError(Cursor cursor, Expression<Func<string>> error, object[] args, bool isWarning)
+        {
+            var errorId = ((MemberExpression)error.Body).Member.Name.Split('_')[0];
+            var errorFormat = error.Compile()();
+            var errorText = string.Format(CultureInfo.CurrentCulture, errorFormat, args);
+            this.Errors.Add(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, errorId, errorText) { IsWarning = isWarning });
+        }
     }
 }

@@ -9,7 +9,6 @@
 namespace Pegasus.Compiler
 {
     using System;
-    using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -69,8 +68,7 @@ namespace Pegasus.Compiler
                     this.ruleStack.Pop();
 
                     var cursor = rule.Identifier.Start;
-                    this.result.Errors.Add(
-                        new CompilerError(cursor.FileName, cursor.Line, cursor.Column, "PEG0004", string.Format(CultureInfo.CurrentCulture, Resources.PEG0004_LEFT_RECURSION_DETECTED, names)));
+                    this.result.AddError(cursor, () => Resources.PEG0004_LEFT_RECURSION_DETECTED, names);
                 }
                 else
                 {

@@ -8,7 +8,6 @@
 
 namespace Pegasus.Compiler
 {
-    using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using Pegasus.Expressions;
     using Pegasus.Properties;
@@ -30,8 +29,7 @@ namespace Pegasus.Compiler
             if (grammar.Rules.Count == 0)
             {
                 var cursor = grammar.End;
-                result.Errors.Add(
-                    new CompilerError(cursor.FileName, 0, 0, "PEG0001", Resources.PEG0001_NO_RULES_DEFINED));
+                result.AddError(cursor, () => Resources.PEG0001_NO_RULES_DEFINED);
             }
         }
     }
