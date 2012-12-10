@@ -145,10 +145,10 @@
   <data name="PEG0009_UNTERMINATED_STRING" xml:space="preserve">
     <value>Unterminated string literal.</value>
   </data>
-  <data name="PEG0010_UNTERNIMATED_CLASS" xml:space="preserve">
+  <data name="PEG0010_UNTERMINATED_CLASS" xml:space="preserve">
     <value>Unterminated character class.</value>
   </data>
-  <data name="PEG0011_UNTERNIMATED_CODE" xml:space="preserve">
+  <data name="PEG0011_UNTERMINATED_CODE" xml:space="preserve">
     <value>Unterminated code section.</value>
   </data>
   <data name="PEG0012_SETTING_VALUE_INVALID" xml:space="preserve">

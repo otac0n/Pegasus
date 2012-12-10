@@ -1533,7 +1533,7 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
 #line 114 "PegParser.peg"
-                "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE 
+                "PEG0011:" + Resources.PEG0011_UNTERMINATED_CODE 
 #line default
                     );
                 }
@@ -3254,7 +3254,7 @@ namespace
                             var startCursor3 = cursor;
                             throw this.ExceptionHelper(startCursor3, state =>
 #line 242 "PegParser.peg"
-                                                                                   "PEG0010:" + Resources.PEG0010_UNTERNIMATED_CLASS 
+                                                                                   "PEG0010:" + Resources.PEG0010_UNTERMINATED_CLASS 
 #line default
                             );
                         }

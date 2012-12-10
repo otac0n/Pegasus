@@ -144,18 +144,18 @@ namespace Pegasus.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Unterminated character class..
         /// </summary>
-        internal static string PEG0010_UNTERNIMATED_CLASS {
+        internal static string PEG0010_UNTERMINATED_CLASS {
             get {
-                return ResourceManager.GetString("PEG0010_UNTERNIMATED_CLASS", resourceCulture);
+                return ResourceManager.GetString("PEG0010_UNTERMINATED_CLASS", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Unterminated code section..
         /// </summary>
-        internal static string PEG0011_UNTERNIMATED_CODE {
+        internal static string PEG0011_UNTERMINATED_CODE {
             get {
-                return ResourceManager.GetString("PEG0011_UNTERNIMATED_CODE", resourceCulture);
+                return ResourceManager.GetString("PEG0011_UNTERMINATED_CODE", resourceCulture);
             }
         }
         

@@ -111,7 +111,7 @@ actionType <CodeType>
 
 code <CodeSpan>
   = "{" contents:braceContents "}" __ { new CodeSpan(contents, contentsStart, contentsEnd) }
-  / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERNIMATED_CODE }
+  / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERMINATED_CODE }
 
 braceContents
   = parts:(nonBraceCharacters / "{" braceContents "}")* { string.Concat(parts) }
@@ -239,7 +239,7 @@ simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) char:. { @char }
 
 class <Expression>
-  = "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* ("]" / #ERROR{ "PEG0010:" + Resources.PEG0010_UNTERNIMATED_CLASS }) flags:"i"? __ {
+  = "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* ("]" / #ERROR{ "PEG0010:" + Resources.PEG0010_UNTERMINATED_CLASS }) flags:"i"? __ {
         new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
