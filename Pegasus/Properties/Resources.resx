@@ -143,7 +143,7 @@
     <value>Unexpected character '{0}'.</value>
   </data>
   <data name="PEG0009_UNTERMINATED_STRING" xml:space="preserve">
-    <value>Unternimated string literal.</value>
+    <value>Unterminated string literal.</value>
   </data>
   <data name="PEG0010_UNTERNIMATED_CLASS" xml:space="preserve">
     <value>Unterminated character class.</value>

@@ -133,7 +133,7 @@ namespace Pegasus.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unternimated string literal..
+        ///   Looks up a localized string similar to Unterminated string literal..
         /// </summary>
         internal static string PEG0009_UNTERMINATED_STRING {
             get {

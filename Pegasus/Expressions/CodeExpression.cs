@@ -48,7 +48,7 @@ namespace Pegasus.Expressions
         {
             if (codeSpan == null)
             {
-                throw new ArgumentNullException("code");
+                throw new ArgumentNullException("codeSpan");
             }
 
             this.codeSpan = codeSpan;
