@@ -46,8 +46,7 @@ namespace Pegasus
                 throw;
             }
 
-            var compiler = new PegCompiler();
-            var result = compiler.Compile(grammar);
+            var result = PegCompiler.Compile(grammar);
 
             bool hadFatal = false;
             foreach (var error in result.Errors)

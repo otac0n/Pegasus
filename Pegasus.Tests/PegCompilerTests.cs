@@ -19,9 +19,8 @@ namespace Pegasus.Tests
         public void Compile_WithSingleSimpleRule_Succeeds()
         {
             var grammar = new PegParser().Parse("start = 'OK'");
-            var compiler = new PegCompiler();
 
-            var result = compiler.Compile(grammar);
+            var result = PegCompiler.Compile(grammar);
             Assert.That(result.Errors, Is.Empty);
         }
 
@@ -29,9 +28,8 @@ namespace Pegasus.Tests
         public void Compile_WithNoRules_YieldsError()
         {
             var grammar = new PegParser().Parse(" ");
-            var compiler = new PegCompiler();
 
-            var result = compiler.Compile(grammar);
+            var result = PegCompiler.Compile(grammar);
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0001"));
@@ -41,9 +39,8 @@ namespace Pegasus.Tests
         public void Compile_WithDuplicateDefinition_YieldsError()
         {
             var grammar = new PegParser().Parse("a = 'a'; a = 'b';");
-            var compiler = new PegCompiler();
 
-            var result = compiler.Compile(grammar);
+            var result = PegCompiler.Compile(grammar);
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0002"));
@@ -53,9 +50,8 @@ namespace Pegasus.Tests
         public void Compile_WithMissingRuleDefinition_YieldsError()
         {
             var grammar = new PegParser().Parse("a = b");
-            var compiler = new PegCompiler();
 
-            var result = compiler.Compile(grammar);
+            var result = PegCompiler.Compile(grammar);
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0003"));
@@ -74,9 +70,8 @@ namespace Pegasus.Tests
         {
             var parser = new PegParser();
             var grammar = parser.Parse(subject);
-            var compiler = new PegCompiler();
 
-            var result = compiler.Compile(grammar);
+            var result = PegCompiler.Compile(grammar);
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0004"));
@@ -88,9 +83,8 @@ namespace Pegasus.Tests
         public void Compile_WithDuplicateSetting_YieldsError(string settingName)
         {
             var grammar = new PegParser().Parse("@" + settingName + " OK; @" + settingName + " OK; a = 'OK';");
-            var compiler = new PegCompiler();
 
-            var result = compiler.Compile(grammar);
+            var result = PegCompiler.Compile(grammar);
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0005"));
@@ -100,9 +94,8 @@ namespace Pegasus.Tests
         public void Compile_WithUnrecognizedSetting_YieldsWarning()
         {
             var grammar = new PegParser().Parse("@barnacle OK; a = 'OK';");
-            var compiler = new PegCompiler();
 
-            var result = compiler.Compile(grammar);
+            var result = PegCompiler.Compile(grammar);
 
             var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0006"));

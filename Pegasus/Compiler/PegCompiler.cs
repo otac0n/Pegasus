@@ -17,26 +17,19 @@ namespace Pegasus.Compiler
     /// <summary>
     /// Provides error checking and compilation services for PEG grammars.
     /// </summary>
-    public class PegCompiler
+    public static class PegCompiler
     {
-        private static readonly IList<Type> PassTypes;
-
-        static PegCompiler()
-        {
-            PassTypes = Assembly
-                .GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(CompilePass)))
-                .ToList()
-                .AsReadOnly();
-        }
+        private static readonly IList<Type> PassTypes = Assembly.GetExecutingAssembly().GetTypes()
+            .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(CompilePass)))
+            .ToList()
+            .AsReadOnly();
 
         /// <summary>
         /// Compiles a PEG grammar into a program.
         /// </summary>
         /// <param name="grammar">The grammar to compile.</param>
         /// <returns>A <see cref="CompileResult"/> containing the errors or results of compilation.</returns>
-        public CompileResult Compile(Grammar grammar)
+        public static CompileResult Compile(Grammar grammar)
         {
             var result = new CompileResult();
 

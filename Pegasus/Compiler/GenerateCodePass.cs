@@ -35,7 +35,7 @@ namespace Pegasus.Compiler
             using (var stringWriter = new StringWriter())
             using (var codeWriter = new IndentedTextWriter(stringWriter))
             {
-                new GenerateCodeExpressionTreeWlaker(result, codeWriter).WalkGrammar(grammar);
+                new GenerateCodeExpressionTreeWlaker(codeWriter).WalkGrammar(grammar);
                 result.Code = stringWriter.ToString();
             }
         }
@@ -67,15 +67,13 @@ namespace Pegasus.Compiler
             };
 
             private readonly IndentedTextWriter code;
-            private readonly CompileResult result;
             private readonly Dictionary<string, int> variables = new Dictionary<string, int>();
             private Grammar grammar;
             private string currentResultName = null;
             private object currentResultType = null;
 
-            public GenerateCodeExpressionTreeWlaker(CompileResult result, IndentedTextWriter codeWriter)
+            public GenerateCodeExpressionTreeWlaker(IndentedTextWriter codeWriter)
             {
-                this.result = result;
                 this.code = codeWriter;
             }
 
@@ -121,9 +119,10 @@ namespace Pegasus.Compiler
 
                 foreach (var members in settings["members"])
                 {
-                    if (members is CodeSpan)
+                    var membersSpan = members as CodeSpan;
+                    if (membersSpan != null)
                     {
-                        this.WriteCodeSpan((CodeSpan)members);
+                        this.WriteCodeSpan(membersSpan);
                     }
                     else
                     {
@@ -698,14 +697,15 @@ namespace Pegasus.Compiler
 
             private void WriteWrappedCode(string prefix, object value, string suffix = null, Func<string, string> stringTransform = null)
             {
-                if (value is CodeSpan)
+                var valueSpan = value as CodeSpan;
+                if (valueSpan != null)
                 {
                     if (!string.IsNullOrEmpty(prefix))
                     {
                         this.code.WriteLine(prefix.TrimEnd());
                     }
 
-                    this.WriteCodeSpan((CodeSpan)value);
+                    this.WriteCodeSpan(valueSpan);
 
                     if (!string.IsNullOrEmpty(suffix))
                     {
