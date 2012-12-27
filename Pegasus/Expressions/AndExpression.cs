@@ -11,7 +11,7 @@ namespace Pegasus.Expressions
     using System;
 
     /// <summary>
-    /// Represents a positive lookahead.
+    /// Represents a positive look-ahead.
     /// </summary>
     public class AndExpression : Expression
     {

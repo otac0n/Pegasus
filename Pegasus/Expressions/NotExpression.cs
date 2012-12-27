@@ -11,7 +11,7 @@ namespace Pegasus.Expressions
     using System;
 
     /// <summary>
-    /// Represents a negative lookahead.
+    /// Represents a negative look-ahead.
     /// </summary>
     public class NotExpression : Expression
     {

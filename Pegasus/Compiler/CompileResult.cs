@@ -11,9 +11,9 @@ namespace Pegasus.Compiler
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq.Expressions;
     using Pegasus.Common;
-    using System.Globalization;
 
     /// <summary>
     /// Encapsulates the results and errors from the compilation of a PEG grammar.
