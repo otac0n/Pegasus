@@ -67,6 +67,7 @@
     <Compile Include="Compiler\ReportNoRulesPass.cs" />
     <Compile Include="Compiler\ReportRuleFlagsIssuesPass.cs" />
     <Compile Include="Compiler\ReportSettingsIssuesPass.cs" />
+    <Compile Include="Compiler\ReportStartRuleNotFoundPass.cs" />
     <Compile Include="Expressions\AndCodeExpression.cs" />
     <Compile Include="Expressions\AndExpression.cs" />
     <Compile Include="Expressions\CharacterRange.cs" />

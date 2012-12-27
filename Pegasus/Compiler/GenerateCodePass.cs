@@ -97,6 +97,7 @@ namespace Pegasus.Compiler
                 var @namespace = settings["namespace"].SingleOrDefault() ?? "Parsers";
                 var classname = settings["classname"].SingleOrDefault() ?? "Parser";
                 var accessibility = settings["accessibility"].SingleOrDefault() ?? "public";
+                var startRule = settings["start"].Select(n => n.ToString()).SingleOrDefault() ?? grammar.Rules[0].Identifier.Name;
 
                 this.WriteWrappedCode("namespace ", @namespace);
                 this.code.WriteLine("{");
@@ -139,7 +140,7 @@ namespace Pegasus.Compiler
                     this.code.WriteLine("private Dictionary<string, object> storage;");
                 }
 
-                var type = this.GetResultType(grammar.Rules[0].Expression);
+                var type = this.GetResultType(grammar.Rules.Single(r => r.Identifier.Name == startRule).Expression);
 
                 this.code.WriteLine("public " + type + " Parse(string subject, string fileName = null)");
                 this.code.WriteLine("{");
@@ -154,11 +155,11 @@ namespace Pegasus.Compiler
                 }
 
                 this.code.WriteLine("var cursor = new Cursor(subject, 0, fileName);");
-                this.code.WriteLine("var result = this." + EscapeName(grammar.Rules[0].Identifier.Name) + "(ref cursor);");
+                this.code.WriteLine("var result = this." + EscapeName(startRule) + "(ref cursor);");
                 this.code.WriteLine("if (result == null)");
                 this.code.WriteLine("{");
                 this.code.Indent++;
-                this.code.WriteLine("throw ExceptionHelper(cursor, state => \"Failed to parse '" + grammar.Rules[0].Identifier.Name + "'.\");");
+                this.code.WriteLine("throw ExceptionHelper(cursor, state => \"Failed to parse '" + startRule + "'.\");");
                 this.code.Indent--;
                 this.code.WriteLine("}");
                 this.code.WriteLine("return result.Value;");
