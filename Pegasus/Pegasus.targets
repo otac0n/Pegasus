@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <CoreCompileDependsOn>$(CoreCompileDependsOn);CompilePegGrammars</CoreCompileDependsOn>
+    <CoreBuildDependsOn>$(CoreBuildDependsOn);CompilePegGrammars</CoreBuildDependsOn>
+  </PropertyGroup>
   <ItemGroup>
     <AvailableItemName Include="PegGrammar" />
   </ItemGroup>
   <UsingTask AssemblyFile="Pegasus.exe" TaskName="CompilePegGrammar" />
-  <Target Name="CompilePegGrammars" BeforeTargets="CoreCompile" Condition=" '$(NCrunch)' != '1' ">
+  <Target Name="CompilePegGrammars" Condition=" '$(NCrunch)' != '1' ">
     <CompilePegGrammar InputFile="%(PegGrammar.Identity)" Condition=" '@(PegGrammar)' != '' " />
     <ItemGroup>
       <Compile Include="@(PegGrammar -> '%(Identity).cs')" Exclude="@(Compile)" />
