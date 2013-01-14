@@ -100,5 +100,19 @@ namespace Pegasus.Tests
             var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0006"));
         }
+
+        [Test]
+        [TestCase(0, 0)]
+        [TestCase(1, 0)]
+        [TestCase(2, 1)]
+        public void Compile_ImpossibleQuantifier_YieldsWarning(int min, int max)
+        {
+            var grammar = new PegParser().Parse("a = 'OK'<" + min + "," + max + ">;");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0015"));
+        }
     }
 }

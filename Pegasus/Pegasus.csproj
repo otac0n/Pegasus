@@ -62,6 +62,7 @@
     <Compile Include="Compiler\PegCompiler.cs" />
     <Compile Include="Compiler\ReportConflictingNamesPass.cs" />
     <Compile Include="Compiler\ReportDuplicateRulesPass.cs" />
+    <Compile Include="Compiler\ReportInvalidQuantifiersPass.cs" />
     <Compile Include="Compiler\ReportLeftRecursionPass.cs" />
     <Compile Include="Compiler\ReportMissingRulesPass.cs" />
     <Compile Include="Compiler\ReportNoRulesPass.cs" />

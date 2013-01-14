@@ -9,12 +9,15 @@
 namespace Pegasus.Expressions
 {
     using System;
+    using Pegasus.Common;
 
     /// <summary>
     /// Represents the rules for repeating an expression.
     /// </summary>
     public class Quantifier
     {
+        private readonly Cursor start;
+        private readonly Cursor end;
         private readonly int? max;
         private readonly int min;
         private readonly Expression delimiter;
@@ -22,14 +25,34 @@ namespace Pegasus.Expressions
         /// <summary>
         /// Initializes a new instance of the <see cref="Quantifier"/> class.
         /// </summary>
+        /// <param name="start">The cursor just before the <see cref="Quantifier"/>.</param>
+        /// <param name="end">The cursor just after the <see cref="Quantifier"/>.</param>
         /// <param name="min">The minimum number of times to match.</param>
         /// <param name="max">The maximum number of times to match, if limited; or null, otherwise.</param>
         /// <param name="delimiter">The expression to use as a delimiter.</param>
-        public Quantifier(int min, int? max = null, Expression delimiter = null)
+        public Quantifier(Cursor start, Cursor end, int min, int? max = null, Expression delimiter = null)
         {
+            this.start = start;
+            this.end = end;
             this.min = min;
             this.max = max;
             this.delimiter = delimiter;
+        }
+
+        /// <summary>
+        /// Gets the cursor just before the <see cref="Quantifier"/>.
+        /// </summary>
+        public Cursor Start
+        {
+            get { return this.start; }
+        }
+
+        /// <summary>
+        /// Gets the cursor just after the <see cref="Quantifier"/>.
+        /// </summary>
+        public Cursor End
+        {
+            get { return this.end; }
         }
 
         /// <summary>
