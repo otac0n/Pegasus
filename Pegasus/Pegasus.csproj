@@ -83,6 +83,7 @@
     <Compile Include="Expressions\NotCodeExpression.cs" />
     <Compile Include="Expressions\NotExpression.cs" />
     <Compile Include="Expressions\PrefixedExpression.cs" />
+    <Compile Include="Expressions\Quantifier.cs" />
     <Compile Include="Expressions\RepetitionExpression.cs" />
     <Compile Include="Expressions\Rule.cs" />
     <Compile Include="Expressions\SequenceExpression.cs" />

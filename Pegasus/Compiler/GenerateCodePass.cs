@@ -450,13 +450,35 @@ namespace Pegasus.Compiler
 
                 var oldResultName = this.currentResultName;
                 var oldResultType = this.currentResultType;
-                this.currentResultName = this.CreateVariable("r");
-                this.currentResultType = this.GetResultType(repetitionExpression.Expression);
+                var listResultType = this.GetResultType(repetitionExpression.Expression);
 
-                this.code.WriteLine("var " + listName + " = new List<" + this.currentResultType + ">();");
-                this.code.WriteLine("while (" + (repetitionExpression.Max.HasValue ? listName + ".Count < " + repetitionExpression.Max : "true") + ")");
+                this.code.WriteLine("var " + listName + " = new List<" + listResultType + ">();");
+                this.code.WriteLine("while (" + (repetitionExpression.Quantifier.Max.HasValue ? listName + ".Count < " + repetitionExpression.Quantifier.Max : "true") + ")");
                 this.code.WriteLine("{");
                 this.code.Indent++;
+
+                if (repetitionExpression.Quantifier.Delimiter != null)
+                {
+                    this.currentResultName = this.CreateVariable("r");
+                    this.currentResultType = this.GetResultType(repetitionExpression.Quantifier.Delimiter);
+
+                    this.code.WriteLine("if (" + listName + ".Count > 0)");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                    this.WalkExpression(repetitionExpression.Quantifier.Delimiter);
+                    this.code.WriteLine("if (" + this.currentResultName + " != null)");
+                    this.code.WriteLine("{");
+                    this.code.Indent++;
+                    this.code.WriteLine("break;");
+                    this.code.Indent--;
+                    this.code.WriteLine("}");
+                    this.code.Indent--;
+                    this.code.WriteLine("}");
+                }
+
+                this.currentResultName = this.CreateVariable("r");
+                this.currentResultType = listResultType;
+
                 this.code.WriteLine("IParseResult<" + this.currentResultType + "> " + this.currentResultName + " = null;");
                 this.WalkExpression(repetitionExpression.Expression);
                 this.code.WriteLine("if (" + this.currentResultName + " != null)");
@@ -477,7 +499,7 @@ namespace Pegasus.Compiler
                 this.currentResultName = oldResultName;
                 this.currentResultType = oldResultType;
 
-                this.code.WriteLine("if (" + listName + ".Count >= " + repetitionExpression.Min + ")");
+                this.code.WriteLine("if (" + listName + ".Count >= " + repetitionExpression.Quantifier.Min + ")");
                 this.code.WriteLine("{");
                 this.code.Indent++;
                 this.code.WriteLine(this.currentResultName + " = new ParseResult<" + this.GetResultType(repetitionExpression) + ">(" + startCursorName + ", cursor, " + listName + ".AsReadOnly());");

@@ -133,7 +133,10 @@ namespace Pegasus.Compiler
                 }
                 else if ((repetitionExpression = expression as RepetitionExpression) != null)
                 {
-                    return repetitionExpression.Min == 0 || this.IsExpressionZeroWidth(repetitionExpression.Expression);
+                    return
+                        repetitionExpression.Quantifier.Min == 0 ||
+                        (this.IsExpressionZeroWidth(repetitionExpression.Expression) && repetitionExpression.Quantifier.Min <= 1) ||
+                        (this.IsExpressionZeroWidth(repetitionExpression.Expression) && this.IsExpressionZeroWidth(repetitionExpression.Quantifier.Delimiter));
                 }
                 else if ((sequenceExpression = expression as SequenceExpression) != null)
                 {

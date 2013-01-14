@@ -156,6 +156,11 @@ namespace Pegasus.Compiler
         protected virtual void WalkRepetitionExpression(RepetitionExpression repetitionExpression)
         {
             this.WalkExpression(repetitionExpression.Expression);
+
+            if (repetitionExpression.Quantifier.Delimiter != null)
+            {
+                this.WalkExpression(repetitionExpression.Quantifier.Delimiter);
+            }
         }
 
         protected virtual void WalkSequenceExpression(SequenceExpression sequenceExpression)

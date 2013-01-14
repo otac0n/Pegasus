@@ -79,13 +79,16 @@ prefixed <Expression>
 
 suffixed <Expression>
   = expression:primary question {
-        new RepetitionExpression(expression, min: 0, max: 1)
+        new RepetitionExpression(expression, new Quantifier(min: 0, max: 1))
     }
   / expression:primary star {
-        new RepetitionExpression(expression, min: 0, max: null)
+        new RepetitionExpression(expression, new Quantifier(min: 0, max: null))
     }
   / expression:primary plus {
-        new RepetitionExpression(expression, min: 1, max: null)
+        new RepetitionExpression(expression, new Quantifier(min: 1, max: null))
+    }
+  / expression:primary q:quantifier {
+        new RepetitionExpression(expression, q)
     }
   / primary
 
@@ -98,6 +101,14 @@ primary <Expression> -memoize
         var typeValue = type.SingleOrDefault();
         return typeValue != null ? new TypedExpression(typeValue, expression) : expression;
     }}
+
+quantifier <Quantifier>
+  = lt min:integer "," max:integer? "," delimiter:expression? gt { new Quantifier(min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter.SingleOrDefault()) }
+  / lt min:integer "," max:integer? gt { new Quantifier(min: min, max: max.Cast<int?>().SingleOrDefault()) }
+  / lt count:integer gt { new Quantifier(min: count, max: count) }
+
+integer <int>
+  = digits:digit+ { int.Parse(string.Concat(digits)) }
 
 action <Expression>
   = type:actionType code:code { new CodeExpression(code, type) }
