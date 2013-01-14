@@ -465,8 +465,9 @@ namespace Pegasus.Compiler
                     this.code.WriteLine("if (" + listName + ".Count > 0)");
                     this.code.WriteLine("{");
                     this.code.Indent++;
+                    this.code.WriteLine("IParseResult<" + this.currentResultType + "> " + this.currentResultName + " = null;");
                     this.WalkExpression(repetitionExpression.Quantifier.Delimiter);
-                    this.code.WriteLine("if (" + this.currentResultName + " != null)");
+                    this.code.WriteLine("if (" + this.currentResultName + " == null)");
                     this.code.WriteLine("{");
                     this.code.Indent++;
                     this.code.WriteLine("break;");

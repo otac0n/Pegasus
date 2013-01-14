@@ -17,7 +17,7 @@ setting <KeyValuePair<Identifier, object>>
     }
 
 rulePreamble
-  = expressionType? ruleFlag* equals
+  = (!quantifier expressionType)? ruleFlag* equals
 
 rule <Rule>
   = name:identifier type:expressionType? flags:ruleFlag* equals expression:expression semicolon? {{
@@ -102,7 +102,7 @@ primary <Expression> -memoize
         return typeValue != null ? new TypedExpression(typeValue, expression) : expression;
     }}
 
-quantifier <Quantifier>
+quantifier <Quantifier> -memoize
   = start:lt min:integer "," max:integer? "," delimiter:expression? end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter.SingleOrDefault()) }
   / start:lt min:integer "," max:integer? end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault()) }
   / start:lt count:integer end:gt { new Quantifier(startStart, endEnd, min: count, max: count) }

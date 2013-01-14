@@ -280,13 +280,40 @@ namespace
         {
             IParseResult<string> r0 = null;
             var startCursor0 = cursor;
-            IParseResult<IList<CodeSpan>> r1 = null;
+            IParseResult<IList<string>> r1 = null;
             var startCursor1 = cursor;
-            var l0 = new List<CodeSpan>();
+            var l0 = new List<string>();
             while (l0.Count < 1)
             {
-                IParseResult<CodeSpan> r2 = null;
-                r2 = this.expressionType(ref cursor);
+                IParseResult<string> r2 = null;
+                var startCursor2 = cursor;
+                IParseResult<string> r3 = null;
+                var startCursor3 = cursor;
+                IParseResult<Quantifier> r4 = null;
+                r4 = this.quantifier(ref cursor);
+                cursor = startCursor3;
+                if (r4 == null)
+                {
+                    r3 = new ParseResult<string>(cursor, cursor, string.Empty);
+                }
+                if (r3 != null)
+                {
+                    IParseResult<CodeSpan> r5 = null;
+                    r5 = this.expressionType(ref cursor);
+                    if (r5 != null)
+                    {
+                        var len = cursor.Location - startCursor2.Location;
+                        r2 = new ParseResult<string>(startCursor2, cursor, cursor.Subject.Substring(startCursor2.Location, len));
+                    }
+                    else
+                    {
+                        cursor = startCursor2;
+                    }
+                }
+                else
+                {
+                    cursor = startCursor2;
+                }
                 if (r2 != null)
                 {
                     l0.Add(r2.Value);
@@ -298,7 +325,7 @@ namespace
             }
             if (l0.Count >= 0)
             {
-                r1 = new ParseResult<IList<CodeSpan>>(startCursor1, cursor, l0.AsReadOnly());
+                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
             }
             else
             {
@@ -306,16 +333,16 @@ namespace
             }
             if (r1 != null)
             {
-                IParseResult<IList<Identifier>> r3 = null;
-                var startCursor2 = cursor;
+                IParseResult<IList<Identifier>> r6 = null;
+                var startCursor4 = cursor;
                 var l1 = new List<Identifier>();
                 while (true)
                 {
-                    IParseResult<Identifier> r4 = null;
-                    r4 = this.ruleFlag(ref cursor);
-                    if (r4 != null)
+                    IParseResult<Identifier> r7 = null;
+                    r7 = this.ruleFlag(ref cursor);
+                    if (r7 != null)
                     {
-                        l1.Add(r4.Value);
+                        l1.Add(r7.Value);
                     }
                     else
                     {
@@ -324,17 +351,17 @@ namespace
                 }
                 if (l1.Count >= 0)
                 {
-                    r3 = new ParseResult<IList<Identifier>>(startCursor2, cursor, l1.AsReadOnly());
+                    r6 = new ParseResult<IList<Identifier>>(startCursor4, cursor, l1.AsReadOnly());
                 }
                 else
                 {
-                    cursor = startCursor2;
+                    cursor = startCursor4;
                 }
-                if (r3 != null)
+                if (r6 != null)
                 {
-                    IParseResult<string> r5 = null;
-                    r5 = this.equals(ref cursor);
-                    if (r5 != null)
+                    IParseResult<string> r8 = null;
+                    r8 = this.equals(ref cursor);
+                    if (r8 != null)
                     {
                         var len = cursor.Location - startCursor0.Location;
                         r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
@@ -1425,6 +1452,16 @@ namespace
         > quantifier(ref Cursor cursor)
         {
             IParseResult<Quantifier> r0 = null;
+            var storageKey = "quantifier:" + cursor.StateKey + ":" + cursor.Location;
+            if (this.storage.ContainsKey(storageKey))
+            {
+                r0 = (IParseResult<Quantifier>)this.storage[storageKey];
+                if (r0 != null)
+                {
+                    cursor = r0.EndCursor;
+                }
+                return r0;
+            }
             if (r0 == null)
             {
                 var startCursor0 = cursor;
@@ -1689,6 +1726,7 @@ namespace
                     cursor = startCursor5;
                 }
             }
+            this.storage[storageKey] = r0;
             return r0;
         }
 
