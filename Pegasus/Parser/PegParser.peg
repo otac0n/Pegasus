@@ -39,11 +39,7 @@ expressionType <CodeSpan> -memoize
   / lt #ERROR{ "PEG0014:" + Resources.PEG0014_INVALID_TYPE }
 
 choice <Expression>
-  = head:sequence tail:(<Expression>slash sequence:sequence { sequence })* {
-        tail.Count == 0
-            ? head
-            : new ChoiceExpression(new [] { head }.Concat(tail))
-    }
+  = choices:sequence<1,,slash> { choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) }
 
 sequence <Expression>
   = elements:labeled* code:action {
