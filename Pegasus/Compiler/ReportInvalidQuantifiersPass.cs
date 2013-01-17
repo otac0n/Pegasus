@@ -22,7 +22,7 @@ namespace Pegasus.Compiler
 
         public override IList<string> BlockedByErrors
         {
-            get { return new string[0]; }
+            get { return new[] { "PEG0001" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)
