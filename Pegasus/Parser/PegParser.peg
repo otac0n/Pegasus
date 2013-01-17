@@ -108,8 +108,6 @@ actionType <CodeType>
   / "#STATE"i { CodeType.State }
   /           { CodeType.Result }
 
-/* "Lexical" elements */
-
 code <CodeSpan>
   = "{" contents:braceContents "}" __ { new CodeSpan(contents, contentsStart, contentsEnd) }
   / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERMINATED_CODE }
@@ -141,35 +139,9 @@ comma     = "," __ { "," }
 lbracket  = "[" __ { "[" }
 rbracket  = "]" __ { "]" }
 
-/*
- * Modeled after ECMA-262, 5th ed., 7.6, but much simplified:
- *
- * * no Unicode escape sequences
- *
- * * "Unicode combining marks" and "Unicode connection punctuation" can't be
- *   part of the identifier
- *
- * * only [a-zA-Z] is considered a "Unicode letter"
- *
- * * only [0-9] is considered a "Unicode digit"
- *
- * The simplifications were made just to make the implementation little bit
- * easier, there is no "philosophical" reason behind them.
- */
 identifier <Identifier> -memoize
   = name:(!digit (letter / digit / "_" / "$")+) __ { new Identifier(name, nameStart, nameEnd) }
 
-/*
- * Modeled after C# Language Specification, Version 4.0, appendix B.2, but simplified:
- *
- * * the "identifier" class is as above.
- *
- * * no support for qualified namespaces. ("global::System.String", for example)
- *
- * * no support for \u characters directly in the name.
- *
- * Again, these simplifications are simply for ease of implementation.
- */
 type <CodeSpan>
   = type:(nonArrayType rankSpecifiers*) { new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
 
@@ -197,10 +169,6 @@ typeArguments
   = type comma typeArguments
   / type ""
 
-/*
- * Modeled after ECMA-262, 5th ed., 7.8.4. (syntax & semantics, rules only
- * vaguely).
- */
 literal <Expression>
   = value:(doubleQuotedString / singleQuotedString) flags:"i"? __ {
         new LiteralExpression(value, ignoreCase: flags.SingleOrDefault() == "i")
@@ -313,7 +281,6 @@ upperCaseLetter
 
 __ = (whitespace / eol / comment)*
 
-/* Modeled after ECMA-262, 5th ed., 7.4. */
 comment
   = singleLineComment
   / multiLineComment
@@ -324,7 +291,6 @@ singleLineComment
 multiLineComment
   = "/*" (!"*/" .)* "*/"
 
-/* Modeled after ECMA-262, 5th ed., 7.3. */
 eol
   = "\n"
   / "\r\n"
@@ -335,7 +301,6 @@ eol
 eolChar
   = [\n\r\u2028\u2029]
 
-/* Modeled after ECMA-262, 5th ed., 7.2. */
 whitespace
   = [ \t\v\f\u00A0\uFEFF\u1680\u180E\u2000-\u200A\u202F\u205F\u3000]
 
