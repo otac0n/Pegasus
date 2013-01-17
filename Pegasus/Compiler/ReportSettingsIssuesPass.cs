@@ -33,7 +33,7 @@ namespace Pegasus.Compiler
 
         public override IList<string> ErrorsProduced
         {
-            get { return new[] { "PEG0006", "PEG0012" }; }
+            get { return new[] { "PEG0005", "PEG0012" }; }
         }
 
         public override IList<string> BlockedByErrors
