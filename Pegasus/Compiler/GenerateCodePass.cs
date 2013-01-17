@@ -27,7 +27,7 @@ namespace Pegasus.Compiler
 
         public override IList<string> BlockedByErrors
         {
-            get { return new[] { "PEG0001", "PEG0002", "PEG0003", "PEG0004", "PEG0005", "PEG0007", "PEG0012" }; }
+            get { return new[] { "PEG0001", "PEG0002", "PEG0003", "PEG0004", "PEG0005", "PEG0007", "PEG0012", "PEG0016" }; }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "StringWriter.Dispose is idempotent.")]
@@ -109,6 +109,12 @@ namespace Pegasus.Compiler
                 foreach (var @using in settings["using"])
                 {
                     this.WriteWrappedCode("using ", @using, ";");
+                }
+
+                var resources = settings["resources"].SingleOrDefault();
+                if (resources != null)
+                {
+                    this.WriteWrappedCode("using ParserResources = ", resources, ";");
                 }
 
                 this.code.WriteLineNoTabs(string.Empty);
@@ -415,7 +421,11 @@ namespace Pegasus.Compiler
 
             protected override void WalkLiteralExpression(LiteralExpression literalExpression)
             {
-                this.code.WriteLine(this.currentResultName + " = this.ParseLiteral(ref cursor, " + ToLiteral(literalExpression.Value) + (literalExpression.IgnoreCase ? ", ignoreCase: true" : string.Empty) + ");");
+                var literalValue = literalExpression.FromResource
+                    ? "ParserResources.ResourceManager.GetString(" + ToLiteral(literalExpression.Value) + ", ParserResources.Culture)"
+                    : ToLiteral(literalExpression.Value);
+
+                this.code.WriteLine(this.currentResultName + " = this.ParseLiteral(ref cursor, " + literalValue + (literalExpression.IgnoreCase ? ", ignoreCase: true" : string.Empty) + ");");
             }
 
             protected override void WalkNameExpression(NameExpression nameExpression)

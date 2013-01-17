@@ -3068,43 +3068,42 @@ namespace
             var value = ValueOrDefault(r1);
             if (r1 != null)
             {
-                IParseResult<IList<string>> r2 = null;
+                IParseResult<string> r2 = null;
                 var flagsStart = cursor;
-                var startCursor1 = cursor;
-                var l0 = new List<string>();
-                while (l0.Count < 1)
+                if (r2 == null)
                 {
-                    IParseResult<string> r3 = null;
-                    r3 = this.ParseLiteral(ref cursor, "i");
-                    if (r3 != null)
-                    {
-                        l0.Add(r3.Value);
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    r2 = this.ParseLiteral(ref cursor, "i");
                 }
-                if (l0.Count >= 0)
+                if (r2 == null)
                 {
-                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                    r2 = this.ParseLiteral(ref cursor, "r");
                 }
-                else
+                if (r2 == null)
                 {
-                    cursor = startCursor1;
+                    r2 = this.ParseLiteral(ref cursor, "ir");
+                }
+                if (r2 == null)
+                {
+                    r2 = this.ParseLiteral(ref cursor, "ri");
+                }
+                if (r2 == null)
+                {
+                    var startCursor1 = cursor;
+                    var len = cursor.Location - startCursor1.Location;
+                    r2 = new ParseResult<string>(startCursor1, cursor, cursor.Subject.Substring(startCursor1.Location, len));
                 }
                 var flagsEnd = cursor;
                 var flags = ValueOrDefault(r2);
                 if (r2 != null)
                 {
-                    IParseResult<IList<string>> r4 = null;
-                    r4 = this.__(ref cursor);
-                    if (r4 != null)
+                    IParseResult<IList<string>> r3 = null;
+                    r3 = this.__(ref cursor);
+                    if (r3 != null)
                     {
                         r0 = this.ReturnHelper<Expression>(startCursor0, cursor, state =>
 #line 173 "PegParser.peg"
-                                                                   
-        new LiteralExpression(value, ignoreCase: flags.SingleOrDefault() == "i")
+                                                                                           
+        new LiteralExpression(valueStart, flagsEnd, value, ignoreCase: flags.Contains('i'), fromResource: flags.Contains('r'))
     
 #line default
                         );

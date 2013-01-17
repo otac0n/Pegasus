@@ -66,6 +66,7 @@
     <Compile Include="Compiler\ReportLeftRecursionPass.cs" />
     <Compile Include="Compiler\ReportMissingRulesPass.cs" />
     <Compile Include="Compiler\ReportNoRulesPass.cs" />
+    <Compile Include="Compiler\ReportResourcesMissingPass.cs" />
     <Compile Include="Compiler\ReportRuleFlagsIssuesPass.cs" />
     <Compile Include="Compiler\ReportSettingsIssuesPass.cs" />
     <Compile Include="Compiler\ReportStartRuleNotFoundPass.cs" />

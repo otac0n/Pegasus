@@ -170,8 +170,8 @@ typeArguments
   / type ""
 
 literal <Expression>
-  = value:(doubleQuotedString / singleQuotedString) flags:"i"? __ {
-        new LiteralExpression(value, ignoreCase: flags.SingleOrDefault() == "i")
+  = value:(doubleQuotedString / singleQuotedString) flags:("i" / "r" / "ir" / "ri" / ) __ {
+        new LiteralExpression(valueStart, flagsEnd, value, ignoreCase: flags.Contains('i'), fromResource: flags.Contains('r'))
     }
 
 string
