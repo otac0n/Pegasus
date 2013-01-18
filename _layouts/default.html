@@ -31,54 +31,7 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Features</h3>
-
-<p>Pegasus is a PEG (Parsing Expression Grammar) parser generator for .NET that integrates with MSBuild and Visual Studio.</p>
-
-<ul>
-<li>Support for everything in the <a href="http://www.brynosaurus.com/pub/lang/peg-slides.pdf">formal definition of PEG</a>.</li>
-<li>Integration with the Visual Studio / MSBuild build pipeline.</li>
-<li>Limited debugging support (code sections only) in Visual Studio.</li>
-</ul><h3>Syntax Examples</h3>
-
-<p>Mathematical Expression Evaluator</p>
-
-<pre><code>@namespace PegExamples
-@classname MathExpressionParser
-
-start
-  = value:additive EOF { value }
-
-additive &lt;decimal&gt;
-  = left:multiplicative add right:additive { left + right }
-  / left:multiplicative sub right:additive { left - right }
-  / multiplicative
-
-multiplicative &lt;decimal&gt; -memoize
-  = left:primary mul right:multiplicative { left * right }
-  / left:primary div right:multiplicative { left / right }
-  / primary
-
-primary &lt;decimal&gt; -memoize
-  = decimal
-  / lParen additive:additive rParen { additive }
-
-add =    "+" __ { "+" }
-sub =    "-" __ { "-" }
-mul =    "*" __ { "*" }
-div =    "/" __ { "/" }
-lParen = "(" __ { "(" }
-rParen = ")" __ { ")" }
-
-decimal &lt;decimal&gt;
-  = value:([0-9]+ ("." [0-9]+)?) __ { decimal.Parse(value) }
-
-__ = [ \t\r\n]*
-
-EOF
-  = !.
-  / unexpected:. #ERROR{ "Unexpected character '" + unexpected + "'." }
-</code></pre>
+{{ content }}
       </section>
     </div>
 
