@@ -8,6 +8,8 @@ Pegasus is a PEG (Parsing Expression Grammar) parser generator for .NET that int
 * Support for everything in the [formal definition of PEG](http://www.brynosaurus.com/pub/lang/peg-slides.pdf).
 * Integration with the Visual Studio / MSBuild build pipeline.
 * Limited debugging support (code sections only) in Visual Studio.
+* Packrat parsing via the `-memoize` rule flag.
+* Stateful parsing, including backtracking of state.
 
 ### Syntax Examples ###
 
