@@ -65,6 +65,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+#header_wrap img {
+  vertical-align: text-bottom;
+}
+
 h1, h2, h3, h4, h5, h6 {
   margin: 10px 0;
   font-weight: 700;
@@ -143,7 +147,7 @@ strong {
   font-weight: bold;
 }
 
-img {
+#main_content img {
   position: relative;
   margin: 0 auto;
   max-width: 739px;
@@ -257,7 +261,7 @@ form {
   padding: 20px;
 }
 
-img {
+#main_content img {
   width: 100%;
   max-width: 100%;
 }
