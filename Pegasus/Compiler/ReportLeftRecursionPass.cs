@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="ReportLeftRecursionPass.cs" company="(none)">
-//   Copyright © 2012 John Gietzen.  All Rights Reserved.
+//   Copyright © 2013 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.txt for more information.
 // </copyright>
@@ -14,6 +14,7 @@ namespace Pegasus.Compiler
     using System.Linq;
     using Pegasus.Expressions;
     using Pegasus.Properties;
+    using System.Diagnostics.CodeAnalysis;
 
     internal class ReportLeftRecursionPass : CompilePass
     {
@@ -89,7 +90,8 @@ namespace Pegasus.Compiler
                 }
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength", Justification = "Empty strings and null strings are logically distinct in this method.")]
+            [SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength", Justification = "Empty strings and null strings are logically distinct in this method.")]
+            [SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "nameExpression", Justification = "The performance penalty is essentially zero in this case, and the readability is better.")]
             private bool IsExpressionZeroWidth(Expression expression)
             {
                 ChoiceExpression choiceExpression;

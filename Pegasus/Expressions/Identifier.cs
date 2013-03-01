@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="Identifier.cs" company="(none)">
-//   Copyright © 2012 John Gietzen.  All Rights Reserved.
+//   Copyright © 2013 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.txt for more information.
 // </copyright>
@@ -47,7 +47,7 @@ namespace Pegasus.Expressions
         }
 
         /// <summary>
-        /// Gets name of the <see cref="Identifier"/>.
+        /// Gets the name of the <see cref="Identifier"/>.
         /// </summary>
         public string Name
         {
