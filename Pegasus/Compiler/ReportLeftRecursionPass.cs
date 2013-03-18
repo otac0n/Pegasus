@@ -98,6 +98,7 @@ namespace Pegasus.Compiler
                 PrefixedExpression prefixedExpression;
                 RepetitionExpression repetitionExpression;
                 SequenceExpression sequenceExpression;
+                TypedExpression typedExpression;
 
                 if (expression is AndCodeExpression || expression is AndExpression)
                 {
@@ -141,6 +142,10 @@ namespace Pegasus.Compiler
                 else if ((sequenceExpression = expression as SequenceExpression) != null)
                 {
                     return sequenceExpression.Sequence.All(e => this.IsExpressionZeroWidth(e));
+                }
+                else if ((typedExpression = expression as TypedExpression) != null)
+                {
+                    return this.IsExpressionZeroWidth(typedExpression.Expression);
                 }
                 else if (expression is WildcardExpression)
                 {
