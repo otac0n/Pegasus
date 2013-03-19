@@ -10,11 +10,11 @@ namespace Pegasus.Compiler
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using Pegasus.Expressions;
     using Pegasus.Properties;
-    using System.Diagnostics.CodeAnalysis;
 
     internal class ReportLeftRecursionPass : CompilePass
     {

@@ -11,9 +11,8 @@ namespace Pegasus.Tests
     using System.IO;
     using System.Linq;
     using NUnit.Framework;
-    using Pegasus.Parser;
     using Pegasus.Expressions;
-    using Pegasus.Common;
+    using Pegasus.Parser;
 
     public class PegParserTests
     {
@@ -30,7 +29,7 @@ namespace Pegasus.Tests
         [Test]
         public void Parse_WithNoRules_YieldsEmptyGrammar()
         {
-            var subject = "";
+            var subject = string.Empty;
             var parser = new PegParser();
 
             var grammar = parser.Parse(subject);

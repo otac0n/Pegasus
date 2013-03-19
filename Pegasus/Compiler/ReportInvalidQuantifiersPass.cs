@@ -9,7 +9,6 @@
 namespace Pegasus.Compiler
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Pegasus.Expressions;
     using Pegasus.Properties;
 

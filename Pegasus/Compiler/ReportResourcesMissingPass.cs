@@ -8,10 +8,8 @@
 
 namespace Pegasus.Compiler
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using Pegasus.Expressions;
     using Pegasus.Properties;
 
@@ -53,7 +51,7 @@ namespace Pegasus.Compiler
             {
                 if (literalExpression.FromResource)
                 {
-                    result.AddError(literalExpression.Start, () => Resources.PEG0016_RESOURCES_NOT_SPECIFIED);
+                    this.result.AddError(literalExpression.Start, () => Resources.PEG0016_RESOURCES_NOT_SPECIFIED);
                 }
             }
         }

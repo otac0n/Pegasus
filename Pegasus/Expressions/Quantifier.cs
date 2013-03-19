@@ -8,7 +8,6 @@
 
 namespace Pegasus.Expressions
 {
-    using System;
     using Pegasus.Common;
 
     /// <summary>

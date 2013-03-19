@@ -29,7 +29,7 @@ namespace Pegasus.Expressions
         /// <param name="end">The cursor just after the <see cref="LiteralExpression"/>.</param>
         /// <param name="value">The literal value.</param>
         /// <param name="ignoreCase">A value indicating whether or not the expression should ignore case differences when matching.</param>
-        /// <param name="fromResource">a value indicating whether <paramref name="value"/> corresponds to a resource name or a literal value.</param>
+        /// <param name="fromResource">A value indicating whether <paramref name="value"/> corresponds to a resource name or a literal value.</param>
         public LiteralExpression(Cursor start, Cursor end, string value, bool ignoreCase = false, bool fromResource = false)
         {
             if (value == null)
@@ -53,10 +53,10 @@ namespace Pegasus.Expressions
         }
 
         /// <summary>
-        /// Gets a value indicating whether <see cref="Value"/> corresponds to a resource name or a literal value
+        /// Gets a value indicating whether <see cref="Value"/> corresponds to a resource name or a literal value.
         /// </summary>
         /// <value>
-        /// true, if <see cref="Value"/> corresponds to a resource name that will be used as the literal value; false, otherwise.
+        /// True, if <see cref="Value"/> corresponds to a resource name that will be used as the literal value; false, otherwise.
         /// </value>
         public bool FromResource
         {
