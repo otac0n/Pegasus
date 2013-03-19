@@ -27,7 +27,7 @@ namespace Pegasus.Compiler
 
         private static readonly Dictionary<string, string> ValuePatterns = new Dictionary<string, string>
         {
-            { "accessibility", @"\s*(public|internal)\s*" },
+            { "accessibility", @"^\s*(public|internal)\s*$" },
         };
 
         public override IList<string> ErrorsProduced

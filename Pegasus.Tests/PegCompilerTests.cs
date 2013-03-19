@@ -91,6 +91,20 @@ namespace Pegasus.Tests
         }
 
         [Test]
+        [TestCase("accessibility", "private")]
+        [TestCase("accessibility", "foo-public-foo")]
+        [TestCase("accessibility", "foo-internal-foo")]
+        public void Compile_WithInvalidSettingValue_YieldsError(string settingName, string value)
+        {
+            var grammar = new PegParser().Parse("@" + settingName + " {" + value + "}; a = 'OK';");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0012"));
+        }
+
+        [Test]
         public void Compile_WithUnrecognizedSetting_YieldsWarning()
         {
             var grammar = new PegParser().Parse("@barnacle OK; a = 'OK';");
