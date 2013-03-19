@@ -63,9 +63,11 @@
     <Compile Include="Compiler\PegCompiler.cs" />
     <Compile Include="Compiler\ReportConflictingNamesPass.cs" />
     <Compile Include="Compiler\ReportDuplicateRulesPass.cs" />
+    <Compile Include="Compiler\ReportInvalidQuantifiersPass.cs" />
     <Compile Include="Compiler\ReportLeftRecursionPass.cs" />
     <Compile Include="Compiler\ReportMissingRulesPass.cs" />
     <Compile Include="Compiler\ReportNoRulesPass.cs" />
+    <Compile Include="Compiler\ReportResourcesMissingPass.cs" />
     <Compile Include="Compiler\ReportRuleFlagsIssuesPass.cs" />
     <Compile Include="Compiler\ReportSettingsIssuesPass.cs" />
     <Compile Include="Compiler\ReportStartRuleNotFoundPass.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Expressions\NotCodeExpression.cs" />
     <Compile Include="Expressions\NotExpression.cs" />
     <Compile Include="Expressions\PrefixedExpression.cs" />
+    <Compile Include="Expressions\Quantifier.cs" />
     <Compile Include="Expressions\RepetitionExpression.cs" />
     <Compile Include="Expressions\Rule.cs" />
     <Compile Include="Expressions\SequenceExpression.cs" />

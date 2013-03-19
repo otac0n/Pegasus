@@ -20,6 +20,7 @@ namespace Pegasus.Compiler
             { "namespace", true },
             { "classname", true },
             { "accessibility", true },
+            { "resources", true },
             { "start", true },
             { "members", false },
             { "using", false },
@@ -32,7 +33,7 @@ namespace Pegasus.Compiler
 
         public override IList<string> ErrorsProduced
         {
-            get { return new[] { "PEG0006", "PEG0012" }; }
+            get { return new[] { "PEG0005", "PEG0012" }; }
         }
 
         public override IList<string> BlockedByErrors

@@ -1,0 +1,7 @@
+# Auto detect text files and perform line-ending normalization
+* text=auto
+
+# Add special handling for common file types.
+*.cs     diff=csharp
+*.sln    merge=union
+*.csproj merge=union

@@ -161,4 +161,11 @@
   <data name="PEG0014_INVALID_TYPE" xml:space="preserve">
     <value>Invalid type definition.</value>
   </data>
+  <data name="PEG0015_QUANTIFIER_INVALID" xml:space="preserve">
+    <value>This quantifier will always fail to match.</value>
+    <comment>warning</comment>
+  </data>
+  <data name="PEG0016_RESOURCES_NOT_SPECIFIED" xml:space="preserve">
+    <value>Resource-based literal expressions require a 'resources' setting.</value>
+  </data>
 </root>

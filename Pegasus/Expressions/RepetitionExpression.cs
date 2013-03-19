@@ -16,25 +16,27 @@ namespace Pegasus.Expressions
     public class RepetitionExpression : Expression
     {
         private readonly Expression expression;
-        private readonly int? max;
-        private readonly int min;
+        private readonly Quantifier quantifier;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RepetitionExpression"/> class.
         /// </summary>
         /// <param name="expression">The expression to be repeatedly matched.</param>
-        /// <param name="min">The minimum number of times to match.</param>
-        /// <param name="max">The maximum number of times to match, if limited; or null, otherwise.</param>
-        public RepetitionExpression(Expression expression, int min, int? max)
+        /// <param name="quantifier">The quantifier that specifies how many times to match and the delimiter of the matches.</param>
+        public RepetitionExpression(Expression expression, Quantifier quantifier)
         {
             if (expression == null)
             {
                 throw new ArgumentNullException("expression");
             }
 
+            if (quantifier == null)
+            {
+                throw new ArgumentNullException("quantifier");
+            }
+
             this.expression = expression;
-            this.min = min;
-            this.max = max;
+            this.quantifier = quantifier;
         }
 
         /// <summary>
@@ -46,19 +48,11 @@ namespace Pegasus.Expressions
         }
 
         /// <summary>
-        /// Gets the maximum number of times to match, if limited; or null, if there is no limit.
+        /// Gets the quantifier that specifies how many times to match and the delimiter of the matches.
         /// </summary>
-        public int? Max
+        public Quantifier Quantifier
         {
-            get { return this.max; }
-        }
-
-        /// <summary>
-        /// Gets the minimum number of times to match.
-        /// </summary>
-        public int Min
-        {
-            get { return this.min; }
+            get { return this.quantifier; }
         }
     }
 }

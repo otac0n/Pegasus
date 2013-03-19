@@ -185,5 +185,23 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0014_INVALID_TYPE", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This quantifier will always fail to match..
+        /// </summary>
+        internal static string PEG0015_QUANTIFIER_INVALID {
+            get {
+                return ResourceManager.GetString("PEG0015_QUANTIFIER_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resource-based literal expressions require a &apos;resources&apos; setting..
+        /// </summary>
+        internal static string PEG0016_RESOURCES_NOT_SPECIFIED {
+            get {
+                return ResourceManager.GetString("PEG0016_RESOURCES_NOT_SPECIFIED", resourceCulture);
+            }
+        }
     }
 }
