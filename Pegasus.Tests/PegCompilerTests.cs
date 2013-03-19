@@ -92,8 +92,6 @@ namespace Pegasus.Tests
 
         [Test]
         [TestCase("accessibility", "private")]
-        [TestCase("accessibility", "foo-public-foo")]
-        [TestCase("accessibility", "foo-internal-foo")]
         public void Compile_WithInvalidSettingValue_YieldsError(string settingName, string value)
         {
             var grammar = new PegParser().Parse("@" + settingName + " {" + value + "}; a = 'OK';");
