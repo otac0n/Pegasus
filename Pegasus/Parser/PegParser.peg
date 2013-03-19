@@ -191,7 +191,7 @@ typeName
 
 typeArgumentList
   = lt typeArguments gt
-
+   
 typeArguments
   = type comma typeArguments
   / type ""
@@ -279,16 +279,16 @@ simpleEscapeSequence
     }
 
 zeroEscapeSequence
-  = "\\0" !digit { "\x00" }
+  = "\\0" !digit { "\0" }
 
 hexEscapeSequence
-  = "\\x" h1:hexDigit h2:hexDigit {
-        ((char)Convert.ToInt32(h1 + h2, 16)).ToString()
+  = "\\x" digits:(hexDigit hexDigit) {
+        ((char)Convert.ToInt32(digits, 16)).ToString()
     }
 
 unicodeEscapeSequence
-  = "\\u" h1:hexDigit h2:hexDigit h3:hexDigit h4:hexDigit {
-        ((char)Convert.ToInt32(h1 + h2 + h3 + h4, 16)).ToString()
+  = "\\u" digits:(hexDigit hexDigit hexDigit hexDigit) {
+        ((char)Convert.ToInt32(digits, 16)).ToString()
     }
 
 eolEscapeSequence

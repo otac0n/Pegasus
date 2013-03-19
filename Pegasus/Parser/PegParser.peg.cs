@@ -3591,7 +3591,7 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
 #line 282 "PegParser.peg"
-                   "\x00" 
+                   "\0" 
 #line default
                     );
                 }
@@ -3616,31 +3616,39 @@ namespace
             if (r1 != null)
             {
                 IParseResult<string> r2 = null;
-                var h1Start = cursor;
-                r2 = this.hexDigit(ref cursor);
-                var h1End = cursor;
-                var h1 = ValueOrDefault(r2);
-                if (r2 != null)
+                var digitsStart = cursor;
+                var startCursor1 = cursor;
+                IParseResult<string> r3 = null;
+                r3 = this.hexDigit(ref cursor);
+                if (r3 != null)
                 {
-                    IParseResult<string> r3 = null;
-                    var h2Start = cursor;
-                    r3 = this.hexDigit(ref cursor);
-                    var h2End = cursor;
-                    var h2 = ValueOrDefault(r3);
-                    if (r3 != null)
+                    IParseResult<string> r4 = null;
+                    r4 = this.hexDigit(ref cursor);
+                    if (r4 != null)
                     {
-                        r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
-#line 285 "PegParser.peg"
-                                   
-        ((char)Convert.ToInt32(h1 + h2, 16)).ToString()
-    
-#line default
-                        );
+                        var len = cursor.Location - startCursor1.Location;
+                        r2 = new ParseResult<string>(startCursor1, cursor, cursor.Subject.Substring(startCursor1.Location, len));
                     }
                     else
                     {
-                        cursor = startCursor0;
+                        cursor = startCursor1;
                     }
+                }
+                else
+                {
+                    cursor = startCursor1;
+                }
+                var digitsEnd = cursor;
+                var digits = ValueOrDefault(r2);
+                if (r2 != null)
+                {
+                    r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
+#line 285 "PegParser.peg"
+                                      
+        ((char)Convert.ToInt32(digits, 16)).ToString()
+    
+#line default
+                    );
                 }
                 else
                 {
@@ -3663,55 +3671,57 @@ namespace
             if (r1 != null)
             {
                 IParseResult<string> r2 = null;
-                var h1Start = cursor;
-                r2 = this.hexDigit(ref cursor);
-                var h1End = cursor;
-                var h1 = ValueOrDefault(r2);
-                if (r2 != null)
+                var digitsStart = cursor;
+                var startCursor1 = cursor;
+                IParseResult<string> r3 = null;
+                r3 = this.hexDigit(ref cursor);
+                if (r3 != null)
                 {
-                    IParseResult<string> r3 = null;
-                    var h2Start = cursor;
-                    r3 = this.hexDigit(ref cursor);
-                    var h2End = cursor;
-                    var h2 = ValueOrDefault(r3);
-                    if (r3 != null)
+                    IParseResult<string> r4 = null;
+                    r4 = this.hexDigit(ref cursor);
+                    if (r4 != null)
                     {
-                        IParseResult<string> r4 = null;
-                        var h3Start = cursor;
-                        r4 = this.hexDigit(ref cursor);
-                        var h3End = cursor;
-                        var h3 = ValueOrDefault(r4);
-                        if (r4 != null)
+                        IParseResult<string> r5 = null;
+                        r5 = this.hexDigit(ref cursor);
+                        if (r5 != null)
                         {
-                            IParseResult<string> r5 = null;
-                            var h4Start = cursor;
-                            r5 = this.hexDigit(ref cursor);
-                            var h4End = cursor;
-                            var h4 = ValueOrDefault(r5);
-                            if (r5 != null)
+                            IParseResult<string> r6 = null;
+                            r6 = this.hexDigit(ref cursor);
+                            if (r6 != null)
                             {
-                                r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
-#line 290 "PegParser.peg"
-                                                           
-        ((char)Convert.ToInt32(h1 + h2 + h3 + h4, 16)).ToString()
-    
-#line default
-                                );
+                                var len = cursor.Location - startCursor1.Location;
+                                r2 = new ParseResult<string>(startCursor1, cursor, cursor.Subject.Substring(startCursor1.Location, len));
                             }
                             else
                             {
-                                cursor = startCursor0;
+                                cursor = startCursor1;
                             }
                         }
                         else
                         {
-                            cursor = startCursor0;
+                            cursor = startCursor1;
                         }
                     }
                     else
                     {
-                        cursor = startCursor0;
+                        cursor = startCursor1;
                     }
+                }
+                else
+                {
+                    cursor = startCursor1;
+                }
+                var digitsEnd = cursor;
+                var digits = ValueOrDefault(r2);
+                if (r2 != null)
+                {
+                    r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
+#line 290 "PegParser.peg"
+                                                        
+        ((char)Convert.ToInt32(digits, 16)).ToString()
+    
+#line default
+                    );
                 }
                 else
                 {
