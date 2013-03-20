@@ -126,5 +126,16 @@ namespace Pegasus.Tests
             var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0015"));
         }
+
+        [Test]
+        public void Compile_WithUnusedRules_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a = b; b = 'OK'; c = d; d = 'OK' c;");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0017"));
+        }
     }
 }
