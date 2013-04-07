@@ -1,0 +1,21 @@
+﻿{{
+    var mustMatch = (bool)model.MustMatch;
+    var expression = (Expression)model.Expression;
+    var startCursorName = this.CreateVariable("startCursor");
+    var oldResultName = this.currentResultName;
+    var oldResultType = this.currentResultType;
+    this.currentResultName = this.CreateVariable("r");
+    this.currentResultType = this.GetResultType(expression);
+}}
+var {{: startCursorName }} = cursor;
+IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
+{{@WalkExpression expression}}
+cursor = {{: startCursorName }};
+if ({{: this.currentResultName }} {{if mustMatch }}!={{else}}=={{/if}} null)
+{
+    {{: oldResultName }} = new ParseResult<string>(cursor, cursor, string.Empty);
+}
+{{
+    this.currentResultName = oldResultName;
+    this.currentResultType = oldResultType;
+}}

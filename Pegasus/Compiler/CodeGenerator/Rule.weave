@@ -1,0 +1,39 @@
+﻿@model Rule
+{{
+    this.currentResultName = this.CreateVariable("r");
+    this.currentResultType = this.GetResultType(model.Expression);
+    var memoize = model.Flags.Any(f => f.Name == "memoize");
+}}
+{{if model.Expression is TypedExpression}}
+    private IParseResult<
+    {{@RenderCode this.currentResultType}}
+    > {{: model.Identifier.Name}}(ref Cursor cursor)
+{{else}}
+    private IParseResult<{{= this.currentResultType }}> {{: model.Identifier.Name}}(ref Cursor cursor)
+{{/if}}
+{
+    IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
+    {{if memoize}}
+        var storageKey = {{= ToLiteral(model.Identifier.Name + ":") }} + cursor.StateKey + ":" + cursor.Location;
+        if (this.storage.ContainsKey(storageKey))
+        {
+            {{: this.currentResultName }} = (IParseResult<{{= this.currentResultType }}>)this.storage[storageKey];
+            if ({{: this.currentResultName }} != null)
+            {
+                cursor = {{: this.currentResultName }}.EndCursor;
+            }
+            return {{: this.currentResultName }};
+        }
+    {{/if}}
+    {{@WalkRule model}}
+    {{if memoize}}
+        this.storage[storageKey] = {{: this.currentResultName }};
+    {{/if}}
+    return {{: this.currentResultName }};
+}
+
+{{
+    this.currentResultName = null;
+    this.currentResultType = null;
+    this.variables.Clear();
+}}

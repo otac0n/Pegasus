@@ -1,0 +1,11 @@
+﻿@model CodeExpression
+{{
+    var startCursorName = this.CreateVariable("startCursor");
+}}
+var {{: startCursorName }} = cursor;
+{
+    var state = cursor.WithMutability(mutable: true);
+    {{@RenderCode model.CodeSpan}}
+    cursor = state.WithMutability(mutable: false);
+}
+{{: this.currentResultName }} = new ParseResult<string>({{: startCursorName }}, cursor, null);

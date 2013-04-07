@@ -48,6 +48,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +57,7 @@
     </Compile>
     <Compile Include="CompileManager.cs" />
     <Compile Include="CompilePegGrammar.cs" />
+    <Compile Include="Compiler\CodeGenerator.cs" />
     <Compile Include="Compiler\CompilePass.cs" />
     <Compile Include="Compiler\CompileResult.cs" />
     <Compile Include="Compiler\ExpressionTreeWalker.cs" />
@@ -105,6 +107,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <WeaveTemplate Include="Compiler\CodeGenerator\PrefixedExpression.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\Grammar.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\Code.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\Rule.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\ChoiceExpression.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\ClassExpression.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\CodeAssertion.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\LiteralExpression.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\NameExpression.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\CodeExpression.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\RepetitionExpression.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\Sequence.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\Assertion.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\SequenceExpression.weave" />
+    <WeaveTemplate Include="Compiler\CodeGenerator\WildcardExpression.weave" />
+    <None Include="Compiler\CodeGenerator\_config.weave" />
+    <None Include="packages.config" />
     <None Include="Parser\PegParser.peg" />
     <None Include="Pegasus.targets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -125,4 +144,5 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" Condition="Exists('$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets')" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="..\packages\Weave.1.0.0\tools\Weave.targets" />
 </Project>

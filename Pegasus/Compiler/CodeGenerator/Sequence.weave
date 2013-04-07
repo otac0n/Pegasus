@@ -1,0 +1,46 @@
+﻿{{
+    var finalResultName = (string)model.FinalResultName;
+    var finalResultType = (object)model.FinalResultType;
+    var index = (int)model.Index;
+    var sequence = (IList<Expression>)model.Sequence;
+    var startCursorName = (string)model.StartCursorName;
+
+    var expression = sequence[index];
+    var codeExpression = expression as CodeExpression;
+}}
+{{if expression == null}}
+    var len = cursor.Location - {{: startCursorName }}.Location;
+    {{: finalResultName }} = new ParseResult<string>({{: startCursorName }}, cursor, cursor.Subject.Substring({{: startCursorName }}.Location, len));
+{{elif codeExpression != null}}
+    {{if codeExpression.CodeType == CodeType.Result}}
+        {{: finalResultName }} = this.ReturnHelper<{{= finalResultType }}>({{: startCursorName }}, cursor, state =>
+            {{@RenderCode codeExpression.CodeSpan}}
+        );
+    {{elif codeExpression.CodeType == CodeType.Error}}
+        throw this.ExceptionHelper({{: startCursorName }}, state =>
+            {{@RenderCode codeExpression.CodeSpan}}
+        );
+    {{/if}}
+{{else}}
+    {{
+        bool isDefinition;
+        this.currentResultName = this.CreateVariable("r");
+        this.currentResultType = this.GetResultType(expression, out isDefinition);
+    }}
+    {{if isDefinition}}
+        IParseResult<
+            {{@RenderCode this.currentResultType}}
+        > {{: this.currentResultName }} = null;
+    {{else}}
+        IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
+    {{/if}}
+    {{@WalkExpression expression}}
+    if ({{: this.currentResultName }} != null)
+    {
+        {{@RenderSequence new { FinalResultName = finalResultName, FinalResultType = finalResultType, Index = index + 1, Sequence = sequence, StartCursorName = startCursorName } }}
+    }
+    else
+    {
+        cursor = {{: startCursorName }};
+    }
+{{/if}}

@@ -24,6 +24,9 @@ Thumbs.db
 TestResult.xml
 *.VisualState.xml
 
+# Ignore Weave generated files.
+*.weave.cs
+
 # Ignore NuGet files in the root.
 /*.nupkg
 

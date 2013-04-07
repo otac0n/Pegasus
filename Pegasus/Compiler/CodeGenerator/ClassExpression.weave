@@ -1,0 +1,5 @@
+﻿@model ClassExpression
+{{
+    var ranges = string.Join(string.Empty, model.Ranges.SelectMany(r => new[] { r.Min, r.Max }));
+}}
+{{: this.currentResultName }} = this.ParseClass(ref cursor, {{= ToLiteral(ranges) }}{{if model.Negated}}, negated: true{{/if}}{{if model.IgnoreCase}}, ignoreCase: true{{/if}});

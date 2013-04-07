@@ -1,0 +1,6 @@
+﻿@model LiteralExpression
+{{if model.FromResource}}
+    {{: this.currentResultName }} = this.ParseLiteral(ref cursor, ParserResources.ResourceManager.GetString({{= ToLiteral(model.Value) }}, ParserResources.Culture){{if model.IgnoreCase}}, ignoreCase: true{{/if}});
+{{else}}
+    {{: this.currentResultName }} = this.ParseLiteral(ref cursor, {{= ToLiteral(model.Value) }}{{if model.IgnoreCase}}, ignoreCase: true{{/if}});
+{{/if}}

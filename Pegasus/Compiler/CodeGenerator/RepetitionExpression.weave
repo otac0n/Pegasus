@@ -1,0 +1,54 @@
+﻿@model RepetitionExpression
+{{
+    var startCursorName = this.CreateVariable("startCursor");
+    var listName = this.CreateVariable("l");
+    var oldResultName = this.currentResultName;
+    var oldResultType = this.currentResultType;
+    var listResultType = this.GetResultType(model.Expression);
+}}
+var {{: startCursorName }} = cursor;
+var {{: listName }} = new List<{{= listResultType }}>();
+while ({{if model.Quantifier.Max.HasValue}}{{: listName }}.Count < {{= model.Quantifier.Max }}{{else}}true{{/if}})
+{
+    {{if model.Quantifier.Delimiter != null}}
+        {{
+            this.currentResultName = this.CreateVariable("r");
+            this.currentResultType = this.GetResultType(model.Quantifier.Delimiter);
+        }}
+        if ({{: listName }}.Count > 0)
+        {
+            IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
+            {{@WalkExpression model.Quantifier.Delimiter}}
+            if ({{: this.currentResultName }} == null)
+            {
+                break;
+            }
+        }
+    {{/if}}
+    {{
+        this.currentResultName = this.CreateVariable("r");
+        this.currentResultType = listResultType;
+    }}
+    IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
+    {{@WalkExpression model.Expression}}
+    if ({{: this.currentResultName }} != null)
+    {
+        {{: listName }}.Add({{: this.currentResultName }}.Value);
+    }
+    else
+    {
+        break;
+    }
+}
+{{
+    this.currentResultName = oldResultName;
+    this.currentResultType = oldResultType;
+}}
+if ({{: listName }}.Count >= {{= model.Quantifier.Min }})
+{
+    {{: this.currentResultName }} = new ParseResult<{{= this.GetResultType(model) }}>({{: startCursorName }}, cursor, {{: listName }}.AsReadOnly());
+}
+else
+{
+    cursor = {{: startCursorName }};
+}

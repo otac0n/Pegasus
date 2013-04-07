@@ -1,0 +1,10 @@
+﻿{{
+    var mustMatch = (bool)model.MustMatch;
+    var code = (CodeSpan)model.Code;
+}}
+if ({{if !mustMatch}}!{{/if}}new Func<Cursor, bool>(state =>
+    {{@RenderCode code}}
+)(cursor))
+{
+    {{: this.currentResultName }} = new ParseResult<string>(cursor, cursor, string.Empty);
+}
