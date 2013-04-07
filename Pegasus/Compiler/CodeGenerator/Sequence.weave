@@ -15,11 +15,11 @@
     {{if codeExpression.CodeType == CodeType.Result}}
         {{: finalResultName }} = this.ReturnHelper<{{= finalResultType }}>({{: startCursorName }}, cursor, state =>
             {{@RenderCode codeExpression.CodeSpan}}
-        );
+            );
     {{elif codeExpression.CodeType == CodeType.Error}}
         throw this.ExceptionHelper({{: startCursorName }}, state =>
             {{@RenderCode codeExpression.CodeSpan}}
-        );
+            );
     {{/if}}
 {{else}}
     {{
@@ -30,7 +30,7 @@
     {{if isDefinition}}
         IParseResult<
             {{@RenderCode this.currentResultType}}
-        > {{: this.currentResultName }} = null;
+            > {{: this.currentResultName }} = null;
     {{else}}
         IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
     {{/if}}

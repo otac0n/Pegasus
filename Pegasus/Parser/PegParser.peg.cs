@@ -10,7 +10,6 @@
 namespace
 #line 1 "PegParser.peg"
            Pegasus.Parser
-
 #line default
 {
     using System;
@@ -19,41 +18,34 @@ namespace
     using
         #line 3 "PegParser.peg"
        System.Globalization
-
         #line default
-    ;
+        ;
     using
         #line 4 "PegParser.peg"
        System.Linq
-
         #line default
-    ;
+        ;
     using
         #line 5 "PegParser.peg"
        System.Text.RegularExpressions
-
         #line default
-    ;
+        ;
     using
         #line 6 "PegParser.peg"
        Pegasus.Expressions
-
         #line default
-    ;
+        ;
     using
         #line 7 "PegParser.peg"
        Pegasus.Properties
-
-
         #line default
-    ;
+        ;
 
     [System.CodeDom.Compiler.GeneratedCode("Pegasus", "2.3.0.0")]
     public
     partial class
     #line 2 "PegParser.peg"
            PegParser
-
     #line default
     {
         private Dictionary<string, object> storage;
@@ -77,10 +69,10 @@ namespace
         }
 
         private IParseResult<
-        #line 9 "PegParser.peg"
+            #line 9 "PegParser.peg"
          Grammar
-        #line default
-        > grammar(ref Cursor cursor)
+            #line default
+            > grammar(ref Cursor cursor)
         {
             IParseResult<Grammar> r0 = null;
             var startCursor0 = cursor;
@@ -154,9 +146,8 @@ namespace
                                 #line 10 "PegParser.peg"
                                           
         new Grammar(rules, settings, rulesEnd)
-    
                                 #line default
-                            );
+                                );
                         }
                         else
                         {
@@ -181,10 +172,10 @@ namespace
         }
 
         private IParseResult<
-        #line 14 "PegParser.peg"
+            #line 14 "PegParser.peg"
          KeyValuePair<Identifier, object>
-        #line default
-        > setting(ref Cursor cursor)
+            #line default
+            > setting(ref Cursor cursor)
         {
             IParseResult<KeyValuePair<Identifier, object>> r0 = null;
             var startCursor0 = cursor;
@@ -203,7 +194,7 @@ namespace
                         #line 15 "PegParser.peg"
                                object
                         #line default
-                    > r3 = null;
+                        > r3 = null;
                     var valueStart = cursor;
                     if (r3 == null)
                     {
@@ -251,9 +242,8 @@ namespace
                                 #line 15 "PegParser.peg"
                                                                          
         new KeyValuePair<Identifier, object>(key, value)
-    
                                 #line default
-                            );
+                                );
                         }
                         else
                         {
@@ -385,10 +375,10 @@ namespace
         }
 
         private IParseResult<
-        #line 22 "PegParser.peg"
+            #line 22 "PegParser.peg"
       Rule
-        #line default
-        > rule(ref Cursor cursor)
+            #line default
+            > rule(ref Cursor cursor)
         {
             IParseResult<Rule> r0 = null;
             var startCursor0 = cursor;
@@ -504,7 +494,7 @@ namespace
             flags: flags);
     }
                                         #line default
-                                    );
+                                        );
                                 }
                                 else
                                 {
@@ -539,10 +529,10 @@ namespace
         }
 
         private IParseResult<
-        #line 31 "PegParser.peg"
+            #line 31 "PegParser.peg"
           Identifier
-        #line default
-        > ruleFlag(ref Cursor cursor)
+            #line default
+            > ruleFlag(ref Cursor cursor)
         {
             IParseResult<Identifier> r0 = null;
             var storageKey = "ruleFlag:" + cursor.StateKey + ":" + cursor.Location;
@@ -569,9 +559,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<Identifier>(startCursor0, cursor, state =>
                         #line 32 "PegParser.peg"
-                          flag 
+                          flag
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -587,10 +577,10 @@ namespace
         }
 
         private IParseResult<
-        #line 34 "PegParser.peg"
+            #line 34 "PegParser.peg"
             Expression
-        #line default
-        > expression(ref Cursor cursor)
+            #line default
+            > expression(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             var choiceStart = cursor;
@@ -601,10 +591,10 @@ namespace
         }
 
         private IParseResult<
-        #line 37 "PegParser.peg"
+            #line 37 "PegParser.peg"
                 CodeSpan
-        #line default
-        > expressionType(ref Cursor cursor)
+            #line default
+            > expressionType(ref Cursor cursor)
         {
             IParseResult<CodeSpan> r0 = null;
             var storageKey = "expressionType:" + cursor.StateKey + ":" + cursor.Location;
@@ -637,9 +627,9 @@ namespace
                         {
                             r0 = this.ReturnHelper<CodeSpan>(startCursor0, cursor, state =>
                                 #line 38 "PegParser.peg"
-                      name 
+                      name
                                 #line default
-                            );
+                                );
                         }
                         else
                         {
@@ -665,9 +655,9 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
                         #line 39 "PegParser.peg"
-               "PEG0014:" + Resources.PEG0014_INVALID_TYPE 
+               "PEG0014:" + Resources.PEG0014_INVALID_TYPE
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -679,10 +669,10 @@ namespace
         }
 
         private IParseResult<
-        #line 41 "PegParser.peg"
+            #line 41 "PegParser.peg"
         Expression
-        #line default
-        > choice(ref Cursor cursor)
+            #line default
+            > choice(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             var startCursor0 = cursor;
@@ -726,9 +716,9 @@ namespace
             {
                 r0 = this.ReturnHelper<Expression>(startCursor0, cursor, state =>
                     #line 42 "PegParser.peg"
-                                 choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) 
+                                 choices.Count == 1 ? choices[0] : new ChoiceExpression(choices)
                     #line default
-                );
+                    );
             }
             else
             {
@@ -738,10 +728,10 @@ namespace
         }
 
         private IParseResult<
-        #line 44 "PegParser.peg"
+            #line 44 "PegParser.peg"
           Expression
-        #line default
-        > sequence(ref Cursor cursor)
+            #line default
+            > sequence(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             if (r0 == null)
@@ -787,9 +777,8 @@ namespace
                             #line 45 "PegParser.peg"
                                    
         new SequenceExpression(elements.Concat(new Expression[] { code }))
-    
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -839,9 +828,8 @@ namespace
         elements.Count == 1
             ? elements[0]
             : new SequenceExpression(elements)
-    
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -852,10 +840,10 @@ namespace
         }
 
         private IParseResult<
-        #line 54 "PegParser.peg"
+            #line 54 "PegParser.peg"
          Expression
-        #line default
-        > labeled(ref Cursor cursor)
+            #line default
+            > labeled(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             var storageKey = "labeled:" + cursor.StateKey + ":" + cursor.Location;
@@ -893,9 +881,8 @@ namespace
                                 #line 55 "PegParser.peg"
                                                 
         new PrefixedExpression(label, expression)
-    
                                 #line default
-                            );
+                                );
                         }
                         else
                         {
@@ -939,9 +926,9 @@ namespace
                     {
                         r0 = this.ReturnHelper<Expression>(startCursor1, cursor, state =>
                             #line 59 "PegParser.peg"
-                             code 
+                             code
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -958,10 +945,10 @@ namespace
         }
 
         private IParseResult<
-        #line 61 "PegParser.peg"
+            #line 61 "PegParser.peg"
           Expression
-        #line default
-        > prefixed(ref Cursor cursor)
+            #line default
+            > prefixed(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             if (r0 == null)
@@ -982,9 +969,8 @@ namespace
                             #line 62 "PegParser.peg"
                    
         new AndCodeExpression(code)
-    
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -1014,9 +1000,8 @@ namespace
                             #line 65 "PegParser.peg"
                              
         new AndExpression(expression)
-    
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -1046,9 +1031,8 @@ namespace
                             #line 68 "PegParser.peg"
                    
         new NotCodeExpression(code)
-    
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -1078,9 +1062,8 @@ namespace
                             #line 71 "PegParser.peg"
                              
         new NotExpression(expression)
-    
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -1100,10 +1083,10 @@ namespace
         }
 
         private IParseResult<
-        #line 76 "PegParser.peg"
+            #line 76 "PegParser.peg"
           Expression
-        #line default
-        > suffixed(ref Cursor cursor)
+            #line default
+            > suffixed(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             if (r0 == null)
@@ -1127,9 +1110,8 @@ namespace
                             #line 77 "PegParser.peg"
                                      
         new RepetitionExpression(expression, q)
-    
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -1149,10 +1131,10 @@ namespace
         }
 
         private IParseResult<
-        #line 82 "PegParser.peg"
+            #line 82 "PegParser.peg"
          Expression
-        #line default
-        > primary(ref Cursor cursor)
+            #line default
+            > primary(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             var storageKey = "primary:" + cursor.StateKey + ":" + cursor.Location;
@@ -1188,9 +1170,9 @@ namespace
                     {
                         r0 = this.ReturnHelper<Expression>(startCursor0, cursor, state =>
                             #line 83 "PegParser.peg"
-                                      new NameExpression(name) 
+                                      new NameExpression(name)
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -1219,9 +1201,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<Expression>(startCursor2, cursor, state =>
                         #line 86 "PegParser.peg"
-          new WildcardExpression() 
+          new WildcardExpression()
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -1282,7 +1264,7 @@ namespace
         return typeValue != null ? new TypedExpression(typeValue, expression) : expression;
     }
                                     #line default
-                                );
+                                    );
                             }
                             else
                             {
@@ -1309,10 +1291,10 @@ namespace
         }
 
         private IParseResult<
-        #line 92 "PegParser.peg"
+            #line 92 "PegParser.peg"
             Quantifier
-        #line default
-        > quantifier(ref Cursor cursor)
+            #line default
+            > quantifier(ref Cursor cursor)
         {
             IParseResult<Quantifier> r0 = null;
             var storageKey = "quantifier:" + cursor.StateKey + ":" + cursor.Location;
@@ -1337,9 +1319,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<Quantifier>(startCursor0, cursor, state =>
                         #line 93 "PegParser.peg"
-                 new Quantifier(qStart, qEnd, min: 0, max: 1) 
+                 new Quantifier(qStart, qEnd, min: 0, max: 1)
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -1358,9 +1340,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<Quantifier>(startCursor1, cursor, state =>
                         #line 94 "PegParser.peg"
-             new Quantifier(qStart, qEnd, min: 0, max: null) 
+             new Quantifier(qStart, qEnd, min: 0, max: null)
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -1379,9 +1361,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<Quantifier>(startCursor2, cursor, state =>
                         #line 95 "PegParser.peg"
-             new Quantifier(qStart, qEnd, min: 1, max: null) 
+             new Quantifier(qStart, qEnd, min: 1, max: null)
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -1480,9 +1462,9 @@ namespace
                                         {
                                             r0 = this.ReturnHelper<Quantifier>(startCursor3, cursor, state =>
                                                 #line 96 "PegParser.peg"
-                                                                             new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter.SingleOrDefault()) 
+                                                                             new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter.SingleOrDefault())
                                                 #line default
-                                            );
+                                                );
                                         }
                                         else
                                         {
@@ -1578,9 +1560,9 @@ namespace
                                 {
                                     r0 = this.ReturnHelper<Quantifier>(startCursor6, cursor, state =>
                                         #line 97 "PegParser.peg"
-                                                   new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault()) 
+                                                   new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault())
                                         #line default
-                                    );
+                                        );
                                 }
                                 else
                                 {
@@ -1633,9 +1615,9 @@ namespace
                         {
                             r0 = this.ReturnHelper<Quantifier>(startCursor8, cursor, state =>
                                 #line 98 "PegParser.peg"
-                                    new Quantifier(startStart, endEnd, min: count, max: count) 
+                                    new Quantifier(startStart, endEnd, min: count, max: count)
                                 #line default
-                            );
+                                );
                         }
                         else
                         {
@@ -1657,10 +1639,10 @@ namespace
         }
 
         private IParseResult<
-        #line 100 "PegParser.peg"
+            #line 100 "PegParser.peg"
          int
-        #line default
-        > integer(ref Cursor cursor)
+            #line default
+            > integer(ref Cursor cursor)
         {
             IParseResult<int> r0 = null;
             var startCursor0 = cursor;
@@ -1695,9 +1677,9 @@ namespace
             {
                 r0 = this.ReturnHelper<int>(startCursor0, cursor, state =>
                     #line 101 "PegParser.peg"
-                    int.Parse(string.Concat(digits)) 
+                    int.Parse(string.Concat(digits))
                     #line default
-                );
+                    );
             }
             else
             {
@@ -1707,10 +1689,10 @@ namespace
         }
 
         private IParseResult<
-        #line 103 "PegParser.peg"
+            #line 103 "PegParser.peg"
         Expression
-        #line default
-        > action(ref Cursor cursor)
+            #line default
+            > action(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             var startCursor0 = cursor;
@@ -1730,9 +1712,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<Expression>(startCursor0, cursor, state =>
                         #line 104 "PegParser.peg"
-                                new CodeExpression(code, type) 
+                                new CodeExpression(code, type)
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -1747,10 +1729,10 @@ namespace
         }
 
         private IParseResult<
-        #line 106 "PegParser.peg"
+            #line 106 "PegParser.peg"
             CodeType
-        #line default
-        > actionType(ref Cursor cursor)
+            #line default
+            > actionType(ref Cursor cursor)
         {
             IParseResult<CodeType> r0 = null;
             if (r0 == null)
@@ -1762,9 +1744,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<CodeType>(startCursor0, cursor, state =>
                         #line 107 "PegParser.peg"
-                CodeType.Error 
+                CodeType.Error
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -1780,9 +1762,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<CodeType>(startCursor1, cursor, state =>
                         #line 108 "PegParser.peg"
-                CodeType.State 
+                CodeType.State
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -1794,18 +1776,18 @@ namespace
                 var startCursor2 = cursor;
                 r0 = this.ReturnHelper<CodeType>(startCursor2, cursor, state =>
                     #line 109 "PegParser.peg"
-                CodeType.Result 
+                CodeType.Result
                     #line default
-                );
+                    );
             }
             return r0;
         }
 
         private IParseResult<
-        #line 111 "PegParser.peg"
+            #line 111 "PegParser.peg"
       CodeSpan
-        #line default
-        > code(ref Cursor cursor)
+            #line default
+            > code(ref Cursor cursor)
         {
             IParseResult<CodeSpan> r0 = null;
             if (r0 == null)
@@ -1832,9 +1814,9 @@ namespace
                             {
                                 r0 = this.ReturnHelper<CodeSpan>(startCursor0, cursor, state =>
                                     #line 112 "PegParser.peg"
-                                        new CodeSpan(contents, contentsStart, contentsEnd) 
+                                        new CodeSpan(contents, contentsStart, contentsEnd)
                                     #line default
-                                );
+                                    );
                             }
                             else
                             {
@@ -1865,9 +1847,9 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
                         #line 113 "PegParser.peg"
-                "PEG0011:" + Resources.PEG0011_UNTERMINATED_CODE 
+                "PEG0011:" + Resources.PEG0011_UNTERMINATED_CODE
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -1948,9 +1930,9 @@ namespace
             {
                 r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                     #line 116 "PegParser.peg"
-                                                          string.Concat(parts) 
+                                                          string.Concat(parts)
                     #line default
-                );
+                    );
             }
             else
             {
@@ -1994,9 +1976,9 @@ namespace
             {
                 r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                     #line 119 "PegParser.peg"
-                               string.Concat(chars) 
+                               string.Concat(chars)
                     #line default
-                );
+                    );
             }
             else
             {
@@ -2026,9 +2008,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 124 "PegParser.peg"
-                     "=" 
+                     "="
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2056,9 +2038,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 125 "PegParser.peg"
-                     ":" 
+                     ":"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2086,9 +2068,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 126 "PegParser.peg"
-                     ";" 
+                     ";"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2116,9 +2098,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 127 "PegParser.peg"
-                     "/" 
+                     "/"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2146,9 +2128,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 128 "PegParser.peg"
-                     "&" 
+                     "&"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2176,9 +2158,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 129 "PegParser.peg"
-                     "!" 
+                     "!"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2206,9 +2188,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 130 "PegParser.peg"
-                     "?" 
+                     "?"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2236,9 +2218,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 131 "PegParser.peg"
-                     "*" 
+                     "*"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2266,9 +2248,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 132 "PegParser.peg"
-                     "+" 
+                     "+"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2296,9 +2278,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 133 "PegParser.peg"
-                     "(" 
+                     "("
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2326,9 +2308,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 134 "PegParser.peg"
-                     ")" 
+                     ")"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2356,9 +2338,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 135 "PegParser.peg"
-                     "." 
+                     "."
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2386,9 +2368,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 136 "PegParser.peg"
-                     "." 
+                     "."
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2416,9 +2398,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 137 "PegParser.peg"
-                     "." 
+                     "."
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2446,9 +2428,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 138 "PegParser.peg"
-                     "," 
+                     ","
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2476,9 +2458,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 139 "PegParser.peg"
-                     "[" 
+                     "["
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2506,9 +2488,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 140 "PegParser.peg"
-                     "]" 
+                     "]"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2523,10 +2505,10 @@ namespace
         }
 
         private IParseResult<
-        #line 142 "PegParser.peg"
+            #line 142 "PegParser.peg"
             Identifier
-        #line default
-        > identifier(ref Cursor cursor)
+            #line default
+            > identifier(ref Cursor cursor)
         {
             IParseResult<Identifier> r0 = null;
             var storageKey = "identifier:" + cursor.StateKey + ":" + cursor.Location;
@@ -2617,9 +2599,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<Identifier>(startCursor0, cursor, state =>
                         #line 143 "PegParser.peg"
-                                                     new Identifier(name, nameStart, nameEnd) 
+                                                     new Identifier(name, nameStart, nameEnd)
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -2635,10 +2617,10 @@ namespace
         }
 
         private IParseResult<
-        #line 145 "PegParser.peg"
+            #line 145 "PegParser.peg"
       CodeSpan
-        #line default
-        > type(ref Cursor cursor)
+            #line default
+            > type(ref Cursor cursor)
         {
             IParseResult<CodeSpan> r0 = null;
             var startCursor0 = cursor;
@@ -2693,9 +2675,9 @@ namespace
             {
                 r0 = this.ReturnHelper<CodeSpan>(startCursor0, cursor, state =>
                     #line 146 "PegParser.peg"
-                                          new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) 
+                                          new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", "))
                     #line default
-                );
+                    );
             }
             else
             {
@@ -3048,10 +3030,10 @@ namespace
         }
 
         private IParseResult<
-        #line 172 "PegParser.peg"
+            #line 172 "PegParser.peg"
          Expression
-        #line default
-        > literal(ref Cursor cursor)
+            #line default
+            > literal(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             var startCursor0 = cursor;
@@ -3105,9 +3087,8 @@ namespace
                             #line 173 "PegParser.peg"
                                                                                            
         new LiteralExpression(valueStart, flagsEnd, value, ignoreCase: flags.Contains('i'), fromResource: flags.Contains('r'))
-    
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -3150,9 +3131,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 178 "PegParser.peg"
-                                                          @string 
+                                                          @string
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -3211,9 +3192,9 @@ namespace
                         {
                             r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                                 #line 181 "PegParser.peg"
-                                           string.Concat(chars) 
+                                           string.Concat(chars)
                                 #line default
-                            );
+                                );
                         }
                         else
                         {
@@ -3239,9 +3220,9 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor2, state =>
                         #line 182 "PegParser.peg"
-                "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING 
+                "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -3316,9 +3297,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 193 "PegParser.peg"
-                                     @char 
+                                     @char
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -3377,9 +3358,9 @@ namespace
                         {
                             r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                                 #line 196 "PegParser.peg"
-                                           string.Concat(chars) 
+                                           string.Concat(chars)
                                 #line default
-                            );
+                                );
                         }
                         else
                         {
@@ -3405,9 +3386,9 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor2, state =>
                         #line 197 "PegParser.peg"
-                "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING 
+                "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -3482,9 +3463,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 208 "PegParser.peg"
-                                     @char 
+                                     @char
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -3499,10 +3480,10 @@ namespace
         }
 
         private IParseResult<
-        #line 210 "PegParser.peg"
+            #line 210 "PegParser.peg"
        Expression
-        #line default
-        > @class(ref Cursor cursor)
+            #line default
+            > @class(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
             var startCursor0 = cursor;
@@ -3585,9 +3566,9 @@ namespace
                             var startCursor3 = cursor;
                             throw this.ExceptionHelper(startCursor3, state =>
                                 #line 211 "PegParser.peg"
-                                                                                   "PEG0010:" + Resources.PEG0010_UNTERMINATED_CLASS 
+                                                                                   "PEG0010:" + Resources.PEG0010_UNTERMINATED_CLASS
                                 #line default
-                            );
+                                );
                         }
                         if (r6 != null)
                         {
@@ -3631,9 +3612,8 @@ namespace
             parts,
             negated: inverted.SingleOrDefault() == "^",
             ignoreCase: flags.SingleOrDefault() == "i")
-    
                                         #line default
-                                    );
+                                        );
                                 }
                                 else
                                 {
@@ -3668,10 +3648,10 @@ namespace
         }
 
         private IParseResult<
-        #line 218 "PegParser.peg"
+            #line 218 "PegParser.peg"
                      CharacterRange
-        #line default
-        > classCharacterRange(ref Cursor cursor)
+            #line default
+            > classCharacterRange(ref Cursor cursor)
         {
             IParseResult<CharacterRange> r0 = null;
             var startCursor0 = cursor;
@@ -3697,9 +3677,8 @@ namespace
                             #line 219 "PegParser.peg"
                                                                        
         new CharacterRange(begin[0], end[0])
-    
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -3719,10 +3698,10 @@ namespace
         }
 
         private IParseResult<
-        #line 223 "PegParser.peg"
+            #line 223 "PegParser.peg"
                 CharacterRange
-        #line default
-        > classCharacter(ref Cursor cursor)
+            #line default
+            > classCharacter(ref Cursor cursor)
         {
             IParseResult<CharacterRange> r0 = null;
             var startCursor0 = cursor;
@@ -3737,9 +3716,8 @@ namespace
                     #line 224 "PegParser.peg"
                                      
         new CharacterRange(char_[0], char_[0])
-    
                     #line default
-                );
+                    );
             }
             else
             {
@@ -3813,9 +3791,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 237 "PegParser.peg"
-                                     @char 
+                                     @char
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -3880,9 +3858,8 @@ namespace
             .Replace("r", "\r")
             .Replace("t", "\t")
             .Replace("v", "\v")
-    
                             #line default
-                        );
+                            );
                     }
                     else
                     {
@@ -3922,9 +3899,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 251 "PegParser.peg"
-                   "\0" 
+                   "\0"
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -3977,9 +3954,8 @@ namespace
                         #line 254 "PegParser.peg"
                                       
         ((char)Convert.ToInt32(digits, 16)).ToString()
-    
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -4050,9 +4026,8 @@ namespace
                         #line 259 "PegParser.peg"
                                                         
         ((char)Convert.ToInt32(digits, 16)).ToString()
-    
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -4083,9 +4058,9 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 264 "PegParser.peg"
-                   eol 
+                   eol
                         #line default
-                    );
+                        );
                 }
                 else
                 {
@@ -4422,9 +4397,9 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
                         #line 309 "PegParser.peg"
-                         "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected) 
+                         "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected)
                         #line default
-                    );
+                        );
                 }
                 else
                 {

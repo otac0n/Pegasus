@@ -4,7 +4,7 @@
 }}
 if ({{if !mustMatch}}!{{/if}}new Func<Cursor, bool>(state =>
     {{@RenderCode code}}
-)(cursor))
+    )(cursor))
 {
     {{: this.currentResultName }} = new ParseResult<string>(cursor, cursor, string.Empty);
 }

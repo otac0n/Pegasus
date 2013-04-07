@@ -1,5 +1,4 @@
 ﻿@model PrefixedExpression
-
 var {{: model.Prefix.Name + "Start" }} = cursor;
 {{@WalkExpression model.Expression}}
 var {{: model.Prefix.Name + "End" }} = cursor;

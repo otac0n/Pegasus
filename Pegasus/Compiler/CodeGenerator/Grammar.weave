@@ -31,12 +31,12 @@ namespace
     {{each @using in settings["using"]}}
         using
             {{@RenderCode @using}}
-        ;
+            ;
     {{/each}}
     {{if resources != null}}
         using ParserResources =
             {{@RenderCode resources}}
-        ;
+            ;
     {{/if}}
 
     [System.CodeDom.Compiler.GeneratedCode("{{= assemblyName.Name }}", "{{= assemblyName.Version }}")]

@@ -1,7 +1,7 @@
 ﻿@model object
 {{ var span = model as CodeSpan; }}
 {{if span != null}}
-    #line {{= span.Start.Line }} "{{= Path.GetFileName(span.Start.FileName) }}"{{ writer.WriteLine(); }}{{= new string(' ', span.Start.Column - 1) }}{{= span.Code }}
+    #line {{= span.Start.Line }} "{{= Path.GetFileName(span.Start.FileName) }}"{{ writer.WriteLine(); }}{{= new string(' ', span.Start.Column - 1) }}{{= span.Code.TrimEnd() }}
     #line default
 {{else}}
     {{ var value = model.ToString(); }}
