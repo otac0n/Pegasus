@@ -15,7 +15,10 @@ namespace Pegasus.Common
     /// <summary>
     /// Represents a location within a parsing subject.
     /// </summary>
+#if !PORTABLE
+
     [Serializable]
+#endif
     public class Cursor : IEquatable<Cursor>
     {
         private readonly int column;

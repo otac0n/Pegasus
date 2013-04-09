@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{88F8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Common", "Pegasus.Common\Pegasus.Common.csproj", "{1FC19ADF-446F-4118-8189-C25AADF12397}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Common.Portable", "Pegasus.Common\Pegasus.Common.Portable.csproj", "{21772B0C-0206-4ABD-B88B-41EE4CFCA47E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{1FC19ADF-446F-4118-8189-C25AADF12397}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FC19ADF-446F-4118-8189-C25AADF12397}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FC19ADF-446F-4118-8189-C25AADF12397}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21772B0C-0206-4ABD-B88B-41EE4CFCA47E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21772B0C-0206-4ABD-B88B-41EE4CFCA47E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21772B0C-0206-4ABD-B88B-41EE4CFCA47E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21772B0C-0206-4ABD-B88B-41EE4CFCA47E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
