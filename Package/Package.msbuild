@@ -10,14 +10,14 @@
     <MSBuild Projects="$(SolutionDir)Pegasus.sln" Properties="Configuration=$(Configuration)" Targets="Rebuild" />
   </Target>
   <Target Name="Package" DependsOnTargets="Build">
-    <MakeDir Directories="bin;obj;obj\lib\net40;obj\lib\portable-net45+sl4+win8" />
+    <MakeDir Directories="bin;obj;obj\lib\net40;obj\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\tools" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.targets" DestinationFolder="obj\tools" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\tools" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\lib\net40" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\lib\portable-net45+sl4+win8" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\lib\portable-net45+sl4+win8" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\lib\portable-sl4+win8" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\readme.txt" />
     <Copy SourceFiles="Install.ps1" DestinationFolder="obj\tools" />
     <Copy SourceFiles="Uninstall.ps1" DestinationFolder="obj\tools" />
