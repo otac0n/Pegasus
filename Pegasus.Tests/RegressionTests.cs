@@ -37,5 +37,15 @@ namespace Pegasus.Tests
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0012"));
         }
+
+        [Test(Description = "GitHub bug #30")]
+        public void Compile_WhenGivenAGrammarWithUnusedRules_YieldsNoErrors()
+        {
+            var grammar = new PegParser().Parse("i = 'OK'; unused = '';");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
+        }
     }
 }

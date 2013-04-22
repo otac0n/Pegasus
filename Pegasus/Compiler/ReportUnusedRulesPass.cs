@@ -61,7 +61,7 @@ namespace Pegasus.Compiler
                 foreach (var ruleName in unusedRules)
                 {
                     var rule = rules[ruleName];
-                    this.result.AddError(rule.Identifier.Start, () => Resources.PEG0017_UNUSED_RULE, rule.Identifier.Name);
+                    this.result.AddWarning(rule.Identifier.Start, () => Resources.PEG0017_UNUSED_RULE, rule.Identifier.Name);
                 }
             }
 

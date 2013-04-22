@@ -33,6 +33,7 @@ namespace Pegasus.Tests
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0001"));
+            Assert.That(error.IsWarning, Is.False);
         }
 
         [Test]
@@ -44,6 +45,7 @@ namespace Pegasus.Tests
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0002"));
+            Assert.That(error.IsWarning, Is.False);
         }
 
         [Test]
@@ -55,6 +57,7 @@ namespace Pegasus.Tests
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0003"));
+            Assert.That(error.IsWarning, Is.False);
         }
 
         [Test]
@@ -75,6 +78,7 @@ namespace Pegasus.Tests
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0004"));
+            Assert.That(error.IsWarning, Is.False);
         }
 
         [Test]
@@ -88,6 +92,7 @@ namespace Pegasus.Tests
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0005"));
+            Assert.That(error.IsWarning, Is.False);
         }
 
         [Test]
@@ -100,6 +105,7 @@ namespace Pegasus.Tests
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0012"));
+            Assert.That(error.IsWarning, Is.False);
         }
 
         [Test]
@@ -111,6 +117,7 @@ namespace Pegasus.Tests
 
             var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0006"));
+            Assert.That(error.IsWarning, Is.True);
         }
 
         [Test]
@@ -125,6 +132,7 @@ namespace Pegasus.Tests
 
             var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0015"));
+            Assert.That(error.IsWarning, Is.True);
         }
 
         [Test]
@@ -136,6 +144,7 @@ namespace Pegasus.Tests
 
             var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0017"));
+            Assert.That(error.IsWarning, Is.True);
         }
     }
 }
