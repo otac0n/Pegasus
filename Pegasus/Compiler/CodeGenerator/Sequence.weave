@@ -20,6 +20,8 @@
         throw this.ExceptionHelper({{: startCursorName }}, state =>
             {{@RenderCode codeExpression.CodeSpan}}
             );
+    {{else}}
+        {{@RenderCodeExpression codeExpression}}
     {{/if}}
 {{else}}
     {{

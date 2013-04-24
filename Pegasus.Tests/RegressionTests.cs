@@ -47,5 +47,15 @@ namespace Pegasus.Tests
 
             Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
         }
+
+        [Test(Description = "GitHub bug #31")]
+        public void Compile_WhenARuleContainsAStateExpressionAsPartOfASequence_IncludesTheContentOfThatStateExpression()
+        {
+            var grammar = new PegParser().Parse("foo = #STATE{TEST} 'OK';");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Code, Contains.Substring("TEST"));
+        }
     }
 }
