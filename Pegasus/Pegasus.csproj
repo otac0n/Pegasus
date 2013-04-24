@@ -6,6 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{58F12D13-9997-4C29-90CE-3C6C7409BA68}</ProjectGuid>
     <OutputType>Exe</OutputType>
+    <StartupObject>Pegasus.Program</StartupObject>
+    <ApplicationIcon>..\Pegasus.ico</ApplicationIcon>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pegasus</RootNamespace>
     <AssemblyName>Pegasus</AssemblyName>
@@ -15,7 +17,6 @@
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -28,7 +29,6 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -38,12 +38,6 @@
     <DocumentationFile>bin\Release\Pegasus.xml</DocumentationFile>
     <CodeAnalysisRuleSet>..\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Pegasus.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>..\Pegasus.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />

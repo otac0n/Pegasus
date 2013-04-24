@@ -27,8 +27,5 @@ TestResult.xml
 # Ignore Weave generated files.
 *.weave.cs
 
-# Ignore NuGet files in the root.
-/*.nupkg
-
-# Use NuGet Package Restore for packages.
+# Ignore NuGet packages (let package restore handle these)
 /packages/

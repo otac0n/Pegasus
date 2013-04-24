@@ -1,4 +1,13 @@
 <StyleCopSettings Version="105">
+  <Parsers>
+    <Parser ParserId="StyleCop.CSharp.CsParser">
+      <ParserSettings>
+        <CollectionProperty Name="GeneratedFileFilters">
+          <Value>TemporaryGeneratedFile_[-a-zA-Z0-9]+\.cs$</Value>
+        </CollectionProperty>
+      </ParserSettings>
+    </Parser>
+  </Parsers>
   <Analyzers>
     <Analyzer AnalyzerId="StyleCop.CSharp.NamingRules">
       <Rules>

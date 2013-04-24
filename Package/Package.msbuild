@@ -19,8 +19,7 @@
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\readme.txt" />
-    <Copy SourceFiles="Install.ps1" DestinationFolder="obj\tools" />
-    <Copy SourceFiles="Uninstall.ps1" DestinationFolder="obj\tools" />
+    <Copy SourceFiles="Install.ps1;Uninstall.ps1" DestinationFolder="obj\tools" />
     <PropertyGroup>
       <AssemblyInfo>$([System.IO.File]::ReadAllText("$(SolutionDir)SharedAssemblyInfo.cs"))</AssemblyInfo>
       <AssemblyVersion>$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfo), "AssemblyVersion\(\"(\d+\.\d+\.\d+)\.\d+\"\)").Groups[1].Value)</AssemblyVersion>
