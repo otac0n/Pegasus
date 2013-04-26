@@ -6,7 +6,12 @@
     var startCursorName = (string)model.StartCursorName;
 
     var expression = sequence[index];
+
     var codeExpression = expression as CodeExpression;
+    if (codeExpression != null && codeExpression.CodeType == CodeType.State)
+    {
+        codeExpression = null;
+    }
 }}
 {{if expression == null}}
     var len = cursor.Location - {{: startCursorName }}.Location;
@@ -20,8 +25,6 @@
         throw this.ExceptionHelper({{: startCursorName }}, state =>
             {{@RenderCode codeExpression.CodeSpan}}
             );
-    {{else}}
-        {{@RenderCodeExpression codeExpression}}
     {{/if}}
 {{else}}
     {{

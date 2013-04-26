@@ -9,7 +9,12 @@
     var codeExpression = sequence.Count > 0
         ? sequence[sequence.Count - 1] as CodeExpression
         : null;
-    if (codeExpression == null || codeExpression.CodeType == CodeType.State)
+    if (codeExpression != null && codeExpression.CodeType == CodeType.State)
+    {
+        codeExpression = null;
+    }
+
+    if (codeExpression == null)
     {
         var newSequence = new List<Expression>(sequence.Count + 1);
         newSequence.AddRange(sequence);
