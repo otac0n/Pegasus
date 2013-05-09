@@ -24,10 +24,10 @@
             }
             return {{: this.currentResultName }};
         }
-    {{/if}}
-    {{@WalkRule model}}
-    {{if memoize}}
+        {{@WalkRule model}}
         this.storage[storageKey] = {{: this.currentResultName }};
+    {{else}}
+        {{@WalkRule model}}
     {{/if}}
     return {{: this.currentResultName }};
 }
