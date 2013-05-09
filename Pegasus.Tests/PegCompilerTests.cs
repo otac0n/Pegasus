@@ -63,12 +63,14 @@ namespace Pegasus.Tests
         [Test]
         [TestCase("a = a;")]
         [TestCase("a = '' a;")]
+        [TestCase("a = b a; b = '';")]
         [TestCase("a = ('OK' / '') a;")]
         [TestCase("a = b; b = c; c = d; d = a;")]
         [TestCase("a = b / c; b = 'OK'; c = a;")]
         [TestCase("a = !b a; b = 'OK';")]
         [TestCase("a = &b c; b = a; c = 'OK';")]
         [TestCase("a = b* a; b = 'OK';")]
+        [TestCase("a = ''<2,> a;")]
         public void Compile_WithLeftRecursion_YieldsError(string subject)
         {
             var parser = new PegParser();
