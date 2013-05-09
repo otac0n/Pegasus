@@ -88,7 +88,7 @@ namespace Pegasus.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The rules &apos;{0}&apos; are left-recursive..
+        ///   Looks up a localized string similar to The rule &apos;{0}&apos; is left-recursive..
         /// </summary>
         internal static string PEG0004_LEFT_RECURSION_DETECTED {
             get {

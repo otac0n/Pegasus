@@ -78,7 +78,7 @@ namespace Pegasus.Tests
 
             var result = PegCompiler.Compile(grammar);
 
-            var error = result.Errors.Single();
+            var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0004"));
             Assert.That(error.IsWarning, Is.False);
         }
