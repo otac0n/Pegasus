@@ -20,7 +20,7 @@
     var startRule = settings["start"].Select(n => n.ToString()).SingleOrDefault() ?? model.Rules[0].Identifier.Name;
     var resources = settings["resources"].SingleOrDefault();
     var memoize = model.Rules.SelectMany(r => r.Flags.Select(f => f.Name)).Any(f => f == "memoize");
-    var type = this.GetResultType(model.Rules.Single(r => r.Identifier.Name == startRule).Expression);
+    var type = this.types[model.Rules.Single(r => r.Identifier.Name == startRule).Expression];
 }}
 namespace
 {{@RenderCode @namespace}}

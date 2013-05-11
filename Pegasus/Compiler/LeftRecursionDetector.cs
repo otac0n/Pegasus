@@ -73,15 +73,13 @@ namespace Pegasus.Compiler
 
                 base.WalkRule(rule);
 
-                if (data.LowLink == int.MaxValue)
+                if (data.LowLink > data.Index)
                 {
                     this.ruleStack.Pop();
                     data.InStack = false;
                 }
                 else if (data.LowLink == data.Index)
                 {
-                    var scc = new HashSet<Rule>();
-
                     while (true)
                     {
                         var w = this.ruleStack.Pop();

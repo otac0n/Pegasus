@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ReportLeftRecursionPass.cs" company="(none)">
+// <copyright file="ReportUnknownTypesPass.cs" company="(none)">
 //   Copyright © 2013 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.txt for more information.
@@ -9,15 +9,14 @@
 namespace Pegasus.Compiler
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Pegasus.Expressions;
     using Pegasus.Properties;
 
-    internal class ReportLeftRecursionPass : CompilePass
+    internal class ReportUnknownTypesPass : CompilePass
     {
         public override IList<string> ErrorsProduced
         {
-            get { return new[] { "PEG0020" }; }
+            get { return new[] { "PEG0019" }; }
         }
 
         public override IList<string> BlockedByErrors
@@ -27,11 +26,13 @@ namespace Pegasus.Compiler
 
         public override void Run(Grammar grammar, CompileResult result)
         {
-            foreach (var rule in result.LeftRecursiveRules)
+            var types = result.ExpressionTypes;
+
+            foreach (var rule in grammar.Rules)
             {
-                if (!rule.Flags.Any(f => f.Name == "memoize"))
+                if (!types.ContainsKey(rule.Expression))
                 {
-                    result.AddError(rule.Identifier.Start, () => Resources.PEG0020_UNMEMOIZED_LEFT_RECURSION, rule.Identifier.Name);
+                    result.AddError(rule.Identifier.Start, () => Resources.PEG0019_UNKNOWN_TYPE, rule.Identifier.Name);
                 }
             }
         }

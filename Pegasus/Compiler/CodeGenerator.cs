@@ -12,7 +12,6 @@ namespace Pegasus.Compiler
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Text;
     using Pegasus.Expressions;
 
@@ -44,15 +43,19 @@ namespace Pegasus.Compiler
 
         private readonly Dictionary<string, int> variables = new Dictionary<string, int>();
         private readonly TextWriter writer;
+        private readonly Dictionary<Expression, object> types;
+        private readonly HashSet<Rule> leftRecursiveRules;
 
         private Grammar grammar;
         private string currentIndentation;
         private string currentResultName = null;
         private object currentResultType = null;
 
-        public CodeGenerator(TextWriter writer)
+        public CodeGenerator(TextWriter writer, Dictionary<Expression, object> types, HashSet<Rule> leftRecursiveRules)
         {
             this.writer = writer;
+            this.types = types;
+            this.leftRecursiveRules = leftRecursiveRules;
         }
 
         public override void WalkGrammar(Grammar grammar)
@@ -179,50 +182,6 @@ namespace Pegasus.Compiler
             this.variables.TryGetValue(prefix, out instance);
             this.variables[prefix] = instance + 1;
             return prefix + instance;
-        }
-
-        private object GetResultType(Expression expression)
-        {
-            bool waste;
-            return this.GetResultType(expression, out waste);
-        }
-
-        private object GetResultType(Expression expression, out bool isDefinition)
-        {
-            isDefinition = false;
-
-            ChoiceExpression choiceExpression;
-            NameExpression nameExpression;
-            PrefixedExpression prefixedExpression;
-            RepetitionExpression repetitionExpression;
-            TypedExpression typedExpression;
-
-            if ((choiceExpression = expression as ChoiceExpression) != null)
-            {
-                return this.GetResultType(choiceExpression.Choices.First(), out isDefinition);
-            }
-            else if ((nameExpression = expression as NameExpression) != null)
-            {
-                var rule = this.grammar.Rules.Where(r => r.Identifier.Name == nameExpression.Identifier.Name).Single();
-                return this.GetResultType(rule.Expression);
-            }
-            else if ((prefixedExpression = expression as PrefixedExpression) != null)
-            {
-                return this.GetResultType(prefixedExpression.Expression, out isDefinition);
-            }
-            else if ((repetitionExpression = expression as RepetitionExpression) != null)
-            {
-                return "IList<" + this.GetResultType(repetitionExpression.Expression, out isDefinition) + ">";
-            }
-            else if ((typedExpression = expression as TypedExpression) != null)
-            {
-                isDefinition = true;
-                return typedExpression.Type;
-            }
-            else
-            {
-                return "string";
-            }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "writer", Justification = "Required by Weave.")]

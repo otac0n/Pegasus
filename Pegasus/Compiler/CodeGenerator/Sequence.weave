@@ -28,11 +28,10 @@
     {{/if}}
 {{else}}
     {{
-        bool isDefinition;
         this.currentResultName = this.CreateVariable("r");
-        this.currentResultType = this.GetResultType(expression, out isDefinition);
+        this.currentResultType = this.types[expression];
     }}
-    {{if isDefinition}}
+    {{if this.currentResultType is CodeSpan}}
         IParseResult<
             {{@RenderCode this.currentResultType}}
             > {{: this.currentResultName }} = null;

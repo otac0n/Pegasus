@@ -68,7 +68,9 @@
     <Compile Include="Compiler\ReportRuleFlagsIssuesPass.cs" />
     <Compile Include="Compiler\ReportSettingsIssuesPass.cs" />
     <Compile Include="Compiler\ReportStartRuleNotFoundPass.cs" />
+    <Compile Include="Compiler\ReportUnknownTypesPass.cs" />
     <Compile Include="Compiler\ReportUnusedRulesPass.cs" />
+    <Compile Include="Compiler\ResultTypeFinder.cs" />
     <Compile Include="Compiler\ZeroWidthEvaluator.cs" />
     <Compile Include="Expressions\AndCodeExpression.cs" />
     <Compile Include="Expressions\AndExpression.cs" />
@@ -136,6 +138,11 @@
       <Project>{1FC19ADF-446F-4118-8189-C25AADF12397}</Project>
       <Name>Pegasus.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" Condition="Exists('$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets')" />

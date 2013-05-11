@@ -31,7 +31,7 @@ namespace Pegasus.Compiler
         /// <returns>A <see cref="CompileResult"/> containing the errors, warnings, and results of compilation.</returns>
         public static CompileResult Compile(Grammar grammar)
         {
-            var result = new CompileResult();
+            var result = new CompileResult(grammar);
 
             var passes = PassTypes.Select(t => (CompilePass)Activator.CreateInstance(t)).ToList();
             while (true)

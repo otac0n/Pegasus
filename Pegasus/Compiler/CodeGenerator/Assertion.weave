@@ -5,7 +5,7 @@
     var oldResultName = this.currentResultName;
     var oldResultType = this.currentResultType;
     this.currentResultName = this.CreateVariable("r");
-    this.currentResultType = this.GetResultType(expression);
+    this.currentResultType = this.types[expression];
 }}
 var {{: startCursorName }} = cursor;
 IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;

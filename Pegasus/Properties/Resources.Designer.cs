@@ -221,5 +221,23 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0018_UNREACHABLE_ALTERNATIVE", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not determine a type for the rule &apos;{0}&apos;..
+        /// </summary>
+        internal static string PEG0019_UNKNOWN_TYPE {
+            get {
+                return ResourceManager.GetString("PEG0019_UNKNOWN_TYPE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The rule &apos;{0}&apos; is left-recursive. Left-recursive rules must be memoized.  Mark this rule with the &apos;-memoize&apos; flag or eliminate the left-recursion..
+        /// </summary>
+        internal static string PEG0020_UNMEMOIZED_LEFT_RECURSION {
+            get {
+                return ResourceManager.GetString("PEG0020_UNMEMOIZED_LEFT_RECURSION", resourceCulture);
+            }
+        }
     }
 }

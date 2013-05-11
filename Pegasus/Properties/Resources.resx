@@ -128,6 +128,7 @@
   </data>
   <data name="PEG0004_LEFT_RECURSION_DETECTED" xml:space="preserve">
     <value>The rule '{0}' is left-recursive.</value>
+    <comment>obsolete</comment>
   </data>
   <data name="PEG0005_SETTING_ALREADY_SPECIFIED" xml:space="preserve">
     <value>The setting '{0}' has already been specified.</value>
@@ -175,5 +176,11 @@
   <data name="PEG0018_UNREACHABLE_ALTERNATIVE" xml:space="preserve">
     <value>Unreachable branch detected.</value>
     <comment>warning</comment>
+  </data>
+  <data name="PEG0019_UNKNOWN_TYPE" xml:space="preserve">
+    <value>Could not determine a type for the rule '{0}'.</value>
+  </data>
+  <data name="PEG0020_UNMEMOIZED_LEFT_RECURSION" xml:space="preserve">
+    <value>The rule '{0}' is left-recursive. Left-recursive rules must be memoized.  Mark this rule with the '-memoize' flag or eliminate the left-recursion.</value>
   </data>
 </root>

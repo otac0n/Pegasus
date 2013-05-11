@@ -61,6 +61,19 @@ namespace Pegasus.Tests
         }
 
         [Test]
+        public void Compile_WithExpressionWhoseTypeIsNotDefined_YieldsError()
+        {
+            var parser = new PegParser();
+            var grammar = parser.Parse("a -memoize = a;");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0019"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
         [TestCase("a = a;")]
         [TestCase("a = '' a;")]
         [TestCase("a = b a; b = '';")]
@@ -71,7 +84,7 @@ namespace Pegasus.Tests
         [TestCase("a = &b c; b = a; c = 'OK';")]
         [TestCase("a = b* a; b = 'OK';")]
         [TestCase("a = ''<2,> a;")]
-        public void Compile_WithLeftRecursion_YieldsError(string subject)
+        public void Compile_WithUnmemoizedLeftRecursion_YieldsError(string subject)
         {
             var parser = new PegParser();
             var grammar = parser.Parse(subject);
@@ -79,8 +92,25 @@ namespace Pegasus.Tests
             var result = PegCompiler.Compile(grammar);
 
             var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0004"));
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0020"));
             Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
+        public void Compile_WithComplexLeftRecursion_Succeeds()
+        {
+            var parser = new PegParser();
+            var grammar = parser.Parse(@"a<o> -memoize = b;
+                                         b<o> -memoize = c;
+                                         c<o> -memoize = a / d;
+                                         d<o> = e;
+                                         e<o> -memoize = f;
+                                         f<o> -memoize = e / g;
+                                         g<o> -memoize = g;");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors, Is.Empty);
         }
 
         [Test]
