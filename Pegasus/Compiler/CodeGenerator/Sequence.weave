@@ -15,10 +15,12 @@
 }}
 {{if expression == null}}
     var len = cursor.Location - {{: startCursorName }}.Location;
-    {{: finalResultName }} = new ParseResult<string>({{: startCursorName }}, cursor, cursor.Subject.Substring({{: startCursorName }}.Location, len));
+    {{: finalResultName }} = this.ReturnHelper<{{= finalResultType }}>({{: startCursorName }}, ref cursor, state =>
+        state.Subject.Substring({{: startCursorName }}.Location, len)
+        );
 {{elif codeExpression != null}}
     {{if codeExpression.CodeType == CodeType.Result}}
-        {{: finalResultName }} = this.ReturnHelper<{{= finalResultType }}>({{: startCursorName }}, cursor, state =>
+        {{: finalResultName }} = this.ReturnHelper<{{= finalResultType }}>({{: startCursorName }}, ref cursor, state =>
             {{@RenderCode codeExpression.CodeSpan}}
             );
     {{elif codeExpression.CodeType == CodeType.Error}}

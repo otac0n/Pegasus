@@ -20,6 +20,7 @@
     var startRule = settings["start"].Select(n => n.ToString()).SingleOrDefault() ?? model.Rules[0].Identifier.Name;
     var resources = settings["resources"].SingleOrDefault();
     var memoize = model.Rules.SelectMany(r => r.Flags.Select(f => f.Name)).Any(f => f == "memoize");
+    var lexical = model.Rules.SelectMany(r => r.Flags.Select(f => f.Name)).Any(f => f == "lexical");
     var type = this.types[model.Rules.Single(r => r.Identifier.Name == startRule).Expression];
 }}
 namespace
@@ -143,9 +144,28 @@ namespace
             return null;
         }
 
-        private IParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<Cursor, T> wrappedCode)
+        private IParseResult<T> ReturnHelper<T>(Cursor startCursor, ref Cursor endCursor, Func<Cursor, T> wrappedCode{{if lexical}}, string ruleName = null{{/if}})
         {
-            return new ParseResult<T>(startCursor, endCursor, wrappedCode(endCursor));
+            {{if lexical}}
+                if (ruleName != null)
+                {
+                    var state = endCursor.WithMutability(true);
+                    state["_lexical"] = new
+                    {
+                        Value = new { StartCursor = startCursor, EndCursor = endCursor, Name = ruleName },
+                        Next = state["_lexical"],
+                    };
+                    endCursor = state.WithMutability(false);
+                }
+            {{/if}}
+            var result = wrappedCode(endCursor);
+            var lexical = result as ILexical;
+            if (lexical != null && lexical.StartCursor == null && lexical.EndCursor == null)
+            {
+                lexical.StartCursor = startCursor;
+                lexical.EndCursor = endCursor;
+            }
+            return new ParseResult<T>(startCursor, endCursor, result);
         }
 
         private Exception ExceptionHelper(Cursor cursor, Func<Cursor, string> wrappedCode)

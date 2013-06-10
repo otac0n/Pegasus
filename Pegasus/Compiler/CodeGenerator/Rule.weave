@@ -10,7 +10,7 @@
         {{@RenderCode this.currentResultType}}
         > {{: model.Identifier.Name}}(ref Cursor cursor)
 {{else}}
-    private IParseResult<{{= this.currentResultType }}> {{: model.Identifier.Name}}(ref Cursor cursor)
+    private IParseResult<{{= this.currentResultType }}> {{: model.Identifier.Name }}(ref Cursor cursor)
 {{/if}}
 {
     IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
