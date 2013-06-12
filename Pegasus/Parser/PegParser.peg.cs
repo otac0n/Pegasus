@@ -99,7 +99,7 @@ namespace
                 }
                 if (l0.Count >= 0)
                 {
-                    r2 = new ParseResult<IList<KeyValuePair<Identifier, object>>>(startCursor1, cursor, l0.AsReadOnly());
+                    r2 = this.ReturnHelper<IList<KeyValuePair<Identifier, object>>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 }
                 else
                 {
@@ -128,7 +128,7 @@ namespace
                     }
                     if (l1.Count >= 0)
                     {
-                        r4 = new ParseResult<IList<Rule>>(startCursor2, cursor, l1.AsReadOnly());
+                        r4 = this.ReturnHelper<IList<Rule>>(startCursor2, ref cursor, state => l1.AsReadOnly());
                     }
                     else
                     {
@@ -230,7 +230,7 @@ namespace
                         }
                         if (l0.Count >= 0)
                         {
-                            r4 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                            r4 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                         }
                         else
                         {
@@ -285,7 +285,7 @@ namespace
                 cursor = startCursor3;
                 if (r4 == null)
                 {
-                    r3 = new ParseResult<string>(cursor, cursor, string.Empty);
+                    r3 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
                 }
                 if (r3 != null)
                 {
@@ -318,7 +318,7 @@ namespace
             }
             if (l0.Count >= 0)
             {
-                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                r1 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
             }
             else
             {
@@ -344,7 +344,7 @@ namespace
                 }
                 if (l1.Count >= 0)
                 {
-                    r6 = new ParseResult<IList<Identifier>>(startCursor4, cursor, l1.AsReadOnly());
+                    r6 = this.ReturnHelper<IList<Identifier>>(startCursor4, ref cursor, state => l1.AsReadOnly());
                 }
                 else
                 {
@@ -412,7 +412,7 @@ namespace
                 }
                 if (l0.Count >= 0)
                 {
-                    r2 = new ParseResult<IList<CodeSpan>>(startCursor1, cursor, l0.AsReadOnly());
+                    r2 = this.ReturnHelper<IList<CodeSpan>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 }
                 else
                 {
@@ -441,7 +441,7 @@ namespace
                     }
                     if (l1.Count >= 0)
                     {
-                        r4 = new ParseResult<IList<Identifier>>(startCursor2, cursor, l1.AsReadOnly());
+                        r4 = this.ReturnHelper<IList<Identifier>>(startCursor2, ref cursor, state => l1.AsReadOnly());
                     }
                     else
                     {
@@ -480,7 +480,7 @@ namespace
                                 }
                                 if (l2.Count >= 0)
                                 {
-                                    r8 = new ParseResult<IList<string>>(startCursor3, cursor, l2.AsReadOnly());
+                                    r8 = this.ReturnHelper<IList<string>>(startCursor3, ref cursor, state => l2.AsReadOnly());
                                 }
                                 else
                                 {
@@ -708,7 +708,7 @@ namespace
             }
             if (l0.Count >= 1)
             {
-                r1 = new ParseResult<IList<Expression>>(startCursor1, cursor, l0.AsReadOnly());
+                r1 = this.ReturnHelper<IList<Expression>>(startCursor1, ref cursor, state => l0.AsReadOnly());
             }
             else
             {
@@ -760,7 +760,7 @@ namespace
                 }
                 if (l0.Count >= 0)
                 {
-                    r1 = new ParseResult<IList<Expression>>(startCursor1, cursor, l0.AsReadOnly());
+                    r1 = this.ReturnHelper<IList<Expression>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 }
                 else
                 {
@@ -816,7 +816,7 @@ namespace
                 }
                 if (l1.Count >= 0)
                 {
-                    r4 = new ParseResult<IList<Expression>>(startCursor3, cursor, l1.AsReadOnly());
+                    r4 = this.ReturnHelper<IList<Expression>>(startCursor3, ref cursor, state => l1.AsReadOnly());
                 }
                 else
                 {
@@ -917,7 +917,7 @@ namespace
                 cursor = startCursor2;
                 if (r5 != null)
                 {
-                    r4 = new ParseResult<string>(cursor, cursor, string.Empty);
+                    r4 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
                 }
                 if (r4 != null)
                 {
@@ -1168,7 +1168,7 @@ namespace
                     cursor = startCursor1;
                     if (r3 == null)
                     {
-                        r2 = new ParseResult<string>(cursor, cursor, string.Empty);
+                        r2 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
                     }
                     if (r2 != null)
                     {
@@ -1240,7 +1240,7 @@ namespace
                     }
                     if (l0.Count >= 0)
                     {
-                        r6 = new ParseResult<IList<CodeSpan>>(startCursor4, cursor, l0.AsReadOnly());
+                        r6 = this.ReturnHelper<IList<CodeSpan>>(startCursor4, ref cursor, state => l0.AsReadOnly());
                     }
                     else
                     {
@@ -1414,7 +1414,7 @@ namespace
                             }
                             if (l0.Count >= 0)
                             {
-                                r7 = new ParseResult<IList<int>>(startCursor4, cursor, l0.AsReadOnly());
+                                r7 = this.ReturnHelper<IList<int>>(startCursor4, ref cursor, state => l0.AsReadOnly());
                             }
                             else
                             {
@@ -1447,7 +1447,7 @@ namespace
                                     }
                                     if (l1.Count >= 0)
                                     {
-                                        r10 = new ParseResult<IList<Expression>>(startCursor5, cursor, l1.AsReadOnly());
+                                        r10 = this.ReturnHelper<IList<Expression>>(startCursor5, ref cursor, state => l1.AsReadOnly());
                                     }
                                     else
                                     {
@@ -1545,7 +1545,7 @@ namespace
                             }
                             if (l2.Count >= 0)
                             {
-                                r16 = new ParseResult<IList<int>>(startCursor7, cursor, l2.AsReadOnly());
+                                r16 = this.ReturnHelper<IList<int>>(startCursor7, ref cursor, state => l2.AsReadOnly());
                             }
                             else
                             {
@@ -1669,7 +1669,7 @@ namespace
             }
             if (l0.Count >= 1)
             {
-                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                r1 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
             }
             else
             {
@@ -1924,7 +1924,7 @@ namespace
             }
             if (l0.Count >= 0)
             {
-                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                r1 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
             }
             else
             {
@@ -1970,7 +1970,7 @@ namespace
             }
             if (l0.Count >= 1)
             {
-                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                r1 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
             }
             else
             {
@@ -2538,7 +2538,7 @@ namespace
             cursor = startCursor2;
             if (r3 == null)
             {
-                r2 = new ParseResult<string>(cursor, cursor, string.Empty);
+                r2 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
             }
             if (r2 != null)
             {
@@ -2575,7 +2575,7 @@ namespace
                 }
                 if (l0.Count >= 1)
                 {
-                    r4 = new ParseResult<IList<string>>(startCursor3, cursor, l0.AsReadOnly());
+                    r4 = this.ReturnHelper<IList<string>>(startCursor3, ref cursor, state => l0.AsReadOnly());
                 }
                 else
                 {
@@ -2657,7 +2657,7 @@ namespace
                 }
                 if (l0.Count >= 0)
                 {
-                    r3 = new ParseResult<IList<string>>(startCursor2, cursor, l0.AsReadOnly());
+                    r3 = this.ReturnHelper<IList<string>>(startCursor2, ref cursor, state => l0.AsReadOnly());
                 }
                 else
                 {
@@ -2765,7 +2765,7 @@ namespace
                 }
                 if (l0.Count >= 0)
                 {
-                    r2 = new ParseResult<IList<IList<string>>>(startCursor1, cursor, l0.AsReadOnly());
+                    r2 = this.ReturnHelper<IList<IList<string>>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 }
                 else
                 {
@@ -2819,7 +2819,7 @@ namespace
             }
             if (l0.Count >= 1)
             {
-                r0 = new ParseResult<IList<string>>(startCursor0, cursor, l0.AsReadOnly());
+                r0 = this.ReturnHelper<IList<string>>(startCursor0, ref cursor, state => l0.AsReadOnly());
             }
             else
             {
@@ -2856,7 +2856,7 @@ namespace
                     }
                     if (l0.Count >= 0)
                     {
-                        r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                        r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                     }
                     else
                     {
@@ -2922,7 +2922,7 @@ namespace
                     }
                     if (l1.Count >= 0)
                     {
-                        r7 = new ParseResult<IList<string>>(startCursor3, cursor, l1.AsReadOnly());
+                        r7 = this.ReturnHelper<IList<string>>(startCursor3, ref cursor, state => l1.AsReadOnly());
                     }
                     else
                     {
@@ -3202,7 +3202,7 @@ namespace
                     }
                     if (l0.Count >= 0)
                     {
-                        r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                        r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                     }
                     else
                     {
@@ -3310,7 +3310,7 @@ namespace
             cursor = startCursor1;
             if (r2 == null)
             {
-                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
+                r1 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
             }
             if (r1 != null)
             {
@@ -3368,7 +3368,7 @@ namespace
                     }
                     if (l0.Count >= 0)
                     {
-                        r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                        r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                     }
                     else
                     {
@@ -3476,7 +3476,7 @@ namespace
             cursor = startCursor1;
             if (r2 == null)
             {
-                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
+                r1 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
             }
             if (r1 != null)
             {
@@ -3536,7 +3536,7 @@ namespace
                 }
                 if (l0.Count >= 0)
                 {
-                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                    r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 }
                 else
                 {
@@ -3572,7 +3572,7 @@ namespace
                     }
                     if (l1.Count >= 0)
                     {
-                        r4 = new ParseResult<IList<CharacterRange>>(startCursor2, cursor, l1.AsReadOnly());
+                        r4 = this.ReturnHelper<IList<CharacterRange>>(startCursor2, ref cursor, state => l1.AsReadOnly());
                     }
                     else
                     {
@@ -3617,7 +3617,7 @@ namespace
                             }
                             if (l2.Count >= 0)
                             {
-                                r7 = new ParseResult<IList<string>>(startCursor4, cursor, l2.AsReadOnly());
+                                r7 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l2.AsReadOnly());
                             }
                             else
                             {
@@ -3804,7 +3804,7 @@ namespace
             cursor = startCursor1;
             if (r2 == null)
             {
-                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
+                r1 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
             }
             if (r1 != null)
             {
@@ -3863,7 +3863,7 @@ namespace
                 cursor = startCursor1;
                 if (r3 == null)
                 {
-                    r2 = new ParseResult<string>(cursor, cursor, string.Empty);
+                    r2 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
                 }
                 if (r2 != null)
                 {
@@ -3919,7 +3919,7 @@ namespace
                 cursor = startCursor1;
                 if (r3 == null)
                 {
-                    r2 = new ParseResult<string>(cursor, cursor, string.Empty);
+                    r2 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
                 }
                 if (r2 != null)
                 {
@@ -4177,7 +4177,7 @@ namespace
             }
             if (l0.Count >= 0)
             {
-                r0 = new ParseResult<IList<string>>(startCursor0, cursor, l0.AsReadOnly());
+                r0 = this.ReturnHelper<IList<string>>(startCursor0, ref cursor, state => l0.AsReadOnly());
             }
             else
             {
@@ -4222,7 +4222,7 @@ namespace
                     cursor = startCursor3;
                     if (r5 == null)
                     {
-                        r4 = new ParseResult<string>(cursor, cursor, string.Empty);
+                        r4 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
                     }
                     if (r4 != null)
                     {
@@ -4255,7 +4255,7 @@ namespace
                 }
                 if (l0.Count >= 0)
                 {
-                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                    r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 }
                 else
                 {
@@ -4302,7 +4302,7 @@ namespace
                     cursor = startCursor3;
                     if (r5 == null)
                     {
-                        r4 = new ParseResult<string>(cursor, cursor, string.Empty);
+                        r4 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
                     }
                     if (r4 != null)
                     {
@@ -4335,7 +4335,7 @@ namespace
                 }
                 if (l0.Count >= 0)
                 {
-                    r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                    r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 }
                 else
                 {
@@ -4420,7 +4420,7 @@ namespace
                 cursor = startCursor0;
                 if (r1 == null)
                 {
-                    r0 = new ParseResult<string>(cursor, cursor, string.Empty);
+                    r0 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
                 }
             }
             if (r0 == null)
@@ -4455,7 +4455,7 @@ namespace
                 if (ignoreCase ? substr.Equals(literal, StringComparison.OrdinalIgnoreCase) : substr == literal)
                 {
                     var endCursor = cursor.Advance(substr.Length);
-                    var result = new ParseResult<string>(cursor, endCursor, substr);
+                    var result = this.ReturnHelper<string>(cursor, ref endCursor, state => substr);
                     cursor = endCursor;
                     return result;
                 }
@@ -4489,7 +4489,8 @@ namespace
                 if (match ^ negated)
                 {
                     var endCursor = cursor.Advance(1);
-                    var result = new ParseResult<string>(cursor, endCursor, cursor.Subject.Substring(cursor.Location, 1));
+                    var substr = cursor.Subject.Substring(cursor.Location, 1);
+                    var result = this.ReturnHelper<string>(cursor, ref endCursor, state => substr);
                     cursor = endCursor;
                     return result;
                 }
@@ -4503,7 +4504,7 @@ namespace
             {
                 var substr = cursor.Subject.Substring(cursor.Location, 1);
                 var endCursor = cursor.Advance(1);
-                var result = new ParseResult<string>(cursor, endCursor, substr);
+                var result = this.ReturnHelper<string>(cursor, ref endCursor, state => substr);
                 cursor = endCursor;
                 return result;
             }

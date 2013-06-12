@@ -50,6 +50,9 @@
     <Compile Include="Cursor.cs" />
     <Compile Include="ILexical.cs" />
     <Compile Include="IParseResult{T}.cs" />
+    <Compile Include="LexicalElement.cs" />
+    <Compile Include="ListNode.cs" />
+    <Compile Include="ListNode{T}.cs" />
     <Compile Include="ParseResult{T}.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

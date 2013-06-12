@@ -1,2 +1,2 @@
 ﻿@model WildcardExpression
-{{: this.currentResultName }} = this.ParseAny(ref cursor);
+{{: this.currentContext.ResultName }} = this.ParseAny(ref cursor{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
