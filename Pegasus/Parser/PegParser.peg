@@ -12,9 +12,12 @@ grammar <Grammar>
     }
 
 setting <KeyValuePair<Identifier, object>>
-  = "@" key:identifier value:(<object> string / code / type) semicolon? {
+  = key:settingName value:(<object> string / code / type) semicolon? {
         new KeyValuePair<Identifier, object>(key, value)
     }
+
+settingName <Identifier> -lexical
+  = "@" name:identifier { name }
 
 rulePreamble
   = (!quantifier expressionType)? ruleFlag* equals
@@ -139,7 +142,7 @@ comma     = "," __ { "," }
 lbracket  = "[" __ { "[" }
 rbracket  = "]" __ { "]" }
 
-identifier <Identifier> -memoize
+identifier <Identifier> -memoize -lexical
   = name:(!digit (letter / digit / "_" / "$")+) __ { new Identifier(name, nameStart, nameEnd) }
 
 type <CodeSpan>
@@ -169,12 +172,12 @@ typeArguments
   = type comma typeArguments
   / type ""
 
-literal <Expression>
+literal <Expression> -lexical
   = value:(doubleQuotedString / singleQuotedString) flags:("i" / "r" / "ir" / "ri" / ) __ {
         new LiteralExpression(valueStart, flagsEnd, value, ignoreCase: flags.Contains('i'), fromResource: flags.Contains('r'))
     }
 
-string
+string -lexical
   = string:(doubleQuotedString / singleQuotedString) __ { @string }
 
 doubleQuotedString
@@ -207,7 +210,7 @@ singleQuotedCharacter
 simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) char:. { @char }
 
-class <Expression>
+class <Expression> -lexical
   = "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* ("]" / #ERROR{ "PEG0010:" + Resources.PEG0010_UNTERMINATED_CLASS }) flags:"i"? __ {
         new ClassExpression(
             parts,

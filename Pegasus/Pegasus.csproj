@@ -39,6 +39,12 @@
     <CodeAnalysisRuleSet>..\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
@@ -120,6 +126,9 @@
     <WeaveTemplate Include="Compiler\CodeGenerator\Assertion.weave" />
     <WeaveTemplate Include="Compiler\CodeGenerator\SequenceExpression.weave" />
     <WeaveTemplate Include="Compiler\CodeGenerator\WildcardExpression.weave" />
+    <None Include="..\Key.snk">
+      <Link>Key.snk</Link>
+    </None>
     <None Include="Compiler\CodeGenerator\_config.weave" />
     <None Include="packages.config" />
     <None Include="Parser\PegParser.peg" />
