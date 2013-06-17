@@ -191,12 +191,15 @@ namespace Pegasus.Package
                 // Highlight the elements.
                 var highlightedElements = HighlightLexicalElements(lexicalElements);
 
-                return new Tuple<int, int, TokenType>[0];
+                // Reduce the elements to strictly non-overlapping tokens.
+                var simplifiedTokens = SimplifyHighlighting(highlightedElements);
+
+                return simplifiedTokens;
             }
 
             private static IList<Tuple<int, int, Tuple<int, TokenType>>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
             {
-                var highlighted = new List<Tuple<int, int, Tuple<int, TokenType>>>();
+                var highlighted = new List<Tuple<int, int, Tuple<int, TokenType>>>(lexicalElements.Count);
 
                 var lexicalStack = new Stack<Tuple<int?, LexicalElement>>();
                 foreach (var e in lexicalElements.Reverse())
@@ -226,7 +229,51 @@ namespace Pegasus.Package
                     }
                 }
 
-                return highlighted;
+                return highlighted.AsReadOnly();
+            }
+
+            private static IList<Tuple<int, int, TokenType>> SimplifyHighlighting(IList<Tuple<int, int, Tuple<int, TokenType>>> tokens)
+            {
+                var simplified = new List<Tuple<int, int, TokenType>>(tokens.Count);
+
+                var lexicalStack = new Stack<Tuple<int, int, TokenType>>();
+                foreach (var t in tokens)
+                {
+                    while (true)
+                    {
+                        if (lexicalStack.Count == 0) break;
+
+                        var top = lexicalStack.Pop();
+                        if (top.Item1 >= t.Item2)
+                        {
+                            simplified.Add(top);
+                            continue;
+                        }
+
+                        if (top.Item2 > t.Item2)
+                        {
+                            simplified.Add(Tuple.Create(t.Item2, top.Item2, top.Item3));
+                        }
+
+                        top = Tuple.Create(top.Item1, t.Item1, top.Item3);
+
+                        if (top.Item1 < top.Item2)
+                        {
+                            lexicalStack.Push(top);
+                            break;
+                        }
+                    }
+
+                    lexicalStack.Push(Tuple.Create(t.Item1, t.Item2, t.Item3.Item2));
+                }
+
+                while (lexicalStack.Count > 0)
+                {
+                    simplified.Add(lexicalStack.Pop());
+                }
+
+                simplified.Reverse();
+                return simplified.AsReadOnly();
             }
 
             private static Tuple<int, TokenType> Highlight(string key, int? maxRule = null)
