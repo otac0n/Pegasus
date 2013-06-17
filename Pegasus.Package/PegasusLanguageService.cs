@@ -11,6 +11,7 @@ namespace Pegasus.Package
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.Package;
     using Microsoft.VisualStudio.TextManager.Interop;
@@ -72,22 +73,24 @@ namespace Pegasus.Package
 
         private class Scanner : IScanner
         {
-            private IDictionary<string, TokenType> typeMap = new Dictionary<string, TokenType>
+            private static IList<HighlightRule<TokenType>> highlightRules = (new HighlightRuleList<TokenType>
             {
-                { "settingName", TokenType.Keyword },
-                { "literal", TokenType.String },
-                { "string", TokenType.String },
-                { "class", TokenType.String },
-                { "identifier", TokenType.Identifier },
-            };
+                { @"^ whitespace       \b", TokenType.WhiteSpace },
+                { @"^ settingName      \b", TokenType.Keyword    },
+                { @"^ (string|literal) \b", TokenType.String     },
+                { @"^ class            \b", TokenType.String     },
+                { @"^ identifier       \b", TokenType.Identifier },
+            }).AsReadOnly();
 
-            private IDictionary<string, TokenColor> colorMap = new Dictionary<string, TokenColor>
+            private static IDictionary<TokenType, TokenColor> colorMap = new Dictionary<TokenType, TokenColor>
             {
-                { "settingName", TokenColor.Keyword },
-                { "literal", TokenColor.String },
-                { "string", TokenColor.String },
-                { "class", TokenColor.String },
-                { "identifier", TokenColor.Identifier },
+                { TokenType.Comment,    TokenColor.Comment    },
+                { TokenType.Identifier, TokenColor.Identifier },
+                { TokenType.Keyword,    TokenColor.Keyword    },
+                { TokenType.Literal,    TokenColor.Number     },
+                { TokenType.String,     TokenColor.String     },
+                { TokenType.Text,       TokenColor.Text       },
+                { TokenType.WhiteSpace, TokenColor.Text       },
             };
 
             private IVsTextLines buffer;
@@ -118,6 +121,7 @@ namespace Pegasus.Package
                 try
                 {
                     var lexicalElements = GetLexicalElements(text);
+                    var tokens = GetHighlightedTokens(text);
 
                     token = (from l in lexicalElements
                              where l.EndCursor.Location > startIndex
@@ -140,8 +144,8 @@ namespace Pegasus.Package
                 {
                     tokenInfo.StartIndex = Math.Max(lineStartIndex, token.StartCursor.Location) - lineStartIndex;
                     tokenInfo.EndIndex = Math.Min(lineEndIndex, token.EndCursor.Location) - lineStartIndex - 1;
-                    tokenInfo.Type = typeMap[token.Name];
-                    tokenInfo.Color = colorMap[token.Name];
+                    tokenInfo.Type = TokenType.Unknown;
+                    tokenInfo.Color = TokenColor.Text;
                 }
 
                 var tokenWidth = tokenInfo.EndIndex - tokenInfo.StartIndex + 1;
@@ -179,6 +183,74 @@ namespace Pegasus.Package
                 return lexicalElements;
             }
 
+            private static IList<Tuple<int, int, TokenType>> GetHighlightedTokens(string text)
+            {
+                // Parse the text to its (possibly overlapping) lexical elements.
+                var lexicalElements = GetLexicalElements(text);
+
+                // Highlight the elements.
+                var highlightedElements = HighlightLexicalElements(lexicalElements);
+
+                return new Tuple<int, int, TokenType>[0];
+            }
+
+            private static IList<Tuple<int, int, Tuple<int, TokenType>>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
+            {
+                var highlighted = new List<Tuple<int, int, Tuple<int, TokenType>>>();
+
+                var lexicalStack = new Stack<Tuple<int?, LexicalElement>>();
+                foreach (var e in lexicalElements.Reverse())
+                {
+                    int? maxRule = null;
+
+                    while (true)
+                    {
+                        if (lexicalStack.Count == 0) break;
+                        var top = lexicalStack.Peek();
+                        maxRule = top.Item1;
+                        if (e.EndCursor.Location <= top.Item2.EndCursor.Location && e.StartCursor.Location >= top.Item2.StartCursor.Location) break;
+                        lexicalStack.Pop();
+                    }
+
+                    lexicalStack.Push(Tuple.Create(maxRule, e));
+
+                    var key = string.Join(" ", lexicalStack.Select(d => d.Item2.Name));
+
+                    var result = Highlight(key);
+
+                    if (result != null)
+                    {
+                        lexicalStack.Pop();
+                        lexicalStack.Push(Tuple.Create((int?)result.Item1, e));
+                        highlighted.Add(Tuple.Create(e.StartCursor.Location, e.EndCursor.Location, Tuple.Create(result.Item1, result.Item2)));
+                    }
+                }
+
+                return highlighted;
+            }
+
+            private static Tuple<int, TokenType> Highlight(string key, int? maxRule = null)
+            {
+                if (maxRule.HasValue && (maxRule.Value > highlightRules.Count || maxRule.Value < 0))
+                {
+                    throw new ArgumentOutOfRangeException("maxRule");
+                }
+
+                maxRule = maxRule ?? highlightRules.Count;
+
+                for (var i = 0; i < maxRule.Value; i++)
+                {
+                    var rule = highlightRules[i];
+
+                    if (rule.Pattern.IsMatch(key))
+                    {
+                        return Tuple.Create(i, rule.Value);
+                    }
+                }
+
+                return null;
+            }
+
             public void SetSource(string source, int offset)
             {
                 this.source = source;
@@ -197,6 +269,36 @@ namespace Pegasus.Package
                 }
 
                 return text;
+            }
+        }
+
+        private class HighlightRule<T>
+        {
+            private Regex pattern;
+            private T value;
+
+            public HighlightRule(string pattern, T value)
+            {
+                this.pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+                this.value = value;
+            }
+
+            public Regex Pattern
+            {
+                get { return this.pattern; }
+            }
+
+            public T Value
+            {
+                get { return this.value; }
+            }
+        }
+
+        private class HighlightRuleList<T> : List<HighlightRule<T>>
+        {
+            public void Add(string pattern, T value)
+            {
+                this.Add(new HighlightRule<T>(pattern, value));
             }
         }
     }
