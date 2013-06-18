@@ -11,6 +11,7 @@ namespace Pegasus.Package
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.Caching;
     using System.Text.RegularExpressions;
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.Package;
@@ -116,16 +117,15 @@ namespace Pegasus.Package
                     return false;
                 }
 
-                LexicalElement token;
+                Tuple<int, int, TokenType> token;
 
                 try
                 {
-                    var lexicalElements = GetLexicalElements(text);
                     var tokens = GetHighlightedTokens(text);
 
-                    token = (from l in lexicalElements
-                             where l.EndCursor.Location > startIndex
-                             where l.StartCursor.Location < lineEndIndex
+                    token = (from l in tokens
+                             where l.Item2 > startIndex
+                             where l.Item1 < lineEndIndex
                              select l).FirstOrDefault();
                 }
                 catch
@@ -140,12 +140,19 @@ namespace Pegasus.Package
                     tokenInfo.Type = TokenType.Unknown;
                     tokenInfo.Color = TokenColor.Text;
                 }
-                else
+                else if (token.Item1 > startIndex)
                 {
-                    tokenInfo.StartIndex = Math.Max(lineStartIndex, token.StartCursor.Location) - lineStartIndex;
-                    tokenInfo.EndIndex = Math.Min(lineEndIndex, token.EndCursor.Location) - lineStartIndex - 1;
+                    tokenInfo.StartIndex = startIndex - lineStartIndex;
+                    tokenInfo.EndIndex = token.Item1 - lineStartIndex - 1;
                     tokenInfo.Type = TokenType.Unknown;
                     tokenInfo.Color = TokenColor.Text;
+                }
+                else
+                {
+                    tokenInfo.StartIndex = Math.Max(lineStartIndex, token.Item1) - lineStartIndex;
+                    tokenInfo.EndIndex = Math.Min(lineEndIndex, token.Item2) - lineStartIndex - 1;
+                    tokenInfo.Type = token.Item3;
+                    tokenInfo.Color = colorMap[token.Item3];
                 }
 
                 var tokenWidth = tokenInfo.EndIndex - tokenInfo.StartIndex + 1;
@@ -171,20 +178,14 @@ namespace Pegasus.Package
                 return false;
             }
 
-            private static IList<LexicalElement> GetLexicalElements(string text)
-            {
-                var lexicalElements = (IList<LexicalElement>)System.Runtime.Caching.MemoryCache.Default.Get(text);
-                if (lexicalElements == null)
-                {
-                    var parsed = new PegParser().Parse(text, null, out lexicalElements);
-                    System.Runtime.Caching.MemoryCache.Default.Add(text, lexicalElements, DateTimeOffset.Now.AddMinutes(1));
-                }
-
-                return lexicalElements;
-            }
-
             private static IList<Tuple<int, int, TokenType>> GetHighlightedTokens(string text)
             {
+                var cached = MemoryCache.Default.Get(text) as IList<Tuple<int, int, TokenType>>;
+                if (cached != null)
+                {
+                    return cached;
+                }
+
                 // Parse the text to its (possibly overlapping) lexical elements.
                 var lexicalElements = GetLexicalElements(text);
 
@@ -194,14 +195,22 @@ namespace Pegasus.Package
                 // Reduce the elements to strictly non-overlapping tokens.
                 var simplifiedTokens = SimplifyHighlighting(highlightedElements);
 
+                MemoryCache.Default.Add(text, simplifiedTokens, DateTimeOffset.Now.AddMinutes(1));
                 return simplifiedTokens;
             }
 
-            private static IList<Tuple<int, int, Tuple<int, TokenType>>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
+            private static IList<LexicalElement> GetLexicalElements(string text)
             {
-                var highlighted = new List<Tuple<int, int, Tuple<int, TokenType>>>(lexicalElements.Count);
+                IList<LexicalElement> lexicalElements;
+                new PegParser().Parse(text, null, out lexicalElements);
+                return lexicalElements;
+            }
 
-                var lexicalStack = new Stack<Tuple<int?, LexicalElement>>();
+            private static IList<Tuple<int, int, TokenType>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
+            {
+                var highlighted = new List<Tuple<int, int, TokenType>>(lexicalElements.Count);
+
+                var lexicalStack = new Stack<Tuple<int, LexicalElement>>();
                 foreach (var e in lexicalElements.Reverse())
                 {
                     int? maxRule = null;
@@ -209,30 +218,36 @@ namespace Pegasus.Package
                     while (true)
                     {
                         if (lexicalStack.Count == 0) break;
+
                         var top = lexicalStack.Peek();
-                        maxRule = top.Item1;
-                        if (e.EndCursor.Location <= top.Item2.EndCursor.Location && e.StartCursor.Location >= top.Item2.StartCursor.Location) break;
+                        if (e.EndCursor.Location <= top.Item2.EndCursor.Location && e.StartCursor.Location >= top.Item2.StartCursor.Location)
+                        {
+                            maxRule = top.Item1;
+                            break;
+                        }
+
                         lexicalStack.Pop();
                     }
 
-                    lexicalStack.Push(Tuple.Create(maxRule, e));
+                    if (maxRule == 0) continue;
 
+                    lexicalStack.Push(Tuple.Create(default(int), e));
                     var key = string.Join(" ", lexicalStack.Select(d => d.Item2.Name));
+                    lexicalStack.Pop();
 
-                    var result = Highlight(key);
+                    var result = Highlight(key, maxRule);
 
                     if (result != null)
                     {
-                        lexicalStack.Pop();
-                        lexicalStack.Push(Tuple.Create((int?)result.Item1, e));
-                        highlighted.Add(Tuple.Create(e.StartCursor.Location, e.EndCursor.Location, Tuple.Create(result.Item1, result.Item2)));
+                        lexicalStack.Push(Tuple.Create(result.Item1, e));
+                        highlighted.Add(Tuple.Create(e.StartCursor.Location, e.EndCursor.Location, result.Item2));
                     }
                 }
 
                 return highlighted.AsReadOnly();
             }
 
-            private static IList<Tuple<int, int, TokenType>> SimplifyHighlighting(IList<Tuple<int, int, Tuple<int, TokenType>>> tokens)
+            private static IList<Tuple<int, int, TokenType>> SimplifyHighlighting(IList<Tuple<int, int, TokenType>> tokens)
             {
                 var simplified = new List<Tuple<int, int, TokenType>>(tokens.Count);
 
@@ -264,7 +279,7 @@ namespace Pegasus.Package
                         }
                     }
 
-                    lexicalStack.Push(Tuple.Create(t.Item1, t.Item2, t.Item3.Item2));
+                    lexicalStack.Push(t);
                 }
 
                 while (lexicalStack.Count > 0)
