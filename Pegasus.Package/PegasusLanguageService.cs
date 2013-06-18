@@ -113,17 +113,17 @@ namespace Pegasus.Package
 
             public bool ScanTokenAndProvideInfoAboutIt(TokenInfo tokenInfo, ref int state)
             {
+                if (this.offset == this.source.Length)
+                {
+                    return false;
+                }
+
                 var text = GetAllText(this.buffer);
 
                 // Some constants.
                 var startIndex = state;
                 var lineStartIndex = startIndex - this.offset;
                 var lineEndIndex = lineStartIndex + this.source.Length;
-
-                if (this.offset == this.source.Length)
-                {
-                    return false;
-                }
 
                 Tuple<int, int, TokenType> token;
 
@@ -167,23 +167,21 @@ namespace Pegasus.Package
                 this.offset += tokenWidth;
                 state += tokenWidth;
 
-                if (this.offset != this.source.Length)
+                if (this.offset == this.source.Length)
                 {
-                    return true;
+                    while (true)
+                    {
+                        if (state >= text.Length) break;
+
+                        var c = text[state];
+
+                        if (c != '\r' && c != '\n') break;
+
+                        state++;
+                    }
                 }
 
-                while (true)
-                {
-                    if (state >= text.Length) break;
-
-                    var c = text[state];
-
-                    if (c != '\r' && c != '\n') break;
-
-                    state++;
-                }
-
-                return false;
+                return true;
             }
 
             private static IList<Tuple<int, int, TokenType>> GetHighlightedTokens(string text)
