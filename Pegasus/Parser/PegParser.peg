@@ -17,7 +17,7 @@ setting <KeyValuePair<Identifier, object>>
     }
 
 settingName <Identifier> -lexical
-  = at name:identifier { name }
+  = "@" name:identifier { name }
 
 rulePreamble
   = (!quantifier expressionType _)? ruleFlag<0,,_> _ equals
@@ -31,7 +31,7 @@ rule <Rule>
             flags: flags);
     }}
 
-ruleFlag <Identifier> -memoize
+ruleFlag <Identifier> -memoize -lexical
   = "-" flag:identifier { flag }
 
 expression <Expression>
@@ -103,7 +103,7 @@ quantifier <Quantifier> -memoize
   / start:lt _ min:integer _ comma _ max:integer? _ end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault()) }
   / start:lt _ count:integer _ end:gt { new Quantifier(startStart, endEnd, min: count, max: count) }
 
-integer <int>
+integer <int> -lexical
   = digits:(digit+ "") { int.Parse(digits) }
 
 action <Expression>
@@ -127,7 +127,6 @@ nonBraceCharacters
 nonBraceCharacter
   = [^{}]
 
-at        -lexical = "@"
 equals    -lexical = "="
 colon     -lexical = ":"
 semicolon -lexical = ";"
@@ -149,7 +148,7 @@ rbracket  -lexical = "]"
 identifier <Identifier> -memoize -lexical
   = name:(!digit (letter / digit / "_" / "$")+) { new Identifier(name, nameStart, nameEnd) }
 
-type <CodeSpan>
+type <CodeSpan> -lexical
   = type:(nonArrayType (_ rankSpecifiers)*) { new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
 
 nonArrayType
@@ -284,14 +283,14 @@ upperCaseLetter
 
 _ = (whitespace / eol / comment)*
 
-comment -lexical
+comment
   = singleLineComment
   / multiLineComment
 
-singleLineComment
+singleLineComment -lexical
   = "//" (!eolChar .)*
 
-multiLineComment
+multiLineComment -lexical
   = "/*" (!"*/" .)* "*/"
 
 eol

@@ -76,22 +76,30 @@ namespace Pegasus.Package
         {
             private static IList<HighlightRule<TokenType>> highlightRules = (new HighlightRuleList<TokenType>
             {
-                { @"^ whitespace       \b", TokenType.WhiteSpace },
-                { @"^ settingName      \b", TokenType.Keyword    },
-                { @"^ (string|literal) \b", TokenType.String     },
-                { @"^ class            \b", TokenType.String     },
-                { @"^ identifier       \b", TokenType.Identifier },
+                { @"^ whitespace \b", TokenType.WhiteSpace },
+                { @"^ settingName \b", TokenType.Keyword },
+                { @"^ dot \s type \b ", TokenType.Delimiter },
+                { @"^ (string|literal) \b", TokenType.String },
+                { @"^ (class|dot) \b", TokenType.String },
+                { @"^ identifier \b", TokenType.Identifier },
+                { @"^ singleLineComment \b", TokenType.LineComment },
+                { @"^ multiLineComment \b", TokenType.Comment },
+                { @"^ code \b", TokenType.Text },
+                { @"^ (comma|semicolon) \b", TokenType.Delimiter },
+                { @"^ (slash|and|not|question|star|plus) \b", TokenType.Delimiter },
             }).AsReadOnly();
 
             private static IDictionary<TokenType, TokenColor> colorMap = new Dictionary<TokenType, TokenColor>
             {
-                { TokenType.Comment,    TokenColor.Comment    },
+                { TokenType.Comment, TokenColor.Comment },
+                { TokenType.Delimiter, TokenColor.Text },
                 { TokenType.Identifier, TokenColor.Identifier },
-                { TokenType.Keyword,    TokenColor.Keyword    },
-                { TokenType.Literal,    TokenColor.Number     },
-                { TokenType.String,     TokenColor.String     },
-                { TokenType.Text,       TokenColor.Text       },
-                { TokenType.WhiteSpace, TokenColor.Text       },
+                { TokenType.Keyword, TokenColor.Keyword },
+                { TokenType.LineComment, TokenColor.Comment },
+                { TokenType.Literal, TokenColor.Number },
+                { TokenType.String, TokenColor.String },
+                { TokenType.Text, TokenColor.Text },
+                { TokenType.WhiteSpace, TokenColor.Text },
             };
 
             private IVsTextLines buffer;
