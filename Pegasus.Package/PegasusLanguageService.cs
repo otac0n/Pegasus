@@ -77,16 +77,14 @@ namespace Pegasus.Package
             private static IList<HighlightRule<TokenType>> highlightRules = (new HighlightRuleList<TokenType>
             {
                 { @"^ whitespace \b", TokenType.WhiteSpace },
-                { @"^ settingName \b", TokenType.Keyword },
-                { @"^ dot \s type \b ", TokenType.Delimiter },
-                { @"^ (string|literal) \b", TokenType.String },
-                { @"^ (class|dot) \b", TokenType.String },
+                { @"^ (settingName|ruleFlag) \b", TokenType.Keyword },
+                { @"^ (dot|lbracket|rbracket) \s type \b ", TokenType.Delimiter },
+                { @"^ (string|literal|class|dot) \b", TokenType.String },
                 { @"^ identifier \b", TokenType.Identifier },
                 { @"^ singleLineComment \b", TokenType.LineComment },
                 { @"^ multiLineComment \b", TokenType.Comment },
                 { @"^ code \b", TokenType.Text },
-                { @"^ (comma|semicolon) \b", TokenType.Delimiter },
-                { @"^ (slash|and|not|question|star|plus) \b", TokenType.Delimiter },
+                { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", TokenType.Delimiter },
             }).AsReadOnly();
 
             private static IDictionary<TokenType, TokenColor> colorMap = new Dictionary<TokenType, TokenColor>
