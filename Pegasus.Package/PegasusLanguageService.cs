@@ -125,21 +125,11 @@ namespace Pegasus.Package
                 var lineStartIndex = startIndex - this.offset;
                 var lineEndIndex = lineStartIndex + this.source.Length;
 
-                Tuple<int, int, TokenType> token;
-
-                try
-                {
-                    var tokens = GetHighlightedTokens(text);
-
-                    token = (from l in tokens
+                var tokens = GetHighlightedTokens(text);
+                var token = (from l in tokens
                              where l.Item2 > startIndex
                              where l.Item1 < lineEndIndex
                              select l).FirstOrDefault();
-                }
-                catch
-                {
-                    token = null;
-                }
 
                 if (token == null)
                 {
@@ -207,9 +197,16 @@ namespace Pegasus.Package
 
             private static IList<LexicalElement> GetLexicalElements(string text)
             {
-                IList<LexicalElement> lexicalElements;
-                new PegParser().Parse(text, null, out lexicalElements);
-                return lexicalElements;
+                try
+                {
+                    IList<LexicalElement> lexicalElements;
+                    new PegParser().Parse(text, null, out lexicalElements);
+                    return lexicalElements;
+                }
+                catch (FormatException)
+                {
+                    return new LexicalElement[0];
+                }
             }
 
             private static IList<Tuple<int, int, TokenType>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
