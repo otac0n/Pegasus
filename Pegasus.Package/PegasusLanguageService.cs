@@ -10,6 +10,7 @@ namespace Pegasus.Package
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Runtime.Caching;
     using System.Text.RegularExpressions;
@@ -149,6 +150,11 @@ namespace Pegasus.Package
                     tokenInfo.EndIndex = Math.Min(lineEndIndex, token.Item2) - lineStartIndex - 1;
                     tokenInfo.Type = token.Item3;
                     tokenInfo.Color = colorMap[token.Item3];
+                }
+
+                if (tokens.Count > 0 && tokenInfo.Type == TokenType.Unknown)
+                {
+                    Debug.WriteLine("The text '{0}' resulted in an unknown token.", this.source.Substring(tokenInfo.StartIndex, tokenInfo.EndIndex - tokenInfo.StartIndex + 1));
                 }
 
                 var tokenWidth = tokenInfo.EndIndex - tokenInfo.StartIndex + 1;
