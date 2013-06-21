@@ -45,11 +45,11 @@ choice <Expression>
   = choices:sequence<1,,_ slash _> { choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) }
 
 sequence <Expression>
-  = code:action {
-        new SequenceExpression(new Expression[] { code })
-    }
-  / elements:labeled<1,,_> _ code:action {
+  = elements:labeled<1,,_> _ code:action {
         new SequenceExpression(elements.Concat(new Expression[] { code }))
+    }
+  / code:action {
+        new SequenceExpression(new Expression[] { code })
     }
   / elements:labeled<0,,_> {
         elements.Count == 1
@@ -109,7 +109,7 @@ integer <int> -lexical
 action <Expression>
   = type:actionType code:code { new CodeExpression(code, type) }
 
-actionType <CodeType>
+actionType <CodeType> -lexical
   = "#ERROR"i { CodeType.Error }
   / "#STATE"i { CodeType.State }
   /           { CodeType.Result }

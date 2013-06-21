@@ -78,7 +78,7 @@ namespace Pegasus.Package
             private static IList<HighlightRule<TokenType>> highlightRules = (new HighlightRuleList<TokenType>
             {
                 { @"^ whitespace \b", TokenType.WhiteSpace },
-                { @"^ (settingName|ruleFlag) \b", TokenType.Keyword },
+                { @"^ (settingName|ruleFlag|actionType) \b", TokenType.Keyword },
                 { @"^ (dot|lbracket|rbracket) \s type \b ", TokenType.Delimiter },
                 { @"^ (string|literal|class|dot) \b", TokenType.String },
                 { @"^ identifier \b", TokenType.Identifier },
