@@ -165,17 +165,29 @@ namespace Pegasus.Package
                 {
                     while (true)
                     {
-                        if (state >= text.Length) break;
+                        if (state >= text.Length)
+                        {
+                            break;
+                        }
 
                         var c = text[state];
 
-                        if (c != '\r' && c != '\n') break;
+                        if (c != '\r' && c != '\n')
+                        {
+                            break;
+                        }
 
                         state++;
                     }
                 }
 
                 return true;
+            }
+
+            public void SetSource(string source, int offset)
+            {
+                this.source = source;
+                this.offset = offset;
             }
 
             private static IList<Tuple<int, int, TokenType>> GetHighlightedTokens(string text)
@@ -224,7 +236,10 @@ namespace Pegasus.Package
 
                     while (true)
                     {
-                        if (lexicalStack.Count == 0) break;
+                        if (lexicalStack.Count == 0)
+                        {
+                            break;
+                        }
 
                         var top = lexicalStack.Peek();
                         if (e.EndCursor.Location <= top.Item2.EndCursor.Location && e.StartCursor.Location >= top.Item2.StartCursor.Location)
@@ -236,7 +251,10 @@ namespace Pegasus.Package
                         lexicalStack.Pop();
                     }
 
-                    if (maxRule == 0) continue;
+                    if (maxRule == 0)
+                    {
+                        continue;
+                    }
 
                     lexicalStack.Push(Tuple.Create(default(int), e));
                     var key = string.Join(" ", lexicalStack.Select(d => d.Item2.Name));
@@ -263,7 +281,10 @@ namespace Pegasus.Package
                 {
                     while (true)
                     {
-                        if (lexicalStack.Count == 0) break;
+                        if (lexicalStack.Count == 0)
+                        {
+                            break;
+                        }
 
                         var top = lexicalStack.Pop();
                         if (top.Item1 >= t.Item2)
@@ -318,12 +339,6 @@ namespace Pegasus.Package
                 }
 
                 return null;
-            }
-
-            public void SetSource(string source, int offset)
-            {
-                this.source = source;
-                this.offset = offset;
             }
 
             private static string GetAllText(IVsTextLines buffer)
