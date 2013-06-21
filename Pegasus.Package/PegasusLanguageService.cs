@@ -227,6 +227,11 @@ namespace Pegasus.Package
 
             private static IList<Tuple<int, int, TokenType>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
             {
+                if (lexicalElements.Count == 0)
+                {
+                    return new Tuple<int, int, TokenType>[0];
+                }
+
                 var highlighted = new List<Tuple<int, int, TokenType>>(lexicalElements.Count);
 
                 var lexicalStack = new Stack<Tuple<int, LexicalElement>>();
