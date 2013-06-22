@@ -147,5 +147,5 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" Condition="Exists('$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets')" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <Import Project="..\packages\Weave.1.0.0\tools\Weave.targets" />
+  <Import Project="..\packages\Weave.1.0.0\tools\Weave.targets" Condition="Exists('..\packages\Weave.1.0.0\tools\Weave.targets')" />
 </Project>
