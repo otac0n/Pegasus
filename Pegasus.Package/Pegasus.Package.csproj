@@ -123,97 +123,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Pegasus.Common\Cursor.cs">
-      <Link>Shared\Pegasus.Common\Cursor.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus.Common\ILexical.cs">
-      <Link>Shared\Pegasus.Common\ILexical.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus.Common\IParseResult{T}.cs">
-      <Link>Shared\Pegasus.Common\IParseResult{T}.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus.Common\LexicalElement.cs">
-      <Link>Shared\Pegasus.Common\LexicalElement.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus.Common\ListNode.cs">
-      <Link>Shared\Pegasus.Common\ListNode.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus.Common\ListNode{T}.cs">
-      <Link>Shared\Pegasus.Common\ListNode{T}.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus.Common\ParseResult{T}.cs">
-      <Link>Shared\Pegasus.Common\ParseResult{T}.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\AndCodeExpression.cs">
-      <Link>Shared\Pegasus\Expressions\AndCodeExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\AndExpression.cs">
-      <Link>Shared\Pegasus\Expressions\AndExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\CharacterRange.cs">
-      <Link>Shared\Pegasus\Expressions\CharacterRange.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\ChoiceExpression.cs">
-      <Link>Shared\Pegasus\Expressions\ChoiceExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\ClassExpression.cs">
-      <Link>Shared\Pegasus\Expressions\ClassExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\CodeExpression.cs">
-      <Link>Shared\Pegasus\Expressions\CodeExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\CodeSpan.cs">
-      <Link>Shared\Pegasus\Expressions\CodeSpan.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\Expression.cs">
-      <Link>Shared\Pegasus\Expressions\Expression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\Grammar.cs">
-      <Link>Shared\Pegasus\Expressions\Grammar.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\Identifier.cs">
-      <Link>Shared\Pegasus\Expressions\Identifier.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\LiteralExpression.cs">
-      <Link>Shared\Pegasus\Expressions\LiteralExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\NameExpression.cs">
-      <Link>Shared\Pegasus\Expressions\NameExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\NotCodeExpression.cs">
-      <Link>Shared\Pegasus\Expressions\NotCodeExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\NotExpression.cs">
-      <Link>Shared\Pegasus\Expressions\NotExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\PrefixedExpression.cs">
-      <Link>Shared\Pegasus\Expressions\PrefixedExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\Quantifier.cs">
-      <Link>Shared\Pegasus\Expressions\Quantifier.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\RepetitionExpression.cs">
-      <Link>Shared\Pegasus\Expressions\RepetitionExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\Rule.cs">
-      <Link>Shared\Pegasus\Expressions\Rule.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\SequenceExpression.cs">
-      <Link>Shared\Pegasus\Expressions\SequenceExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\TypedExpression.cs">
-      <Link>Shared\Pegasus\Expressions\TypedExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Expressions\WildcardExpression.cs">
-      <Link>Shared\Pegasus\Expressions\WildcardExpression.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Parser\PegParser.peg.cs">
-      <Link>Shared\Pegasus\Parser\PegParser.peg.cs</Link>
-    </Compile>
-    <Compile Include="..\Pegasus\Properties\Resources.Designer.cs">
-      <Link>Shared\Pegasus\Properties\Resources.Designer.css</Link>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
@@ -228,9 +137,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Pegasus\Properties\Resources.resx">
-      <Link>Shared\Pegasus\Properties\Resources.resx</Link>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -251,6 +157,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Package.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
+      <Project>{1fc19adf-446f-4118-8189-c25aadf12397}</Project>
+      <Name>Pegasus.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pegasus\Pegasus.csproj">
+      <Project>{58f12d13-9997-4c29-90ce-3c6c7409ba68}</Project>
+      <Name>Pegasus</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
