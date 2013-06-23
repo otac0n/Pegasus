@@ -1,6 +1,5 @@
 ﻿@model Grammar
 {{
-    this.grammar = model;
     var settings = model.Settings.ToLookup(s => s.Key.Name, s => s.Value);
     var assemblyName = Assembly.GetExecutingAssembly().GetName();
 }}
@@ -194,6 +193,3 @@ namespace
         }
     }
 }
-{{
-    this.grammar = null;
-}}
