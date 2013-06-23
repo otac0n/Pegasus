@@ -112,6 +112,11 @@ namespace Pegasus.Package
 
             public bool ScanTokenAndProvideInfoAboutIt(TokenInfo tokenInfo, ref int state)
             {
+                if (tokenInfo == null)
+                {
+                    throw new ArgumentNullException("tokenInfo");
+                }
+
                 if (this.offset == this.source.Length)
                 {
                     return false;

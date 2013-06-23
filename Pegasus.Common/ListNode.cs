@@ -9,6 +9,7 @@
 namespace Pegasus.Common
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Provides static methods for operating on <see cref="ListNode&lt;T&gt;"/> objects.
@@ -33,6 +34,7 @@ namespace Pegasus.Common
         /// <typeparam name="T">The type of the elements in the list.</typeparam>
         /// <param name="this">The list to convert.</param>
         /// <returns>A <see cref="List&lt;T&gt;"/> containing the elements in the read-only <see cref="ListNode&lt;T&gt;"/>.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "This does not expose an internal list, it is a utility method explicitly for the purpose of creating generic lists.")]
         public static List<T> ToList<T>(this ListNode<T> @this)
         {
             var list = new List<T>();
