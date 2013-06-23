@@ -11,15 +11,14 @@
   </Target>
   <Target Name="Package" DependsOnTargets="Build">
     <MakeDir Directories="bin;obj;obj\lib\net40;obj\lib\portable-sl4+win8" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\tools" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.targets" DestinationFolder="obj\tools" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\tools" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.targets" DestinationFolder="obj\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\build" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\readme.txt" />
-    <Copy SourceFiles="Install.ps1;Uninstall.ps1" DestinationFolder="obj\tools" />
     <PropertyGroup>
       <AssemblyInfo>$([System.IO.File]::ReadAllText("$(SolutionDir)SharedAssemblyInfo.cs"))</AssemblyInfo>
       <AssemblyVersion>$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfo), "AssemblyVersion\(\"(\d+\.\d+\.\d+)\.\d+\"\)").Groups[1].Value)</AssemblyVersion>
