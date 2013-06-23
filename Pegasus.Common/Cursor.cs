@@ -45,7 +45,7 @@ namespace Pegasus.Common
 
             if (location < 0 || location > subject.Length)
             {
-                throw new ArgumentOutOfRangeException("length");
+                throw new ArgumentOutOfRangeException("location");
             }
 
             this.subject = subject;
@@ -153,23 +153,23 @@ namespace Pegasus.Common
         /// <summary>
         /// Determines whether two specified cursors represent the same location.
         /// </summary>
-        /// <param name="a">The first <see cref="Cursor"/> to compare, or null.</param>
-        /// <param name="b">The second <see cref="Cursor"/> to compare, or null.</param>
-        /// <returns>true if the value of <paramref name="a"/> is the same as the value of <paramref name="b"/>; otherwise, false.</returns>
-        public static bool operator ==(Cursor a, Cursor b)
+        /// <param name="left">The first <see cref="Cursor"/> to compare, or null.</param>
+        /// <param name="right">The second <see cref="Cursor"/> to compare, or null.</param>
+        /// <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
+        public static bool operator ==(Cursor left, Cursor right)
         {
-            return object.Equals(a, b);
+            return object.Equals(left, right);
         }
 
         /// <summary>
         /// Determines whether two specified cursors represent different locations.
         /// </summary>
-        /// <param name="a">The first <see cref="Cursor"/> to compare, or null.</param>
-        /// <param name="b">The second <see cref="Cursor"/> to compare, or null.</param>
-        /// <returns>true if the value of <paramref name="a"/> is different from the value of <paramref name="b"/>; otherwise, false.</returns>
-        public static bool operator !=(Cursor a, Cursor b)
+        /// <param name="left">The first <see cref="Cursor"/> to compare, or null.</param>
+        /// <param name="right">The second <see cref="Cursor"/> to compare, or null.</param>
+        /// <returns>true if the value of <paramref name="left"/> is different from the value of <paramref name="right"/>; otherwise, false.</returns>
+        public static bool operator !=(Cursor left, Cursor right)
         {
-            return !object.Equals(a, b);
+            return !object.Equals(left, right);
         }
 
         /// <summary>

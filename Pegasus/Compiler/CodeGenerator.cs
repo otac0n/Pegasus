@@ -46,7 +46,6 @@ namespace Pegasus.Compiler
         private readonly Dictionary<Expression, object> types;
         private readonly HashSet<Rule> leftRecursiveRules;
 
-        private Grammar grammar;
         private string currentIndentation;
         private string currentResultName = null;
         private object currentResultType = null;
