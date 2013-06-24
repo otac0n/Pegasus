@@ -20,10 +20,11 @@ namespace Pegasus.Package
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [Guid(GuidList.PegasusPackageGuid)]
+    [ProvideBindingPath]
     [ProvideService(typeof(PegasusLanguageService), ServiceName = "Pegasus Language Service")]
     [ProvideLanguageService(typeof(PegasusLanguageService), "Pegasus", 110, CodeSense = true, RequestStockColors = true, EnableCommenting = true, EnableAsyncCompletion = true)]
     [ProvideLanguageExtension(typeof(PegasusLanguageService), ".peg")]
-    public sealed class PegasusPackage : Microsoft.VisualStudio.Shell.Package
+    public sealed class PegasusPackage : Package
     {
         /// <summary>
         /// Called when the VSPackage is loaded by Visual Studio.
