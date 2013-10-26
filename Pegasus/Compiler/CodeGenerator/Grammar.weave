@@ -38,6 +38,9 @@ namespace
             ;
     {{/if}}
 
+    /// <summary>
+    ///  Parses a string according to the rules of the <see cref="{{= classname }}" /> grammar.
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("{{= assemblyName.Name }}", "{{= assemblyName.Version }}")]
     {{@RenderCode accessibility}}
     partial class
@@ -49,6 +52,16 @@ namespace
         {{if memoize}}
             private Dictionary<string, object> storage;
         {{/if}}
+
+        /// <summary>
+        ///  Parses a string according to the rules of the <see cref="{{= classname }}" /> grammar.
+        /// </summary>
+        /// <param name="subject">The parsing subject.</param>
+        /// <param name="fileName">The optional file name to use in error messages.</param>
+        /// <returns>The <see cref="{{= type.ToString().Replace("<", "&lt;").Replace(">", "&gt;") }}" /> parsed from <paramref name="subject" />.</returns>
+        /// <exception cref="FormatException">
+        ///  Thrown when parsing fails against <paramref name="subject"/>.  The exception's <code>Data["cursor"]</code> will be set with the cursor where the fatal error occurred.
+        /// </exception>
         public {{= type }} Parse(string subject, string fileName = null)
         {
             {{if memoize}}

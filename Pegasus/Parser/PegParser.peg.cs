@@ -41,6 +41,9 @@ namespace
         #line default
         ;
 
+    /// <summary>
+    ///  Parses a string according to the rules of the <see cref="PegParser" /> grammar.
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("Pegasus", "3.0.0.0")]
     public
     partial class
@@ -49,6 +52,16 @@ namespace
     #line default
     {
         private Dictionary<string, object> storage;
+
+        /// <summary>
+        ///  Parses a string according to the rules of the <see cref="PegParser" /> grammar.
+        /// </summary>
+        /// <param name="subject">The parsing subject.</param>
+        /// <param name="fileName">The optional file name to use in error messages.</param>
+        /// <returns>The <see cref="Grammar" /> parsed from <paramref name="subject" />.</returns>
+        /// <exception cref="FormatException">
+        ///  Thrown when parsing fails against <paramref name="subject"/>.  The exception's <code>Data["cursor"]</code> will be set with the cursor where the fatal error occurred.
+        /// </exception>
         public Grammar Parse(string subject, string fileName = null)
         {
             try
