@@ -67,5 +67,16 @@ namespace Pegasus.Tests
 
             Assert.That(result.Code, Contains.Substring("TEST"));
         }
+
+        [Test(Description = "GitHub bug #38")]
+        public void Parse_WhenARepetitionDelimiterFollowsTheRepeatedRule_DoesNotConsumeTheDelimiter()
+        {
+            var grammar = new PegParser().Parse("start = ' ' 'hoge'<1,,' '> ' ';");
+
+            var result = PegCompiler.Compile(grammar);
+            var func = CodeCompiler.Compile<string>(result.Code);
+
+            Assert.That(func(" hoge ", null), Is.EqualTo(" hoge "));
+        }
     }
 }

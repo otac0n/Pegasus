@@ -5,6 +5,7 @@
     var oldResultName = this.currentResultName;
     var oldResultType = this.currentResultType;
     var listResultType = this.types[model.Expression];
+    var loopCursorName = model.Quantifier.Delimiter == null ? null : this.CreateVariable("startCursor");
 }}
 var {{: startCursorName }} = cursor;
 var {{: listName }} = new List<{{= listResultType }}>();
@@ -15,6 +16,7 @@ while ({{if model.Quantifier.Max.HasValue}}{{: listName }}.Count < {{= model.Qua
             this.currentResultName = this.CreateVariable("r");
             this.currentResultType = this.types[model.Quantifier.Delimiter];
         }}
+        var {{: loopCursorName }} = cursor;
         if ({{: listName }}.Count > 0)
         {
             IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
@@ -37,6 +39,9 @@ while ({{if model.Quantifier.Max.HasValue}}{{: listName }}.Count < {{= model.Qua
     }
     else
     {
+        {{if model.Quantifier.Delimiter != null}}
+            cursor = {{: loopCursorName }};
+        {{/if}}
         break;
     }
 }
