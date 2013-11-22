@@ -695,6 +695,7 @@ namespace
             var l0 = new List<Expression>();
             while (true)
             {
+                var startCursor2 = cursor;
                 if (l0.Count > 0)
                 {
                     IParseResult<string> r2 = null;
@@ -712,6 +713,7 @@ namespace
                 }
                 else
                 {
+                    cursor = startCursor2;
                     break;
                 }
             }
