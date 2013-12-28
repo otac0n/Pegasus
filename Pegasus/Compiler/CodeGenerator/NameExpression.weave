@@ -1,2 +1,2 @@
 ﻿@model NameExpression
-{{: this.currentResultName }} = this.{{: model.Identifier.Name }}(ref cursor);
+{{: this.currentContext.ResultName }} = this.{{: model.Identifier.Name }}(ref cursor);

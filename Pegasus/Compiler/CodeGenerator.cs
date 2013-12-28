@@ -47,8 +47,7 @@ namespace Pegasus.Compiler
         private readonly HashSet<Rule> leftRecursiveRules;
 
         private string currentIndentation;
-        private string currentResultName = null;
-        private object currentResultType = null;
+        private ResultContext currentContext;
 
         public CodeGenerator(TextWriter writer, Dictionary<Expression, object> types, HashSet<Rule> leftRecursiveRules)
         {
@@ -208,6 +207,43 @@ namespace Pegasus.Compiler
             this.currentIndentation = indentation;
             base.WalkRule(rule);
             this.currentIndentation = temp;
+        }
+
+        private struct ResultContext
+        {
+            private string resultName;
+            private string resultRuleName;
+            private object resultType;
+
+            public ResultContext(string resultName = null, string resultRuleName = null, object resultType = null)
+            {
+                this.resultName = resultName;
+                this.resultType = resultType;
+                this.resultRuleName = resultRuleName;
+            }
+
+            public string ResultName
+            {
+                get { return this.resultName; }
+            }
+
+            public string ResultRuleName
+            {
+                get { return this.resultRuleName; }
+            }
+
+            public object ResultType
+            {
+                get { return this.resultType; }
+            }
+
+            public ResultContext WithResultName(string resultName)
+            {
+                return new ResultContext(
+                    resultName: resultName,
+                    resultRuleName: this.resultRuleName,
+                    resultType: this.resultType);
+            }
         }
     }
 }

@@ -1,75 +1,77 @@
 ﻿@model Rule
 {{
-    this.currentResultName = this.CreateVariable("r");
-    this.currentResultType = this.types[model.Expression];
     var memoize = model.Flags.Any(f => f.Name == "memoize");
+    var lexical = model.Flags.Any(f => f.Name == "lexical");
+    this.currentContext = new ResultContext(
+        resultName: this.CreateVariable("r"),
+        resultRuleName: lexical ? model.Identifier.Name : null,
+        resultType: this.types[model.Expression]);
     var leftRecursive = memoize && this.leftRecursiveRules.Contains(model);
 }}
 {{if model.Expression is TypedExpression}}
     private IParseResult<
-        {{@RenderCode this.currentResultType}}
+        {{@RenderCode this.currentContext.ResultType}}
         > {{: model.Identifier.Name}}(ref Cursor cursor)
 {{else}}
-    private IParseResult<{{= this.currentResultType }}> {{: model.Identifier.Name}}(ref Cursor cursor)
+    private IParseResult<{{= this.currentContext.ResultType }}> {{: model.Identifier.Name }}(ref Cursor cursor)
 {{/if}}
 {
-    IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
+    IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }} = null;
     {{if leftRecursive}}
         var storageKey = {{= ToLiteral(model.Identifier.Name + ":") }} + cursor.StateKey + ":" + cursor.Location;
         if (this.storage.ContainsKey(storageKey))
         {
-            {{: this.currentResultName }} = (IParseResult<{{= this.currentResultType }}>)this.storage[storageKey];
-            if ({{: this.currentResultName }} != null)
+            {{: this.currentContext.ResultName }} = (IParseResult<{{= this.currentContext.ResultType }}>)this.storage[storageKey];
+            if ({{: this.currentContext.ResultName }} != null)
             {
-                cursor = {{: this.currentResultName }}.EndCursor;
+                cursor = {{: this.currentContext.ResultName }}.EndCursor;
             }
-            return {{: this.currentResultName }};
+            return {{: this.currentContext.ResultName }};
         }
         {{
             var startCursorName = this.CreateVariable("startCursor");
-            var resultName = this.currentResultName;
+            var resultName = this.currentContext.ResultName;
             var nextResultName = this.CreateVariable("r");
         }}
         this.storage[storageKey] = null;
         var {{: startCursorName }} = cursor;
         while (true)
         {
-            IParseResult<{{= this.currentResultType }}> {{: nextResultName }} = null;
-            {{ this.currentResultName = nextResultName; }}
+            IParseResult<{{= this.currentContext.ResultType }}> {{: nextResultName }} = null;
+            {{ this.currentContext = this.currentContext.WithResultName(nextResultName); }}
             {{@WalkRule model}}
-            {{ this.currentResultName = resultName; }}
-            if ({{: nextResultName }} == null || ({{: this.currentResultName }} != null && {{: this.currentResultName }}.EndCursor.Location >= r1.EndCursor.Location))
+            {{ this.currentContext = this.currentContext.WithResultName(resultName); }}
+            if ({{: nextResultName }} == null || ({{: this.currentContext.ResultName }} != null && {{: this.currentContext.ResultName }}.EndCursor.Location >= r1.EndCursor.Location))
             {
                 break;
             }
-            this.storage[storageKey] = {{: this.currentResultName }} = {{: nextResultName }};
+            this.storage[storageKey] = {{: this.currentContext.ResultName }} = {{: nextResultName }};
             cursor = {{: startCursorName }};
         }
-        if ({{: this.currentResultName }} != null)
+        if ({{: this.currentContext.ResultName }} != null)
         {
-            cursor = {{: this.currentResultName }}.EndCursor;
+            cursor = {{: this.currentContext.ResultName }}.EndCursor;
         }
     {{elif memoize}}
         var storageKey = {{= ToLiteral(model.Identifier.Name + ":") }} + cursor.StateKey + ":" + cursor.Location;
         if (this.storage.ContainsKey(storageKey))
         {
-            {{: this.currentResultName }} = (IParseResult<{{= this.currentResultType }}>)this.storage[storageKey];
-            if ({{: this.currentResultName }} != null)
+            {{: this.currentContext.ResultName }} = (IParseResult<{{= this.currentContext.ResultType }}>)this.storage[storageKey];
+            if ({{: this.currentContext.ResultName }} != null)
             {
-                cursor = {{: this.currentResultName }}.EndCursor;
+                cursor = {{: this.currentContext.ResultName }}.EndCursor;
             }
-            return {{: this.currentResultName }};
+            return {{: this.currentContext.ResultName }};
         }
         {{@WalkRule model}}
-        this.storage[storageKey] = {{: this.currentResultName }};
+        this.storage[storageKey] = {{: this.currentContext.ResultName }};
     {{else}}
         {{@WalkRule model}}
     {{/if}}
-    return {{: this.currentResultName }};
+    return {{: this.currentContext.ResultName }};
 }
 
 {{
-    this.currentResultName = null;
-    this.currentResultType = null;
+    this.currentContext = default(ResultContext);
     this.variables.Clear();
 }}

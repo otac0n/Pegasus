@@ -2,4 +2,4 @@
 var {{: model.Prefix.Name + "Start" }} = cursor;
 {{@WalkExpression model.Expression}}
 var {{: model.Prefix.Name + "End" }} = cursor;
-var {{: model.Prefix.Name }} = ValueOrDefault({{: this.currentResultName }});
+var {{: model.Prefix.Name }} = ValueOrDefault({{: this.currentContext.ResultName }});

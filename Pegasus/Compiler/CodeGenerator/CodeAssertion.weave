@@ -6,5 +6,5 @@ if ({{if !mustMatch}}!{{/if}}new Func<Cursor, bool>(state =>
     {{@RenderCode code}}
     )(cursor))
 {
-    {{: this.currentResultName }} = new ParseResult<string>(cursor, cursor, string.Empty);
+    {{: this.currentContext.ResultName }} = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
 }
