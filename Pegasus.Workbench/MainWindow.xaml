@@ -7,6 +7,21 @@
     Title="MainWindow"
     Height="350"
     Width="525">
-    <Grid>
+    <Grid DataContext="{Binding ViewModel}">
+        <wfi:WindowsFormsHost x:Name="FormsHost" AllowDrop="True">
+            <ic:TextEditorControl
+                x:Name="TextEditor"
+                AllowDrop="True"
+                IndentStyle="Smart"
+                IsIconBarVisible="False"
+                ShowInvalidLines="False"
+                ShowEOLMarkers="False"
+                ShowLineNumbers="True"
+                ShowMatchingBracket="True"
+                ShowTabs="True"
+                ShowSpaces="True"
+                ShowHRuler="False"
+                ShowVRuler="False" />
+        </wfi:WindowsFormsHost>
     </Grid>
 </Window>

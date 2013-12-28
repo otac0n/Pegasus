@@ -17,7 +17,31 @@ namespace Pegasus.Workbench
     {
         public MainWindow()
         {
+            this.ViewModel = new AppViewModel();
             InitializeComponent();
+
+            var updating = false;
+            this.TextEditor.TextChanged += (s, e) =>
+            {
+                if (!updating)
+                {
+                    updating = true;
+                    this.ViewModel.Text = this.TextEditor.Text;
+                    updating = false;
+                }
+            };
+
+            this.ViewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "Text" && !updating)
+                {
+                    updating = true;
+                    this.TextEditor.Text = this.ViewModel.Text;
+                    updating = false;
+                }
+            };
         }
+
+        public AppViewModel ViewModel { get; protected set; }
     }
 }
