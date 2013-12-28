@@ -1,5 +1,7 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:ic="clr-namespace:ICSharpCode.TextEditor;assembly=ICSharpCode.TextEditor"
+    xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Pegasus.Workbench.MainWindow"
     Title="MainWindow"
