@@ -599,58 +599,67 @@ namespace
                             var flags = ValueOrDefault(r6);
                             if (r6 != null)
                             {
-                                IParseResult<string> r9 = null;
-                                r9 = this.equals(ref cursor);
+                                IParseResult<IList<string>> r9 = null;
+                                r9 = this._(ref cursor);
                                 if (r9 != null)
                                 {
-                                    IParseResult<IList<string>> r10 = null;
-                                    r10 = this._(ref cursor);
+                                    IParseResult<string> r10 = null;
+                                    r10 = this.equals(ref cursor);
                                     if (r10 != null)
                                     {
-                                        IParseResult<Expression> r11 = null;
-                                        var expressionStart = cursor;
-                                        r11 = this.expression(ref cursor);
-                                        var expressionEnd = cursor;
-                                        var expression = ValueOrDefault(r11);
+                                        IParseResult<IList<string>> r11 = null;
+                                        r11 = this._(ref cursor);
                                         if (r11 != null)
                                         {
-                                            IParseResult<IList<string>> r12 = null;
-                                            var startCursor3 = cursor;
-                                            var l2 = new List<string>();
-                                            while (l2.Count < 1)
+                                            IParseResult<Expression> r12 = null;
+                                            var expressionStart = cursor;
+                                            r12 = this.expression(ref cursor);
+                                            var expressionEnd = cursor;
+                                            var expression = ValueOrDefault(r12);
+                                            if (r12 != null)
                                             {
-                                                IParseResult<string> r13 = null;
-                                                r13 = this.semicolon(ref cursor);
-                                                if (r13 != null)
+                                                IParseResult<IList<string>> r13 = null;
+                                                var startCursor3 = cursor;
+                                                var l2 = new List<string>();
+                                                while (l2.Count < 1)
                                                 {
-                                                    l2.Add(r13.Value);
+                                                    IParseResult<string> r14 = null;
+                                                    r14 = this.semicolon(ref cursor);
+                                                    if (r14 != null)
+                                                    {
+                                                        l2.Add(r14.Value);
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                                if (l2.Count >= 0)
+                                                {
+                                                    r13 = this.ReturnHelper<IList<string>>(startCursor3, ref cursor, state => l2.AsReadOnly());
                                                 }
                                                 else
                                                 {
-                                                    break;
+                                                    cursor = startCursor3;
                                                 }
-                                            }
-                                            if (l2.Count >= 0)
-                                            {
-                                                r12 = this.ReturnHelper<IList<string>>(startCursor3, ref cursor, state => l2.AsReadOnly());
-                                            }
-                                            else
-                                            {
-                                                cursor = startCursor3;
-                                            }
-                                            if (r12 != null)
-                                            {
-                                                r0 = this.ReturnHelper<Rule>(startCursor0, ref cursor, state =>
-                                                    #line 26 "PegParser.peg"
-                                                                                                             {
+                                                if (r13 != null)
+                                                {
+                                                    r0 = this.ReturnHelper<Rule>(startCursor0, ref cursor, state =>
+                                                        #line 26 "PegParser.peg"
+                                                                                                               {
         var typeValue = type.SingleOrDefault();
         return new Rule(
             identifier: name,
             expression: typeValue != null ? new TypedExpression(typeValue, expression) : expression,
             flags: flags);
     }
-                                                    #line default
-                                                    );
+                                                        #line default
+                                                        );
+                                                }
+                                                else
+                                                {
+                                                    cursor = startCursor0;
+                                                }
                                             }
                                             else
                                             {
