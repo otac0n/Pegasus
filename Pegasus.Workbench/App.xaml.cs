@@ -9,11 +9,16 @@
 namespace Pegasus.Workbench
 {
     using System.Windows;
+    using ICSharpCode.TextEditor.Document;
 
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
+        private void App_Startup(object sender, StartupEventArgs e)
+        {
+            HighlightingManager.Manager.AddHighlightingStrategy(new PegasusHighlightingStrategy());
+        }
     }
 }

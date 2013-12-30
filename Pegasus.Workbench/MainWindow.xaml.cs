@@ -19,6 +19,7 @@ namespace Pegasus.Workbench
         {
             this.ViewModel = new AppViewModel();
             InitializeComponent();
+            this.TextEditor.SetHighlighting("Pegasus");
 
             var updating = false;
             this.TextEditor.TextChanged += (s, e) =>
