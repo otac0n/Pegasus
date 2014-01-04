@@ -57,7 +57,13 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding CompileErrors}" AutoGenerateColumns="False" GridLinesVisibility="None" IsReadOnly="True" SelectionMode="Single">
+        <DataGrid
+            Grid.Row="1"
+            ItemsSource="{Binding CompileErrors}"
+            AutoGenerateColumns="False"
+            GridLinesVisibility="None"
+            IsReadOnly="True"
+            SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn />
                 <DataGridTextColumn Header="Description" Width="*" Binding="{Binding ErrorText}" />

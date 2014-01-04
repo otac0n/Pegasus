@@ -44,7 +44,7 @@ namespace Pegasus.Workbench
                 }
             };
 
-            this.ViewModel.Text = "start" + Environment.NewLine + "  = \"Hello, world!\" EOF" + Environment.NewLine + "EOF" + Environment.NewLine + "  = !.";
+            this.ViewModel.Text = string.Join(Environment.NewLine, new[] { "start", "  = \"Hello, world!\" EOF", "", "EOF", "  = !.", "" });
         }
 
         public AppViewModel ViewModel { get; protected set; }

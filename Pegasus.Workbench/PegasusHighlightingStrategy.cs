@@ -34,8 +34,29 @@ namespace Pegasus.Workbench
             { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", "Delimiter" },
         }).AsReadOnly();
 
-        private readonly DefaultHighlightingStrategy @default = new DefaultHighlightingStrategy();
-        private readonly Dictionary<string, string> properties = new Dictionary<string, string>();
+        private readonly Dictionary<string, HighlightColor> environmentColors;
+        private readonly Dictionary<string, string> properties;
+
+        public PegasusHighlightingStrategy()
+        {
+            this.properties = new Dictionary<string, string>();
+            this.environmentColors = new Dictionary<string, HighlightColor>
+            {
+                { "Default", new HighlightBackground("WindowText", "Window", false, false) },
+                { "Selection", new HighlightColor("HighlightText", "Highlight", false, false) },
+                { "VRuler", new HighlightColor("ControlLight", "Window", false, false) },
+                { "InvalidLines", new HighlightColor(Color.Red, false, false) },
+                { "CaretMarker", new HighlightColor(Color.Yellow, false, false) },
+                { "CaretLine", new HighlightBackground("ControlLight", "Window", false, false) },
+                { "LineNumbers", new HighlightBackground("ControlDark", "Window", false, false) },
+                { "FoldLine", new HighlightColor("ControlDark", false, false) },
+                { "FoldMarker", new HighlightColor("WindowText", "Window", false, false) },
+                { "SelectedFoldLine", new HighlightColor("WindowText", false, false) },
+                { "EOLMarkers", new HighlightColor("ControlLight", "Window", false, false) },
+                { "SpaceMarkers", new HighlightColor("ControlLight", "Window", false, false) },
+                { "TabMarkers", new HighlightColor("ControlLight", "Window", false, false) },
+            };
+        }
 
         public string[] Extensions
         {
@@ -64,10 +85,15 @@ namespace Pegasus.Workbench
 
                 case "Comment":
                     return new HighlightColor(Color.DarkGreen, false, false);
-
-                default:
-                    return new HighlightColor(Color.Black, false, false);
             }
+
+            HighlightColor color;
+            if (name == null || !this.environmentColors.TryGetValue(name, out color))
+            {
+                color = new HighlightColor(SystemColors.WindowText, false, false);
+            }
+
+            return color;
         }
 
         public void MarkTokens(IDocument document)
