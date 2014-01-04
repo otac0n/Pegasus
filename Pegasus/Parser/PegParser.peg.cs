@@ -140,14 +140,7 @@ namespace
                         break;
                     }
                 }
-                if (l0.Count >= 0)
-                {
-                    r2 = this.ReturnHelper<IList<KeyValuePair<Identifier, object>>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                }
-                else
-                {
-                    cursor = startCursor1;
-                }
+                r2 = this.ReturnHelper<IList<KeyValuePair<Identifier, object>>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 var settingsEnd = cursor;
                 var settings = ValueOrDefault(r2);
                 if (r2 != null)
@@ -184,14 +177,7 @@ namespace
                                 break;
                             }
                         }
-                        if (l1.Count >= 0)
-                        {
-                            r6 = this.ReturnHelper<IList<Rule>>(startCursor3, ref cursor, state => l1.AsReadOnly());
-                        }
-                        else
-                        {
-                            cursor = startCursor3;
-                        }
+                        r6 = this.ReturnHelper<IList<Rule>>(startCursor3, ref cursor, state => l1.AsReadOnly());
                         var rulesEnd = cursor;
                         var rules = ValueOrDefault(r6);
                         if (r6 != null)
@@ -322,14 +308,7 @@ namespace
                                 break;
                             }
                         }
-                        if (l0.Count >= 0)
-                        {
-                            r4 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                        }
-                        else
-                        {
-                            cursor = startCursor1;
-                        }
+                        r4 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                         if (r4 != null)
                         {
                             r0 = this.ReturnHelper<KeyValuePair<Identifier, object>>(startCursor0, ref cursor, state =>
@@ -456,14 +435,7 @@ namespace
                     break;
                 }
             }
-            if (l0.Count >= 0)
-            {
-                r1 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-            }
-            else
-            {
-                cursor = startCursor1;
-            }
+            r1 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
             if (r1 != null)
             {
                 IParseResult<IList<Identifier>> r7 = null;
@@ -493,14 +465,7 @@ namespace
                         break;
                     }
                 }
-                if (l1.Count >= 0)
-                {
-                    r7 = this.ReturnHelper<IList<Identifier>>(startCursor4, ref cursor, state => l1.AsReadOnly());
-                }
-                else
-                {
-                    cursor = startCursor4;
-                }
+                r7 = this.ReturnHelper<IList<Identifier>>(startCursor4, ref cursor, state => l1.AsReadOnly());
                 if (r7 != null)
                 {
                     IParseResult<IList<string>> r10 = null;
@@ -574,14 +539,7 @@ namespace
                             break;
                         }
                     }
-                    if (l0.Count >= 0)
-                    {
-                        r3 = this.ReturnHelper<IList<CodeSpan>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                    }
-                    else
-                    {
-                        cursor = startCursor1;
-                    }
+                    r3 = this.ReturnHelper<IList<CodeSpan>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                     var typeEnd = cursor;
                     var type = ValueOrDefault(r3);
                     if (r3 != null)
@@ -618,14 +576,7 @@ namespace
                                     break;
                                 }
                             }
-                            if (l1.Count >= 0)
-                            {
-                                r6 = this.ReturnHelper<IList<Identifier>>(startCursor2, ref cursor, state => l1.AsReadOnly());
-                            }
-                            else
-                            {
-                                cursor = startCursor2;
-                            }
+                            r6 = this.ReturnHelper<IList<Identifier>>(startCursor2, ref cursor, state => l1.AsReadOnly());
                             var flagsEnd = cursor;
                             var flags = ValueOrDefault(r6);
                             if (r6 != null)
@@ -665,14 +616,7 @@ namespace
                                                         break;
                                                     }
                                                 }
-                                                if (l2.Count >= 0)
-                                                {
-                                                    r13 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l2.AsReadOnly());
-                                                }
-                                                else
-                                                {
-                                                    cursor = startCursor4;
-                                                }
+                                                r13 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l2.AsReadOnly());
                                                 if (r13 != null)
                                                 {
                                                     r0 = this.ReturnHelper<Rule>(startCursor0, ref cursor, state =>
@@ -1125,14 +1069,7 @@ namespace
                         break;
                     }
                 }
-                if (l1.Count >= 0)
-                {
-                    r7 = this.ReturnHelper<IList<Expression>>(startCursor5, ref cursor, state => l1.AsReadOnly());
-                }
-                else
-                {
-                    cursor = startCursor5;
-                }
+                r7 = this.ReturnHelper<IList<Expression>>(startCursor5, ref cursor, state => l1.AsReadOnly());
                 var elementsEnd = cursor;
                 var elements = ValueOrDefault(r7);
                 if (r7 != null)
@@ -1638,14 +1575,7 @@ namespace
                                 break;
                             }
                         }
-                        if (l0.Count >= 0)
-                        {
-                            r9 = this.ReturnHelper<IList<CodeSpan>>(startCursor5, ref cursor, state => l0.AsReadOnly());
-                        }
-                        else
-                        {
-                            cursor = startCursor5;
-                        }
+                        r9 = this.ReturnHelper<IList<CodeSpan>>(startCursor5, ref cursor, state => l0.AsReadOnly());
                         var typeEnd = cursor;
                         var type = ValueOrDefault(r9);
                         if (r9 != null)
@@ -1847,14 +1777,7 @@ namespace
                                                 break;
                                             }
                                         }
-                                        if (l0.Count >= 0)
-                                        {
-                                            r10 = this.ReturnHelper<IList<int>>(startCursor4, ref cursor, state => l0.AsReadOnly());
-                                        }
-                                        else
-                                        {
-                                            cursor = startCursor4;
-                                        }
+                                        r10 = this.ReturnHelper<IList<int>>(startCursor4, ref cursor, state => l0.AsReadOnly());
                                         var maxEnd = cursor;
                                         var max = ValueOrDefault(r10);
                                         if (r10 != null)
@@ -1888,14 +1811,7 @@ namespace
                                                                 break;
                                                             }
                                                         }
-                                                        if (l1.Count >= 0)
-                                                        {
-                                                            r15 = this.ReturnHelper<IList<Expression>>(startCursor5, ref cursor, state => l1.AsReadOnly());
-                                                        }
-                                                        else
-                                                        {
-                                                            cursor = startCursor5;
-                                                        }
+                                                        r15 = this.ReturnHelper<IList<Expression>>(startCursor5, ref cursor, state => l1.AsReadOnly());
                                                         var delimiterEnd = cursor;
                                                         var delimiter = ValueOrDefault(r15);
                                                         if (r15 != null)
@@ -2032,14 +1948,7 @@ namespace
                                                 break;
                                             }
                                         }
-                                        if (l2.Count >= 0)
-                                        {
-                                            r25 = this.ReturnHelper<IList<int>>(startCursor7, ref cursor, state => l2.AsReadOnly());
-                                        }
-                                        else
-                                        {
-                                            cursor = startCursor7;
-                                        }
+                                        r25 = this.ReturnHelper<IList<int>>(startCursor7, ref cursor, state => l2.AsReadOnly());
                                         var maxEnd = cursor;
                                         var max = ValueOrDefault(r25);
                                         if (r25 != null)
@@ -2466,14 +2375,7 @@ namespace
                     break;
                 }
             }
-            if (l0.Count >= 0)
-            {
-                r1 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-            }
-            else
-            {
-                cursor = startCursor1;
-            }
+            r1 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
             var partsEnd = cursor;
             var parts = ValueOrDefault(r1);
             if (r1 != null)
@@ -2821,14 +2723,7 @@ namespace
                         break;
                     }
                 }
-                if (l0.Count >= 0)
-                {
-                    r3 = this.ReturnHelper<IList<string>>(startCursor2, ref cursor, state => l0.AsReadOnly());
-                }
-                else
-                {
-                    cursor = startCursor2;
-                }
+                r3 = this.ReturnHelper<IList<string>>(startCursor2, ref cursor, state => l0.AsReadOnly());
                 if (r3 != null)
                 {
                     var len = cursor.Location - startCursor1.Location;
@@ -2953,14 +2848,7 @@ namespace
                             break;
                         }
                     }
-                    if (l0.Count >= 0)
-                    {
-                        r3 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                    }
-                    else
-                    {
-                        cursor = startCursor1;
-                    }
+                    r3 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                     if (r3 != null)
                     {
                         IParseResult<IList<string>> r6 = null;
@@ -3051,14 +2939,7 @@ namespace
                             break;
                         }
                     }
-                    if (l0.Count >= 0)
-                    {
-                        r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                    }
-                    else
-                    {
-                        cursor = startCursor1;
-                    }
+                    r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                     if (r2 != null)
                     {
                         IParseResult<IList<string>> r6 = null;
@@ -3157,14 +3038,7 @@ namespace
                             break;
                         }
                     }
-                    if (l1.Count >= 0)
-                    {
-                        r11 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l1.AsReadOnly());
-                    }
-                    else
-                    {
-                        cursor = startCursor4;
-                    }
+                    r11 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l1.AsReadOnly());
                     if (r11 != null)
                     {
                         var len = cursor.Location - startCursor3.Location;
@@ -3441,14 +3315,7 @@ namespace
                             break;
                         }
                     }
-                    if (l0.Count >= 0)
-                    {
-                        r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                    }
-                    else
-                    {
-                        cursor = startCursor1;
-                    }
+                    r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                     var charsEnd = cursor;
                     var chars = ValueOrDefault(r2);
                     if (r2 != null)
@@ -3607,14 +3474,7 @@ namespace
                             break;
                         }
                     }
-                    if (l0.Count >= 0)
-                    {
-                        r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                    }
-                    else
-                    {
-                        cursor = startCursor1;
-                    }
+                    r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                     var charsEnd = cursor;
                     var chars = ValueOrDefault(r2);
                     if (r2 != null)
@@ -3775,14 +3635,7 @@ namespace
                         break;
                     }
                 }
-                if (l0.Count >= 0)
-                {
-                    r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                }
-                else
-                {
-                    cursor = startCursor1;
-                }
+                r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 var invertedEnd = cursor;
                 var inverted = ValueOrDefault(r2);
                 if (r2 != null)
@@ -3811,14 +3664,7 @@ namespace
                             break;
                         }
                     }
-                    if (l1.Count >= 0)
-                    {
-                        r4 = this.ReturnHelper<IList<CharacterRange>>(startCursor2, ref cursor, state => l1.AsReadOnly());
-                    }
-                    else
-                    {
-                        cursor = startCursor2;
-                    }
+                    r4 = this.ReturnHelper<IList<CharacterRange>>(startCursor2, ref cursor, state => l1.AsReadOnly());
                     var partsEnd = cursor;
                     var parts = ValueOrDefault(r4);
                     if (r4 != null)
@@ -3856,14 +3702,7 @@ namespace
                                     break;
                                 }
                             }
-                            if (l2.Count >= 0)
-                            {
-                                r7 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l2.AsReadOnly());
-                            }
-                            else
-                            {
-                                cursor = startCursor4;
-                            }
+                            r7 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l2.AsReadOnly());
                             var flagsEnd = cursor;
                             var flags = ValueOrDefault(r7);
                             if (r7 != null)
@@ -4407,14 +4246,7 @@ namespace
                     break;
                 }
             }
-            if (l0.Count >= 0)
-            {
-                r0 = this.ReturnHelper<IList<string>>(startCursor0, ref cursor, state => l0.AsReadOnly());
-            }
-            else
-            {
-                cursor = startCursor0;
-            }
+            r0 = this.ReturnHelper<IList<string>>(startCursor0, ref cursor, state => l0.AsReadOnly());
             return r0;
         }
 
@@ -4485,14 +4317,7 @@ namespace
                         break;
                     }
                 }
-                if (l0.Count >= 0)
-                {
-                    r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                }
-                else
-                {
-                    cursor = startCursor1;
-                }
+                r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 if (r2 != null)
                 {
                     var len = cursor.Location - startCursor0.Location;
@@ -4565,14 +4390,7 @@ namespace
                         break;
                     }
                 }
-                if (l0.Count >= 0)
-                {
-                    r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
-                }
-                else
-                {
-                    cursor = startCursor1;
-                }
+                r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 if (r2 != null)
                 {
                     IParseResult<string> r7 = null;

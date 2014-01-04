@@ -49,11 +49,15 @@ while ({{if model.Quantifier.Max.HasValue}}{{: listName }}.Count < {{= model.Qua
 {{
     this.currentContext = oldContext;
 }}
-if ({{: listName }}.Count >= {{= model.Quantifier.Min }})
-{
+{{if model.Quantifier.Min == 0}}
     {{: this.currentContext.ResultName }} = this.ReturnHelper<{{= this.types[model] }}>({{: startCursorName }}, ref cursor, state => {{: listName }}.AsReadOnly(){{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
-}
-else
-{
-    cursor = {{: startCursorName }};
-}
+{{else}}
+    if ({{: listName }}.Count >= {{= model.Quantifier.Min }})
+    {
+        {{: this.currentContext.ResultName }} = this.ReturnHelper<{{= this.types[model] }}>({{: startCursorName }}, ref cursor, state => {{: listName }}.AsReadOnly(){{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
+    }
+    else
+    {
+        cursor = {{: startCursorName }};
+    }
+{{/if}}
