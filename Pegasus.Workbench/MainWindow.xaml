@@ -31,6 +31,31 @@
                         ShowVRuler="False" />
                 </wfi:WindowsFormsHost>
             </TabItem>
+            <TabItem Header="Highlighting">
+            </TabItem>
+            <TabItem Header="Test">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <wfi:WindowsFormsHost AllowDrop="True">
+                        <ic:TextEditorControl
+                            x:Name="TestEditor"
+                            AllowDrop="True"
+                            IndentStyle="Smart"
+                            IsIconBarVisible="False"
+                            ShowInvalidLines="False"
+                            ShowEOLMarkers="False"
+                            ShowLineNumbers="True"
+                            ShowMatchingBracket="True"
+                            ShowTabs="True"
+                            ShowSpaces="True"
+                            ShowHRuler="False"
+                            ShowVRuler="False" />
+                    </wfi:WindowsFormsHost>
+                </Grid>
+            </TabItem>
         </TabControl>
         <DataGrid Grid.Row="1" ItemsSource="{Binding CompileErrors}" AutoGenerateColumns="False" GridLinesVisibility="None" IsReadOnly="True" SelectionMode="Single">
             <DataGrid.Columns>
