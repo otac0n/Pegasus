@@ -8,6 +8,7 @@
 
 namespace Pegasus.Workbench
 {
+    using System;
     using System.Windows;
 
     /// <summary>
@@ -19,15 +20,16 @@ namespace Pegasus.Workbench
         {
             this.ViewModel = new AppViewModel();
             InitializeComponent();
-            this.TextEditor.SetHighlighting("Pegasus");
+
+            this.GrammarEditor.SetHighlighting("Pegasus");
 
             var updating = false;
-            this.TextEditor.TextChanged += (s, e) =>
+            this.GrammarEditor.TextChanged += (s, e) =>
             {
                 if (!updating)
                 {
                     updating = true;
-                    this.ViewModel.Text = this.TextEditor.Text;
+                    this.ViewModel.Text = this.GrammarEditor.Text;
                     updating = false;
                 }
             };
@@ -37,10 +39,12 @@ namespace Pegasus.Workbench
                 if (e.PropertyName == "Text" && !updating)
                 {
                     updating = true;
-                    this.TextEditor.Text = this.ViewModel.Text;
+                    this.GrammarEditor.Text = this.ViewModel.Text;
                     updating = false;
                 }
             };
+
+            this.ViewModel.Text = "start" + Environment.NewLine + "  = \"Hello, world!\" EOF" + Environment.NewLine + "EOF" + Environment.NewLine + "  = !.";
         }
 
         public AppViewModel ViewModel { get; protected set; }

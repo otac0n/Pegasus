@@ -4,24 +4,42 @@
     xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Pegasus.Workbench.MainWindow"
+    DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
     Title="MainWindow"
-    Height="350"
-    Width="525">
-    <Grid DataContext="{Binding ViewModel}">
-        <wfi:WindowsFormsHost x:Name="FormsHost" AllowDrop="True">
-            <ic:TextEditorControl
-                x:Name="TextEditor"
-                AllowDrop="True"
-                IndentStyle="Smart"
-                IsIconBarVisible="False"
-                ShowInvalidLines="False"
-                ShowEOLMarkers="False"
-                ShowLineNumbers="True"
-                ShowMatchingBracket="True"
-                ShowTabs="True"
-                ShowSpaces="True"
-                ShowHRuler="False"
-                ShowVRuler="False" />
-        </wfi:WindowsFormsHost>
+    Height="600"
+    Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="200" />
+        </Grid.RowDefinitions>
+        <TabControl>
+            <TabItem Header="Grammar">
+                <wfi:WindowsFormsHost AllowDrop="True">
+                    <ic:TextEditorControl
+                        x:Name="GrammarEditor"
+                        AllowDrop="True"
+                        IndentStyle="Smart"
+                        IsIconBarVisible="False"
+                        ShowInvalidLines="False"
+                        ShowEOLMarkers="False"
+                        ShowLineNumbers="True"
+                        ShowMatchingBracket="True"
+                        ShowTabs="True"
+                        ShowSpaces="True"
+                        ShowHRuler="False"
+                        ShowVRuler="False" />
+                </wfi:WindowsFormsHost>
+            </TabItem>
+        </TabControl>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding CompileErrors}" AutoGenerateColumns="False" GridLinesVisibility="None" IsReadOnly="True" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn />
+                <DataGridTextColumn Header="Description" Width="*" Binding="{Binding ErrorText}" />
+                <DataGridTextColumn Header="File" Binding="{Binding FileName}" />
+                <DataGridTextColumn Header="Line" Binding="{Binding Line}" />
+                <DataGridTextColumn Header="Column" Binding="{Binding Column}" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
