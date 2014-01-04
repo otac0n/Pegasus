@@ -17,33 +17,23 @@ namespace Pegasus
     using Pegasus.Expressions;
     using Pegasus.Parser;
 
-    internal static class CompileManager
+    /// <summary>
+    /// Provides a simple interface for parsing and compiling a PEG grammar.
+    /// </summary>
+    public static class CompileManager
     {
+        /// <summary>
+        /// Parse and compile a PEG grammar from a file.
+        /// </summary>
+        /// <param name="inputFile">The source filename.</param>
+        /// <param name="outputFile">The desired destination filename, or <c>null</c> to use the default.</param>
+        /// <param name="logError">An action that will be called for every warning or error.</param>
         public static void CompileFile(string inputFile, string outputFile, Action<CompilerError> logError)
         {
             outputFile = outputFile ?? inputFile + ".cs";
 
             var subject = File.ReadAllText(inputFile);
-            var parser = new PegParser();
-            Grammar grammar;
-            try
-            {
-                grammar = parser.Parse(subject, fileName: inputFile);
-            }
-            catch (FormatException ex)
-            {
-                var cursor = ex.Data["cursor"] as Cursor;
-                if (cursor != null && Regex.IsMatch(ex.Message, @"^PEG\d+:"))
-                {
-                    var parts = ex.Message.Split(new[] { ':' }, 2);
-                    logError(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, parts[0], parts[1]));
-                    return;
-                }
-
-                throw;
-            }
-
-            var result = PegCompiler.Compile(grammar);
+            var result = CompileString(subject, fileName: inputFile);
 
             bool hadFatal = false;
             foreach (var error in result.Errors)
@@ -56,6 +46,37 @@ namespace Pegasus
             {
                 File.WriteAllText(outputFile, result.Code);
             }
+        }
+
+        /// <summary>
+        /// Parse and compile a PEG grammar from a string.
+        /// </summary>
+        /// <param name="subject">The PEG grammar to parse and compile.</param>
+        /// <param name="fileName">The filename to use in errors.</param>
+        /// <returns>A <see cref="CompileResule"/> containing the result of the compilation.</returns>
+        public static CompileResult CompileString(string subject, string fileName = null)
+        {
+            var parser = new PegParser();
+            Grammar grammar;
+            try
+            {
+                grammar = parser.Parse(subject, fileName);
+            }
+            catch (FormatException ex)
+            {
+                var cursor = ex.Data["cursor"] as Cursor;
+                if (cursor != null && Regex.IsMatch(ex.Message, @"^PEG\d+:"))
+                {
+                    var parts = ex.Message.Split(new[] { ':' }, 2);
+                    var result = new CompileResult(null);
+                    result.Errors.Add(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, parts[0], parts[1]));
+                    return result;
+                }
+
+                throw;
+            }
+
+            return PegCompiler.Compile(grammar);
         }
     }
 }
