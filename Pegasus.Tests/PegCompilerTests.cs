@@ -8,8 +8,10 @@
 
 namespace Pegasus.Tests
 {
+    using System.Collections.Generic;
     using System.Linq;
     using NUnit.Framework;
+    using Pegasus.Common;
     using Pegasus.Compiler;
     using Pegasus.Parser;
 
@@ -28,6 +30,20 @@ namespace Pegasus.Tests
             var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0015"));
             Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenTheTestHasTwoLexicalRulesThatEndOnTheSameCharacter_ProducesAParserThatReturnsBothLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = b; b -lexical = 'OK';");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse("OK", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "b@0:2", "a@0:2" }));
         }
 
         [Test]
