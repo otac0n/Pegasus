@@ -74,9 +74,9 @@ namespace Pegasus.Tests
             var grammar = new PegParser().Parse("start = ' ' 'hoge'<1,,' '> ' ';");
 
             var result = PegCompiler.Compile(grammar);
-            var parse = CodeCompiler.Compile<string>(result.Code);
+            var parser = CodeCompiler.Compile<string>(result.Code);
 
-            Assert.That(parse(" hoge ", null), Is.EqualTo(" hoge "));
+            Assert.That(parser.Parse(" hoge "), Is.EqualTo(" hoge "));
         }
     }
 }
