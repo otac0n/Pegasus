@@ -111,6 +111,11 @@ namespace
                 {
                     throw ExceptionHelper(cursor, state => "Failed to parse '{{= startRule }}'.");
                 }
+                {{if lexical}}
+                    var lexical = (cursor["_lexical"] as ListNode<LexicalElement>).ToList();
+                    lexical.Reverse();
+                    lexicalElements = lexical.AsReadOnly();
+                {{/if}}
                 return result.Value;
             {{/if}}
         }
