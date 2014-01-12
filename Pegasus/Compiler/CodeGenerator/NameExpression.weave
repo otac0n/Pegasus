@@ -1,2 +1,20 @@
 ﻿@model NameExpression
-{{: this.currentContext.ResultName }} = this.{{: model.Identifier.Name }}(ref cursor);
+{{if this.currentContext.ResultRuleName == null}}
+    {{: this.currentContext.ResultName }} = this.{{: model.Identifier.Name }}(ref cursor);
+{{else}}
+    {{
+        var oldContext = this.currentContext;
+        var resultName = this.CreateVariable("r");
+        this.currentContext = new ResultContext(
+                resultName: resultName,
+                resultType: this.currentContext.ResultType);
+    }}
+    IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }};
+    {{@RenderNameExpression model}}
+    {{
+        this.currentContext = oldContext;
+    }}
+    {{: this.currentContext.ResultName }} = {{: resultName }} != null
+        ? this.ReturnHelper<{{= this.currentContext.ResultType }}>({{: resultName }}.StartCursor, ref cursor, state => {{: resultName }}.Value, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }})
+        : null;
+{{/if}}
