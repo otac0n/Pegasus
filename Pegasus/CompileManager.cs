@@ -56,11 +56,10 @@ namespace Pegasus
         /// <returns>A <see cref="CompileResule"/> containing the result of the compilation.</returns>
         public static CompileResult CompileString(string subject, string fileName = null)
         {
-            var parser = new PegParser();
             Grammar grammar;
             try
             {
-                grammar = parser.Parse(subject, fileName);
+                grammar = new PegParser().Parse(subject ?? "", fileName);
             }
             catch (FormatException ex)
             {
