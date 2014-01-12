@@ -172,7 +172,7 @@ typeArguments
   = type<1,,_ comma _>
 
 literal <Expression> -lexical
-  = value:(doubleQuotedString / singleQuotedString) flags:("i" / "r" / "ir" / "ri" / ) {
+  = value:(doubleQuotedString / singleQuotedString) flags:("ir" / "ri" / "i" / "r" / ) {
         new LiteralExpression(valueStart, flagsEnd, value, ignoreCase: flags.Contains('i'), fromResource: flags.Contains('r'))
     }
 

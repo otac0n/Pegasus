@@ -3203,19 +3203,19 @@ namespace
                 var flagsStart = cursor;
                 if (r2 == null)
                 {
-                    r2 = this.ParseLiteral(ref cursor, "i");
-                }
-                if (r2 == null)
-                {
-                    r2 = this.ParseLiteral(ref cursor, "r");
-                }
-                if (r2 == null)
-                {
                     r2 = this.ParseLiteral(ref cursor, "ir");
                 }
                 if (r2 == null)
                 {
                     r2 = this.ParseLiteral(ref cursor, "ri");
+                }
+                if (r2 == null)
+                {
+                    r2 = this.ParseLiteral(ref cursor, "i");
+                }
+                if (r2 == null)
+                {
+                    r2 = this.ParseLiteral(ref cursor, "r");
                 }
                 if (r2 == null)
                 {
