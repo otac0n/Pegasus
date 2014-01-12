@@ -33,7 +33,105 @@ namespace Pegasus.Tests
         }
 
         [Test]
-        public void Compile_WhenTheTestHasTwoLexicalRulesThatEndOnTheSameCharacter_ProducesAParserThatReturnsBothLexicalElements()
+        public void Compile_WhenTheGrammarHasAZeroWidthLexicalRule_ProducesAParserThatReturnsTheLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a = b 'OK'; b -lexical = ;");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse("OK", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "b@0:0" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasLexicalRuleConsistingOfAClassExpression_ProducesAParserThatReturnsTheLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = [O];");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse("OK", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "a@0:1" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasLexicalRuleConsistingOfALiteralExpression_ProducesAParserThatReturnsTheLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = 'OK';");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse("OK", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "a@0:2" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasLexicalRuleConsistingOfANameExpression_ProducesAParserThatReturnsTheLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = b; b = 'OK';");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse("OK", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "a@0:2" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasLexicalRuleConsistingOfARepetitionExpression_ProducesAParserThatReturnsTheLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = [OK]+;");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<IList<string>>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse("OK", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "a@0:2" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasLexicalRuleConsistingOfAStateExpression_ProducesAParserThatReturnsTheLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = #STATE{};");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse("OK", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "a@0:0" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasLexicalRuleConsistingOfAWildcardExpression_ProducesAParserThatReturnsTheLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = .;");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse("OK", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "a@0:1" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasTwoLexicalRulesThatBeginAndEndOnTheSameCharacter_ProducesAParserThatReturnsBothLexicalElements()
         {
             var grammar = new PegParser().Parse("a -lexical = b; b -lexical = 'OK';");
             var compiled = PegCompiler.Compile(grammar);
@@ -44,6 +142,48 @@ namespace Pegasus.Tests
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "b@0:2", "a@0:2" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasTwoLexicalRulesThatBeginOnTheSameCharacter_ProducesAParserThatReturnsBothLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = b ' '; b -lexical = 'OK';");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse("OK ", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "b@0:2", "a@0:3" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasTwoLexicalRulesThatEndOnTheSameCharacter_ProducesAParserThatReturnsBothLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = ' ' b; b -lexical = 'OK';");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse(" OK", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "b@1:3", "a@0:3" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasTwoNestedLexicalRules_ProducesAParserThatReturnsBothLexicalElements()
+        {
+            var grammar = new PegParser().Parse("a -lexical = ' ' b ' '; b -lexical = 'OK';");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            IList<LexicalElement> lexicalElements;
+            var result = parser.Parse(" OK ", null, out lexicalElements);
+
+            var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
+            Assert.That(actual, Is.EqualTo(new[] { "b@1:3", "a@0:4" }));
         }
 
         [Test]
