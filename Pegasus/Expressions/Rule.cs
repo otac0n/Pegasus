@@ -10,11 +10,13 @@ namespace Pegasus.Expressions
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
 
     /// <summary>
     /// Represents a parse rule.
     /// </summary>
+    [DebuggerDisplay("Rule {Identifier.Name}")]
     public class Rule
     {
         private readonly Expression expression;

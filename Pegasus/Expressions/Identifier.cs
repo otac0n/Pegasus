@@ -9,11 +9,13 @@
 namespace Pegasus.Expressions
 {
     using System;
+    using System.Diagnostics;
     using Pegasus.Common;
 
     /// <summary>
     /// Represents a lexical identifier.
     /// </summary>
+    [DebuggerDisplay("{Name}")]
     public class Identifier
     {
         private readonly Cursor end;
