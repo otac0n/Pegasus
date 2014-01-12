@@ -54,6 +54,7 @@
                             ShowHRuler="False"
                             ShowVRuler="False" />
                     </wfi:WindowsFormsHost>
+                    <TextBlock Grid.Column="2" Text="{Binding TestResults}" />
                 </Grid>
             </TabItem>
         </TabControl>

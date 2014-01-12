@@ -23,28 +23,50 @@ namespace Pegasus.Workbench
 
             this.GrammarEditor.SetHighlighting("Pegasus");
 
-            var updating = false;
+            var updatingGrammar = false;
             this.GrammarEditor.TextChanged += (s, e) =>
             {
-                if (!updating)
+                if (!updatingGrammar)
                 {
-                    updating = true;
-                    this.ViewModel.Text = this.GrammarEditor.Text;
-                    updating = false;
+                    updatingGrammar = true;
+                    this.ViewModel.GrammarText = this.GrammarEditor.Text;
+                    updatingGrammar = false;
                 }
             };
 
             this.ViewModel.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == "Text" && !updating)
+                if (e.PropertyName == "Text" && !updatingGrammar)
                 {
-                    updating = true;
-                    this.GrammarEditor.Text = this.ViewModel.Text;
-                    updating = false;
+                    updatingGrammar = true;
+                    this.GrammarEditor.Text = this.ViewModel.GrammarText;
+                    updatingGrammar = false;
                 }
             };
 
-            this.ViewModel.Text = string.Join(Environment.NewLine, new[] { "start", "  = \"Hello, world!\" EOF", "", "EOF", "  = !.", "" });
+            var updatingTest = false;
+            this.TestEditor.TextChanged += (s, e) =>
+            {
+                if (!updatingTest)
+                {
+                    updatingTest = true;
+                    this.ViewModel.TestText = this.TestEditor.Text;
+                    updatingTest = false;
+                }
+            };
+
+            this.ViewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "Text" && !updatingTest)
+                {
+                    updatingTest = true;
+                    this.TestEditor.Text = this.ViewModel.TestText;
+                    updatingTest = false;
+                }
+            };
+
+            this.GrammarEditor.Text = string.Join(Environment.NewLine, new[] { "greeting", "  = \"Hello, world!\" EOF", "", "EOF", "  = !.", "" });
+            this.TestEditor.Text = "Hello, world!";
         }
 
         public AppViewModel ViewModel { get; protected set; }
