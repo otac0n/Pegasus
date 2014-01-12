@@ -45,11 +45,8 @@ choice <Expression>
   = choices:sequence<1,,_ slash _> { choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) }
 
 sequence <Expression>
-  = elements:labeled<1,,_> _ code:action {
+  = elements:labeled<0,,_> _ code:action {
         new SequenceExpression(elements.Concat(new Expression[] { code }))
-    }
-  / code:action {
-        new SequenceExpression(new Expression[] { code })
     }
   / elements:labeled<0,,_> {
         elements.Count == 1
