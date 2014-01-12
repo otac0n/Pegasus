@@ -64,8 +64,26 @@
             GridLinesVisibility="None"
             IsReadOnly="True"
             SelectionMode="Single">
+            <DataGrid.Resources>
+                <DataTemplate x:Key="ErrorTemplate">
+                    <Image Width="16" Height="16">
+                        <Image.Style>
+                            <Style TargetType="{x:Type Image}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsWarning}" Value="False">
+                                        <Setter Property="Source" Value="Resources/Error.png" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsWarning}" Value="True">
+                                        <Setter Property="Source" Value="Resources/Warning.png" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </DataTemplate>
+            </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn />
+                <DataGridTemplateColumn Width="20" CellTemplate="{StaticResource ErrorTemplate}" />
                 <DataGridTextColumn Header="Description" Width="*" Binding="{Binding ErrorText}" />
                 <DataGridTextColumn Header="File" Binding="{Binding FileName}" />
                 <DataGridTextColumn Header="Line" Binding="{Binding Line}" />
