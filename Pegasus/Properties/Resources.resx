@@ -170,7 +170,7 @@
     <value>Resource-based literal expressions require a 'resources' setting.</value>
   </data>
   <data name="PEG0017_UNUSED_RULE" xml:space="preserve">
-    <value>The '{0}' rule is never used.</value>
+    <value>The rule '{0}' is never used.</value>
     <comment>warning</comment>
   </data>
   <data name="PEG0018_UNREACHABLE_ALTERNATIVE" xml:space="preserve">
