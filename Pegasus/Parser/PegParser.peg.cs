@@ -4528,13 +4528,13 @@ namespace
             return null;
         }
 
-        private IParseResult<string> ParseAny(ref Cursor cursor)
+        private IParseResult<string> ParseAny(ref Cursor cursor, string ruleName = null)
         {
             if (cursor.Location + 1 <= cursor.Subject.Length)
             {
                 var substr = cursor.Subject.Substring(cursor.Location, 1);
                 var endCursor = cursor.Advance(1);
-                var result = this.ReturnHelper<string>(cursor, ref endCursor, state => substr);
+                var result = this.ReturnHelper<string>(cursor, ref endCursor, state => substr, ruleName);
                 cursor = endCursor;
                 return result;
             }
