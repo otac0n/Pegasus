@@ -601,35 +601,44 @@ namespace
                                             if (r12 != null)
                                             {
                                                 IParseResult<IList<string>> r13 = null;
-                                                var startCursor4 = cursor;
-                                                var l2 = new List<string>();
-                                                while (l2.Count < 1)
-                                                {
-                                                    IParseResult<string> r14 = null;
-                                                    r14 = this.semicolon(ref cursor);
-                                                    if (r14 != null)
-                                                    {
-                                                        l2.Add(r14.Value);
-                                                    }
-                                                    else
-                                                    {
-                                                        break;
-                                                    }
-                                                }
-                                                r13 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l2.AsReadOnly());
+                                                r13 = this._(ref cursor);
                                                 if (r13 != null)
                                                 {
-                                                    r0 = this.ReturnHelper<Rule>(startCursor0, ref cursor, state =>
-                                                        #line 26 "PegParser.peg"
-                                                                                                               {
+                                                    IParseResult<IList<string>> r14 = null;
+                                                    var startCursor4 = cursor;
+                                                    var l2 = new List<string>();
+                                                    while (l2.Count < 1)
+                                                    {
+                                                        IParseResult<string> r15 = null;
+                                                        r15 = this.semicolon(ref cursor);
+                                                        if (r15 != null)
+                                                        {
+                                                            l2.Add(r15.Value);
+                                                        }
+                                                        else
+                                                        {
+                                                            break;
+                                                        }
+                                                    }
+                                                    r14 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l2.AsReadOnly());
+                                                    if (r14 != null)
+                                                    {
+                                                        r0 = this.ReturnHelper<Rule>(startCursor0, ref cursor, state =>
+                                                            #line 26 "PegParser.peg"
+                                                                                                                 {
         var typeValue = type.SingleOrDefault();
         return new Rule(
             identifier: name,
             expression: typeValue != null ? new TypedExpression(typeValue, expression) : expression,
             flags: flags);
     }
-                                                        #line default
-                                                        );
+                                                            #line default
+                                                            );
+                                                    }
+                                                    else
+                                                    {
+                                                        cursor = startCursor0;
+                                                    }
                                                 }
                                                 else
                                                 {
