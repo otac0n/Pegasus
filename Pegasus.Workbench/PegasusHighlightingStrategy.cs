@@ -28,6 +28,7 @@ namespace Pegasus.Workbench
             { @"^ (settingName|ruleFlag|actionType) \b", "Keyword" },
             { @"^ (dot|lbracket|rbracket) \s type \b ", "Delimiter" },
             { @"^ (string|literal|class|dot) \b", "String" },
+            { @"^ identifier \s ruleName \b", "RuleName" },
             { @"^ identifier \b", "Identifier" },
             { @"^ (singleLineComment|multiLineComment) \b", "Comment" },
             { @"^ code \b", "Text" },
@@ -79,6 +80,9 @@ namespace Pegasus.Workbench
             {
                 case "String":
                     return new HighlightColor(Color.FromArgb(163, 21, 21), false, false);
+
+                case "RuleName":
+                    return new HighlightColor(Color.FromArgb(43, 145, 175), false, false);
 
                 case "Keyword":
                     return new HighlightColor(Color.Blue, false, false);

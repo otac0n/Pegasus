@@ -23,13 +23,16 @@ rulePreamble
   = (!quantifier expressionType _)? ruleFlag<0,,_> _ equals
 
 rule <Rule>
-  = name:identifier _ type:expressionType? _ flags:ruleFlag<0,,_> _ equals _ expression:expression _ semicolon? {{
+  = name:ruleName _ type:expressionType? _ flags:ruleFlag<0,,_> _ equals _ expression:expression _ semicolon? {{
         var typeValue = type.SingleOrDefault();
         return new Rule(
             identifier: name,
             expression: typeValue != null ? new TypedExpression(typeValue, expression) : expression,
             flags: flags);
     }}
+
+ruleName -lexical
+  = identifier
 
 ruleFlag <Identifier> -memoize -lexical
   = "-" flag:identifier { flag }
@@ -83,7 +86,7 @@ suffixed <Expression>
   / primary
 
 primary <Expression> -memoize
-  = name:identifier !(_ rulePreamble) { new NameExpression(name) }
+  = name:ruleName !(_ rulePreamble) { new NameExpression(name) }
   / literal
   / class
   / dot { new WildcardExpression() }
