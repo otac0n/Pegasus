@@ -215,7 +215,7 @@ namespace Pegasus.Workbench
             var highlighted = new List<HighlightedSegment<string>>(lexicalElements.Count);
 
             var lexicalStack = new Stack<Tuple<int, LexicalElement>>();
-            foreach (var e in lexicalElements.Reverse())
+            foreach (var e in lexicalElements.Reverse().Where(e => e.StartCursor.Location != e.EndCursor.Location))
             {
                 int? maxRule = null;
 
@@ -227,7 +227,7 @@ namespace Pegasus.Workbench
                     }
 
                     var top = lexicalStack.Peek();
-                    if (e.EndCursor.Location <= top.Item2.EndCursor.Location && e.StartCursor.Location >= top.Item2.StartCursor.Location)
+                    if (e.EndCursor.Location > top.Item2.StartCursor.Location && e.StartCursor.Location < top.Item2.EndCursor.Location)
                     {
                         maxRule = top.Item1;
                         break;
@@ -241,14 +241,13 @@ namespace Pegasus.Workbench
                     continue;
                 }
 
-                lexicalStack.Push(Tuple.Create(default(int), e));
+                lexicalStack.Push(Tuple.Create(maxRule ?? highlightRules.Count, e));
                 var key = string.Join(" ", lexicalStack.Select(d => d.Item2.Name));
-                lexicalStack.Pop();
-
                 var result = Highlight(key, maxRule);
 
                 if (result != null)
                 {
+                    lexicalStack.Pop();
                     lexicalStack.Push(Tuple.Create(result.Item1, e));
                     highlighted.Add(new HighlightedSegment<string>(e.StartCursor.Location, e.EndCursor.Location, result.Item2));
                 }
