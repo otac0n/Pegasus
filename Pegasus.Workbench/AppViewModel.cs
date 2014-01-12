@@ -12,6 +12,7 @@ namespace Pegasus.Workbench
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reactive.Concurrency;
     using System.Reactive.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
@@ -33,7 +34,8 @@ namespace Pegasus.Workbench
 
         public AppViewModel()
         {
-            var grammarTextChanges = this.WhenAny(x => x.GrammarText, x => x.Value);
+            var grammarTextChanges = this.WhenAny(x => x.GrammarText, x => x.Value).ObserveOn(Scheduler.Default);
+            var testTextChanges = this.WhenAny(x => x.TestText, x => x.Value).ObserveOn(Scheduler.Default);
 
             var pegParserResults = grammarTextChanges.Select(g => Parse(g, "Grammar"));
             var pegCompilerResults = pegParserResults.Select(r => r.Grammar == null
@@ -44,10 +46,8 @@ namespace Pegasus.Workbench
                                         : Compile(r.Code));
 
             var parsers = pegParserResults.Zip(csCompilerResults, (p, c) => p.Grammar == null || c.NativeCompilerReturnValue != 0 ? null : GetParser(p.Grammar, c.CompiledAssembly));
-            var testTextChanges = this.WhenAny(x => x.TestText, x => x.Value);
 
             var testParserResults = parsers.CombineLatest(testTextChanges, (p, t) => p == null ? new ParseTestResult { Errors = new CompilerError[0] } : ParseTest((object)p, t, "Test"));
-
             testParserResults.Select(r => JsonConvert.SerializeObject(r.Result, Formatting.Indented)).BindTo(this, x => x.TestResults);
 
             var errors = pegParserResults.Select(r => r.Errors.AsEnumerable());
