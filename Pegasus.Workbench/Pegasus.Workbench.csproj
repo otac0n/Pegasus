@@ -110,6 +110,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PegasusHighlightingStrategy.cs" />
+    <Compile Include="Pipeline\CsCompiler.cs" />
+    <Compile Include="Pipeline\PegCompiler.cs" />
+    <Compile Include="Pipeline\PegParser.cs" />
+    <Compile Include="Pipeline\TestParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -12,49 +12,45 @@ namespace Pegasus.Workbench
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reactive.Concurrency;
     using System.Reactive.Linq;
-    using System.Reflection;
-    using System.Text.RegularExpressions;
-    using Microsoft.CSharp;
     using Newtonsoft.Json;
-    using Pegasus.Common;
-    using Pegasus.Compiler;
-    using Pegasus.Expressions;
-    using Pegasus.Parser;
     using ReactiveUI;
 
     public class AppViewModel : ReactiveObject
     {
+        private readonly object[] pipeline;
+
         private IList<CompilerError> errors = new CompilerError[0];
         private string fileName = "";
+        private string grammarFileName = "Grammar";
         private string grammarText;
+        private string testFileName = "Test";
         private string testResults;
         private string testText;
 
         public AppViewModel()
         {
-            var grammarTextChanges = this.WhenAny(x => x.GrammarText, x => x.Value).ObserveOn(Scheduler.Default);
-            var testTextChanges = this.WhenAny(x => x.TestText, x => x.Value).ObserveOn(Scheduler.Default);
+            var grammarNameChanges = this.WhenAny(x => x.GrammarFileName, x => x.Value);
+            var grammarTextChanges = this.WhenAny(x => x.GrammarText, x => x.Value);
+            var testNameChanges = this.WhenAny(x => x.TestFileName, x => x.Value);
+            var testTextChanges = this.WhenAny(x => x.TestText, x => x.Value);
 
-            var pegParserResults = grammarTextChanges.Select(g => Parse(g, "Grammar"));
-            var pegCompilerResults = pegParserResults.Select(r => r.Grammar == null
-                                         ? new CompileResult(r.Grammar)
-                                         : PegCompiler.Compile(r.Grammar));
-            var csCompilerResults = pegCompilerResults.Select(r => r.Code == null
-                                        ? new CompilerResults(new TempFileCollection()) { NativeCompilerReturnValue = -1 }
-                                        : Compile(r.Code));
+            var pegParser = new Pipeline.PegParser(grammarTextChanges, grammarNameChanges);
+            var pegCompiler = new Pipeline.PegCompiler(pegParser.Grammars);
+            var csCompiler = new Pipeline.CsCompiler(pegCompiler.Codes.Zip(pegParser.Grammars, Tuple.Create), grammarNameChanges);
+            var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges, testNameChanges);
 
-            var parsers = pegParserResults.Zip(csCompilerResults, (p, c) => p.Grammar == null || c.NativeCompilerReturnValue != 0 ? null : GetParser(p.Grammar, c.CompiledAssembly));
+            testParser.Results.Select(r => JsonConvert.SerializeObject(r)).BindTo(this, x => x.TestResults);
 
-            var testParserResults = parsers.CombineLatest(testTextChanges, (p, t) => p == null ? new ParseTestResult { Errors = new CompilerError[0] } : ParseTest((object)p, t, "Test"));
-            testParserResults.Select(r => JsonConvert.SerializeObject(r.Result, Formatting.Indented)).BindTo(this, x => x.TestResults);
-
-            var errors = pegParserResults.Select(r => r.Errors.AsEnumerable());
-            errors = errors.CombineLatest(pegCompilerResults, (e, r) => e.Concat(r.Errors));
-            errors = errors.CombineLatest(csCompilerResults, (e, r) => e.Concat(r.Errors.Cast<CompilerError>()));
-            errors = errors.CombineLatest(testParserResults, (e, r) => e.Concat(r.Errors));
-            errors.Select(Enumerable.ToList).BindTo(this, x => x.CompileErrors);
+            this.pipeline = new object[] { pegParser, pegCompiler, csCompiler, testParser };
+            var errorObvervables = new List<IObservable<IEnumerable<CompilerError>>>
+            {
+                pegParser.Errors,
+                pegCompiler.Errors,
+                csCompiler.Errors,
+                testParser.Errors,
+            };
+            errorObvervables.Aggregate((a, b) => a.CombineLatest(b, (e, r) => e.Concat(r))).Select(e => e.ToList()).BindTo(this, x => x.CompileErrors);
         }
 
         public IList<CompilerError> CompileErrors
@@ -69,10 +65,22 @@ namespace Pegasus.Workbench
             set { this.RaiseAndSetIfChanged(ref this.fileName, value); }
         }
 
+        public string GrammarFileName
+        {
+            get { return this.grammarFileName; }
+            set { this.RaiseAndSetIfChanged(ref this.grammarFileName, value); }
+        }
+
         public string GrammarText
         {
             get { return this.grammarText; }
             set { this.RaiseAndSetIfChanged(ref this.grammarText, value); }
+        }
+
+        public string TestFileName
+        {
+            get { return this.testFileName; }
+            set { this.RaiseAndSetIfChanged(ref this.testFileName, value); }
         }
 
         public string TestResults
@@ -85,117 +93,6 @@ namespace Pegasus.Workbench
         {
             get { return this.testText; }
             set { this.RaiseAndSetIfChanged(ref this.testText, value); }
-        }
-
-        private static CompilerResults Compile(string source)
-        {
-            var compiler = new CSharpCodeProvider();
-            var options = new CompilerParameters
-            {
-                GenerateExecutable = false,
-                GenerateInMemory = true,
-            };
-            options.ReferencedAssemblies.Add("System.dll");
-            options.ReferencedAssemblies.Add(typeof(Cursor).Assembly.Location);
-
-            return compiler.CompileAssemblyFromSource(options, source);
-        }
-
-        private static ParseResult Parse(string subject, string fileName)
-        {
-            try
-            {
-                return new ParseResult
-                {
-                    Grammar = new PegParser().Parse(subject ?? "", fileName),
-                    Errors = new CompilerError[0],
-                };
-            }
-            catch (FormatException ex)
-            {
-                var cursor = ex.Data["cursor"] as Cursor;
-                if (cursor != null)
-                {
-                    var parts = Regex.Split(ex.Message, @"(?<=^\w+):");
-                    if (parts.Length == 1)
-                    {
-                        parts = new[] { "", parts[0] };
-                    }
-
-                    return new ParseResult
-                    {
-                        Errors = new[]
-                        {
-                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, parts[0], parts[1]),
-                        },
-                    };
-                }
-
-                throw;
-            }
-        }
-
-        private static ParseTestResult ParseTest(dynamic parser, string subject, string fileName)
-        {
-            try
-            {
-                return new ParseTestResult
-                {
-                    Result = parser.Parse(subject ?? "", fileName),
-                    Errors = new CompilerError[0],
-                };
-            }
-            catch (FormatException ex)
-            {
-                var cursor = ex.Data["cursor"] as Cursor;
-                if (cursor != null)
-                {
-                    var parts = Regex.Split(ex.Message, @"(?<=^\w+):");
-                    if (parts.Length == 1)
-                    {
-                        parts = new[] { "", parts[0] };
-                    }
-
-                    return new ParseTestResult
-                    {
-                        Errors = new[]
-                        {
-                            new CompilerError(cursor.FileName, cursor.Line, cursor.Column, parts[0], parts[1]),
-                        },
-                    };
-                }
-
-                throw;
-            }
-        }
-
-        private dynamic GetParser(Grammar grammar, Assembly assembly)
-        {
-            var @namespace = grammar.Settings.Where(s => s.Key.Name == "namespace").Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parsers";
-            var @className = grammar.Settings.Where(s => s.Key.Name == "classname").Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parser";
-
-            try
-            {
-                return Activator.CreateInstance(assembly.GetType(@namespace + "." + @className));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private class ParseResult
-        {
-            public IList<CompilerError> Errors { get; set; }
-
-            public Grammar Grammar { get; set; }
-        }
-
-        private class ParseTestResult
-        {
-            public IList<CompilerError> Errors { get; set; }
-
-            public object Result { get; set; }
         }
     }
 }
