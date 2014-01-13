@@ -8,7 +8,6 @@
 
 namespace Pegasus.Workbench
 {
-    using System;
     using System.Windows;
 
     /// <summary>
@@ -22,6 +21,8 @@ namespace Pegasus.Workbench
             InitializeComponent();
 
             this.GrammarEditor.SetHighlighting("Pegasus");
+            this.GrammarEditor.Text = ViewModel.GrammarText;
+            this.TestEditor.Text = ViewModel.TestText;
 
             var updatingGrammar = false;
             this.GrammarEditor.TextChanged += (s, e) =>
@@ -64,9 +65,6 @@ namespace Pegasus.Workbench
                     updatingTest = false;
                 }
             };
-
-            this.GrammarEditor.Text = string.Join(Environment.NewLine, new[] { "greeting", "  = \"Hello, world!\" EOF", "", "EOF", "  = !.", "" });
-            this.TestEditor.Text = "Hello, world!";
         }
 
         public AppViewModel ViewModel { get; protected set; }

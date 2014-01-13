@@ -22,11 +22,12 @@ namespace Pegasus.Workbench
 
         private IList<CompilerError> errors = new CompilerError[0];
         private string fileName = "";
-        private string grammarFileName = "Grammar";
-        private string grammarText;
+        private bool grammarChanged = false;
+        private string grammarFileName = "Grammar.peg";
+        private string grammarText = string.Join(Environment.NewLine, new[] { "greeting", "  = \"Hello, world!\" EOF", "", "EOF", "  = !.", "" });
         private string testFileName = "Test";
         private string testResults;
-        private string testText;
+        private string testText = "Hello, world!";
 
         public AppViewModel()
         {
@@ -65,6 +66,12 @@ namespace Pegasus.Workbench
             set { this.RaiseAndSetIfChanged(ref this.fileName, value); }
         }
 
+        public bool GrammarChanged
+        {
+            get { return this.grammarChanged; }
+            private set { this.RaiseAndSetIfChanged(ref this.grammarChanged, value); }
+        }
+
         public string GrammarFileName
         {
             get { return this.grammarFileName; }
@@ -74,13 +81,17 @@ namespace Pegasus.Workbench
         public string GrammarText
         {
             get { return this.grammarText; }
-            set { this.RaiseAndSetIfChanged(ref this.grammarText, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref this.grammarText, value);
+                this.GrammarChanged = true;
+            }
         }
 
         public string TestFileName
         {
             get { return this.testFileName; }
-            set { this.RaiseAndSetIfChanged(ref this.testFileName, value); }
+            private set { this.RaiseAndSetIfChanged(ref this.testFileName, value); }
         }
 
         public string TestResults

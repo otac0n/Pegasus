@@ -14,7 +14,26 @@
             <RowDefinition Height="200" />
         </Grid.RowDefinitions>
         <TabControl>
-            <TabItem Header="Grammar">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding GrammarFileName}" />
+                        <TextBlock Text="*">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding GrammarChanged}" Value="False">
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding GrammarChanged}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
                 <wfi:WindowsFormsHost AllowDrop="True">
                     <ic:TextEditorControl
                         x:Name="GrammarEditor"
@@ -33,7 +52,7 @@
             </TabItem>
             <TabItem Header="Highlighting">
             </TabItem>
-            <TabItem Header="Test">
+            <TabItem Header="{Binding TestFileName}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
