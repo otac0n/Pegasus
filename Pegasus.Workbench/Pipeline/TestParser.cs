@@ -28,6 +28,15 @@
 
         private static ParseResult ParseTest(dynamic parser, string subject, string fileName)
         {
+            if (parser == null)
+            {
+                return new ParseResult
+                {
+                    Errors = new List<CompilerError>(),
+                    Result = null,
+                };
+            }
+
             subject = subject ?? "";
 
             try
