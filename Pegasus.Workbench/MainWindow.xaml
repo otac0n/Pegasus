@@ -13,6 +13,10 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="200" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
         <TabControl>
             <TabItem>
                 <TabItem.Header>
@@ -50,16 +54,9 @@
                         ShowVRuler="False" />
                 </wfi:WindowsFormsHost>
             </TabItem>
-            <TabItem Header="Highlighting">
-            </TabItem>
             <TabItem Header="{Binding TestFileName}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <wfi:WindowsFormsHost AllowDrop="True">
-                        <ic:TextEditorControl
+                <wfi:WindowsFormsHost AllowDrop="True">
+                    <ic:TextEditorControl
                             x:Name="TestEditor"
                             AllowDrop="True"
                             IndentStyle="Smart"
@@ -72,13 +69,15 @@
                             ShowSpaces="True"
                             ShowHRuler="False"
                             ShowVRuler="False" />
-                    </wfi:WindowsFormsHost>
-                    <TextBlock Grid.Column="2" Text="{Binding TestResults}" />
-                </Grid>
+                </wfi:WindowsFormsHost>
             </TabItem>
         </TabControl>
+        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="5,25,0,0">
+            <TextBlock Text="{Binding TestResults}" />
+        </ScrollViewer>
         <DataGrid
             Grid.Row="1"
+            Grid.ColumnSpan="2"
             ItemsSource="{Binding CompileErrors}"
             AutoGenerateColumns="False"
             GridLinesVisibility="None"
