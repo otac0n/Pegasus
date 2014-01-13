@@ -41,7 +41,7 @@ namespace Pegasus.Workbench
             var csCompiler = new Pipeline.CsCompiler(pegCompiler.Codes.Zip(pegParser.Grammars, Tuple.Create), grammarNameChanges);
             var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges, testNameChanges);
 
-            testParser.Results.Select(r => JsonConvert.SerializeObject(r)).BindTo(this, x => x.TestResults);
+            testParser.Results.Select(r => JsonConvert.SerializeObject(r, Formatting.Indented)).BindTo(this, x => x.TestResults);
 
             this.pipeline = new object[] { pegParser, pegCompiler, csCompiler, testParser };
             var errorObvervables = new List<IObservable<IEnumerable<CompilerError>>>

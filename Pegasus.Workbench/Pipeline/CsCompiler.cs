@@ -30,7 +30,7 @@
 
         private static Result Compile(string source, Grammar grammar, string fileName)
         {
-            if (source == null)
+            if (source == null || grammar == null)
             {
                 return new Result
                 {
@@ -45,6 +45,7 @@
                 GenerateInMemory = true,
             };
             options.ReferencedAssemblies.Add("System.dll");
+            options.ReferencedAssemblies.Add("System.Core.dll");
             options.ReferencedAssemblies.Add(typeof(Cursor).Assembly.Location);
 
             var compilerResults = compiler.CompileAssemblyFromSource(options, source);
