@@ -18,7 +18,7 @@
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
         <TabControl>
-            <TabItem>
+            <TabItem x:Name="GrammarTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding GrammarFileName}" />
@@ -54,7 +54,7 @@
                         ShowVRuler="False" />
                 </wfi:WindowsFormsHost>
             </TabItem>
-            <TabItem Header="{Binding TestFileName}">
+            <TabItem x:Name="TestTab" Header="{Binding TestFileName}">
                 <wfi:WindowsFormsHost AllowDrop="True">
                     <ic:TextEditorControl
                             x:Name="TestEditor"
@@ -101,6 +101,11 @@
                     </Image>
                 </DataTemplate>
             </DataGrid.Resources>
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="ErrorRow_DoubleClick" />
+                </Style>
+            </DataGrid.ItemContainerStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="20" CellTemplate="{StaticResource ErrorTemplate}" />
                 <DataGridTextColumn Header="Description" Width="*" Binding="{Binding ErrorText}" />
