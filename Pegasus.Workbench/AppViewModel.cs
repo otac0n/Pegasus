@@ -22,7 +22,6 @@ namespace Pegasus.Workbench
         private readonly object[] pipeline;
 
         private IList<CompilerError> errors = new CompilerError[0];
-        private string fileName = "";
         private bool grammarChanged = false;
         private string grammarFileName = Path.Combine(Environment.CurrentDirectory, "Grammar.peg");
         private string grammarText = string.Join(Environment.NewLine, new[] { "greeting", "  = \"Hello, world!\" EOF", "", "EOF", "  = !.", "" });
@@ -60,18 +59,21 @@ namespace Pegasus.Workbench
                 File.WriteAllText(this.grammarFileName, this.grammarText);
                 this.GrammarChanged = false;
             });
+
+            this.SaveAs = new ReactiveCommand();
+            this.SaveAs.RegisterAsyncAction(_ =>
+            {
+                var fileName = (string)_;
+                File.WriteAllText(fileName, this.grammarText);
+                this.GrammarFileName = fileName;
+                this.GrammarChanged = false;
+            });
         }
 
         public IList<CompilerError> CompileErrors
         {
             get { return this.errors; }
             protected set { this.RaiseAndSetIfChanged(ref this.errors, value); }
-        }
-
-        public string FileName
-        {
-            get { return this.fileName; }
-            set { this.RaiseAndSetIfChanged(ref this.fileName, value); }
         }
 
         public bool GrammarChanged
@@ -97,6 +99,8 @@ namespace Pegasus.Workbench
         }
 
         public IReactiveCommand Save { get; protected set; }
+
+        public IReactiveCommand SaveAs { get; protected set; }
 
         public string TestFileName
         {

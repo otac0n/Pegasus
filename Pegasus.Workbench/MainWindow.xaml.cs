@@ -9,10 +9,12 @@
 namespace Pegasus.Workbench
 {
     using System.CodeDom.Compiler;
+    using System.IO;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using ICSharpCode.TextEditor;
+    using Microsoft.Win32;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -124,6 +126,25 @@ namespace Pegasus.Workbench
             // 4. Double click the error. (Note that the focus did not transfer to the text editor.)
             // 5. Double click the error again. (Note that the focus does transfer.)
             // Note: This does not occur until both TextEditor controls have been shown at least once.
+        }
+
+        private void SaveAs(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new SaveFileDialog()
+            {
+                FileName = Path.GetFileName(this.ViewModel.GrammarFileName),
+                AddExtension = true,
+                DefaultExt = ".peg",
+                Filter = "Pegasus Grammars (*.peg)|*.peg",
+                ValidateNames = true,
+                InitialDirectory = Path.GetDirectoryName(this.ViewModel.GrammarFileName),
+            };
+
+            var result = dialog.ShowDialog();
+            if (result == true)
+            {
+                this.ViewModel.SaveAs.Execute(dialog.FileName);
+            }
         }
     }
 }

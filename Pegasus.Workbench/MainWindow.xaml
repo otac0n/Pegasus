@@ -11,11 +11,16 @@
     Width="800">
     <Window.InputBindings>
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding Save}" />
+        <KeyBinding Key="S" Modifiers="Control+Shift" Command="SaveAs" />
     </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="SaveAs" Executed="SaveAs" />
+    </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Command="{Binding Save}" Header="Save" InputGestureText="Ctrl+S" />
+                <MenuItem Command="SaveAs" Header="SaveAs" InputGestureText="Ctrl+Shift+S" />
             </MenuItem>
         </Menu>
         <Grid>
