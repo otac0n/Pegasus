@@ -1,6 +1,7 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:ic="clr-namespace:ICSharpCode.TextEditor;assembly=ICSharpCode.TextEditor"
+    xmlns:p="clr-namespace:Pegasus.Workbench"
     xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Pegasus.Workbench.MainWindow"
@@ -8,55 +9,64 @@
     Title="MainWindow"
     Height="600"
     Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="200" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="2*" />
-        </Grid.ColumnDefinitions>
-        <TabControl>
-            <TabItem x:Name="GrammarTab">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding GrammarFileName}" />
-                        <TextBlock Text="*">
-                            <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding GrammarChanged}" Value="False">
-                                            <Setter Property="Visibility" Value="Hidden" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding GrammarChanged}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
-                </TabItem.Header>
-                <wfi:WindowsFormsHost AllowDrop="True">
-                    <ic:TextEditorControl
-                        x:Name="GrammarEditor"
-                        AllowDrop="True"
-                        IndentStyle="Smart"
-                        IsIconBarVisible="False"
-                        ShowInvalidLines="False"
-                        ShowEOLMarkers="False"
-                        ShowLineNumbers="True"
-                        ShowMatchingBracket="True"
-                        ShowTabs="True"
-                        ShowSpaces="True"
-                        ShowHRuler="False"
-                        ShowVRuler="False" />
-                </wfi:WindowsFormsHost>
-            </TabItem>
-            <TabItem x:Name="TestTab" Header="{Binding TestFileName}">
-                <wfi:WindowsFormsHost AllowDrop="True">
-                    <ic:TextEditorControl
+    <Window.InputBindings>
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding Save}" />
+    </Window.InputBindings>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Command="{Binding Save}" Header="Save" InputGestureText="Ctrl+S" />
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="200" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <TabControl>
+                <TabItem x:Name="GrammarTab" ToolTip="{Binding GrammarFileName}">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding GrammarFileName, Converter={p:PathToFileNameConverter}}" />
+                            <TextBlock Text="*">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding GrammarChanged}" Value="False">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding GrammarChanged}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <wfi:WindowsFormsHost AllowDrop="True">
+                        <ic:TextEditorControl
+                            x:Name="GrammarEditor"
+                            AllowDrop="True"
+                            IndentStyle="Smart"
+                            IsIconBarVisible="False"
+                            ShowInvalidLines="False"
+                            ShowEOLMarkers="False"
+                            ShowLineNumbers="True"
+                            ShowMatchingBracket="True"
+                            ShowTabs="True"
+                            ShowSpaces="True"
+                            ShowHRuler="False"
+                            ShowVRuler="False" />
+                    </wfi:WindowsFormsHost>
+                </TabItem>
+                <TabItem x:Name="TestTab" Header="{Binding TestFileName}">
+                    <wfi:WindowsFormsHost AllowDrop="True">
+                        <ic:TextEditorControl
                             x:Name="TestEditor"
                             AllowDrop="True"
                             IndentStyle="Smart"
@@ -69,51 +79,52 @@
                             ShowSpaces="True"
                             ShowHRuler="False"
                             ShowVRuler="False" />
-                </wfi:WindowsFormsHost>
-            </TabItem>
-        </TabControl>
-        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="5,25,0,0">
-            <TextBlock Text="{Binding TestResults}" />
-        </ScrollViewer>
-        <DataGrid
-            Grid.Row="1"
-            Grid.ColumnSpan="2"
-            ItemsSource="{Binding CompileErrors}"
-            AutoGenerateColumns="False"
-            GridLinesVisibility="None"
-            IsReadOnly="True"
-            SelectionMode="Single">
-            <DataGrid.Resources>
-                <DataTemplate x:Key="ErrorTemplate">
-                    <Image Width="16" Height="16">
-                        <Image.Style>
-                            <Style TargetType="{x:Type Image}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsWarning}" Value="False">
-                                        <Setter Property="Source" Value="Resources/Error.png" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsWarning}" Value="True">
-                                        <Setter Property="Source" Value="Resources/Warning.png" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                </DataTemplate>
-            </DataGrid.Resources>
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseDoubleClick" Handler="ErrorRow_DoubleClick" />
-                    <EventSetter Event="KeyDown" Handler="ErrorRow_KeyDown" />
-                </Style>
-            </DataGrid.ItemContainerStyle>
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Width="20" CellTemplate="{StaticResource ErrorTemplate}" />
-                <DataGridTextColumn Header="Description" Width="*" Binding="{Binding ErrorText}" />
-                <DataGridTextColumn Header="File" Binding="{Binding FileName}" />
-                <DataGridTextColumn Header="Line" Binding="{Binding Line}" />
-                <DataGridTextColumn Header="Column" Binding="{Binding Column}" />
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+                    </wfi:WindowsFormsHost>
+                </TabItem>
+            </TabControl>
+            <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="5,25,0,0">
+                <TextBlock Text="{Binding TestResults}" />
+            </ScrollViewer>
+            <DataGrid
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                ItemsSource="{Binding CompileErrors}"
+                AutoGenerateColumns="False"
+                GridLinesVisibility="None"
+                IsReadOnly="True"
+                SelectionMode="Single">
+                <DataGrid.Resources>
+                    <DataTemplate x:Key="ErrorTemplate">
+                        <Image Width="16" Height="16">
+                            <Image.Style>
+                                <Style TargetType="{x:Type Image}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsWarning}" Value="False">
+                                            <Setter Property="Source" Value="Resources/Error.png" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsWarning}" Value="True">
+                                            <Setter Property="Source" Value="Resources/Warning.png" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </DataTemplate>
+                </DataGrid.Resources>
+                <DataGrid.ItemContainerStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="ErrorRow_DoubleClick" />
+                        <EventSetter Event="KeyDown" Handler="ErrorRow_KeyDown" />
+                    </Style>
+                </DataGrid.ItemContainerStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="20" CellTemplate="{StaticResource ErrorTemplate}" />
+                    <DataGridTextColumn Header="Description" Width="*" Binding="{Binding ErrorText}" />
+                    <DataGridTextColumn Header="File" Binding="{Binding FileName}" />
+                    <DataGridTextColumn Header="Line" Binding="{Binding Line}" />
+                    <DataGridTextColumn Header="Column" Binding="{Binding Column}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </DockPanel>
 </Window>

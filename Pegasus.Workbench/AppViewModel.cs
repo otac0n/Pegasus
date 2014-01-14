@@ -11,6 +11,7 @@ namespace Pegasus.Workbench
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reactive.Linq;
     using Newtonsoft.Json;
@@ -23,7 +24,7 @@ namespace Pegasus.Workbench
         private IList<CompilerError> errors = new CompilerError[0];
         private string fileName = "";
         private bool grammarChanged = false;
-        private string grammarFileName = "Grammar.peg";
+        private string grammarFileName = Path.Combine(Environment.CurrentDirectory, "Grammar.peg");
         private string grammarText = string.Join(Environment.NewLine, new[] { "greeting", "  = \"Hello, world!\" EOF", "", "EOF", "  = !.", "" });
         private string testFileName = "Test";
         private string testResults;
@@ -52,6 +53,13 @@ namespace Pegasus.Workbench
                 testParser.Errors,
             };
             errorObvervables.Aggregate((a, b) => a.CombineLatest(b, (e, r) => e.Concat(r))).Select(e => e.ToList()).BindTo(this, x => x.CompileErrors);
+
+            this.Save = new ReactiveCommand();
+            this.Save.RegisterAsyncAction(_ =>
+            {
+                File.WriteAllText(this.grammarFileName, this.grammarText);
+                this.GrammarChanged = false;
+            });
         }
 
         public IList<CompilerError> CompileErrors
@@ -87,6 +95,8 @@ namespace Pegasus.Workbench
                 this.GrammarChanged = true;
             }
         }
+
+        public IReactiveCommand Save { get; protected set; }
 
         public string TestFileName
         {
