@@ -115,6 +115,15 @@ namespace Pegasus.Workbench
             target.ActiveTextAreaControl.SelectionManager.ClearSelection();
             target.ActiveTextAreaControl.Caret.Position = new TextLocation(error.Column - 1, error.Line - 1);
             target.Focus();
+
+            // BUG: There seems to be a bug in the framework regarding focus with WinForms interop.
+            // Repro case:
+            // 1. Run the app, switch to both the grammar and the test tabs, to make sure each TextEditor control is shown at least once.
+            // 2. Edit until an error is shown.
+            // 3. Switch to the tab that the error is NOT on.
+            // 4. Double click the error. (Note that the focus did not transfer to the text editor.)
+            // 5. Double click the error again. (Note that the focus does transfer.)
+            // Note: This does not occur until both TextEditor controls have been shown at least once.
         }
     }
 }
