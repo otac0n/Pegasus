@@ -104,6 +104,7 @@
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="ErrorRow_DoubleClick" />
+                    <EventSetter Event="KeyDown" Handler="ErrorRow_KeyDown" />
                 </Style>
             </DataGrid.ItemContainerStyle>
             <DataGrid.Columns>

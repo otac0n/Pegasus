@@ -11,6 +11,7 @@ namespace Pegasus.Workbench
     using System.CodeDom.Compiler;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
     using ICSharpCode.TextEditor;
 
     /// <summary>
@@ -78,6 +79,15 @@ namespace Pegasus.Workbench
             var item = row.Item as CompilerError;
 
             FocusError(item);
+        }
+
+        public void ErrorRow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                this.ErrorRow_DoubleClick(sender, null);
+            }
         }
 
         private void FocusError(CompilerError error)
