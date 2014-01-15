@@ -6,19 +6,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Pegasus.Workbench.MainWindow"
     DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
-    Title="MainWindow"
+    Title="Pegasus Workbench"
     Height="600"
     Width="800">
     <Window.InputBindings>
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding Save}" />
         <KeyBinding Key="S" Modifiers="Control+Shift" Command="SaveAs" />
+        <KeyBinding Key="O" Modifiers="Control" Command="Open" />
     </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="SaveAs" Executed="SaveAs" />
+        <CommandBinding Command="Open" Executed="Open" />
     </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
+                <MenuItem Command="Open" Header="Open" InputGestureText="Ctrl+O" />
                 <MenuItem Command="{Binding Save}" Header="Save" InputGestureText="Ctrl+S" />
                 <MenuItem Command="SaveAs" Header="SaveAs" InputGestureText="Ctrl+Shift+S" />
             </MenuItem>

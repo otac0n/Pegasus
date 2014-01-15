@@ -128,9 +128,39 @@ namespace Pegasus.Workbench
             // Note: This does not occur until both TextEditor controls have been shown at least once.
         }
 
+        private void Open(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (this.ViewModel.GrammarChanged)
+            {
+                switch (MessageBox.Show("Save changes to " + Path.GetFileName(this.ViewModel.GrammarFileName) + "?", "Pegasus Workbench", MessageBoxButton.YesNoCancel))
+                {
+                    case MessageBoxResult.Cancel:
+                        return;
+
+                    case MessageBoxResult.Yes:
+                        this.ViewModel.Save.Execute(null);
+                        break;
+                }
+            }
+
+            var dialog = new OpenFileDialog
+            {
+                FileName = Path.GetFileName(this.ViewModel.GrammarFileName),
+                DefaultExt = ".peg",
+                Filter = "Pegasus Grammars (*.peg)|*.peg",
+                ValidateNames = true,
+                InitialDirectory = Path.GetDirectoryName(this.ViewModel.GrammarFileName),
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                this.ViewModel.Load.Execute(dialog.FileName);
+            }
+        }
+
         private void SaveAs(object sender, ExecutedRoutedEventArgs e)
         {
-            var dialog = new SaveFileDialog()
+            var dialog = new SaveFileDialog
             {
                 FileName = Path.GetFileName(this.ViewModel.GrammarFileName),
                 AddExtension = true,
@@ -140,8 +170,7 @@ namespace Pegasus.Workbench
                 InitialDirectory = Path.GetDirectoryName(this.ViewModel.GrammarFileName),
             };
 
-            var result = dialog.ShowDialog();
-            if (result == true)
+            if (dialog.ShowDialog() == true)
             {
                 this.ViewModel.SaveAs.Execute(dialog.FileName);
             }

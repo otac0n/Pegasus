@@ -68,6 +68,16 @@ namespace Pegasus.Workbench
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
             });
+
+            this.Load = new ReactiveCommand();
+            this.Load.RegisterAsyncAction(_ =>
+            {
+                var fileName = (string)_;
+                this.GrammarText = File.ReadAllText(fileName);
+                this.GrammarFileName = fileName;
+                this.GrammarChanged = false;
+                this.TestText = "";
+            });
         }
 
         public IList<CompilerError> CompileErrors
@@ -97,6 +107,8 @@ namespace Pegasus.Workbench
                 this.GrammarChanged = true;
             }
         }
+
+        public IReactiveCommand Load { get; protected set; }
 
         public IReactiveCommand Save { get; protected set; }
 
