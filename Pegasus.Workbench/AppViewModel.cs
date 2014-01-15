@@ -23,11 +23,11 @@ namespace Pegasus.Workbench
 
         private IList<CompilerError> errors = new CompilerError[0];
         private bool grammarChanged = false;
-        private string grammarFileName = Path.Combine(Environment.CurrentDirectory, "Grammar.peg");
-        private string grammarText = string.Join(Environment.NewLine, new[] { "greeting", "  = \"Hello, world!\" EOF", "", "EOF", "  = !.", "" });
+        private string grammarFileName = "Untitled.peg";
+        private string grammarText = "";
         private string testFileName = "Test";
         private string testResults;
-        private string testText = "Hello, world!";
+        private string testText = "";
 
         public AppViewModel()
         {
@@ -53,7 +53,7 @@ namespace Pegasus.Workbench
             };
             errorObvervables.Aggregate((a, b) => a.CombineLatest(b, (e, r) => e.Concat(r))).Select(e => e.ToList()).BindTo(this, x => x.CompileErrors);
 
-            this.Save = new ReactiveCommand();
+            this.Save = new ReactiveCommand(grammarNameChanges.Select(n => n != "Untitled.peg"));
             this.Save.RegisterAsyncAction(_ =>
             {
                 File.WriteAllText(this.grammarFileName, this.grammarText);

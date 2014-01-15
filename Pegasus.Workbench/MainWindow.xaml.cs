@@ -158,6 +158,18 @@ namespace Pegasus.Workbench
             }
         }
 
+        private void Save(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (this.ViewModel.Save.CanExecute(null))
+            {
+                this.ViewModel.Save.Execute(null);
+            }
+            else
+            {
+                this.SaveAs(sender, e);
+            }
+        }
+
         private void SaveAs(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new SaveFileDialog

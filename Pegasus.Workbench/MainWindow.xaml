@@ -10,13 +10,14 @@
     Height="600"
     Width="800">
     <Window.InputBindings>
-        <KeyBinding Key="S" Modifiers="Control" Command="{Binding Save}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="Save" />
         <KeyBinding Key="S" Modifiers="Control+Shift" Command="SaveAs" />
         <KeyBinding Key="O" Modifiers="Control" Command="Open" />
     </Window.InputBindings>
     <Window.CommandBindings>
-        <CommandBinding Command="SaveAs" Executed="SaveAs" />
         <CommandBinding Command="Open" Executed="Open" />
+        <CommandBinding Command="Save" Executed="Save" />
+        <CommandBinding Command="SaveAs" Executed="SaveAs" />
     </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
