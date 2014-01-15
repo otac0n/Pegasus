@@ -3,6 +3,7 @@
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reactive.Concurrency;
     using System.Reactive.Linq;
@@ -48,8 +49,15 @@
             options.ReferencedAssemblies.Add("System.Core.dll");
             options.ReferencedAssemblies.Add(typeof(Cursor).Assembly.Location);
 
+            var fileDirectory = Path.GetDirectoryName(fileName);
+            var fileFileName = Path.GetFileName(fileName);
+
             var compilerResults = compiler.CompileAssemblyFromSource(options, source);
-            var errors = compilerResults.Errors.Cast<CompilerError>().ToList();
+            var errors = (from CompilerError e in compilerResults.Errors
+                          let errorFileName = Path.GetFileName(e.FileName)
+                          let newName = errorFileName.Equals(fileFileName, StringComparison.CurrentCultureIgnoreCase) ? fileFileName : fileFileName + ".cs"
+                          let newPath = Path.Combine(fileDirectory, newName)
+                          select new CompilerError(newPath, e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning }).ToList();
 
             if (errors.Any(e => !e.IsWarning))
             {
