@@ -43,10 +43,10 @@ namespace Pegasus.Workbench
 
             this.ViewModel.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == "Text" && !updatingGrammar)
+                if (e.PropertyName == "GrammarText" && !updatingGrammar)
                 {
                     updatingGrammar = true;
-                    this.GrammarEditor.Text = this.ViewModel.GrammarText;
+                    Dispatcher.Invoke(() => { this.GrammarEditor.Text = this.ViewModel.GrammarText; });
                     updatingGrammar = false;
                 }
             };
@@ -64,10 +64,10 @@ namespace Pegasus.Workbench
 
             this.ViewModel.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == "Text" && !updatingTest)
+                if (e.PropertyName == "TestText" && !updatingTest)
                 {
                     updatingTest = true;
-                    this.TestEditor.Text = this.ViewModel.TestText;
+                    Dispatcher.Invoke(() => { this.TestEditor.Text = this.ViewModel.TestText; });
                     updatingTest = false;
                 }
             };
