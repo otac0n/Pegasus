@@ -73,21 +73,38 @@ namespace Pegasus.Package
             return null;
         }
 
+        private class HighlightRule<T>
+        {
+            private Regex pattern;
+            private T value;
+
+            public HighlightRule(string pattern, T value)
+            {
+                this.pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+                this.value = value;
+            }
+
+            public Regex Pattern
+            {
+                get { return this.pattern; }
+            }
+
+            public T Value
+            {
+                get { return this.value; }
+            }
+        }
+
+        private class HighlightRuleList<T> : List<HighlightRule<T>>
+        {
+            public void Add(string pattern, T value)
+            {
+                this.Add(new HighlightRule<T>(pattern, value));
+            }
+        }
+
         private class Scanner : IScanner
         {
-            private static IList<HighlightRule<TokenType>> highlightRules = (new HighlightRuleList<TokenType>
-            {
-                { @"^ whitespace \b", TokenType.WhiteSpace },
-                { @"^ (settingName|ruleFlag|actionType) \b", TokenType.Keyword },
-                { @"^ (dot|lbracket|rbracket) \s type \b ", TokenType.Delimiter },
-                { @"^ (string|literal|class|dot) \b", TokenType.String },
-                { @"^ identifier \b", TokenType.Identifier },
-                { @"^ singleLineComment \b", TokenType.LineComment },
-                { @"^ multiLineComment \b", TokenType.Comment },
-                { @"^ code \b", TokenType.Text },
-                { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", TokenType.Delimiter },
-            }).AsReadOnly();
-
             private static IDictionary<TokenType, TokenColor> colorMap = new Dictionary<TokenType, TokenColor>
             {
                 { TokenType.Comment, TokenColor.Comment },
@@ -101,9 +118,22 @@ namespace Pegasus.Package
                 { TokenType.WhiteSpace, TokenColor.Text },
             };
 
+            private static IList<HighlightRule<TokenType>> highlightRules = (new HighlightRuleList<TokenType>
+            {
+                { @"^ whitespace \b", TokenType.WhiteSpace },
+                { @"^ (settingName|ruleFlag|actionType) \b", TokenType.Keyword },
+                { @"^ (dot|lbracket|rbracket) \s type \b ", TokenType.Delimiter },
+                { @"^ (string|literal|class|dot) \b", TokenType.String },
+                { @"^ identifier \b", TokenType.Identifier },
+                { @"^ singleLineComment \b", TokenType.LineComment },
+                { @"^ multiLineComment \b", TokenType.Comment },
+                { @"^ code \b", TokenType.Text },
+                { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", TokenType.Delimiter },
+            }).AsReadOnly();
+
             private IVsTextLines buffer;
-            private string source;
             private int offset;
+            private string source;
 
             public Scanner(IVsTextLines buffer)
             {
@@ -195,6 +225,20 @@ namespace Pegasus.Package
                 this.offset = offset;
             }
 
+            private static string GetAllText(IVsTextLines buffer)
+            {
+                int endLine, endIndex;
+                string text;
+
+                if (buffer.GetLastLineIndex(out endLine, out endIndex) != VSConstants.S_OK ||
+                    buffer.GetLineText(0, 0, endLine, endIndex, out text) != VSConstants.S_OK)
+                {
+                    text = null;
+                }
+
+                return text;
+            }
+
             private static IList<Tuple<int, int, TokenType>> GetHighlightedTokens(string text)
             {
                 var cached = MemoryCache.Default.Get(text) as IList<Tuple<int, int, TokenType>>;
@@ -228,6 +272,28 @@ namespace Pegasus.Package
                 {
                     return new LexicalElement[0];
                 }
+            }
+
+            private static Tuple<int, TokenType> Highlight(string key, int? maxRule = null)
+            {
+                if (maxRule.HasValue && (maxRule.Value > highlightRules.Count || maxRule.Value < 0))
+                {
+                    throw new ArgumentOutOfRangeException("maxRule");
+                }
+
+                maxRule = maxRule ?? highlightRules.Count;
+
+                for (var i = 0; i < maxRule.Value; i++)
+                {
+                    var rule = highlightRules[i];
+
+                    if (rule.Pattern.IsMatch(key))
+                    {
+                        return Tuple.Create(i, rule.Value);
+                    }
+                }
+
+                return null;
             }
 
             private static IList<Tuple<int, int, TokenType>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
@@ -327,72 +393,6 @@ namespace Pegasus.Package
 
                 simplified.Reverse();
                 return simplified.AsReadOnly();
-            }
-
-            private static Tuple<int, TokenType> Highlight(string key, int? maxRule = null)
-            {
-                if (maxRule.HasValue && (maxRule.Value > highlightRules.Count || maxRule.Value < 0))
-                {
-                    throw new ArgumentOutOfRangeException("maxRule");
-                }
-
-                maxRule = maxRule ?? highlightRules.Count;
-
-                for (var i = 0; i < maxRule.Value; i++)
-                {
-                    var rule = highlightRules[i];
-
-                    if (rule.Pattern.IsMatch(key))
-                    {
-                        return Tuple.Create(i, rule.Value);
-                    }
-                }
-
-                return null;
-            }
-
-            private static string GetAllText(IVsTextLines buffer)
-            {
-                int endLine, endIndex;
-                string text;
-
-                if (buffer.GetLastLineIndex(out endLine, out endIndex) != VSConstants.S_OK ||
-                    buffer.GetLineText(0, 0, endLine, endIndex, out text) != VSConstants.S_OK)
-                {
-                    text = null;
-                }
-
-                return text;
-            }
-        }
-
-        private class HighlightRule<T>
-        {
-            private Regex pattern;
-            private T value;
-
-            public HighlightRule(string pattern, T value)
-            {
-                this.pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
-                this.value = value;
-            }
-
-            public Regex Pattern
-            {
-                get { return this.pattern; }
-            }
-
-            public T Value
-            {
-                get { return this.value; }
-            }
-        }
-
-        private class HighlightRuleList<T> : List<HighlightRule<T>>
-        {
-            public void Add(string pattern, T value)
-            {
-                this.Add(new HighlightRule<T>(pattern, value));
             }
         }
     }
