@@ -1,0 +1,10 @@
+// Here, we have updated the previous example to
+//   give the results some structure.
+// Note that the curly braces enclose C# code,
+//   and that 'x' is a C# variable.
+
+greeting <object>
+  = x:"Hello, world!" EOF { new { Greeting = x } }
+
+EOF
+  = !.

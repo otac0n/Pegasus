@@ -1,0 +1,22 @@
+// If we want to do something slightly more
+//   complex in the action, we have several
+//   options.
+// Here is an example of inline C# statements.
+// Note the extra set of curly braces.
+
+greeting <object>
+  = x:"Hello, world!" EOF {{
+      var greeting = x.Replace("e", "i");
+      return new { Greeting = x };
+  }}
+
+EOF
+  = !.
+
+// Pegasus generates a lambda expression with
+//   the code you enclose in curly braces.
+// In this case, the lambda has a body, like:
+//   state => { ... }
+// Where the previous example was like this:
+//   state => x
+// Both result in valid C#.
