@@ -10,11 +10,8 @@ namespace Pegasus.Workbench
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Drawing;
-    using System.Linq;
     using System.Runtime.Caching;
-    using System.Text.RegularExpressions;
     using ICSharpCode.TextEditor;
     using ICSharpCode.TextEditor.Document;
     using Pegasus.Common;
@@ -22,7 +19,7 @@ namespace Pegasus.Workbench
 
     public class PegasusHighlightingStrategy : IHighlightingStrategy
     {
-        private static readonly IList<HighlightRule<string>> highlightRules = (new HighlightRuleList<string>
+        private static readonly SyntaxHighlighter<string> syntaxHighlighter = new SyntaxHighlighter<string>
         {
             { @"^ whitespace \b", "WhiteSpace" },
             { @"^ (settingName|ruleFlag|actionType) \b", "Keyword" },
@@ -33,7 +30,7 @@ namespace Pegasus.Workbench
             { @"^ (singleLineComment|multiLineComment) \b", "Comment" },
             { @"^ code \b", "Text" },
             { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", "Delimiter" },
-        }).AsReadOnly();
+        };
 
         private readonly Dictionary<string, HighlightColor> environmentColors;
         private readonly Dictionary<string, string> properties;
@@ -129,7 +126,7 @@ namespace Pegasus.Workbench
 
                     if (offset < token.Start)
                     {
-                        token = new HighlightedSegment<string>(offset, token.Start, null);
+                        token = new SyntaxHighlighter<string>.HighlightedSegment(offset, token.Start, null);
                     }
 
                     var end = Math.Min(line.Offset + line.Length, token.End);
@@ -152,22 +149,15 @@ namespace Pegasus.Workbench
             this.MarkTokens(document);
         }
 
-        private static IList<HighlightedSegment<string>> GetHighlightedTokens(string text)
+        private static IList<SyntaxHighlighter<string>.HighlightedSegment> GetHighlightedTokens(string text)
         {
-            var cached = MemoryCache.Default.Get(text) as IList<HighlightedSegment<string>>;
+            var cached = MemoryCache.Default.Get(text) as IList<SyntaxHighlighter<string>.HighlightedSegment>;
             if (cached != null)
             {
                 return cached;
             }
 
-            // Parse the text to its (possibly overlapping) lexical elements.
-            var lexicalElements = GetLexicalElements(text);
-
-            // Highlight the elements.
-            var highlightedElements = HighlightLexicalElements(lexicalElements);
-
-            // Reduce the elements to strictly non-overlapping tokens.
-            var simplifiedTokens = SimplifyHighlighting(highlightedElements);
+            var simplifiedTokens = syntaxHighlighter.GetTokens(GetLexicalElements(text));
 
             MemoryCache.Default.Add(text, simplifiedTokens, DateTimeOffset.Now.AddMinutes(1));
             return simplifiedTokens;
@@ -184,186 +174,6 @@ namespace Pegasus.Workbench
             catch (FormatException)
             {
                 return new LexicalElement[0];
-            }
-        }
-
-        private static Tuple<int, string> Highlight(string key, int? maxRule = null)
-        {
-            if (maxRule.HasValue && (maxRule.Value > highlightRules.Count || maxRule.Value < 0))
-            {
-                throw new ArgumentOutOfRangeException("maxRule");
-            }
-
-            maxRule = maxRule ?? highlightRules.Count;
-
-            for (var i = 0; i < maxRule.Value; i++)
-            {
-                var rule = highlightRules[i];
-
-                if (rule.Pattern.IsMatch(key))
-                {
-                    return Tuple.Create(i, rule.Value);
-                }
-            }
-
-            return null;
-        }
-
-        private static IList<HighlightedSegment<string>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
-        {
-            if (lexicalElements.Count == 0)
-            {
-                return new HighlightedSegment<string>[0];
-            }
-
-            var highlighted = new List<HighlightedSegment<string>>(lexicalElements.Count);
-
-            var lexicalStack = new Stack<Tuple<int, LexicalElement>>();
-            foreach (var e in lexicalElements.Reverse().Where(e => e.StartCursor.Location != e.EndCursor.Location))
-            {
-                int? maxRule = null;
-
-                while (true)
-                {
-                    if (lexicalStack.Count == 0)
-                    {
-                        break;
-                    }
-
-                    var top = lexicalStack.Peek();
-                    if (e.EndCursor.Location > top.Item2.StartCursor.Location && e.StartCursor.Location < top.Item2.EndCursor.Location)
-                    {
-                        maxRule = top.Item1;
-                        break;
-                    }
-
-                    lexicalStack.Pop();
-                }
-
-                if (maxRule == 0)
-                {
-                    continue;
-                }
-
-                lexicalStack.Push(Tuple.Create(maxRule ?? highlightRules.Count, e));
-                var key = string.Join(" ", lexicalStack.Select(d => d.Item2.Name));
-                var result = Highlight(key, maxRule);
-
-                if (result != null)
-                {
-                    lexicalStack.Pop();
-                    lexicalStack.Push(Tuple.Create(result.Item1, e));
-                    highlighted.Add(new HighlightedSegment<string>(e.StartCursor.Location, e.EndCursor.Location, result.Item2));
-                }
-            }
-
-            return highlighted.AsReadOnly();
-        }
-
-        private static IList<HighlightedSegment<string>> SimplifyHighlighting(IList<HighlightedSegment<string>> tokens)
-        {
-            var simplified = new List<HighlightedSegment<string>>(tokens.Count);
-
-            var lexicalStack = new Stack<HighlightedSegment<string>>();
-            foreach (var t in tokens)
-            {
-                while (true)
-                {
-                    if (lexicalStack.Count == 0)
-                    {
-                        break;
-                    }
-
-                    var top = lexicalStack.Pop();
-                    if (top.Start >= t.End)
-                    {
-                        simplified.Add(top);
-                        continue;
-                    }
-
-                    if (top.End > t.End)
-                    {
-                        simplified.Add(new HighlightedSegment<string>(t.End, top.End, top.Value));
-                    }
-
-                    top = new HighlightedSegment<string>(top.Start, t.Start, top.Value);
-
-                    if (top.Start < top.End)
-                    {
-                        lexicalStack.Push(top);
-                        break;
-                    }
-                }
-
-                lexicalStack.Push(t);
-            }
-
-            while (lexicalStack.Count > 0)
-            {
-                simplified.Add(lexicalStack.Pop());
-            }
-
-            simplified.Reverse();
-            return simplified.AsReadOnly();
-        }
-
-        [DebuggerDisplay("[{Start}, {End}) {Value}")]
-        private class HighlightedSegment<T>
-        {
-            private int end;
-            private int start;
-            private T value;
-
-            public HighlightedSegment(int start, int end, T value)
-            {
-                this.start = start;
-                this.end = end;
-                this.value = value;
-            }
-
-            public int End
-            {
-                get { return this.end; }
-            }
-
-            public int Start
-            {
-                get { return this.start; }
-            }
-
-            public T Value
-            {
-                get { return this.value; }
-            }
-        }
-
-        private class HighlightRule<T>
-        {
-            private Regex pattern;
-            private T value;
-
-            public HighlightRule(string pattern, T value)
-            {
-                this.pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
-                this.value = value;
-            }
-
-            public Regex Pattern
-            {
-                get { return this.pattern; }
-            }
-
-            public T Value
-            {
-                get { return this.value; }
-            }
-        }
-
-        private class HighlightRuleList<T> : List<HighlightRule<T>>
-        {
-            public void Add(string pattern, T value)
-            {
-                this.Add(new HighlightRule<T>(pattern, value));
             }
         }
     }

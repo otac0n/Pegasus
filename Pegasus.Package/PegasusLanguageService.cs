@@ -13,7 +13,6 @@ namespace Pegasus.Package
     using System.Diagnostics;
     using System.Linq;
     using System.Runtime.Caching;
-    using System.Text.RegularExpressions;
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.Package;
     using Microsoft.VisualStudio.TextManager.Interop;
@@ -73,36 +72,6 @@ namespace Pegasus.Package
             return null;
         }
 
-        private class HighlightRule<T>
-        {
-            private Regex pattern;
-            private T value;
-
-            public HighlightRule(string pattern, T value)
-            {
-                this.pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
-                this.value = value;
-            }
-
-            public Regex Pattern
-            {
-                get { return this.pattern; }
-            }
-
-            public T Value
-            {
-                get { return this.value; }
-            }
-        }
-
-        private class HighlightRuleList<T> : List<HighlightRule<T>>
-        {
-            public void Add(string pattern, T value)
-            {
-                this.Add(new HighlightRule<T>(pattern, value));
-            }
-        }
-
         private class Scanner : IScanner
         {
             private static IDictionary<TokenType, TokenColor> colorMap = new Dictionary<TokenType, TokenColor>
@@ -118,7 +87,7 @@ namespace Pegasus.Package
                 { TokenType.WhiteSpace, TokenColor.Text },
             };
 
-            private static IList<HighlightRule<TokenType>> highlightRules = (new HighlightRuleList<TokenType>
+            private static SyntaxHighlighter<TokenType> syntaxHighlighter = new SyntaxHighlighter<TokenType>
             {
                 { @"^ whitespace \b", TokenType.WhiteSpace },
                 { @"^ (settingName|ruleFlag|actionType) \b", TokenType.Keyword },
@@ -129,7 +98,7 @@ namespace Pegasus.Package
                 { @"^ multiLineComment \b", TokenType.Comment },
                 { @"^ code \b", TokenType.Text },
                 { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", TokenType.Delimiter },
-            }).AsReadOnly();
+            };
 
             private IVsTextLines buffer;
             private int offset;
@@ -161,8 +130,8 @@ namespace Pegasus.Package
 
                 var tokens = GetHighlightedTokens(text);
                 var token = (from l in tokens
-                             where l.Item2 > startIndex
-                             where l.Item1 < lineEndIndex
+                             where l.End > startIndex
+                             where l.Start < lineEndIndex
                              select l).FirstOrDefault();
 
                 if (token == null)
@@ -172,19 +141,19 @@ namespace Pegasus.Package
                     tokenInfo.Type = TokenType.Unknown;
                     tokenInfo.Color = TokenColor.Text;
                 }
-                else if (token.Item1 > startIndex)
+                else if (token.Start > startIndex)
                 {
                     tokenInfo.StartIndex = startIndex - lineStartIndex;
-                    tokenInfo.EndIndex = token.Item1 - lineStartIndex - 1;
+                    tokenInfo.EndIndex = token.Start - lineStartIndex - 1;
                     tokenInfo.Type = TokenType.Unknown;
                     tokenInfo.Color = TokenColor.Text;
                 }
                 else
                 {
-                    tokenInfo.StartIndex = Math.Max(lineStartIndex, token.Item1) - lineStartIndex;
-                    tokenInfo.EndIndex = Math.Min(lineEndIndex, token.Item2) - lineStartIndex - 1;
-                    tokenInfo.Type = token.Item3;
-                    tokenInfo.Color = colorMap[token.Item3];
+                    tokenInfo.StartIndex = Math.Max(lineStartIndex, token.Start) - lineStartIndex;
+                    tokenInfo.EndIndex = Math.Min(lineEndIndex, token.End) - lineStartIndex - 1;
+                    tokenInfo.Type = token.Value;
+                    tokenInfo.Color = colorMap[token.Value];
                 }
 
                 if (tokens.Count > 0 && tokenInfo.Type == TokenType.Unknown)
@@ -239,22 +208,15 @@ namespace Pegasus.Package
                 return text;
             }
 
-            private static IList<Tuple<int, int, TokenType>> GetHighlightedTokens(string text)
+            private static IList<SyntaxHighlighter<TokenType>.HighlightedSegment> GetHighlightedTokens(string text)
             {
-                var cached = MemoryCache.Default.Get(text) as IList<Tuple<int, int, TokenType>>;
+                var cached = MemoryCache.Default.Get(text) as IList<SyntaxHighlighter<TokenType>.HighlightedSegment>;
                 if (cached != null)
                 {
                     return cached;
                 }
 
-                // Parse the text to its (possibly overlapping) lexical elements.
-                var lexicalElements = GetLexicalElements(text);
-
-                // Highlight the elements.
-                var highlightedElements = HighlightLexicalElements(lexicalElements);
-
-                // Reduce the elements to strictly non-overlapping tokens.
-                var simplifiedTokens = SimplifyHighlighting(highlightedElements);
+                var simplifiedTokens = syntaxHighlighter.GetTokens(GetLexicalElements(text));
 
                 MemoryCache.Default.Add(text, simplifiedTokens, DateTimeOffset.Now.AddMinutes(1));
                 return simplifiedTokens;
@@ -272,127 +234,6 @@ namespace Pegasus.Package
                 {
                     return new LexicalElement[0];
                 }
-            }
-
-            private static Tuple<int, TokenType> Highlight(string key, int? maxRule = null)
-            {
-                if (maxRule.HasValue && (maxRule.Value > highlightRules.Count || maxRule.Value < 0))
-                {
-                    throw new ArgumentOutOfRangeException("maxRule");
-                }
-
-                maxRule = maxRule ?? highlightRules.Count;
-
-                for (var i = 0; i < maxRule.Value; i++)
-                {
-                    var rule = highlightRules[i];
-
-                    if (rule.Pattern.IsMatch(key))
-                    {
-                        return Tuple.Create(i, rule.Value);
-                    }
-                }
-
-                return null;
-            }
-
-            private static IList<Tuple<int, int, TokenType>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
-            {
-                if (lexicalElements.Count == 0)
-                {
-                    return new Tuple<int, int, TokenType>[0];
-                }
-
-                var highlighted = new List<Tuple<int, int, TokenType>>(lexicalElements.Count);
-
-                var lexicalStack = new Stack<Tuple<int, LexicalElement>>();
-                foreach (var e in lexicalElements.Reverse())
-                {
-                    int? maxRule = null;
-
-                    while (true)
-                    {
-                        if (lexicalStack.Count == 0)
-                        {
-                            break;
-                        }
-
-                        var top = lexicalStack.Peek();
-                        if (e.EndCursor.Location <= top.Item2.EndCursor.Location && e.StartCursor.Location >= top.Item2.StartCursor.Location)
-                        {
-                            maxRule = top.Item1;
-                            break;
-                        }
-
-                        lexicalStack.Pop();
-                    }
-
-                    if (maxRule == 0)
-                    {
-                        continue;
-                    }
-
-                    lexicalStack.Push(Tuple.Create(default(int), e));
-                    var key = string.Join(" ", lexicalStack.Select(d => d.Item2.Name));
-                    lexicalStack.Pop();
-
-                    var result = Highlight(key, maxRule);
-
-                    if (result != null)
-                    {
-                        lexicalStack.Push(Tuple.Create(result.Item1, e));
-                        highlighted.Add(Tuple.Create(e.StartCursor.Location, e.EndCursor.Location, result.Item2));
-                    }
-                }
-
-                return highlighted.AsReadOnly();
-            }
-
-            private static IList<Tuple<int, int, TokenType>> SimplifyHighlighting(IList<Tuple<int, int, TokenType>> tokens)
-            {
-                var simplified = new List<Tuple<int, int, TokenType>>(tokens.Count);
-
-                var lexicalStack = new Stack<Tuple<int, int, TokenType>>();
-                foreach (var t in tokens)
-                {
-                    while (true)
-                    {
-                        if (lexicalStack.Count == 0)
-                        {
-                            break;
-                        }
-
-                        var top = lexicalStack.Pop();
-                        if (top.Item1 >= t.Item2)
-                        {
-                            simplified.Add(top);
-                            continue;
-                        }
-
-                        if (top.Item2 > t.Item2)
-                        {
-                            simplified.Add(Tuple.Create(t.Item2, top.Item2, top.Item3));
-                        }
-
-                        top = Tuple.Create(top.Item1, t.Item1, top.Item3);
-
-                        if (top.Item1 < top.Item2)
-                        {
-                            lexicalStack.Push(top);
-                            break;
-                        }
-                    }
-
-                    lexicalStack.Push(t);
-                }
-
-                while (lexicalStack.Count > 0)
-                {
-                    simplified.Add(lexicalStack.Pop());
-                }
-
-                simplified.Reverse();
-                return simplified.AsReadOnly();
             }
         }
     }
