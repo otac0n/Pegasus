@@ -99,6 +99,11 @@ namespace Pegasus.Workbench
 
         public void MarkTokens(IDocument document)
         {
+            if (document == null)
+            {
+                throw new ArgumentNullException("document");
+            }
+
             var tokens = GetHighlightedTokens(document.TextContent);
 
             var tokenEnum = tokens.GetEnumerator();

@@ -113,7 +113,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppViewModel.cs" />
-    <Compile Include="DispatcherExtensions.cs" />
     <Compile Include="PathToFileNameConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

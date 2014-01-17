@@ -30,6 +30,16 @@ namespace Pegasus
         /// <param name="logError">An action that will be called for every warning or error.</param>
         public static void CompileFile(string inputFile, string outputFile, Action<CompilerError> logError)
         {
+            if (string.IsNullOrEmpty(inputFile))
+            {
+                throw new ArgumentNullException("inputFile");
+            }
+
+            if (logError == null)
+            {
+                throw new ArgumentNullException("logError");
+            }
+
             outputFile = outputFile ?? inputFile + ".cs";
 
             var subject = File.ReadAllText(inputFile);

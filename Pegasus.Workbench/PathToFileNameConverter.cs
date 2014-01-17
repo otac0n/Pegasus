@@ -34,7 +34,7 @@ namespace Pegasus.Workbench
                 throw new NotSupportedException();
             }
 
-            return Path.GetFileName(value.ToString());
+            return value == null ? null : Path.GetFileName(value.ToString());
         }
 
         /// <summary>
