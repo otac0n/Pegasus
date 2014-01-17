@@ -17,6 +17,9 @@ namespace Pegasus.Workbench
     using Newtonsoft.Json;
     using ReactiveUI;
 
+    /// <summary>
+    /// Controls the interaction of the app.
+    /// </summary>
     public class AppViewModel : ReactiveObject
     {
         private readonly object[] pipeline;
@@ -29,6 +32,9 @@ namespace Pegasus.Workbench
         private string testResults;
         private string testText = "";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppViewModel"/> class.
+        /// </summary>
         public AppViewModel()
         {
             var grammarNameChanges = this.WhenAny(x => x.GrammarFileName, x => x.Value);
@@ -80,27 +86,43 @@ namespace Pegasus.Workbench
             });
         }
 
+        /// <summary>
+        /// Gets the list of compile errors.
+        /// </summary>
         public IList<CompilerError> CompileErrors
         {
             get { return this.errors; }
-            protected set { this.RaiseAndSetIfChanged(ref this.errors, value); }
+            private set { this.RaiseAndSetIfChanged(ref this.errors, value); }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the grammar has changed.
+        /// </summary>
         public bool GrammarChanged
         {
             get { return this.grammarChanged; }
             private set { this.RaiseAndSetIfChanged(ref this.grammarChanged, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the name of the grammar file.
+        /// </summary>
         public string GrammarFileName
         {
             get { return this.grammarFileName; }
             set { this.RaiseAndSetIfChanged(ref this.grammarFileName, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the grammar text.
+        /// </summary>
         public string GrammarText
         {
-            get { return this.grammarText; }
+            get
+            {
+                return this.grammarText;
+            }
+
             set
             {
                 this.RaiseAndSetIfChanged(ref this.grammarText, value);
@@ -108,24 +130,42 @@ namespace Pegasus.Workbench
             }
         }
 
-        public IReactiveCommand Load { get; protected set; }
+        /// <summary>
+        /// Gets the load command.
+        /// </summary>
+        public IReactiveCommand Load { get; private set; }
 
-        public IReactiveCommand Save { get; protected set; }
+        /// <summary>
+        /// Gets the save command.
+        /// </summary>
+        public IReactiveCommand Save { get; private set; }
 
-        public IReactiveCommand SaveAs { get; protected set; }
+        /// <summary>
+        /// Gets the save-as command.
+        /// </summary>
+        public IReactiveCommand SaveAs { get; private set; }
 
+        /// <summary>
+        /// Gets the name of the test file.
+        /// </summary>
         public string TestFileName
         {
             get { return this.testFileName; }
             private set { this.RaiseAndSetIfChanged(ref this.testFileName, value); }
         }
 
+        /// <summary>
+        /// Gets the test results.
+        /// </summary>
         public string TestResults
         {
             get { return this.testResults; }
             private set { this.RaiseAndSetIfChanged(ref this.testResults, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the test text.
+        /// </summary>
         public string TestText
         {
             get { return this.testText; }

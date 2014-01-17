@@ -109,7 +109,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighter{T}.cs" />
   </ItemGroup>
   <ItemGroup>
     <WeaveTemplate Include="Compiler\CodeGenerator\PrefixedExpression.weave" />

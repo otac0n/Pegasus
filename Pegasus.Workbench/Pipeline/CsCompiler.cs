@@ -1,4 +1,12 @@
-﻿namespace Pegasus.Workbench.Pipeline
+﻿// -----------------------------------------------------------------------
+// <copyright file="CsCompiler.cs" company="(none)">
+//   Copyright © 2013 John Gietzen.  All Rights Reserved.
+//   This source is subject to the MIT license.
+//   Please see license.txt for more information.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace Pegasus.Workbench.Pipeline
 {
     using System;
     using System.CodeDom.Compiler;
@@ -11,7 +19,7 @@
     using Pegasus.Common;
     using Pegasus.Expressions;
 
-    public class CsCompiler
+    internal class CsCompiler
     {
         public CsCompiler(IObservable<Tuple<string, Grammar>> codeAndGrammar, IObservable<string> fileNames)
         {

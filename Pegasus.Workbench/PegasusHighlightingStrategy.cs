@@ -17,9 +17,9 @@ namespace Pegasus.Workbench
     using Pegasus.Common;
     using Pegasus.Parser;
 
-    public class PegasusHighlightingStrategy : IHighlightingStrategy
+    internal class PegasusHighlightingStrategy : IHighlightingStrategy
     {
-        private static readonly SyntaxHighlighter<string> syntaxHighlighter = new SyntaxHighlighter<string>
+        private static readonly SyntaxHighlighter<string> SyntaxHighlighter = new SyntaxHighlighter<string>
         {
             { @"^ whitespace \b", "WhiteSpace" },
             { @"^ (settingName|ruleFlag|actionType) \b", "Keyword" },
@@ -157,7 +157,7 @@ namespace Pegasus.Workbench
                 return cached;
             }
 
-            var simplifiedTokens = syntaxHighlighter.GetTokens(GetLexicalElements(text));
+            var simplifiedTokens = SyntaxHighlighter.GetTokens(GetLexicalElements(text));
 
             MemoryCache.Default.Add(text, simplifiedTokens, DateTimeOffset.Now.AddMinutes(1));
             return simplifiedTokens;

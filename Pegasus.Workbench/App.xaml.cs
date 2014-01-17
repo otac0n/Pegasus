@@ -12,7 +12,7 @@ namespace Pegasus.Workbench
     using ICSharpCode.TextEditor.Document;
 
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for the workbench application.
     /// </summary>
     public partial class App : Application
     {

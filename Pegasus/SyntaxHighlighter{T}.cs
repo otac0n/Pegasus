@@ -1,4 +1,12 @@
-﻿namespace Pegasus
+﻿// -----------------------------------------------------------------------
+// <copyright file="SyntaxHighlighter{T}.cs" company="(none)">
+//   Copyright © 2013 John Gietzen.  All Rights Reserved.
+//   This source is subject to the MIT license.
+//   Please see license.txt for more information.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace Pegasus
 {
     using System;
     using System.Collections;
@@ -159,7 +167,7 @@
 
                 lexicalStack.Push(Tuple.Create(maxRule ?? this.list.Count, e));
                 var key = string.Join(" ", lexicalStack.Select(d => d.Item2.Name));
-                var result = Highlight(key, maxRule);
+                var result = this.Highlight(key, maxRule);
 
                 if (result != null)
                 {
@@ -172,6 +180,9 @@
             return highlighted.AsReadOnly();
         }
 
+        /// <summary>
+        /// Represents a segment of text that is highlighted with an object of type <typeparamref name="T"/>.
+        /// </summary>
         [DebuggerDisplay("[{Start}, {End}) {Value}")]
         public class HighlightedSegment
         {
@@ -179,6 +190,12 @@
             private int start;
             private T value;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="HighlightedSegment"/> class.
+            /// </summary>
+            /// <param name="start">The starting index of the segment.</param>
+            /// <param name="end">The ending index of the segment.</param>
+            /// <param name="value">The value of the segment.</param>
             public HighlightedSegment(int start, int end, T value)
             {
                 this.start = start;
@@ -186,38 +203,61 @@
                 this.value = value;
             }
 
+            /// <summary>
+            /// Gets the ending index of the segment.
+            /// </summary>
             public int End
             {
                 get { return this.end; }
             }
 
+            /// <summary>
+            /// Gets the starting index of the segment.
+            /// </summary>
             public int Start
             {
                 get { return this.start; }
             }
 
+            /// <summary>
+            /// Gets the value of the segment.
+            /// </summary>
             public T Value
             {
                 get { return this.value; }
             }
         }
 
+        /// <summary>
+        /// Represents a rule for highlighting.
+        /// </summary>
         public class HighlightRule
         {
             private Regex pattern;
             private T value;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="HighlightRule"/> class.
+            /// </summary>
+            /// <param name="pattern">The <see cref="Regex"/> pattern to use for matching.</param>
+            /// <param name="value">The value of the match.</param>
             public HighlightRule(string pattern, T value)
             {
                 this.pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
                 this.value = value;
             }
 
+            /// <summary>
+            /// Gets the pattern to use for matching.
+            /// </summary>
             public Regex Pattern
             {
                 get { return this.pattern; }
             }
 
+            /// <summary>
+            /// Gets the value of the match.
+            /// </summary>
             public T Value
             {
                 get { return this.value; }

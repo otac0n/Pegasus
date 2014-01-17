@@ -1,4 +1,12 @@
-﻿namespace Pegasus.Workbench.Pipeline
+﻿// -----------------------------------------------------------------------
+// <copyright file="PegCompiler.cs" company="(none)">
+//   Copyright © 2013 John Gietzen.  All Rights Reserved.
+//   This source is subject to the MIT license.
+//   Please see license.txt for more information.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace Pegasus.Workbench.Pipeline
 {
     using System;
     using System.CodeDom.Compiler;
@@ -8,7 +16,7 @@
     using Pegasus.Expressions;
     using CompileResult = Pegasus.Compiler.CompileResult;
 
-    public class PegCompiler
+    internal class PegCompiler
     {
         public PegCompiler(IObservable<Grammar> grammars)
         {

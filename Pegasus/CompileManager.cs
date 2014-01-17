@@ -53,7 +53,7 @@ namespace Pegasus
         /// </summary>
         /// <param name="subject">The PEG grammar to parse and compile.</param>
         /// <param name="fileName">The filename to use in errors.</param>
-        /// <returns>A <see cref="CompileResule"/> containing the result of the compilation.</returns>
+        /// <returns>A <see cref="CompileResult"/> containing the result of the compilation.</returns>
         public static CompileResult CompileString(string subject, string fileName = null)
         {
             Grammar grammar;

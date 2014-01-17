@@ -17,18 +17,21 @@ namespace Pegasus.Workbench
     using Microsoft.Win32;
 
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for the main workbench window.
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
             this.ViewModel = new AppViewModel();
-            InitializeComponent();
+            this.InitializeComponent();
 
             this.GrammarEditor.SetHighlighting("Pegasus");
-            this.GrammarEditor.Text = ViewModel.GrammarText;
-            this.TestEditor.Text = ViewModel.TestText;
+            this.GrammarEditor.Text = this.ViewModel.GrammarText;
+            this.TestEditor.Text = this.ViewModel.TestText;
 
             var updatingGrammar = false;
             this.GrammarEditor.TextChanged += (s, e) =>
@@ -73,16 +76,29 @@ namespace Pegasus.Workbench
             };
         }
 
+        /// <summary>
+        /// Gets or sets the view model.
+        /// </summary>
         public AppViewModel ViewModel { get; protected set; }
 
+        /// <summary>
+        /// Handles the DoubleClick event of the ErrorRow control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         public void ErrorRow_DoubleClick(object sender, RoutedEventArgs e)
         {
             var row = sender as DataGridRow;
             var item = row.Item as CompilerError;
 
-            FocusError(item);
+            this.FocusError(item);
         }
 
+        /// <summary>
+        /// Handles the KeyDown event of the ErrorRow control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         public void ErrorRow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -112,7 +128,7 @@ namespace Pegasus.Workbench
             }
 
             tab.IsSelected = true;
-            UpdateLayout();
+            this.UpdateLayout();
 
             target.ActiveTextAreaControl.SelectionManager.ClearSelection();
             target.ActiveTextAreaControl.Caret.Position = new TextLocation(error.Column - 1, error.Line - 1);

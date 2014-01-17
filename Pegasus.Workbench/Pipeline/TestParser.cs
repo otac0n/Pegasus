@@ -1,4 +1,12 @@
-﻿namespace Pegasus.Workbench.Pipeline
+﻿// -----------------------------------------------------------------------
+// <copyright file="TestParser.cs" company="(none)">
+//   Copyright © 2013 John Gietzen.  All Rights Reserved.
+//   This source is subject to the MIT license.
+//   Please see license.txt for more information.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace Pegasus.Workbench.Pipeline
 {
     using System;
     using System.CodeDom.Compiler;
@@ -8,7 +16,7 @@
     using System.Text.RegularExpressions;
     using Pegasus.Common;
 
-    public class TestParser
+    internal class TestParser
     {
         public TestParser(IObservable<dynamic> parsers, IObservable<string> subjects, IObservable<string> fileNames)
         {
