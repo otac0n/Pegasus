@@ -41,13 +41,13 @@ namespace Pegasus.Compiler
             { '\r', "\\r" }, { '\t', "\\t" }, { '\v', "\\v" },
         };
 
+        private readonly HashSet<Rule> leftRecursiveRules;
+        private readonly Dictionary<Expression, object> types;
         private readonly Dictionary<string, int> variables = new Dictionary<string, int>();
         private readonly TextWriter writer;
-        private readonly Dictionary<Expression, object> types;
-        private readonly HashSet<Rule> leftRecursiveRules;
 
-        private string currentIndentation;
         private ResultContext currentContext;
+        private string currentIndentation;
 
         public CodeGenerator(TextWriter writer, Dictionary<Expression, object> types, HashSet<Rule> leftRecursiveRules)
         {

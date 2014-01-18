@@ -20,14 +20,14 @@ namespace Pegasus.Compiler
             "lexical",
         };
 
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "PEG0013" }; }
-        }
-
         public override IList<string> BlockedByErrors
         {
             get { return new[] { "PEG0001" }; }
+        }
+
+        public override IList<string> ErrorsProduced
+        {
+            get { return new[] { "PEG0013" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)

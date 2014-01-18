@@ -14,14 +14,14 @@ namespace Pegasus.Compiler
 
     internal class ReportInvalidQuantifiersPass : CompilePass
     {
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "PEG0015" }; }
-        }
-
         public override IList<string> BlockedByErrors
         {
             get { return new[] { "PEG0001" }; }
+        }
+
+        public override IList<string> ErrorsProduced
+        {
+            get { return new[] { "PEG0015" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)

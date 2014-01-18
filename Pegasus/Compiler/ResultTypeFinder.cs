@@ -40,8 +40,8 @@ namespace Pegasus.Compiler
         private class ResultTypeTreeWalker : ExpressionTreeWalker
         {
             private readonly Dictionary<string, Rule> rules;
-            private Dictionary<Expression, object> types;
             private bool changed;
+            private Dictionary<Expression, object> types;
 
             public ResultTypeTreeWalker(Grammar grammar, Dictionary<Expression, object> types)
             {

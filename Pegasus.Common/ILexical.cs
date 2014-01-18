@@ -14,13 +14,13 @@ namespace Pegasus.Common
     public interface ILexical
     {
         /// <summary>
-        /// Gets or sets the starting cursor of this instance.
-        /// </summary>
-        Cursor StartCursor { get; set; }
-
-        /// <summary>
         /// Gets or sets the ending cursor of this instance.
         /// </summary>
         Cursor EndCursor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the starting cursor of this instance.
+        /// </summary>
+        Cursor StartCursor { get; set; }
     }
 }

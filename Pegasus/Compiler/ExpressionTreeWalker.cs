@@ -14,14 +14,6 @@ namespace Pegasus.Compiler
 
     internal abstract class ExpressionTreeWalker
     {
-        public virtual void WalkGrammar(Grammar grammar)
-        {
-            foreach (var rule in grammar.Rules)
-            {
-                this.WalkRule(rule);
-            }
-        }
-
         public virtual void WalkExpression(Expression expression)
         {
             AndCodeExpression andCodeExpression;
@@ -101,9 +93,12 @@ namespace Pegasus.Compiler
             }
         }
 
-        protected virtual void WalkRule(Rule rule)
+        public virtual void WalkGrammar(Grammar grammar)
         {
-            this.WalkExpression(rule.Expression);
+            foreach (var rule in grammar.Rules)
+            {
+                this.WalkRule(rule);
+            }
         }
 
         protected virtual void WalkAndCodeExpression(AndCodeExpression andCodeExpression)
@@ -161,6 +156,11 @@ namespace Pegasus.Compiler
             {
                 this.WalkExpression(repetitionExpression.Quantifier.Delimiter);
             }
+        }
+
+        protected virtual void WalkRule(Rule rule)
+        {
+            this.WalkExpression(rule.Expression);
         }
 
         protected virtual void WalkSequenceExpression(SequenceExpression sequenceExpression)

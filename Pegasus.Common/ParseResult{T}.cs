@@ -70,17 +70,6 @@ namespace Pegasus.Common
         }
 
         /// <summary>
-        /// Determines whether two specified parse results have the same value.
-        /// </summary>
-        /// <param name="left">The first <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
-        /// <param name="right">The second <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
-        /// <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
-        public static bool operator ==(ParseResult<T> left, ParseResult<T> right)
-        {
-            return object.Equals(left, right);
-        }
-
-        /// <summary>
         /// Determines whether two specified parse results have different values.
         /// </summary>
         /// <param name="left">The first <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
@@ -89,6 +78,17 @@ namespace Pegasus.Common
         public static bool operator !=(ParseResult<T> left, ParseResult<T> right)
         {
             return !object.Equals(left, right);
+        }
+
+        /// <summary>
+        /// Determines whether two specified parse results have the same value.
+        /// </summary>
+        /// <param name="left">The first <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
+        /// <param name="right">The second <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
+        /// <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
+        public static bool operator ==(ParseResult<T> left, ParseResult<T> right)
+        {
+            return object.Equals(left, right);
         }
 
         /// <summary>

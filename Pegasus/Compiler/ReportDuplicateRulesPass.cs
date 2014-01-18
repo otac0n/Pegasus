@@ -14,14 +14,14 @@ namespace Pegasus.Compiler
 
     internal class ReportDuplicateRulesPass : CompilePass
     {
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "PEG0002" }; }
-        }
-
         public override IList<string> BlockedByErrors
         {
             get { return new[] { "PEG0001" }; }
+        }
+
+        public override IList<string> ErrorsProduced
+        {
+            get { return new[] { "PEG0002" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)

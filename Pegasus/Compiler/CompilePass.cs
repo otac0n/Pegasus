@@ -13,9 +13,9 @@ namespace Pegasus.Compiler
 
     internal abstract class CompilePass
     {
-        public abstract IList<string> ErrorsProduced { get; }
-
         public abstract IList<string> BlockedByErrors { get; }
+
+        public abstract IList<string> ErrorsProduced { get; }
 
         public abstract void Run(Grammar grammar, CompileResult result);
     }

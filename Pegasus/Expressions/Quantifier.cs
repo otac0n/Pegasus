@@ -15,11 +15,11 @@ namespace Pegasus.Expressions
     /// </summary>
     public class Quantifier
     {
-        private readonly Cursor start;
+        private readonly Expression delimiter;
         private readonly Cursor end;
         private readonly int? max;
         private readonly int min;
-        private readonly Expression delimiter;
+        private readonly Cursor start;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Quantifier"/> class.
@@ -39,11 +39,11 @@ namespace Pegasus.Expressions
         }
 
         /// <summary>
-        /// Gets the cursor just before the <see cref="Quantifier"/>.
+        /// Gets the expression to use as a delimiter.
         /// </summary>
-        public Cursor Start
+        public Expression Delimiter
         {
-            get { return this.start; }
+            get { return this.delimiter; }
         }
 
         /// <summary>
@@ -71,11 +71,11 @@ namespace Pegasus.Expressions
         }
 
         /// <summary>
-        /// Gets the expression to use as a delimiter.
+        /// Gets the cursor just before the <see cref="Quantifier"/>.
         /// </summary>
-        public Expression Delimiter
+        public Cursor Start
         {
-            get { return this.delimiter; }
+            get { return this.start; }
         }
     }
 }

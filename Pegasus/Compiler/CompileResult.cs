@@ -20,8 +20,8 @@ namespace Pegasus.Compiler
     /// </summary>
     public class CompileResult
     {
-        private readonly Grammar grammar;
         private readonly Lazy<Dictionary<Expression, object>> expressionTypes;
+        private readonly Grammar grammar;
         private readonly Lazy<HashSet<Rule>> leftRecursiveRules;
 
         /// <summary>
@@ -37,22 +37,14 @@ namespace Pegasus.Compiler
         }
 
         /// <summary>
-        /// Gets the collection of errors that occurred during compilation.
-        /// </summary>
-        public IList<CompilerError> Errors { get; private set; }
-
-        /// <summary>
         /// Gets or sets the code resulting from compilation.
         /// </summary>
         public string Code { get; set; }
 
         /// <summary>
-        /// Gets the collection of left-recursive rules.
+        /// Gets the collection of errors that occurred during compilation.
         /// </summary>
-        public HashSet<Rule> LeftRecursiveRules
-        {
-            get { return this.leftRecursiveRules.Value; }
-        }
+        public IList<CompilerError> Errors { get; private set; }
 
         /// <summary>
         /// Gets a dictionary of expressions and their corresponding types.
@@ -60,6 +52,14 @@ namespace Pegasus.Compiler
         public Dictionary<Expression, object> ExpressionTypes
         {
             get { return this.expressionTypes.Value; }
+        }
+
+        /// <summary>
+        /// Gets the collection of left-recursive rules.
+        /// </summary>
+        public HashSet<Rule> LeftRecursiveRules
+        {
+            get { return this.leftRecursiveRules.Value; }
         }
 
         internal void AddError(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, params object[] args)

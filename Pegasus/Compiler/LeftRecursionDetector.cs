@@ -33,14 +33,13 @@ namespace Pegasus.Compiler
 
         private class LeftRecursionExpressionTreeWalker : ExpressionTreeWalker
         {
+            private readonly HashSet<Rule> leftRecursive;
             private readonly Dictionary<string, Rule> rules;
             private readonly Dictionary<Expression, bool> zeroWidth;
-            private readonly HashSet<Rule> leftRecursive;
-
             private int index = 0;
-            private Rule v;
             private Dictionary<Rule, RuleData> ruleData = new Dictionary<Rule, RuleData>();
             private Stack<Rule> ruleStack = new Stack<Rule>();
+            private Rule v;
 
             public LeftRecursionExpressionTreeWalker(Grammar grammar, Dictionary<Expression, bool> zeroWidth, HashSet<Rule> leftRecursive)
             {
@@ -57,6 +56,24 @@ namespace Pegasus.Compiler
                     {
                         this.WalkRule(rule);
                     }
+                }
+            }
+
+            protected override void WalkNameExpression(NameExpression nameExpression)
+            {
+                var rule = this.rules[nameExpression.Identifier.Name];
+                RuleData data;
+                if (!this.ruleData.TryGetValue(rule, out data))
+                {
+                    var v = this.v;
+                    this.WalkRule(rule);
+                    this.v = v;
+
+                    this.ruleData[this.v].LowLink = Math.Min(this.ruleData[this.v].LowLink, this.ruleData[rule].LowLink);
+                }
+                else if (data.InStack)
+                {
+                    this.ruleData[this.v].LowLink = Math.Min(this.ruleData[this.v].LowLink, data.Index);
                 }
             }
 
@@ -94,24 +111,6 @@ namespace Pegasus.Compiler
                 }
             }
 
-            protected override void WalkNameExpression(NameExpression nameExpression)
-            {
-                var rule = this.rules[nameExpression.Identifier.Name];
-                RuleData data;
-                if (!this.ruleData.TryGetValue(rule, out data))
-                {
-                    var v = this.v;
-                    this.WalkRule(rule);
-                    this.v = v;
-
-                    this.ruleData[this.v].LowLink = Math.Min(this.ruleData[this.v].LowLink, this.ruleData[rule].LowLink);
-                }
-                else if (data.InStack)
-                {
-                    this.ruleData[this.v].LowLink = Math.Min(this.ruleData[this.v].LowLink, data.Index);
-                }
-            }
-
             protected override void WalkSequenceExpression(SequenceExpression sequenceExpression)
             {
                 foreach (var expression in sequenceExpression.Sequence)
@@ -130,9 +129,9 @@ namespace Pegasus.Compiler
         {
             public int Index { get; set; }
 
-            public int LowLink { get; set; }
-
             public bool InStack { get; set; }
+
+            public int LowLink { get; set; }
         }
     }
 }

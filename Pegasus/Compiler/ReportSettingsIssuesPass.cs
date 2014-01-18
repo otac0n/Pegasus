@@ -31,14 +31,14 @@ namespace Pegasus.Compiler
             { "accessibility", @"^\s*(public|internal)\s*$" },
         };
 
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "PEG0005", "PEG0012" }; }
-        }
-
         public override IList<string> BlockedByErrors
         {
             get { return new string[0]; }
+        }
+
+        public override IList<string> ErrorsProduced
+        {
+            get { return new[] { "PEG0005", "PEG0012" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)

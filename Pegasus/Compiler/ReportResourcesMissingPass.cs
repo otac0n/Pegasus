@@ -15,14 +15,14 @@ namespace Pegasus.Compiler
 
     internal class ReportResourcesMissingPass : CompilePass
     {
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "PEG0016" }; }
-        }
-
         public override IList<string> BlockedByErrors
         {
             get { return new[] { "PEG0001" }; }
+        }
+
+        public override IList<string> ErrorsProduced
+        {
+            get { return new[] { "PEG0016" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)

@@ -14,14 +14,14 @@ namespace Pegasus.Compiler
 
     internal class ReportConflictingNamesPass : CompilePass
     {
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "PEG0007" }; }
-        }
-
         public override IList<string> BlockedByErrors
         {
             get { return new[] { "PEG0001" }; }
+        }
+
+        public override IList<string> ErrorsProduced
+        {
+            get { return new[] { "PEG0007" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)
@@ -31,18 +31,12 @@ namespace Pegasus.Compiler
 
         private class ConflictingNamesTreeWalker : ExpressionTreeWalker
         {
-            private readonly CompileResult result;
             private readonly HashSet<string> currentNames = new HashSet<string>();
+            private readonly CompileResult result;
 
             public ConflictingNamesTreeWalker(CompileResult result)
             {
                 this.result = result;
-            }
-
-            protected override void WalkRule(Rule rule)
-            {
-                base.WalkRule(rule);
-                this.currentNames.Clear();
             }
 
             protected override void WalkChoiceExpression(ChoiceExpression choiceExpression)
@@ -68,6 +62,12 @@ namespace Pegasus.Compiler
                 }
 
                 base.WalkPrefixedExpression(prefixedExpression);
+            }
+
+            protected override void WalkRule(Rule rule)
+            {
+                base.WalkRule(rule);
+                this.currentNames.Clear();
             }
         }
     }

@@ -12,25 +12,26 @@ namespace Pegasus.Common
     using System.Collections.Generic;
     using System.Threading;
 
-    /// <summary>
-    /// Represents a location within a parsing subject.
-    /// </summary>
 #if !PORTABLE
 
     [Serializable]
 #endif
+
+    /// <summary>
+    /// Represents a location within a parsing subject.
+    /// </summary>
     public class Cursor : IEquatable<Cursor>
     {
         private static int previousStateKey = -1;
 
         private readonly int column;
         private readonly string fileName;
+        private readonly bool inTransition;
         private readonly int line;
         private readonly int location;
-        private readonly bool inTransition;
-        private readonly string subject;
-        private readonly IDictionary<string, object> state;
         private readonly bool mutable;
+        private readonly IDictionary<string, object> state;
+        private readonly string subject;
         private int stateKey;
 
         /// <summary>
@@ -157,17 +158,6 @@ namespace Pegasus.Common
         }
 
         /// <summary>
-        /// Determines whether two specified cursors represent the same location.
-        /// </summary>
-        /// <param name="left">The first <see cref="Cursor"/> to compare, or null.</param>
-        /// <param name="right">The second <see cref="Cursor"/> to compare, or null.</param>
-        /// <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
-        public static bool operator ==(Cursor left, Cursor right)
-        {
-            return object.Equals(left, right);
-        }
-
-        /// <summary>
         /// Determines whether two specified cursors represent different locations.
         /// </summary>
         /// <param name="left">The first <see cref="Cursor"/> to compare, or null.</param>
@@ -176,6 +166,17 @@ namespace Pegasus.Common
         public static bool operator !=(Cursor left, Cursor right)
         {
             return !object.Equals(left, right);
+        }
+
+        /// <summary>
+        /// Determines whether two specified cursors represent the same location.
+        /// </summary>
+        /// <param name="left">The first <see cref="Cursor"/> to compare, or null.</param>
+        /// <param name="right">The second <see cref="Cursor"/> to compare, or null.</param>
+        /// <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
+        public static bool operator ==(Cursor left, Cursor right)
+        {
+            return object.Equals(left, right);
         }
 
         /// <summary>
@@ -196,16 +197,6 @@ namespace Pegasus.Common
             TrackLines(this.subject, this.location, count, ref line, ref column, ref inTransition);
 
             return new Cursor(this.subject, this.location + count, this.fileName, line, column, inTransition, this.state, this.stateKey, this.mutable);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="Cursor"/> with the specified mutability.
-        /// </summary>
-        /// <param name="mutable">A value indicating whether or not the resulting <see cref="Cursor"/> should be mutable.</param>
-        /// <returns>A <see cref="Cursor"/> with the specified mutability.</returns>
-        public Cursor WithMutability(bool mutable)
-        {
-            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, new Dictionary<string, object>(this.state), this.stateKey, mutable);
         }
 
         /// <summary>
@@ -245,6 +236,16 @@ namespace Pegasus.Common
             hash = (hash * -0x25555529) + this.stateKey;
 
             return hash;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="Cursor"/> with the specified mutability.
+        /// </summary>
+        /// <param name="mutable">A value indicating whether or not the resulting <see cref="Cursor"/> should be mutable.</param>
+        /// <returns>A <see cref="Cursor"/> with the specified mutability.</returns>
+        public Cursor WithMutability(bool mutable)
+        {
+            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, new Dictionary<string, object>(this.state), this.stateKey, mutable);
         }
 
         private static int GetNextStateKey()
