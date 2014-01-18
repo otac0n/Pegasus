@@ -11,6 +11,7 @@ namespace Pegasus.Workbench.Pipeline
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Reactive.Concurrency;
     using System.Reactive.Linq;
     using System.Text.RegularExpressions;
@@ -34,6 +35,7 @@ namespace Pegasus.Workbench.Pipeline
 
         public IObservable<object> Results { get; set; }
 
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]
         private static ParseResult ParseTest(dynamic parser, string subject, string fileName)
         {
             if (parser == null)

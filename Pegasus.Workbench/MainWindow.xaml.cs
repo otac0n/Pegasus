@@ -9,6 +9,8 @@
 namespace Pegasus.Workbench
 {
     using System.CodeDom.Compiler;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.IO;
     using System.Windows;
     using System.Windows.Controls;
@@ -86,6 +88,7 @@ namespace Pegasus.Workbench
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "This is standard for event handlers.")]
         public void ErrorRow_DoubleClick(object sender, RoutedEventArgs e)
         {
             var row = sender as DataGridRow;
@@ -99,9 +102,10 @@ namespace Pegasus.Workbench
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "This is standard for event handlers.")]
         public void ErrorRow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e != null && e.Key == Key.Enter)
             {
                 e.Handled = true;
                 this.ErrorRow_DoubleClick(sender, null);
@@ -148,7 +152,7 @@ namespace Pegasus.Workbench
         {
             if (this.ViewModel.GrammarChanged)
             {
-                switch (MessageBox.Show("Save changes to " + Path.GetFileName(this.ViewModel.GrammarFileName) + "?", "Pegasus Workbench", MessageBoxButton.YesNoCancel))
+                switch (MessageBox.Show(string.Format(CultureInfo.CurrentCulture, Properties.Resources.SaveChangesToFile, Path.GetFileName(this.ViewModel.GrammarFileName)), this.Title, MessageBoxButton.YesNoCancel))
                 {
                     case MessageBoxResult.Cancel:
                         return;

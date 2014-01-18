@@ -11,6 +11,7 @@ namespace Pegasus.Workbench
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Reactive.Linq;
@@ -22,6 +23,7 @@ namespace Pegasus.Workbench
     /// </summary>
     public class AppViewModel : ReactiveObject
     {
+        [SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Maintained for GC purposes.")]
         private readonly object[] pipeline;
 
         private IList<CompilerError> errors = new CompilerError[0];

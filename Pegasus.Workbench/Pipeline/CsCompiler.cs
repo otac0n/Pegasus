@@ -11,6 +11,7 @@ namespace Pegasus.Workbench.Pipeline
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Reactive.Concurrency;
@@ -37,6 +38,7 @@ namespace Pegasus.Workbench.Pipeline
 
         public IObservable<dynamic> Parsers { get; private set; }
 
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during compilation should be reported through the UI.")]
         private static Result Compile(string source, Grammar grammar, string fileName)
         {
             if (source == null || grammar == null)
@@ -47,20 +49,24 @@ namespace Pegasus.Workbench.Pipeline
                 };
             }
 
-            var compiler = new CSharpCodeProvider();
-            var options = new CompilerParameters
+            CompilerResults compilerResults;
+            using (var compiler = new CSharpCodeProvider())
             {
-                GenerateExecutable = false,
-                GenerateInMemory = true,
-            };
-            options.ReferencedAssemblies.Add("System.dll");
-            options.ReferencedAssemblies.Add("System.Core.dll");
-            options.ReferencedAssemblies.Add(typeof(Cursor).Assembly.Location);
+                var options = new CompilerParameters
+                {
+                    GenerateExecutable = false,
+                    GenerateInMemory = true,
+                };
+                options.ReferencedAssemblies.Add("System.dll");
+                options.ReferencedAssemblies.Add("System.Core.dll");
+                options.ReferencedAssemblies.Add(typeof(Cursor).Assembly.Location);
+
+                compilerResults = compiler.CompileAssemblyFromSource(options, source);
+            }
 
             var fileDirectory = Path.GetDirectoryName(fileName);
             var fileFileName = Path.GetFileName(fileName);
 
-            var compilerResults = compiler.CompileAssemblyFromSource(options, source);
             var errors = (from CompilerError e in compilerResults.Errors
                           let errorFileName = Path.GetFileName(e.FileName)
                           let newName = errorFileName.Equals(fileFileName, StringComparison.CurrentCultureIgnoreCase) ? fileFileName : fileFileName + ".cs"
