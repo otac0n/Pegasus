@@ -76,6 +76,7 @@
     <Compile Include="Compiler\ReportStartRuleNotFoundPass.cs" />
     <Compile Include="Compiler\ReportUnknownTypesPass.cs" />
     <Compile Include="Compiler\ReportUnusedRulesPass.cs" />
+    <Compile Include="Compiler\ReportZeroWidthRepetitionPass.cs" />
     <Compile Include="Compiler\ResultTypeFinder.cs" />
     <Compile Include="Compiler\ZeroWidthEvaluator.cs" />
     <Compile Include="Expressions\AndCodeExpression.cs" />

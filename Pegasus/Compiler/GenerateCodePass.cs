@@ -15,14 +15,14 @@ namespace Pegasus.Compiler
 
     internal class GenerateCodePass : CompilePass
     {
+        public override IList<string> BlockedByErrors
+        {
+            get { return new[] { "PEG0001", "PEG0002", "PEG0003", "PEG0005", "PEG0007", "PEG0012", "PEG0016", "PEG0019", "PEG0020", "PEG0021" }; }
+        }
+
         public override IList<string> ErrorsProduced
         {
             get { return new string[0]; }
-        }
-
-        public override IList<string> BlockedByErrors
-        {
-            get { return new[] { "PEG0001", "PEG0002", "PEG0003", "PEG0005", "PEG0007", "PEG0012", "PEG0016", "PEG0019", "PEG0020" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)

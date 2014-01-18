@@ -239,5 +239,23 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0020_UNMEMOIZED_LEFT_RECURSION", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repetition of a zero-width expression with no maximum repetition count will result in an infinite loop..
+        /// </summary>
+        internal static string PEG0021_ZERO_WIDTH_REPETITION {
+            get {
+                return ResourceManager.GetString("PEG0021_ZERO_WIDTH_REPETITION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repetition of a zero-width expression will always result in the maximum repetition count..
+        /// </summary>
+        internal static string PEG0022_ZERO_WIDTH_REPETITION {
+            get {
+                return ResourceManager.GetString("PEG0022_ZERO_WIDTH_REPETITION", resourceCulture);
+            }
+        }
     }
 }

@@ -36,6 +36,20 @@ namespace Pegasus.Tests
             Assert.That(result.Code, Contains.Substring("TEST"));
         }
 
+        [Test(Description = "GitHub bug #40")]
+        [TestCase("start = ''*")]
+        [TestCase("start = (.<0,1>)*")]
+        [TestCase("start = ('OK' / )*")]
+        public void Compile_WhenAZeroLengthProductionIsRepeated_YieldsError(string grammarText)
+        {
+            var grammar = new PegParser().Parse(grammarText);
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0021"));
+        }
+
         [Test(Description = "GitHub bug #21")]
         [TestCase("accessibility", "foo-public-foo")]
         [TestCase("accessibility", "foo-internal-foo")]
