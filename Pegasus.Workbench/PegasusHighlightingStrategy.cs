@@ -19,7 +19,7 @@ namespace Pegasus.Workbench
 
     internal class PegasusHighlightingStrategy : IHighlightingStrategy
     {
-        private static readonly SyntaxHighlighter<string> SyntaxHighlighter = new SyntaxHighlighter<string>
+        private static readonly SyntaxHighlighter<string> SyntaxHighlighter = new SyntaxHighlighter<string>(new HighlightRuleCollection<string>
         {
             { @"^ whitespace \b", "WhiteSpace" },
             { @"^ (settingName|ruleFlag|actionType) \b", "Keyword" },
@@ -30,7 +30,7 @@ namespace Pegasus.Workbench
             { @"^ (singleLineComment|multiLineComment) \b", "Comment" },
             { @"^ code \b", "Text" },
             { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", "Delimiter" },
-        };
+        });
 
         private readonly Dictionary<string, HighlightColor> environmentColors;
         private readonly Dictionary<string, string> properties;
@@ -131,7 +131,7 @@ namespace Pegasus.Workbench
 
                     if (offset < token.Start)
                     {
-                        token = new SyntaxHighlighter<string>.HighlightedSegment(offset, token.Start, null);
+                        token = new HighlightedSegment<string>(offset, token.Start, null);
                     }
 
                     var end = Math.Min(line.Offset + line.Length, token.End);
@@ -154,9 +154,9 @@ namespace Pegasus.Workbench
             this.MarkTokens(document);
         }
 
-        private static IList<SyntaxHighlighter<string>.HighlightedSegment> GetHighlightedTokens(string text)
+        private static IList<HighlightedSegment<string>> GetHighlightedTokens(string text)
         {
-            var cached = MemoryCache.Default.Get(text) as IList<SyntaxHighlighter<string>.HighlightedSegment>;
+            var cached = MemoryCache.Default.Get(text) as IList<HighlightedSegment<string>>;
             if (cached != null)
             {
                 return cached;

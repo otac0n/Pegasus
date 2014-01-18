@@ -9,38 +9,25 @@
 namespace Pegasus
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
-    using System.Text.RegularExpressions;
     using Pegasus.Common;
 
     /// <summary>
     /// Provides syntax highlighting services for Pegasus grammars.
     /// </summary>
     /// <typeparam name="T">The type of the value of each token.</typeparam>
-    public class SyntaxHighlighter<T> : IEnumerable<SyntaxHighlighter<T>.HighlightRule>
+    public class SyntaxHighlighter<T>
     {
-        private readonly List<HighlightRule> list = new List<HighlightRule>();
+        private readonly IList<HighlightRule<T>> list;
 
         /// <summary>
-        /// Adds the specified pattern to the list of highlight rules.
+        /// Initializes a new instance of the <see cref="SyntaxHighlighter{T}"/> class.
         /// </summary>
-        /// <param name="pattern">The pattern used to match the token.</param>
-        /// <param name="value">The value of the token.</param>
-        public void Add(string pattern, T value)
+        /// <param name="rules">The rules for the syntax highlighter.</param>
+        public SyntaxHighlighter(IEnumerable<HighlightRule<T>> rules)
         {
-            this.list.Add(new HighlightRule(pattern, value));
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>A <see cref="IEnumerator&lt;T&gt;" /> that can be used to iterate through the collection.</returns>
-        public IEnumerator<SyntaxHighlighter<T>.HighlightRule> GetEnumerator()
-        {
-            return this.list.GetEnumerator();
+            this.list = rules.ToList().AsReadOnly();
         }
 
         /// <summary>
@@ -48,23 +35,18 @@ namespace Pegasus
         /// </summary>
         /// <param name="lexicalElements">The lexical elements for which to generate tokens.</param>
         /// <returns>The list of tokens for the specified list of lexical elements.</returns>
-        public IList<HighlightedSegment> GetTokens(IList<LexicalElement> lexicalElements)
+        public IList<HighlightedSegment<T>> GetTokens(IList<LexicalElement> lexicalElements)
         {
             var highlightedElements = this.HighlightLexicalElements(lexicalElements);
             var simplifiedTokens = SimplifyHighlighting(highlightedElements);
             return simplifiedTokens;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        private static IList<HighlightedSegment<T>> SimplifyHighlighting(IList<HighlightedSegment<T>> tokens)
         {
-            return this.GetEnumerator();
-        }
+            var simplified = new List<HighlightedSegment<T>>(tokens.Count);
 
-        private static IList<HighlightedSegment> SimplifyHighlighting(IList<HighlightedSegment> tokens)
-        {
-            var simplified = new List<HighlightedSegment>(tokens.Count);
-
-            var lexicalStack = new Stack<HighlightedSegment>();
+            var lexicalStack = new Stack<HighlightedSegment<T>>();
             foreach (var t in tokens)
             {
                 while (true)
@@ -83,10 +65,10 @@ namespace Pegasus
 
                     if (top.End > t.End)
                     {
-                        simplified.Add(new HighlightedSegment(t.End, top.End, top.Value));
+                        simplified.Add(new HighlightedSegment<T>(t.End, top.End, top.Value));
                     }
 
-                    top = new HighlightedSegment(top.Start, t.Start, top.Value);
+                    top = new HighlightedSegment<T>(top.Start, t.Start, top.Value);
 
                     if (top.Start < top.End)
                     {
@@ -129,14 +111,14 @@ namespace Pegasus
             return null;
         }
 
-        private IList<HighlightedSegment> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
+        private IList<HighlightedSegment<T>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
         {
             if (lexicalElements.Count == 0)
             {
-                return new HighlightedSegment[0];
+                return new HighlightedSegment<T>[0];
             }
 
-            var highlighted = new List<HighlightedSegment>(lexicalElements.Count);
+            var highlighted = new List<HighlightedSegment<T>>(lexicalElements.Count);
 
             var lexicalStack = new Stack<Tuple<int, LexicalElement>>();
             foreach (var e in lexicalElements.Reverse().Where(e => e.StartCursor.Location != e.EndCursor.Location))
@@ -173,95 +155,11 @@ namespace Pegasus
                 {
                     lexicalStack.Pop();
                     lexicalStack.Push(Tuple.Create(result.Item1, e));
-                    highlighted.Add(new HighlightedSegment(e.StartCursor.Location, e.EndCursor.Location, result.Item2));
+                    highlighted.Add(new HighlightedSegment<T>(e.StartCursor.Location, e.EndCursor.Location, result.Item2));
                 }
             }
 
             return highlighted.AsReadOnly();
-        }
-
-        /// <summary>
-        /// Represents a segment of text that is highlighted with an object of type <typeparamref name="T"/>.
-        /// </summary>
-        [DebuggerDisplay("[{Start}, {End}) {Value}")]
-        public class HighlightedSegment
-        {
-            private int end;
-            private int start;
-            private T value;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="HighlightedSegment"/> class.
-            /// </summary>
-            /// <param name="start">The starting index of the segment.</param>
-            /// <param name="end">The ending index of the segment.</param>
-            /// <param name="value">The value of the segment.</param>
-            public HighlightedSegment(int start, int end, T value)
-            {
-                this.start = start;
-                this.end = end;
-                this.value = value;
-            }
-
-            /// <summary>
-            /// Gets the ending index of the segment.
-            /// </summary>
-            public int End
-            {
-                get { return this.end; }
-            }
-
-            /// <summary>
-            /// Gets the starting index of the segment.
-            /// </summary>
-            public int Start
-            {
-                get { return this.start; }
-            }
-
-            /// <summary>
-            /// Gets the value of the segment.
-            /// </summary>
-            public T Value
-            {
-                get { return this.value; }
-            }
-        }
-
-        /// <summary>
-        /// Represents a rule for highlighting.
-        /// </summary>
-        public class HighlightRule
-        {
-            private Regex pattern;
-            private T value;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="HighlightRule"/> class.
-            /// </summary>
-            /// <param name="pattern">The <see cref="Regex"/> pattern to use for matching.</param>
-            /// <param name="value">The value of the match.</param>
-            public HighlightRule(string pattern, T value)
-            {
-                this.pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
-                this.value = value;
-            }
-
-            /// <summary>
-            /// Gets the pattern to use for matching.
-            /// </summary>
-            public Regex Pattern
-            {
-                get { return this.pattern; }
-            }
-
-            /// <summary>
-            /// Gets the value of the match.
-            /// </summary>
-            public T Value
-            {
-                get { return this.value; }
-            }
         }
     }
 }

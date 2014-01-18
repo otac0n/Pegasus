@@ -87,7 +87,7 @@ namespace Pegasus.Package
                 { TokenType.WhiteSpace, TokenColor.Text },
             };
 
-            private static SyntaxHighlighter<TokenType> syntaxHighlighter = new SyntaxHighlighter<TokenType>
+            private static SyntaxHighlighter<TokenType> syntaxHighlighter = new SyntaxHighlighter<TokenType>(new HighlightRuleCollection<TokenType>
             {
                 { @"^ whitespace \b", TokenType.WhiteSpace },
                 { @"^ (settingName|ruleFlag|actionType) \b", TokenType.Keyword },
@@ -98,7 +98,7 @@ namespace Pegasus.Package
                 { @"^ multiLineComment \b", TokenType.Comment },
                 { @"^ code \b", TokenType.Text },
                 { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", TokenType.Delimiter },
-            };
+            });
 
             private IVsTextLines buffer;
             private int offset;
@@ -208,9 +208,9 @@ namespace Pegasus.Package
                 return text;
             }
 
-            private static IList<SyntaxHighlighter<TokenType>.HighlightedSegment> GetHighlightedTokens(string text)
+            private static IList<HighlightedSegment<TokenType>> GetHighlightedTokens(string text)
             {
-                var cached = MemoryCache.Default.Get(text) as IList<SyntaxHighlighter<TokenType>.HighlightedSegment>;
+                var cached = MemoryCache.Default.Get(text) as IList<HighlightedSegment<TokenType>>;
                 if (cached != null)
                 {
                     return cached;
