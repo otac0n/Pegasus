@@ -15,6 +15,7 @@ namespace Pegasus.Workbench
     using ICSharpCode.TextEditor;
     using ICSharpCode.TextEditor.Document;
     using Pegasus.Common;
+    using Pegasus.Highlighting;
     using Pegasus.Parser;
 
     internal class PegasusHighlightingStrategy : IHighlightingStrategy

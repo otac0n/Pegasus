@@ -99,9 +99,10 @@
     <Compile Include="Expressions\SequenceExpression.cs" />
     <Compile Include="Expressions\TypedExpression.cs" />
     <Compile Include="Expressions\WildcardExpression.cs" />
-    <Compile Include="HighlightedSegment{T}.cs" />
-    <Compile Include="HighlightRuleCollection{T}.cs" />
-    <Compile Include="HighlightRule{T}.cs" />
+    <Compile Include="Highlighting\HighlightedSegment{T}.cs" />
+    <Compile Include="Highlighting\HighlightRuleCollection{T}.cs" />
+    <Compile Include="Highlighting\HighlightRule{T}.cs" />
+    <Compile Include="Highlighting\SyntaxHighlighter{T}.cs" />
     <Compile Include="Parser\PegParser.peg.cs">
       <DependentUpon>PegParser.peg</DependentUpon>
     </Compile>
@@ -112,7 +113,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SyntaxHighlighter{T}.cs" />
   </ItemGroup>
   <ItemGroup>
     <WeaveTemplate Include="Compiler\CodeGenerator\PrefixedExpression.weave" />

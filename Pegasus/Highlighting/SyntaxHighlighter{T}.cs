@@ -6,7 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Pegasus
+namespace Pegasus.Highlighting
 {
     using System;
     using System.Collections.Generic;
