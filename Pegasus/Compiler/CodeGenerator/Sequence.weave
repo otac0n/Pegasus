@@ -1,6 +1,5 @@
 ﻿{{
-    var finalResultName = (string)model.FinalResultName;
-    var finalResultType = (object)model.FinalResultType;
+    var finalContext = (ResultContext)model.FinalContext;
     var index = (int)model.Index;
     var sequence = (IList<Expression>)model.Sequence;
     var startCursorName = (string)model.StartCursorName;
@@ -15,12 +14,14 @@
 }}
 {{if expression == null}}
     var len = cursor.Location - {{: startCursorName }}.Location;
-    {{: finalResultName }} = new ParseResult<string>({{: startCursorName }}, cursor, cursor.Subject.Substring({{: startCursorName }}.Location, len));
+    {{: finalContext.ResultName }} = this.ReturnHelper<{{= finalContext.ResultType }}>({{: startCursorName }}, ref cursor, state =>
+        state.Subject.Substring({{: startCursorName }}.Location, len)
+        {{if finalContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(finalContext.ResultRuleName) }}{{/if}});
 {{elif codeExpression != null}}
     {{if codeExpression.CodeType == CodeType.Result}}
-        {{: finalResultName }} = this.ReturnHelper<{{= finalResultType }}>({{: startCursorName }}, cursor, state =>
+        {{: finalContext.ResultName }} = this.ReturnHelper<{{= finalContext.ResultType }}>({{: startCursorName }}, ref cursor, state =>
             {{@RenderCode codeExpression.CodeSpan}}
-            );
+            {{if finalContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(finalContext.ResultRuleName) }}{{/if}});
     {{elif codeExpression.CodeType == CodeType.Error}}
         throw this.ExceptionHelper({{: startCursorName }}, state =>
             {{@RenderCode codeExpression.CodeSpan}}
@@ -28,20 +29,21 @@
     {{/if}}
 {{else}}
     {{
-        this.currentResultName = this.CreateVariable("r");
-        this.currentResultType = this.types[expression];
+        this.currentContext = new ResultContext(
+            resultName: this.CreateVariable("r"),
+            resultType: this.types[expression]);
     }}
-    {{if this.currentResultType is CodeSpan}}
+    {{if this.currentContext.ResultType is CodeSpan}}
         IParseResult<
-            {{@RenderCode this.currentResultType}}
-            > {{: this.currentResultName }} = null;
+            {{@RenderCode this.currentContext.ResultType}}
+            > {{: this.currentContext.ResultName }} = null;
     {{else}}
-        IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
+        IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }} = null;
     {{/if}}
     {{@WalkExpression expression}}
-    if ({{: this.currentResultName }} != null)
+    if ({{: this.currentContext.ResultName }} != null)
     {
-        {{@RenderSequence new { FinalResultName = finalResultName, FinalResultType = finalResultType, Index = index + 1, Sequence = sequence, StartCursorName = startCursorName } }}
+        {{@RenderSequence new { FinalContext = finalContext, Index = index + 1, Sequence = sequence, StartCursorName = startCursorName } }}
     }
     else
     {

@@ -1,8 +1,7 @@
 ﻿@model SequenceExpression
 {{
     var startCursorName = this.CreateVariable("startCursor");
-    var oldResultName = this.currentResultName;
-    var oldResultType = this.currentResultType;
+    var oldContext = this.currentContext;
 
     var sequence = model.Sequence;
 
@@ -23,8 +22,7 @@
     }
 }}
 var {{: startCursorName }} = cursor;
-{{@RenderSequence new { FinalResultName = oldResultName, FinalResultType = oldResultType, Index = 0, Sequence = sequence, StartCursorName = startCursorName } }}
+{{@RenderSequence new { FinalContext = oldContext, Index = 0, Sequence = sequence, StartCursorName = startCursorName } }}
 {{
-    this.currentResultName = oldResultName;
-    this.currentResultType = oldResultType;
+    this.currentContext = oldContext;
 }}

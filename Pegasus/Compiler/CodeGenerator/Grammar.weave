@@ -19,6 +19,7 @@
     var startRule = settings["start"].Select(n => n.ToString()).SingleOrDefault() ?? model.Rules[0].Identifier.Name;
     var resources = settings["resources"].SingleOrDefault();
     var memoize = model.Rules.SelectMany(r => r.Flags.Select(f => f.Name)).Any(f => f == "memoize");
+    var lexical = model.Rules.SelectMany(r => r.Flags.Select(f => f.Name)).Any(f => f == "lexical");
     var type = this.types[model.Rules.Single(r => r.Identifier.Name == startRule).Expression];
 }}
 namespace
@@ -62,7 +63,25 @@ namespace
         /// <exception cref="FormatException">
         ///  Thrown when parsing fails against <paramref name="subject"/>.  The exception's <code>Data["cursor"]</code> will be set with the cursor where the fatal error occurred.
         /// </exception>
-        public {{= type }} Parse(string subject, string fileName = null)
+        {{if lexical}}
+            public {{= type }} Parse(string subject, string fileName = null)
+            {
+                IList<LexicalElement> lexicalElements;
+                return this.Parse(subject, fileName, out lexicalElements);
+            }
+
+            /// <summary>
+            ///  Parses a string according to the rules of the <see cref="{{= classname }}" /> grammar.
+            /// </summary>
+            /// <param name="subject">The parsing subject.</param>
+            /// <param name="fileName">The optional file name to use in error messages.</param>
+            /// <param name="lexicalElements">When this method returns, contains the lexical elements for the parsing subject. This parameter is passed uninitialized.</param>
+            /// <returns>The <see cref="{{= type.ToString().Replace("<", "&lt;").Replace(">", "&gt;") }}" /> parsed from <paramref name="subject" />.</returns>
+            /// <exception cref="FormatException">
+            ///  Thrown when parsing fails against <paramref name="subject"/>.  The exception's <code>Data["cursor"]</code> will be set with the cursor where the fatal error occurred.
+            /// </exception>
+        {{/if}}
+        public {{= type }} Parse(string subject, string fileName{{if !lexical}} = null{{else}}, out IList<LexicalElement> lexicalElements{{/if}})
         {
             {{if memoize}}
                 try
@@ -74,6 +93,11 @@ namespace
                     {
                         throw ExceptionHelper(cursor, state => "Failed to parse '{{= startRule }}'.");
                     }
+                    {{if lexical}}
+                        var lexical = (cursor["_lexical"] as ListNode<LexicalElement>).ToList();
+                        lexical.Reverse();
+                        lexicalElements = lexical.AsReadOnly();
+                    {{/if}}
                     return result.Value;
                 }
                 finally
@@ -87,12 +111,17 @@ namespace
                 {
                     throw ExceptionHelper(cursor, state => "Failed to parse '{{= startRule }}'.");
                 }
+                {{if lexical}}
+                    var lexical = (cursor["_lexical"] as ListNode<LexicalElement>).ToList();
+                    lexical.Reverse();
+                    lexicalElements = lexical.AsReadOnly();
+                {{/if}}
                 return result.Value;
             {{/if}}
         }
 
         {{@WalkGrammar model}}
-        private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false)
+        private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false{{if lexical}}, string ruleName = null{{/if}})
         {
             if (cursor.Location + literal.Length <= cursor.Subject.Length)
             {
@@ -100,7 +129,7 @@ namespace
                 if (ignoreCase ? substr.Equals(literal, StringComparison.OrdinalIgnoreCase) : substr == literal)
                 {
                     var endCursor = cursor.Advance(substr.Length);
-                    var result = new ParseResult<string>(cursor, endCursor, substr);
+                    var result = this.ReturnHelper<string>(cursor, ref endCursor, state => substr{{if lexical}}, ruleName{{/if}});
                     cursor = endCursor;
                     return result;
                 }
@@ -108,7 +137,7 @@ namespace
             return null;
         }
 
-        private IParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, bool negated = false, bool ignoreCase = false)
+        private IParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, bool negated = false, bool ignoreCase = false{{if lexical}}, string ruleName = null{{/if}})
         {
             if (cursor.Location + 1 <= cursor.Subject.Length)
             {
@@ -134,7 +163,8 @@ namespace
                 if (match ^ negated)
                 {
                     var endCursor = cursor.Advance(1);
-                    var result = new ParseResult<string>(cursor, endCursor, cursor.Subject.Substring(cursor.Location, 1));
+                    var substr = cursor.Subject.Substring(cursor.Location, 1);
+                    var result = this.ReturnHelper<string>(cursor, ref endCursor, state => substr{{if lexical}}, ruleName{{/if}});
                     cursor = endCursor;
                     return result;
                 }
@@ -142,22 +172,38 @@ namespace
             return null;
         }
 
-        private IParseResult<string> ParseAny(ref Cursor cursor)
+        private IParseResult<string> ParseAny(ref Cursor cursor{{if lexical}}, string ruleName = null{{/if}})
         {
             if (cursor.Location + 1 <= cursor.Subject.Length)
             {
                 var substr = cursor.Subject.Substring(cursor.Location, 1);
                 var endCursor = cursor.Advance(1);
-                var result = new ParseResult<string>(cursor, endCursor, substr);
+                var result = this.ReturnHelper<string>(cursor, ref endCursor, state => substr{{if lexical}}, ruleName{{/if}});
                 cursor = endCursor;
                 return result;
             }
             return null;
         }
 
-        private IParseResult<T> ReturnHelper<T>(Cursor startCursor, Cursor endCursor, Func<Cursor, T> wrappedCode)
+        private IParseResult<T> ReturnHelper<T>(Cursor startCursor, ref Cursor endCursor, Func<Cursor, T> wrappedCode{{if lexical}}, string ruleName = null{{/if}})
         {
-            return new ParseResult<T>(startCursor, endCursor, wrappedCode(endCursor));
+            {{if lexical}}
+                if (ruleName != null)
+                {
+                    var state = endCursor.WithMutability(true);
+                    var element = new LexicalElement { StartCursor = startCursor, EndCursor = endCursor, Name = ruleName };
+                    state["_lexical"] = (state["_lexical"] as ListNode<LexicalElement>).Push(element);
+                    element.EndCursor = endCursor = state.WithMutability(false);
+                }
+            {{/if}}
+            var result = wrappedCode(endCursor);
+            var lexical = result as ILexical;
+            if (lexical != null && lexical.StartCursor == null && lexical.EndCursor == null)
+            {
+                lexical.StartCursor = startCursor;
+                lexical.EndCursor = endCursor;
+            }
+            return new ParseResult<T>(startCursor, endCursor, result);
         }
 
         private Exception ExceptionHelper(Cursor cursor, Func<Cursor, string> wrappedCode)

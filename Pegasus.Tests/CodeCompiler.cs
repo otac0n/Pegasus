@@ -10,12 +10,14 @@ namespace Pegasus.Tests
 {
     using System;
     using System.CodeDom.Compiler;
+    using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CSharp;
+    using Pegasus.Common;
 
     public static class CodeCompiler
     {
-        public static Func<string, string, T> Compile<T>(string source)
+        public static ParserWrapper<T> Compile<T>(string source)
         {
             var compiler = new CSharpCodeProvider();
             var options = new CompilerParameters
@@ -34,10 +36,30 @@ namespace Pegasus.Tests
 
             var assembly = results.CompiledAssembly;
             var type = assembly.GetType("Parsers.Parser");
-            var method = type.GetMethod("Parse");
 
-            var @this = Activator.CreateInstance(type);
-            return (Func<string, string, T>)Delegate.CreateDelegate(typeof(Func<string, string, T>), @this, method);
+            return new ParserWrapper<T>(type);
+        }
+
+        public class ParserWrapper<T>
+        {
+            private readonly object instance;
+            private readonly Type type;
+
+            public ParserWrapper(Type type)
+            {
+                this.type = type;
+                this.instance = Activator.CreateInstance(type);
+            }
+
+            public T Parse(string subject, string fileName = null)
+            {
+                return ((dynamic)this.instance).Parse(subject, fileName);
+            }
+
+            public T Parse(string subject, string fileName, out IList<LexicalElement> lexicalElements)
+            {
+                return ((dynamic)this.instance).Parse(subject, fileName, out lexicalElements);
+            }
         }
     }
 }

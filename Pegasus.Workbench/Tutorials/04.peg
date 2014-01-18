@@ -1,0 +1,17 @@
+// Alternatively, we can declare members at the
+//   top of the file, like so:
+
+@members
+{
+    private static string RepalceGreeting(string x)
+    {
+        x = x.Replace("e", "i");
+        return x;
+    }
+}
+
+greeting <object>
+  = x:"Hello, world!" EOF { new { Greeting = ReplaceGreeting(x) } }
+
+EOF
+  = !.

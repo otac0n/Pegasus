@@ -7,20 +7,23 @@
 @using Pegasus.Properties
 
 grammar <Grammar>
-  = __ settings:setting* rules:rule* EOF {
+  = _ settings:setting<0,,_> _ rules:rule<0,,_> _ EOF {
         new Grammar(rules, settings, rulesEnd)
     }
 
 setting <KeyValuePair<Identifier, object>>
-  = "@" key:identifier value:(<object> string / code / type) semicolon? {
+  = key:settingName _ value:(<object> string / code / type) (_ semicolon)? {
         new KeyValuePair<Identifier, object>(key, value)
     }
 
+settingName <Identifier> -lexical
+  = "@" name:identifier { name }
+
 rulePreamble
-  = (!quantifier expressionType)? ruleFlag* equals
+  = (!quantifier expressionType _)? ruleFlag<0,,_> _ equals
 
 rule <Rule>
-  = name:identifier type:expressionType? flags:ruleFlag* equals expression:expression semicolon? {{
+  = name:ruleName _ type:expressionType? _ flags:ruleFlag<0,,_> _ equals _ expression:expression _ semicolon? {{
         var typeValue = type.SingleOrDefault();
         return new Rule(
             identifier: name,
@@ -28,63 +31,66 @@ rule <Rule>
             flags: flags);
     }}
 
-ruleFlag <Identifier> -memoize
+ruleName -lexical
+  = identifier
+
+ruleFlag <Identifier> -memoize -lexical
   = "-" flag:identifier { flag }
 
 expression <Expression>
   = choice:choice
 
 expressionType <CodeSpan> -memoize
-  = lt name:type gt { name }
+  = lt _ name:type _ gt { name }
   / lt #ERROR{ "PEG0014:" + Resources.PEG0014_INVALID_TYPE }
 
 choice <Expression>
-  = choices:sequence<1,,slash> { choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) }
+  = choices:sequence<1,,_ slash _> { choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) }
 
 sequence <Expression>
-  = elements:labeled* code:action {
+  = elements:labeled<0,,_> _ code:action {
         new SequenceExpression(elements.Concat(new Expression[] { code }))
     }
-  / elements:labeled* {
+  / elements:labeled<0,,_> {
         elements.Count == 1
             ? elements[0]
             : new SequenceExpression(elements)
     }
 
 labeled <Expression> -memoize
-  = label:identifier colon expression:prefixed {
+  = label:identifier _ colon _ expression:prefixed {
         new PrefixedExpression(label, expression)
     }
   / prefixed
   / &"#STATE"i code:action { code }
 
 prefixed <Expression>
-  = and code:code {
+  = and _ code:code {
         new AndCodeExpression(code)
     }
-  / and expression:suffixed {
+  / and _ expression:suffixed {
         new AndExpression(expression)
     }
-  / not code:code {
+  / not _ code:code {
         new NotCodeExpression(code)
     }
-  / not expression:suffixed {
+  / not _ expression:suffixed {
         new NotExpression(expression)
     }
   / suffixed
 
 suffixed <Expression>
-  = expression:primary q:quantifier {
+  = expression:primary _ q:quantifier {
         new RepetitionExpression(expression, q)
     }
   / primary
 
 primary <Expression> -memoize
-  = name:identifier !(rulePreamble) { new NameExpression(name) }
+  = name:ruleName !(_ rulePreamble) { new NameExpression(name) }
   / literal
   / class
   / dot { new WildcardExpression() }
-  / lparen type:expressionType? expression:expression rparen {{
+  / lparen _ type:expressionType? _ expression:expression _ rparen {{
         var typeValue = type.SingleOrDefault();
         return typeValue != null ? new TypedExpression(typeValue, expression) : expression;
     }}
@@ -93,23 +99,23 @@ quantifier <Quantifier> -memoize
   = q:question { new Quantifier(qStart, qEnd, min: 0, max: 1) }
   / q:star { new Quantifier(qStart, qEnd, min: 0, max: null) }
   / q:plus { new Quantifier(qStart, qEnd, min: 1, max: null) }
-  / start:lt min:integer "," max:integer? "," delimiter:expression? end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter.SingleOrDefault()) }
-  / start:lt min:integer "," max:integer? end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault()) }
-  / start:lt count:integer end:gt { new Quantifier(startStart, endEnd, min: count, max: count) }
+  / start:lt _ min:integer _ comma _ max:integer? _ comma _ delimiter:expression? _ end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter.SingleOrDefault()) }
+  / start:lt _ min:integer _ comma _ max:integer? _ end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault()) }
+  / start:lt _ count:integer _ end:gt { new Quantifier(startStart, endEnd, min: count, max: count) }
 
-integer <int>
-  = digits:digit+ { int.Parse(string.Concat(digits)) }
+integer <int> -lexical
+  = digits:(digit+ "") { int.Parse(digits) }
 
 action <Expression>
   = type:actionType code:code { new CodeExpression(code, type) }
 
-actionType <CodeType>
+actionType <CodeType> -lexical
   = "#ERROR"i { CodeType.Error }
   / "#STATE"i { CodeType.State }
   /           { CodeType.Result }
 
-code <CodeSpan>
-  = "{" contents:braceContents "}" __ { new CodeSpan(contents, contentsStart, contentsEnd) }
+code <CodeSpan> -lexical
+  = "{" contents:braceContents "}" { new CodeSpan(contents, contentsStart, contentsEnd) }
   / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERMINATED_CODE }
 
 braceContents
@@ -121,61 +127,57 @@ nonBraceCharacters
 nonBraceCharacter
   = [^{}]
 
-equals    = "=" __ { "=" }
-colon     = ":" __ { ":" }
-semicolon = ";" __ { ";" }
-slash     = "/" __ { "/" }
-and       = "&" __ { "&" }
-not       = "!" __ { "!" }
-question  = "?" __ { "?" }
-star      = "*" __ { "*" }
-plus      = "+" __ { "+" }
-lparen    = "(" __ { "(" }
-rparen    = ")" __ { ")" }
-dot       = "." __ { "." }
-lt        = "<" __ { "." }
-gt        = ">" __ { "." }
-comma     = "," __ { "," }
-lbracket  = "[" __ { "[" }
-rbracket  = "]" __ { "]" }
+equals    -lexical = "="
+colon     -lexical = ":"
+semicolon -lexical = ";"
+slash     -lexical = "/"
+and       -lexical = "&"
+not       -lexical = "!"
+question  -lexical = "?"
+star      -lexical = "*"
+plus      -lexical = "+"
+lparen    -lexical = "("
+rparen    -lexical = ")"
+dot       -lexical = "."
+lt        -lexical = "<"
+gt        -lexical = ">"
+comma     -lexical = ","
+lbracket  -lexical = "["
+rbracket  -lexical = "]"
 
-identifier <Identifier> -memoize
-  = name:(!digit (letter / digit / "_" / "$")+) __ { new Identifier(name, nameStart, nameEnd) }
+identifier <Identifier> -memoize -lexical
+  = name:(!digit (letter / digit / "_" / "$")+) { new Identifier(name, nameStart, nameEnd) }
 
-type <CodeSpan>
-  = type:(nonArrayType rankSpecifiers*) { new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
+type <CodeSpan> -lexical
+  = type:(nonArrayType (_ rankSpecifiers)*) { new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
 
 nonArrayType
   = nullableType
   / typeName
 
 nullableType
-  = typeName question
+  = typeName _ question
 
 rankSpecifiers
-  = lbracket dimSeparator? rbracket
-
-dimSeparator
-  = comma+
+  = lbracket _ comma<0,,_> _ rbracket
 
 typeName
-  = identifier typeArgumentList? dot typeName
-  / identifier typeArgumentList?
+  = identifier (_ typeArgumentList)? _ dot _ typeName
+  / identifier (_ typeArgumentList)?
 
 typeArgumentList
-  = lt typeArguments gt
-   
-typeArguments
-  = type comma typeArguments
-  / type ""
+  = lt _ typeArguments _ gt
 
-literal <Expression>
-  = value:(doubleQuotedString / singleQuotedString) flags:("i" / "r" / "ir" / "ri" / ) __ {
+typeArguments
+  = type<1,,_ comma _>
+
+literal <Expression> -lexical
+  = value:(doubleQuotedString / singleQuotedString) flags:("ir" / "ri" / "i" / "r" / ) {
         new LiteralExpression(valueStart, flagsEnd, value, ignoreCase: flags.Contains('i'), fromResource: flags.Contains('r'))
     }
 
-string
-  = string:(doubleQuotedString / singleQuotedString) __ { @string }
+string -lexical
+  = string:(doubleQuotedString / singleQuotedString) { @string }
 
 doubleQuotedString
   = '"' chars:doubleQuotedCharacter* '"' { string.Concat(chars) }
@@ -207,8 +209,8 @@ singleQuotedCharacter
 simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) char:. { @char }
 
-class <Expression>
-  = "[" inverted:"^"? parts:(classCharacterRange / classCharacter)* ("]" / #ERROR{ "PEG0010:" + Resources.PEG0010_UNTERMINATED_CLASS }) flags:"i"? __ {
+class <Expression> -lexical
+  = lbracket inverted:"^"? parts:(classCharacterRange / classCharacter)* (rbracket / #ERROR{ "PEG0010:" + Resources.PEG0010_UNTERMINATED_CLASS }) flags:"i"? {
         new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
@@ -279,16 +281,16 @@ lowerCaseLetter
 upperCaseLetter
   = [A-Z]
 
-__ = (whitespace / eol / comment)*
+_ = (whitespace / eol / comment)*
 
 comment
   = singleLineComment
   / multiLineComment
 
-singleLineComment
+singleLineComment -lexical
   = "//" (!eolChar .)*
 
-multiLineComment
+multiLineComment -lexical
   = "/*" (!"*/" .)* "*/"
 
 eol
@@ -301,7 +303,7 @@ eol
 eolChar
   = [\n\r\u2028\u2029]
 
-whitespace
+whitespace -lexical
   = [ \t\v\f\u00A0\uFEFF\u1680\u180E\u2000-\u200A\u202F\u205F\u3000]
 
 EOF

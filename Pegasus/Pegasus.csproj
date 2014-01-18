@@ -39,6 +39,12 @@
     <CodeAnalysisRuleSet>..\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
@@ -93,6 +99,10 @@
     <Compile Include="Expressions\SequenceExpression.cs" />
     <Compile Include="Expressions\TypedExpression.cs" />
     <Compile Include="Expressions\WildcardExpression.cs" />
+    <Compile Include="Highlighting\HighlightedSegment{T}.cs" />
+    <Compile Include="Highlighting\HighlightRuleCollection{T}.cs" />
+    <Compile Include="Highlighting\HighlightRule{T}.cs" />
+    <Compile Include="Highlighting\SyntaxHighlighter{T}.cs" />
     <Compile Include="Parser\PegParser.peg.cs">
       <DependentUpon>PegParser.peg</DependentUpon>
     </Compile>
@@ -120,12 +130,12 @@
     <WeaveTemplate Include="Compiler\CodeGenerator\Assertion.weave" />
     <WeaveTemplate Include="Compiler\CodeGenerator\SequenceExpression.weave" />
     <WeaveTemplate Include="Compiler\CodeGenerator\WildcardExpression.weave" />
+    <None Include="..\Key.snk">
+      <Link>Key.snk</Link>
+    </None>
     <None Include="Compiler\CodeGenerator\_config.weave" />
     <None Include="packages.config" />
     <None Include="Parser\PegParser.peg" />
-    <None Include="Pegasus.targets">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

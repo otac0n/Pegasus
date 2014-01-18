@@ -16,38 +16,6 @@ namespace Pegasus.Tests
     [TestFixture]
     public class RegressionTests
     {
-        [Test(Description = "GitHub bug #20")]
-        public void Compile_WhenGivenAGrammarWithARuleWithAnImmediateTypedExpression_DoesNotThrowAnExceptionOrReturnErrors()
-        {
-            var grammar = new PegParser().Parse("top = item:(<string> 'a' 'b') {item}");
-
-            var result = PegCompiler.Compile(grammar);
-            Assert.That(result.Errors, Is.Empty);
-        }
-
-        [Test(Description = "GitHub bug #21")]
-        [TestCase("accessibility", "foo-public-foo")]
-        [TestCase("accessibility", "foo-internal-foo")]
-        public void Compile_WhenGivenAGrammarWithAnInvalidAccessibilitySetting_YieldsError(string settingName, string value)
-        {
-            var grammar = new PegParser().Parse("@" + settingName + " {" + value + "}; a = 'OK';");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.Single();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0012"));
-        }
-
-        [Test(Description = "GitHub bug #30")]
-        public void Compile_WhenGivenAGrammarWithUnusedRules_YieldsNoErrors()
-        {
-            var grammar = new PegParser().Parse("i = 'OK'; unused = '';");
-
-            var result = PegCompiler.Compile(grammar);
-
-            Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
-        }
-
         [Test(Description = "GitHub bug #31")]
         public void Compile_WhenARuleContainsAStateExpressionAsPartOfASequence_IncludesTheContentOfThatStateExpression()
         {
@@ -68,15 +36,47 @@ namespace Pegasus.Tests
             Assert.That(result.Code, Contains.Substring("TEST"));
         }
 
+        [Test(Description = "GitHub bug #21")]
+        [TestCase("accessibility", "foo-public-foo")]
+        [TestCase("accessibility", "foo-internal-foo")]
+        public void Compile_WhenGivenAGrammarWithAnInvalidAccessibilitySetting_YieldsError(string settingName, string value)
+        {
+            var grammar = new PegParser().Parse("@" + settingName + " {" + value + "}; a = 'OK';");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0012"));
+        }
+
+        [Test(Description = "GitHub bug #20")]
+        public void Compile_WhenGivenAGrammarWithARuleWithAnImmediateTypedExpression_DoesNotThrowAnExceptionOrReturnErrors()
+        {
+            var grammar = new PegParser().Parse("top = item:(<string> 'a' 'b') {item}");
+
+            var result = PegCompiler.Compile(grammar);
+            Assert.That(result.Errors, Is.Empty);
+        }
+
+        [Test(Description = "GitHub bug #30")]
+        public void Compile_WhenGivenAGrammarWithUnusedRules_YieldsNoErrors()
+        {
+            var grammar = new PegParser().Parse("i = 'OK'; unused = '';");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
+        }
+
         [Test(Description = "GitHub bug #38")]
         public void Parse_WhenARepetitionDelimiterFollowsTheRepeatedRule_DoesNotConsumeTheDelimiter()
         {
             var grammar = new PegParser().Parse("start = ' ' 'hoge'<1,,' '> ' ';");
 
             var result = PegCompiler.Compile(grammar);
-            var parse = CodeCompiler.Compile<string>(result.Code);
+            var parser = CodeCompiler.Compile<string>(result.Code);
 
-            Assert.That(parse(" hoge ", null), Is.EqualTo(" hoge "));
+            Assert.That(parser.Parse(" hoge "), Is.EqualTo(" hoge "));
         }
     }
 }

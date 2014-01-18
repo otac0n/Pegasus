@@ -2,20 +2,19 @@
     var mustMatch = (bool)model.MustMatch;
     var expression = (Expression)model.Expression;
     var startCursorName = this.CreateVariable("startCursor");
-    var oldResultName = this.currentResultName;
-    var oldResultType = this.currentResultType;
-    this.currentResultName = this.CreateVariable("r");
-    this.currentResultType = this.types[expression];
+    var oldContext = this.currentContext;
+    this.currentContext = new ResultContext(
+        resultName: this.CreateVariable("r"),
+        resultType: this.types[expression]);
 }}
 var {{: startCursorName }} = cursor;
-IParseResult<{{= this.currentResultType }}> {{: this.currentResultName }} = null;
+IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }} = null;
 {{@WalkExpression expression}}
 cursor = {{: startCursorName }};
-if ({{: this.currentResultName }} {{if mustMatch }}!={{else}}=={{/if}} null)
+if ({{: this.currentContext.ResultName }} {{if mustMatch }}!={{else}}=={{/if}} null)
 {
-    {{: oldResultName }} = new ParseResult<string>(cursor, cursor, string.Empty);
+    {{: oldContext.ResultName }} = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
 }
 {{
-    this.currentResultName = oldResultName;
-    this.currentResultType = oldResultType;
+    this.currentContext = oldContext;
 }}

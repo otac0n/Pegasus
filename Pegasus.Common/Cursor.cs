@@ -10,7 +10,6 @@ namespace Pegasus.Common
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     /// <summary>
     /// Represents a location within a parsing subject.
@@ -199,7 +198,7 @@ namespace Pegasus.Common
         /// <returns>A <see cref="Cursor"/> with the specified mutability.</returns>
         public Cursor WithMutability(bool mutable)
         {
-            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, this.state.ToDictionary(i => i.Key, i => i.Value), mutable);
+            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, new Dictionary<string, object>(this.state), mutable);
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿@model LiteralExpression
 {{if model.FromResource}}
-    {{: this.currentResultName }} = this.ParseLiteral(ref cursor, ParserResources.ResourceManager.GetString({{= ToLiteral(model.Value) }}, ParserResources.Culture){{if model.IgnoreCase}}, ignoreCase: true{{/if}});
+    {{: this.currentContext.ResultName }} = this.ParseLiteral(ref cursor, ParserResources.ResourceManager.GetString({{= ToLiteral(model.Value) }}, ParserResources.Culture){{if model.IgnoreCase}}, ignoreCase: true{{/if}}{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
 {{else}}
-    {{: this.currentResultName }} = this.ParseLiteral(ref cursor, {{= ToLiteral(model.Value) }}{{if model.IgnoreCase}}, ignoreCase: true{{/if}});
+    {{: this.currentContext.ResultName }} = this.ParseLiteral(ref cursor, {{= ToLiteral(model.Value) }}{{if model.IgnoreCase}}, ignoreCase: true{{/if}}{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
 {{/if}}
