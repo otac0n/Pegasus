@@ -17,72 +17,16 @@ namespace Pegasus.Tests
     public class PegParserTests
     {
         [Test]
-        public void Parse_WithPegGrammar_Works()
-        {
-            var subject = File.ReadAllText("PegParser.peg");
-            var parser = new PegParser();
-
-            var result = parser.Parse(subject);
-            Assert.That(result, Is.Not.Null);
-        }
-
-        [Test]
-        public void Parse_WithNoRules_YieldsEmptyGrammar()
-        {
-            var subject = string.Empty;
-            var parser = new PegParser();
-
-            var grammar = parser.Parse(subject);
-
-            Assert.That(grammar.Rules, Is.Empty);
-        }
-
-        [Test]
-        public void Parse_WithSingleEmptyRule_YieldsRuleWithMatchingName()
-        {
-            var subject = "testName = ";
-            var parser = new PegParser();
-
-            var grammar = parser.Parse(subject);
-
-            Assert.That(grammar.Rules.Single().Identifier.Name, Is.EqualTo("testName"));
-        }
-
-        [Test]
-        public void Parse_WithSingleEmptyRule_YieldsRuleWithEmptySequenceExpression()
-        {
-            var subject = "a = ";
-            var parser = new PegParser();
-
-            var grammar = parser.Parse(subject);
-            var sequence = (SequenceExpression)grammar.Rules.Single().Expression;
-
-            Assert.That(sequence.Sequence, Is.Empty);
-        }
-
-        [Test]
-        public void Parse_WithLiteralExpression_YieldsLiteralExpressionWithCorrectString()
-        {
-            var subject = "a = 'testString'";
-            var parser = new PegParser();
-
-            var grammar = parser.Parse(subject);
-            var literal = (LiteralExpression)grammar.Rules.Single().Expression;
-
-            Assert.That(literal.Value, Is.EqualTo("testString"));
-        }
-
-        [Test]
-        [TestCase("a = 'OK'i", true)]
-        [TestCase("a = 'OK'", false)]
-        public void Parse_WithLiteralExpression_YieldsLiteralExpressionWithCorrectCaseSensitivity(string subject, bool ignoreCase)
+        [TestCase("a = [abc]i", true)]
+        [TestCase("a = [abc]", false)]
+        public void Parse_WithClassExpression_YieldsClassExpressionWithCorrectCaseSensitivity(string subject, bool ignoreCase)
         {
             var parser = new PegParser();
 
             var grammar = parser.Parse(subject);
-            var literal = (LiteralExpression)grammar.Rules.Single().Expression;
+            var charClass = (ClassExpression)grammar.Rules.Single().Expression;
 
-            Assert.That(literal.IgnoreCase, Is.EqualTo(ignoreCase));
+            Assert.That(charClass.IgnoreCase, Is.EqualTo(ignoreCase));
         }
 
         [Test]
@@ -104,16 +48,72 @@ namespace Pegasus.Tests
         }
 
         [Test]
-        [TestCase("a = [abc]i", true)]
-        [TestCase("a = [abc]", false)]
-        public void Parse_WithClassExpression_YieldsClassExpressionWithCorrectCaseSensitivity(string subject, bool ignoreCase)
+        [TestCase("a = 'OK'i", true)]
+        [TestCase("a = 'OK'", false)]
+        public void Parse_WithLiteralExpression_YieldsLiteralExpressionWithCorrectCaseSensitivity(string subject, bool ignoreCase)
         {
             var parser = new PegParser();
 
             var grammar = parser.Parse(subject);
-            var charClass = (ClassExpression)grammar.Rules.Single().Expression;
+            var literal = (LiteralExpression)grammar.Rules.Single().Expression;
 
-            Assert.That(charClass.IgnoreCase, Is.EqualTo(ignoreCase));
+            Assert.That(literal.IgnoreCase, Is.EqualTo(ignoreCase));
+        }
+
+        [Test]
+        public void Parse_WithLiteralExpression_YieldsLiteralExpressionWithCorrectString()
+        {
+            var subject = "a = 'testString'";
+            var parser = new PegParser();
+
+            var grammar = parser.Parse(subject);
+            var literal = (LiteralExpression)grammar.Rules.Single().Expression;
+
+            Assert.That(literal.Value, Is.EqualTo("testString"));
+        }
+
+        [Test]
+        public void Parse_WithNoRules_YieldsEmptyGrammar()
+        {
+            var subject = string.Empty;
+            var parser = new PegParser();
+
+            var grammar = parser.Parse(subject);
+
+            Assert.That(grammar.Rules, Is.Empty);
+        }
+
+        [Test]
+        public void Parse_WithPegGrammar_Works()
+        {
+            var subject = File.ReadAllText("PegParser.peg");
+            var parser = new PegParser();
+
+            var result = parser.Parse(subject);
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public void Parse_WithSingleEmptyRule_YieldsRuleWithEmptySequenceExpression()
+        {
+            var subject = "a = ";
+            var parser = new PegParser();
+
+            var grammar = parser.Parse(subject);
+            var sequence = (SequenceExpression)grammar.Rules.Single().Expression;
+
+            Assert.That(sequence.Sequence, Is.Empty);
+        }
+
+        [Test]
+        public void Parse_WithSingleEmptyRule_YieldsRuleWithMatchingName()
+        {
+            var subject = "testName = ";
+            var parser = new PegParser();
+
+            var grammar = parser.Parse(subject);
+
+            Assert.That(grammar.Rules.Single().Identifier.Name, Is.EqualTo("testName"));
         }
     }
 }
