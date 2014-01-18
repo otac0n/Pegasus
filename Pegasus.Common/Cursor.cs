@@ -10,6 +10,7 @@ namespace Pegasus.Common
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading;
 
     /// <summary>
     /// Represents a location within a parsing subject.
@@ -20,6 +21,8 @@ namespace Pegasus.Common
 #endif
     public class Cursor : IEquatable<Cursor>
     {
+        private static int previousStateKey = -1;
+
         private readonly int column;
         private readonly string fileName;
         private readonly int line;
@@ -28,6 +31,7 @@ namespace Pegasus.Common
         private readonly string subject;
         private readonly IDictionary<string, object> state;
         private readonly bool mutable;
+        private int stateKey;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Cursor"/> class.
@@ -60,10 +64,11 @@ namespace Pegasus.Common
             this.column = column;
             this.inTransition = inTransition;
             this.state = new Dictionary<string, object>();
+            this.stateKey = GetNextStateKey();
             this.mutable = false;
         }
 
-        private Cursor(string subject, int location, string fileName, int line, int column, bool inTransition, IDictionary<string, object> state, bool mutable)
+        private Cursor(string subject, int location, string fileName, int line, int column, bool inTransition, IDictionary<string, object> state, int stateKey, bool mutable)
         {
             this.subject = subject;
             this.location = location;
@@ -72,6 +77,7 @@ namespace Pegasus.Common
             this.column = column;
             this.inTransition = inTransition;
             this.state = state;
+            this.stateKey = stateKey;
             this.mutable = mutable;
         }
 
@@ -113,7 +119,7 @@ namespace Pegasus.Common
         /// <remarks>This value, along with this cursor's location uniquely identify the parsing state.</remarks>
         public int StateKey
         {
-            get { return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(this.state); }
+            get { return this.stateKey; }
         }
 
         /// <summary>
@@ -145,6 +151,7 @@ namespace Pegasus.Common
                     throw new InvalidOperationException();
                 }
 
+                this.stateKey = GetNextStateKey();
                 this.state[key] = value;
             }
         }
@@ -188,7 +195,7 @@ namespace Pegasus.Common
             var inTransition = this.inTransition;
             TrackLines(this.subject, this.location, count, ref line, ref column, ref inTransition);
 
-            return new Cursor(this.subject, this.location + count, this.fileName, line, column, inTransition, this.state, this.mutable);
+            return new Cursor(this.subject, this.location + count, this.fileName, line, column, inTransition, this.state, this.stateKey, this.mutable);
         }
 
         /// <summary>
@@ -198,7 +205,7 @@ namespace Pegasus.Common
         /// <returns>A <see cref="Cursor"/> with the specified mutability.</returns>
         public Cursor WithMutability(bool mutable)
         {
-            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, new Dictionary<string, object>(this.state), mutable);
+            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, new Dictionary<string, object>(this.state), this.stateKey, mutable);
         }
 
         /// <summary>
@@ -215,13 +222,14 @@ namespace Pegasus.Common
         /// Determines whether the specified <see cref="Cursor"/> is equal to the current <see cref="Cursor"/>.
         /// </summary>
         /// <param name="other">A <see cref="Cursor"/> to compare with this <see cref="Cursor"/>.</param>
-        /// <returns>true if the cursors represent the same location; otherwise, false.</returns>
+        /// <returns>true if the cursors represent the same location at the same state; otherwise, false.</returns>
         public bool Equals(Cursor other)
         {
             return !object.ReferenceEquals(other, null) &&
                 this.location == other.location &&
                 this.subject == other.subject &&
-                this.fileName == other.fileName;
+                this.fileName == other.fileName &&
+                this.stateKey == other.stateKey;
         }
 
         /// <summary>
@@ -234,8 +242,14 @@ namespace Pegasus.Common
             hash = (hash * -0x25555529) + this.subject.GetHashCode();
             hash = (hash * -0x25555529) + this.location.GetHashCode();
             hash = (hash * -0x25555529) + (this.fileName == null ? 0 : this.fileName.GetHashCode());
+            hash = (hash * -0x25555529) + this.stateKey;
 
             return hash;
+        }
+
+        private static int GetNextStateKey()
+        {
+            return Interlocked.Increment(ref previousStateKey);
         }
 
         private static void TrackLines(string subject, int start, int count, ref int line, ref int column, ref bool inTransition)

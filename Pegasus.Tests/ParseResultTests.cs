@@ -16,7 +16,9 @@ namespace Pegasus.Tests
         [Test]
         public void Equals_WithOtherObject_ReturnsFalse()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(1);
+            var subjectA = new ParseResult<int>(start, end, 0);
             var subjectB = new object();
 
             Assert.That(subjectA.Equals(subjectB), Is.False);
@@ -34,8 +36,10 @@ namespace Pegasus.Tests
         [Test]
         public void OpEquality_WithEqualValuesAndCursors_ReturnsTrue()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
-            var subjectB = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(1);
+            var subjectA = new ParseResult<int>(start, end, 0);
+            var subjectB = new ParseResult<int>(start, end, 0);
 
             Assert.That(subjectA == subjectB, Is.True);
         }
@@ -43,8 +47,10 @@ namespace Pegasus.Tests
         [Test]
         public void OpEquality_WithNullReferenceOnLeft_ReturnsFalse()
         {
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(1);
             var subjectA = (ParseResult<int>)null;
-            var subjectB = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
+            var subjectB = new ParseResult<int>(start, end, 0);
 
             Assert.That(subjectA == subjectB, Is.False);
         }
@@ -52,7 +58,9 @@ namespace Pegasus.Tests
         [Test]
         public void OpEquality_WithNullReferenceOnRight_ReturnsFalse()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(1);
+            var subjectA = new ParseResult<int>(start, end, 0);
             var subjectB = (ParseResult<int>)null;
 
             Assert.That(subjectA == subjectB, Is.False);
@@ -61,8 +69,11 @@ namespace Pegasus.Tests
         [Test]
         public void OpEquality_WithUnequalEndCursors_ReturnsFalse()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
-            var subjectB = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 2), 0);
+            var start = new Cursor("OK", 0);
+            var one = start.Advance(1);
+            var two = one.Advance(1);
+            var subjectA = new ParseResult<int>(start, one, 0);
+            var subjectB = new ParseResult<int>(start, two, 0);
 
             Assert.That(subjectA == subjectB, Is.False);
         }
@@ -70,8 +81,11 @@ namespace Pegasus.Tests
         [Test]
         public void OpEquality_WithUnequalStartCursors_ReturnsFalse()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 2), 0);
-            var subjectB = new ParseResult<int>(new Cursor("OK", 1), new Cursor("OK", 2), 0);
+            var start = new Cursor("OK", 0);
+            var one = start.Advance(1);
+            var two = one.Advance(1);
+            var subjectA = new ParseResult<int>(start, two, 0);
+            var subjectB = new ParseResult<int>(one, two, 0);
 
             Assert.That(subjectA == subjectB, Is.False);
         }
@@ -79,8 +93,10 @@ namespace Pegasus.Tests
         [Test]
         public void OpEquality_WithUnequalValues_ReturnsFalse()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 1);
-            var subjectB = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(1);
+            var subjectA = new ParseResult<int>(start, end, 1);
+            var subjectB = new ParseResult<int>(end, end, 0);
 
             Assert.That(subjectA == subjectB, Is.False);
         }
@@ -97,8 +113,10 @@ namespace Pegasus.Tests
         [Test]
         public void OpInequality_WithEqualValuesAndCursors_ReturnsFalse()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
-            var subjectB = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(1);
+            var subjectA = new ParseResult<int>(start, end, 0);
+            var subjectB = new ParseResult<int>(start, end, 0);
 
             Assert.That(subjectA != subjectB, Is.False);
         }
@@ -106,8 +124,10 @@ namespace Pegasus.Tests
         [Test]
         public void OpInequality_WithNullReferenceOnLeft_ReturnsTrue()
         {
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(1);
             var subjectA = (ParseResult<int>)null;
-            var subjectB = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
+            var subjectB = new ParseResult<int>(start, end, 0);
 
             Assert.That(subjectA != subjectB, Is.True);
         }
@@ -115,7 +135,9 @@ namespace Pegasus.Tests
         [Test]
         public void OpInequality_WithNullReferenceOnRight_ReturnsTrue()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(1);
+            var subjectA = new ParseResult<int>(start, end, 0);
             var subjectB = (ParseResult<int>)null;
 
             Assert.That(subjectA != subjectB, Is.True);
@@ -124,8 +146,11 @@ namespace Pegasus.Tests
         [Test]
         public void OpInequality_WithUnequalEndCursors_ReturnsTrue()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
-            var subjectB = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 2), 0);
+            var start = new Cursor("OK", 0);
+            var one = start.Advance(1);
+            var two = one.Advance(1);
+            var subjectA = new ParseResult<int>(start, one, 0);
+            var subjectB = new ParseResult<int>(start, two, 0);
 
             Assert.That(subjectA != subjectB, Is.True);
         }
@@ -133,8 +158,11 @@ namespace Pegasus.Tests
         [Test]
         public void OpInequality_WithUnequalStartCursors_ReturnsTrue()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 2), 0);
-            var subjectB = new ParseResult<int>(new Cursor("OK", 1), new Cursor("OK", 2), 0);
+            var start = new Cursor("OK", 0);
+            var one = start.Advance(1);
+            var two = one.Advance(1);
+            var subjectA = new ParseResult<int>(start, two, 0);
+            var subjectB = new ParseResult<int>(one, two, 0);
 
             Assert.That(subjectA != subjectB, Is.True);
         }
@@ -142,8 +170,10 @@ namespace Pegasus.Tests
         [Test]
         public void OpInequality_WithUnequalValues_ReturnsTrue()
         {
-            var subjectA = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 1);
-            var subjectB = new ParseResult<int>(new Cursor("OK", 0), new Cursor("OK", 1), 0);
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(1);
+            var subjectA = new ParseResult<int>(start, end, 1);
+            var subjectB = new ParseResult<int>(start, end, 0);
 
             Assert.That(subjectA != subjectB, Is.True);
         }

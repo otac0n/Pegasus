@@ -82,6 +82,48 @@ namespace Pegasus.Tests
             Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
         }
 
+        [Test(Description = "GitHub bug #35")]
+        public void Compile_WhenMemoizedRuleIsReVisitedWithoutStateMutation_UsesTheMemoizedValue()
+        {
+            var grammar = new PegParser().Parse(string.Join("\n", new[] {
+                "@members",
+                "{",
+                "    private int callCount = 0;",
+                "}",
+                "start <int>",
+                "  = 'OK'           t:test 'NO' { t }",
+                "  / 'OK' #STATE{ } t:test      { t }",
+                "",
+                "test <int> -memoize = { ++callCount }"
+            }));
+
+            var result = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<int>(result.Code);
+
+            Assert.That(parser.Parse("OK"), Is.EqualTo(1));
+        }
+
+        [Test(Description = "GitHub bug #35")]
+        public void Compile_WhenMemoizedRuleIsVisitedAfterAMutation_DoesNotUseTheMemoizedValue()
+        {
+            var grammar = new PegParser().Parse(string.Join("\n", new[] {
+                "@members",
+                "{",
+                "    private int callCount = 0;",
+                "}",
+                "start <int>",
+                "  = 'OK'                                     t:test 'NO' { t }",
+                "  / 'OK' #STATE{ state[\"foo\"] = \"bar\"; } t:test      { t }",
+                "",
+                "test <int> -memoize = { ++callCount }"
+            }));
+
+            var result = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<int>(result.Code);
+
+            Assert.That(parser.Parse("OK"), Is.EqualTo(2));
+        }
+
         [Test(Description = "GitHub bug #38")]
         public void Parse_WhenARepetitionDelimiterFollowsTheRepeatedRule_DoesNotConsumeTheDelimiter()
         {
