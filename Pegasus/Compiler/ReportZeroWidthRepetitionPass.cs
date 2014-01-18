@@ -45,7 +45,7 @@ namespace Pegasus.Compiler
             {
                 base.WalkRepetitionExpression(repetitionExpression);
 
-                if (this.zeroWidth[repetitionExpression.Expression])
+                if (this.zeroWidth[repetitionExpression.Expression] && (repetitionExpression.Quantifier.Delimiter == null || this.zeroWidth[repetitionExpression.Quantifier.Delimiter]))
                 {
                     if (repetitionExpression.Quantifier.Max == null)
                     {

@@ -50,6 +50,16 @@ namespace Pegasus.Tests
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0021"));
         }
 
+        [Test(Description = "GitHub bug #40")]
+        public void Compile_WhenAZeroLengthProductionIsRepeatedWithADelimiter_YieldsNoErrors(string grammarText)
+        {
+            var grammar = new PegParser().Parse("start = ''<0,,'OK'>");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
+        }
+
         [Test(Description = "GitHub bug #21")]
         [TestCase("accessibility", "foo-public-foo")]
         [TestCase("accessibility", "foo-internal-foo")]
