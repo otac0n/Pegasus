@@ -128,6 +128,7 @@
                 </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="20" CellTemplate="{StaticResource ErrorTemplate}" />
+                    <DataGridTextColumn Binding="{Binding ErrorNumber}" />
                     <DataGridTextColumn Header="Description" Width="*" Binding="{Binding ErrorText}" />
                     <DataGridTextColumn Header="File" Binding="{Binding FileName, Converter={p:PathToFileNameConverter}}" />
                     <DataGridTextColumn Header="Line" Binding="{Binding Line}" />
