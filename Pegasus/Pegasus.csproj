@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pegasus</RootNamespace>
     <AssemblyName>Pegasus</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -27,6 +27,7 @@
     <DocumentationFile>bin\Debug\Pegasus.xml</DocumentationFile>
     <CodeAnalysisRuleSet>..\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +39,7 @@
     <DocumentationFile>bin\Release\Pegasus.xml</DocumentationFile>
     <CodeAnalysisRuleSet>..\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -49,6 +51,12 @@
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Roslyn.Compilers">
+      <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
+    </Reference>
+    <Reference Include="Roslyn.Compilers.CSharp">
+      <HintPath>..\packages\Roslyn.Compilers.CSharp.1.2.20906.2\lib\net45\Roslyn.Compilers.CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +72,7 @@
     <Compile Include="Compiler\GenerateCodePass.cs" />
     <Compile Include="Compiler\LeftRecursionDetector.cs" />
     <Compile Include="Compiler\PegCompiler.cs" />
+    <Compile Include="Compiler\ReportCodeSyntaxIssuesPass.cs" />
     <Compile Include="Compiler\ReportConflictingNamesPass.cs" />
     <Compile Include="Compiler\ReportDuplicateRulesPass.cs" />
     <Compile Include="Compiler\ReportInvalidQuantifiersPass.cs" />
@@ -159,4 +168,14 @@
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" Condition="Exists('$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets')" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <Import Project="..\packages\Weave.1.0.0\tools\Weave.targets" Condition="Exists('..\packages\Weave.1.0.0\tools\Weave.targets')" />
+  <PropertyGroup>
+    <PreBuildEvent>if exist "$(TargetPath)" (
+"$(TargetPath)" ..\..\Parser\PegParser.peg
+) else (
+echo Initial build.
+)</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>"$(TargetPath)" ..\..\Parser\PegParser.peg</PostBuildEvent>
+  </PropertyGroup>
 </Project>
