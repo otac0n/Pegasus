@@ -13,10 +13,12 @@
     }
 }}
 {{if expression == null}}
-    var len = cursor.Location - {{: startCursorName }}.Location;
-    {{: finalContext.ResultName }} = this.ReturnHelper<{{= finalContext.ResultType }}>({{: startCursorName }}, ref cursor, state =>
-        state.Subject.Substring({{: startCursorName }}.Location, len)
-        {{if finalContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(finalContext.ResultRuleName) }}{{/if}});
+    {
+        var len = cursor.Location - {{: startCursorName }}.Location;
+        {{: finalContext.ResultName }} = this.ReturnHelper<{{= finalContext.ResultType }}>({{: startCursorName }}, ref cursor, state =>
+            state.Subject.Substring({{: startCursorName }}.Location, len)
+            {{if finalContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(finalContext.ResultRuleName) }}{{/if}});
+    }
 {{elif codeExpression != null}}
     {{if codeExpression.CodeType == CodeType.Result}}
         {{: finalContext.ResultName }} = this.ReturnHelper<{{= finalContext.ResultType }}>({{: startCursorName }}, ref cursor, state =>

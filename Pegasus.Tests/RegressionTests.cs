@@ -60,6 +60,17 @@ namespace Pegasus.Tests
             Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
         }
 
+        [Test(Description = "GitHub bug #39")]
+        public void Compile_WhenEmptyParensAreIncluded_CompilesCorrectly()
+        {
+            var grammar = new PegParser().Parse("a = () b; b = 'OK';");
+
+            var result = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(result.Code);
+
+            Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
+        }
+
         [Test(Description = "GitHub bug #21")]
         [TestCase("accessibility", "foo-public-foo")]
         [TestCase("accessibility", "foo-internal-foo")]

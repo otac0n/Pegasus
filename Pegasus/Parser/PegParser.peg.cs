@@ -285,10 +285,12 @@ namespace
                                 r7 = this.semicolon(ref cursor);
                                 if (r7 != null)
                                 {
-                                    var len = cursor.Location - startCursor2.Location;
-                                    r5 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
-                                        state.Subject.Substring(startCursor2.Location, len)
-                                        );
+                                    {
+                                        var len = cursor.Location - startCursor2.Location;
+                                        r5 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
+                                            state.Subject.Substring(startCursor2.Location, len)
+                                            );
+                                    }
                                 }
                                 else
                                 {
@@ -407,10 +409,12 @@ namespace
                         r6 = this._(ref cursor);
                         if (r6 != null)
                         {
-                            var len = cursor.Location - startCursor2.Location;
-                            r2 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
-                                state.Subject.Substring(startCursor2.Location, len)
-                                );
+                            {
+                                var len = cursor.Location - startCursor2.Location;
+                                r2 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
+                                    state.Subject.Substring(startCursor2.Location, len)
+                                    );
+                            }
                         }
                         else
                         {
@@ -476,10 +480,12 @@ namespace
                         r11 = this.equals(ref cursor);
                         if (r11 != null)
                         {
-                            var len = cursor.Location - startCursor0.Location;
-                            r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
-                                state.Subject.Substring(startCursor0.Location, len)
-                                );
+                            {
+                                var len = cursor.Location - startCursor0.Location;
+                                r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
+                                    state.Subject.Substring(startCursor0.Location, len)
+                                    );
+                            }
                         }
                         else
                         {
@@ -892,10 +898,12 @@ namespace
                             r5 = this._(ref cursor);
                             if (r5 != null)
                             {
-                                var len = cursor.Location - startCursor3.Location;
-                                r2 = this.ReturnHelper<string>(startCursor3, ref cursor, state =>
-                                    state.Subject.Substring(startCursor3.Location, len)
-                                    );
+                                {
+                                    var len = cursor.Location - startCursor3.Location;
+                                    r2 = this.ReturnHelper<string>(startCursor3, ref cursor, state =>
+                                        state.Subject.Substring(startCursor3.Location, len)
+                                        );
+                                }
                             }
                             else
                             {
@@ -1475,10 +1483,12 @@ namespace
                         r5 = this.rulePreamble(ref cursor);
                         if (r5 != null)
                         {
-                            var len = cursor.Location - startCursor2.Location;
-                            r3 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
-                                state.Subject.Substring(startCursor2.Location, len)
-                                );
+                            {
+                                var len = cursor.Location - startCursor2.Location;
+                                r3 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
+                                    state.Subject.Substring(startCursor2.Location, len)
+                                    );
+                            }
                         }
                         else
                         {
@@ -2114,10 +2124,12 @@ namespace
                 r4 = this.ParseLiteral(ref cursor, "");
                 if (r4 != null)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r1 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
-                        state.Subject.Substring(startCursor1.Location, len)
-                        );
+                    {
+                        var len = cursor.Location - startCursor1.Location;
+                        r1 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
+                            state.Subject.Substring(startCursor1.Location, len)
+                            );
+                    }
                 }
                 else
                 {
@@ -2337,10 +2349,12 @@ namespace
                             r5 = this.ParseLiteral(ref cursor, "}");
                             if (r5 != null)
                             {
-                                var len = cursor.Location - startCursor2.Location;
-                                r2 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
-                                    state.Subject.Substring(startCursor2.Location, len)
-                                    );
+                                {
+                                    var len = cursor.Location - startCursor2.Location;
+                                    r2 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
+                                        state.Subject.Substring(startCursor2.Location, len)
+                                        );
+                                }
                             }
                             else
                             {
@@ -2629,10 +2643,12 @@ namespace
                 }
                 if (r4 != null)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r1 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
-                        state.Subject.Substring(startCursor1.Location, len)
-                        );
+                    {
+                        var len = cursor.Location - startCursor1.Location;
+                        r1 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
+                            state.Subject.Substring(startCursor1.Location, len)
+                            );
+                    }
                 }
                 else
                 {
@@ -2691,10 +2707,12 @@ namespace
                         r6 = this.rankSpecifiers(ref cursor);
                         if (r6 != null)
                         {
-                            var len = cursor.Location - startCursor3.Location;
-                            r4 = this.ReturnHelper<string>(startCursor3, ref cursor, state =>
-                                state.Subject.Substring(startCursor3.Location, len)
-                                );
+                            {
+                                var len = cursor.Location - startCursor3.Location;
+                                r4 = this.ReturnHelper<string>(startCursor3, ref cursor, state =>
+                                    state.Subject.Substring(startCursor3.Location, len)
+                                    );
+                            }
                         }
                         else
                         {
@@ -2717,10 +2735,12 @@ namespace
                 r3 = this.ReturnHelper<IList<string>>(startCursor2, ref cursor, state => l0.AsReadOnly());
                 if (r3 != null)
                 {
-                    var len = cursor.Location - startCursor1.Location;
-                    r1 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
-                        state.Subject.Substring(startCursor1.Location, len)
-                        );
+                    {
+                        var len = cursor.Location - startCursor1.Location;
+                        r1 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
+                            state.Subject.Substring(startCursor1.Location, len)
+                            );
+                    }
                 }
                 else
                 {
@@ -2778,10 +2798,12 @@ namespace
                     r3 = this.question(ref cursor);
                     if (r3 != null)
                     {
-                        var len = cursor.Location - startCursor0.Location;
-                        r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
-                            state.Subject.Substring(startCursor0.Location, len)
-                            );
+                        {
+                            var len = cursor.Location - startCursor0.Location;
+                            r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
+                                state.Subject.Substring(startCursor0.Location, len)
+                                );
+                        }
                     }
                     else
                     {
@@ -2850,10 +2872,12 @@ namespace
                             r7 = this.rbracket(ref cursor);
                             if (r7 != null)
                             {
-                                var len = cursor.Location - startCursor0.Location;
-                                r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
-                                    state.Subject.Substring(startCursor0.Location, len)
-                                    );
+                                {
+                                    var len = cursor.Location - startCursor0.Location;
+                                    r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
+                                        state.Subject.Substring(startCursor0.Location, len)
+                                        );
+                                }
                             }
                             else
                             {
@@ -2907,10 +2931,12 @@ namespace
                             r5 = this.typeArgumentList(ref cursor);
                             if (r5 != null)
                             {
-                                var len = cursor.Location - startCursor2.Location;
-                                r3 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
-                                    state.Subject.Substring(startCursor2.Location, len)
-                                    );
+                                {
+                                    var len = cursor.Location - startCursor2.Location;
+                                    r3 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
+                                        state.Subject.Substring(startCursor2.Location, len)
+                                        );
+                                }
                             }
                             else
                             {
@@ -2949,10 +2975,12 @@ namespace
                                     r9 = this.typeName(ref cursor);
                                     if (r9 != null)
                                     {
-                                        var len = cursor.Location - startCursor0.Location;
-                                        r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
-                                            state.Subject.Substring(startCursor0.Location, len)
-                                            );
+                                        {
+                                            var len = cursor.Location - startCursor0.Location;
+                                            r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
+                                                state.Subject.Substring(startCursor0.Location, len)
+                                                );
+                                        }
                                     }
                                     else
                                     {
@@ -3006,10 +3034,12 @@ namespace
                             r14 = this.typeArgumentList(ref cursor);
                             if (r14 != null)
                             {
-                                var len = cursor.Location - startCursor5.Location;
-                                r12 = this.ReturnHelper<string>(startCursor5, ref cursor, state =>
-                                    state.Subject.Substring(startCursor5.Location, len)
-                                    );
+                                {
+                                    var len = cursor.Location - startCursor5.Location;
+                                    r12 = this.ReturnHelper<string>(startCursor5, ref cursor, state =>
+                                        state.Subject.Substring(startCursor5.Location, len)
+                                        );
+                                }
                             }
                             else
                             {
@@ -3032,10 +3062,12 @@ namespace
                     r11 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l1.AsReadOnly());
                     if (r11 != null)
                     {
-                        var len = cursor.Location - startCursor3.Location;
-                        r0 = this.ReturnHelper<string>(startCursor3, ref cursor, state =>
-                            state.Subject.Substring(startCursor3.Location, len)
-                            );
+                        {
+                            var len = cursor.Location - startCursor3.Location;
+                            r0 = this.ReturnHelper<string>(startCursor3, ref cursor, state =>
+                                state.Subject.Substring(startCursor3.Location, len)
+                                );
+                        }
                     }
                     else
                     {
@@ -3074,10 +3106,12 @@ namespace
                             r5 = this.gt(ref cursor);
                             if (r5 != null)
                             {
-                                var len = cursor.Location - startCursor0.Location;
-                                r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
-                                    state.Subject.Substring(startCursor0.Location, len)
-                                    );
+                                {
+                                    var len = cursor.Location - startCursor0.Location;
+                                    r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
+                                        state.Subject.Substring(startCursor0.Location, len)
+                                        );
+                                }
                             }
                             else
                             {
@@ -3130,10 +3164,12 @@ namespace
                             r4 = this._(ref cursor);
                             if (r4 != null)
                             {
-                                var len = cursor.Location - startCursor2.Location;
-                                r1 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
-                                    state.Subject.Substring(startCursor2.Location, len)
-                                    );
+                                {
+                                    var len = cursor.Location - startCursor2.Location;
+                                    r1 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
+                                        state.Subject.Substring(startCursor2.Location, len)
+                                        );
+                                }
                             }
                             else
                             {
@@ -3220,10 +3256,12 @@ namespace
                 if (r2 == null)
                 {
                     var startCursor1 = cursor;
-                    var len = cursor.Location - startCursor1.Location;
-                    r2 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
-                        state.Subject.Substring(startCursor1.Location, len)
-                        );
+                    {
+                        var len = cursor.Location - startCursor1.Location;
+                        r2 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
+                            state.Subject.Substring(startCursor1.Location, len)
+                            );
+                    }
                 }
                 var flagsEnd = cursor;
                 var flags = ValueOrDefault(r2);
@@ -4022,10 +4060,12 @@ namespace
                     r4 = this.hexDigit(ref cursor);
                     if (r4 != null)
                     {
-                        var len = cursor.Location - startCursor1.Location;
-                        r2 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
-                            state.Subject.Substring(startCursor1.Location, len)
-                            );
+                        {
+                            var len = cursor.Location - startCursor1.Location;
+                            r2 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
+                                state.Subject.Substring(startCursor1.Location, len)
+                                );
+                        }
                     }
                     else
                     {
@@ -4086,10 +4126,12 @@ namespace
                             r6 = this.hexDigit(ref cursor);
                             if (r6 != null)
                             {
-                                var len = cursor.Location - startCursor1.Location;
-                                r2 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
-                                    state.Subject.Substring(startCursor1.Location, len)
-                                    );
+                                {
+                                    var len = cursor.Location - startCursor1.Location;
+                                    r2 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
+                                        state.Subject.Substring(startCursor1.Location, len)
+                                        );
+                                }
                             }
                             else
                             {
@@ -4285,10 +4327,12 @@ namespace
                         r6 = this.ParseAny(ref cursor);
                         if (r6 != null)
                         {
-                            var len = cursor.Location - startCursor2.Location;
-                            r3 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
-                                state.Subject.Substring(startCursor2.Location, len)
-                                );
+                            {
+                                var len = cursor.Location - startCursor2.Location;
+                                r3 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
+                                    state.Subject.Substring(startCursor2.Location, len)
+                                    );
+                            }
                         }
                         else
                         {
@@ -4311,10 +4355,12 @@ namespace
                 r2 = this.ReturnHelper<IList<string>>(startCursor1, ref cursor, state => l0.AsReadOnly());
                 if (r2 != null)
                 {
-                    var len = cursor.Location - startCursor0.Location;
-                    r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
-                        state.Subject.Substring(startCursor0.Location, len)
-                        , ruleName: "singleLineComment");
+                    {
+                        var len = cursor.Location - startCursor0.Location;
+                        r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
+                            state.Subject.Substring(startCursor0.Location, len)
+                            , ruleName: "singleLineComment");
+                    }
                 }
                 else
                 {
@@ -4358,10 +4404,12 @@ namespace
                         r6 = this.ParseAny(ref cursor);
                         if (r6 != null)
                         {
-                            var len = cursor.Location - startCursor2.Location;
-                            r3 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
-                                state.Subject.Substring(startCursor2.Location, len)
-                                );
+                            {
+                                var len = cursor.Location - startCursor2.Location;
+                                r3 = this.ReturnHelper<string>(startCursor2, ref cursor, state =>
+                                    state.Subject.Substring(startCursor2.Location, len)
+                                    );
+                            }
                         }
                         else
                         {
@@ -4388,10 +4436,12 @@ namespace
                     r7 = this.ParseLiteral(ref cursor, "*/");
                     if (r7 != null)
                     {
-                        var len = cursor.Location - startCursor0.Location;
-                        r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
-                            state.Subject.Substring(startCursor0.Location, len)
-                            , ruleName: "multiLineComment");
+                        {
+                            var len = cursor.Location - startCursor0.Location;
+                            r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
+                                state.Subject.Substring(startCursor0.Location, len)
+                                , ruleName: "multiLineComment");
+                        }
                     }
                     else
                     {
