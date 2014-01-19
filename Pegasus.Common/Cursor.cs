@@ -12,14 +12,13 @@ namespace Pegasus.Common
     using System.Collections.Generic;
     using System.Threading;
 
+    /// <summary>
+    /// Represents a location within a parsing subject.
+    /// </summary>
 #if !PORTABLE
 
     [Serializable]
 #endif
-
-    /// <summary>
-    /// Represents a location within a parsing subject.
-    /// </summary>
     public class Cursor : IEquatable<Cursor>
     {
         private static int previousStateKey = -1;
