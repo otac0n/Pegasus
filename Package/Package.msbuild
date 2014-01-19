@@ -12,8 +12,10 @@
   <Target Name="Package" DependsOnTargets="Build">
     <MakeDir Directories="bin;obj;obj\lib\net40;obj\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Roslyn.Compilers.CSharp.dll" DestinationFolder="obj\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Roslyn.Compilers.dll" DestinationFolder="obj\build" />
     <Copy SourceFiles="Pegasus.targets" DestinationFolder="obj\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\build" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\lib\portable-sl4+win8" />
