@@ -162,6 +162,11 @@
     <Resource Include="Resources\Information.png" />
     <Resource Include="Resources\Warning.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\Pegasus.ico">
+      <Link>Resources\Pegasus.ico</Link>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" Condition="Exists('$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets')" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

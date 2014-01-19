@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Pegasus.Workbench.MainWindow"
     DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
+    Icon="Resources/Pegasus.ico"
     Title="Pegasus Workbench"
     Height="600"
     Width="800">
