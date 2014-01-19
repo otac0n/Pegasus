@@ -51,6 +51,12 @@
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Roslyn.Compilers">
+      <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
+    </Reference>
+    <Reference Include="Roslyn.Compilers.CSharp">
+      <HintPath>..\packages\Roslyn.Compilers.CSharp.1.2.20906.2\lib\net45\Roslyn.Compilers.CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +72,7 @@
     <Compile Include="Compiler\GenerateCodePass.cs" />
     <Compile Include="Compiler\LeftRecursionDetector.cs" />
     <Compile Include="Compiler\PegCompiler.cs" />
+    <Compile Include="Compiler\ReportCodeSyntaxIssuesPass.cs" />
     <Compile Include="Compiler\ReportConflictingNamesPass.cs" />
     <Compile Include="Compiler\ReportDuplicateRulesPass.cs" />
     <Compile Include="Compiler\ReportInvalidQuantifiersPass.cs" />
