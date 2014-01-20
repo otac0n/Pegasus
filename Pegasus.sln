@@ -34,11 +34,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Common", "Pegasus.Common\Pegasus.Common.csproj", "{1FC19ADF-446F-4118-8189-C25AADF12397}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Common.Portable", "Pegasus.Common\Pegasus.Common.Portable.csproj", "{21772B0C-0206-4ABD-B88B-41EE4CFCA47E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1FC19ADF-446F-4118-8189-C25AADF12397} = {1FC19ADF-446F-4118-8189-C25AADF12397}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Workbench", "Pegasus.Workbench\Pegasus.Workbench.csproj", "{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Package", "Pegasus.Package\Pegasus.Package.csproj", "{0292AC9A-C27D-4D35-9328-B491F9E455F0}"
 EndProject
 Global

@@ -168,14 +168,4 @@
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" Condition="Exists('$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets')" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <Import Project="..\packages\Weave.1.0.0\tools\Weave.targets" Condition="Exists('..\packages\Weave.1.0.0\tools\Weave.targets')" />
-  <PropertyGroup>
-    <PreBuildEvent>if exist "$(TargetPath)" (
-"$(TargetPath)" ..\..\Parser\PegParser.peg
-) else (
-echo Initial build.
-)</PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>"$(TargetPath)" ..\..\Parser\PegParser.peg</PostBuildEvent>
-  </PropertyGroup>
 </Project>

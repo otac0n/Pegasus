@@ -29,5 +29,6 @@
     <WriteLinesToFile File="obj\Pegasus.nuspec" Lines="$(NuSpec)" />
     <MakeDir Directories="bin" />
     <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\Pegasus.nuspec -NonInteractive -OutputDir bin\" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Package\bin\$(Configuration)\Pegasus.Package.vsix" DestinationFolder="bin" />
   </Target>
 </Project>
