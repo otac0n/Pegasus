@@ -18,6 +18,7 @@ namespace Pegasus.Compiler
         {
             "memoize",
             "lexical",
+            "public",
         };
 
         public override IList<string> BlockedByErrors

@@ -193,4 +193,8 @@
     <value>Repetition of a zero-width expression will always result in the maximum repetition count.</value>
     <comment>warning</comment>
   </data>
+  <data name="PEG0023_LOWERCASE_PUBLIC_RULE" xml:space="preserve">
+    <value>The rule '{0}' is public. Public rule names should begin with an uppercase letter.</value>
+    <comment>warning</comment>
+  </data>
 </root>

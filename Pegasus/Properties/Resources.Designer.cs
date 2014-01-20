@@ -266,5 +266,14 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0022_ZERO_WIDTH_REPETITION", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The rule &apos;{0}&apos; is public. Public rule names should begin with an uppercase letter..
+        /// </summary>
+        internal static string PEG0023_LOWERCASE_PUBLIC_RULE {
+            get {
+                return ResourceManager.GetString("PEG0023_LOWERCASE_PUBLIC_RULE", resourceCulture);
+            }
+        }
     }
 }

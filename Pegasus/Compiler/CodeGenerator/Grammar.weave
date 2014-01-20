@@ -21,6 +21,7 @@
     var memoize = model.Rules.SelectMany(r => r.Flags.Select(f => f.Name)).Any(f => f == "memoize");
     var lexical = model.Rules.SelectMany(r => r.Flags.Select(f => f.Name)).Any(f => f == "lexical");
     var type = this.types[model.Rules.Single(r => r.Identifier.Name == startRule).Expression];
+    var publicRules = model.Rules.Where(r => r.Flags.Any(f => f.Name == "public")).ToList();
 }}
 namespace
 {{@RenderCode @namespace}}
@@ -119,6 +120,47 @@ namespace
                 return result.Value;
             {{/if}}
         }
+        {{each publicRule in publicRules}}
+            {{
+                var ruleName = publicRule.Identifier.Name;
+                var ruleType = this.types[publicRule.Expression];
+            }}
+
+            /// <summary>
+            ///  Parses a string according to the '{{= ruleName }}' rule of the <see cref="{{= classname }}" /> grammar.
+            /// </summary>
+            /// <param name="subject">The parsing subject.</param>
+            /// <param name="fileName">The optional file name to use in error messages.</param>
+            /// <param name="offset">The optional offset in the string at which to begin parsing.</param>
+            /// <returns>An <see cref="IParseResult&lt;{{= ruleType.ToString().Replace("<", "&lt;").Replace(">", "&gt;") }}&gt;" /> representing the result of the parse.</returns>
+            public IParseResult<{{= ruleType }}> Parse{{= ruleName }}(string subject, string fileName = null, int offset = 0)
+            {
+                var cursor = new Cursor(subject, offset, fileName);
+                return this.Parse{{= ruleName }}(ref cursor);
+            }
+
+            /// <summary>
+            ///  Continues parsing according to the '{{= ruleName }}' rule of the <see cref="{{= classname }}" /> grammar.
+            /// </summary>
+            /// <param name="cursor">The cursor representing the current state in the parse.</param>
+            /// <returns>An <see cref="IParseResult&lt;{{= ruleType.ToString().Replace("<", "&lt;").Replace(">", "&gt;") }}&gt;" /> representing the result of the parse.</returns>
+            public IParseResult<{{= ruleType }}> Parse{{= ruleName }}(ref Cursor cursor)
+            {
+                {{if memoize}}
+                    try
+                    {
+                        this.storage = new Dictionary<string, object>();
+                        return this.{{: ruleName }}(ref cursor);
+                    }
+                    finally
+                    {
+                        this.storage = null;
+                    }
+                {{else}}
+                    return this.{{: ruleName }}(ref cursor);
+                {{/if}}
+            }
+        {{/each}}
 
         {{@WalkGrammar model}}
         private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false{{if lexical}}, string ruleName = null{{/if}})
