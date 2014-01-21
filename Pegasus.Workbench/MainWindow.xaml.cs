@@ -9,6 +9,7 @@
 namespace Pegasus.Workbench
 {
     using System.CodeDom.Compiler;
+    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
@@ -110,6 +111,34 @@ namespace Pegasus.Workbench
                 e.Handled = true;
                 this.ErrorRow_DoubleClick(sender, null);
             }
+        }
+
+        /// <summary>
+        /// Handles the Closing event of the Window.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
+        [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "This is standard for event handlers.")]
+        public void Window_Closing(object sender, CancelEventArgs e)
+        {
+            if (this.ViewModel.GrammarChanged)
+            {
+                switch (MessageBox.Show(string.Format(CultureInfo.CurrentCulture, Properties.Resources.SaveChangesToFile, Path.GetFileName(this.ViewModel.GrammarFileName)), this.Title, MessageBoxButton.YesNoCancel))
+                {
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        return;
+
+                    case MessageBoxResult.Yes:
+                        this.ViewModel.Save.Execute(null);
+                        break;
+                }
+            }
+        }
+
+        private void Exit(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Close();
         }
 
         private void FocusError(CompilerError error)

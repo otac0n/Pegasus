@@ -5,6 +5,7 @@
     xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Pegasus.Workbench.MainWindow"
+    Closing="Window_Closing"
     DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
     Icon="Resources/Pegasus.ico"
     Title="Pegasus Workbench"
@@ -16,6 +17,7 @@
         <KeyBinding Key="O" Modifiers="Control" Command="Open" />
     </Window.InputBindings>
     <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="Exit" />
         <CommandBinding Command="Open" Executed="Open" />
         <CommandBinding Command="Save" Executed="Save" />
         <CommandBinding Command="SaveAs" Executed="SaveAs" />
@@ -26,6 +28,7 @@
                 <MenuItem Command="Open" Header="Open" InputGestureText="Ctrl+O" />
                 <MenuItem Command="{Binding Save}" Header="Save" InputGestureText="Ctrl+S" />
                 <MenuItem Command="SaveAs" Header="SaveAs" InputGestureText="Ctrl+Shift+S" />
+                <MenuItem Command="Close" Header="Exit" InputGestureText="Alt+F4" />
             </MenuItem>
         </Menu>
         <Grid>
