@@ -2,7 +2,7 @@
 using System.Reflection;
 
 [assembly: AssemblyProduct("Pegasus")]
-[assembly: AssemblyCopyright("Copyright © 2013 John Gietzen")]
+[assembly: AssemblyCopyright("Copyright © 2014 John Gietzen")]
 [assembly: AssemblyVersion("3.1.0.0")]
 [assembly: AssemblyFileVersion("3.1.0.0")]
 #if !PORTABLE

@@ -1,8 +1,8 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="Quantifier.cs" company="(none)">
-//   Copyright © 2012 John Gietzen.  All Rights Reserved.
+//   Copyright © 2014 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
-//   Please see license.txt for more information.
+//   Please see license.md for more information.
 // </copyright>
 // -----------------------------------------------------------------------
 
