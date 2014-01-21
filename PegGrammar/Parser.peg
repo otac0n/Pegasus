@@ -1,0 +1,5 @@
+﻿@namespace $rootnamespace$
+@classname $safeitemname$
+@using System.Linq;
+
+start = 

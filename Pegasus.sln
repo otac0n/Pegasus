@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Workbench", "Pegasu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Package", "Pegasus.Package\Pegasus.Package.csproj", "{0292AC9A-C27D-4D35-9328-B491F9E455F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PegGrammar", "PegGrammar\PegGrammar.csproj", "{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{0292AC9A-C27D-4D35-9328-B491F9E455F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0292AC9A-C27D-4D35-9328-B491F9E455F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0292AC9A-C27D-4D35-9328-B491F9E455F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

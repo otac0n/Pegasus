@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="243c099e-6e07-4be4-a418-84e77bb0f038" Version="3.1" Language="en-US" Publisher="John Gietzen" />
+    <Identity Id="Pegasus.Package.243c099e-6e07-4be4-a418-84e77bb0f038" Version="3.1" Language="en-US" Publisher="John Gietzen" />
     <DisplayName>Pegasus</DisplayName>
     <Description>Provides Language Services for Pegasus Grammars</Description>
     <MoreInfo>http://otac0n.com/Pegasus/</MoreInfo>
@@ -14,8 +14,10 @@
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
     <Dependency Id="Microsoft.VisualStudio.MPF.11.0" DisplayName="Visual Studio MPF 11.0" d:Source="Installed" Version="11.0" />
+    <Dependency Id="NuPackToolsVsix.Microsoft.67e54e40-0ae3-42c5-a949-fddf5739e7a5" DisplayName="NuGet Package Manager" d:Source="Installed" Version="1.7.30402.9028" d:InstallSource="Download" Location="http://docs.nuget.org/" />
   </Dependencies>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:TargetPath="|PegGrammar;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
   </Assets>
 </PackageManifest>
