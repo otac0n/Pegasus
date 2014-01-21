@@ -124,6 +124,28 @@ namespace Pegasus.Package
 
                 var text = GetAllText(this.buffer);
 
+                if (state < 0)
+                {
+                    state = -state;
+
+                    while (true)
+                    {
+                        if (state >= text.Length)
+                        {
+                            break;
+                        }
+
+                        var c = text[state];
+
+                        if (c != '\r' && c != '\n')
+                        {
+                            break;
+                        }
+
+                        state++;
+                    }
+                }
+
                 // Some constants.
                 var startIndex = state;
                 var lineStartIndex = startIndex - this.offset;
@@ -168,22 +190,7 @@ namespace Pegasus.Package
 
                 if (this.offset == this.source.Length)
                 {
-                    while (true)
-                    {
-                        if (state >= text.Length)
-                        {
-                            break;
-                        }
-
-                        var c = text[state];
-
-                        if (c != '\r' && c != '\n')
-                        {
-                            break;
-                        }
-
-                        state++;
-                    }
+                    state = -state;
                 }
 
                 return true;
