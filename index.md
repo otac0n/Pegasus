@@ -18,34 +18,27 @@ Mathematical Expression Evaluator
     @namespace PegExamples
     @classname MathExpressionParser
 
-    start
-      = value:additive EOF { value }
+    start <decimal>
+      = _ value:additive _ EOF { value }
 
-    additive <decimal>
-      = left:multiplicative add right:additive { left + right }
-      / left:multiplicative sub right:additive { left - right }
-      / multiplicative
+    additive <decimal> -memoize
+        = left:additive _ "+" _ right:multiplicative { left + right }
+        / left:additive _ "-" _ right:multiplicative { left - right }
+        / multiplicative
 
     multiplicative <decimal> -memoize
-      = left:primary mul right:multiplicative { left * right }
-      / left:primary div right:multiplicative { left / right }
-      / primary
+        = left:multiplicative _ "*" _ right:primary { left * right }
+        / left:multiplicative _ "/" _ right:primary { left / right }
+        / primary
 
-    primary <decimal> -memoize
-      = decimal
-      / lParen additive:additive rParen { additive }
-
-    add =    "+" __ { "+" }
-    sub =    "-" __ { "-" }
-    mul =    "*" __ { "*" }
-    div =    "/" __ { "/" }
-    lParen = "(" __ { "(" }
-    rParen = ")" __ { ")" }
+    primary <decimal>
+        = decimal
+        / "(" _ additive:additive _ ")" { additive }
 
     decimal <decimal>
-      = value:([0-9]+ ("." [0-9]+)?) __ { decimal.Parse(value) }
+        = value:([0-9]+ ("." [0-9]+)?) { decimal.Parse(value) }
 
-    __ = [ \t\r\n]*
+    _ = [ \t\r\n]*
 
     EOF
       = !.
