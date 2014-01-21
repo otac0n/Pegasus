@@ -124,10 +124,13 @@ namespace Pegasus.Package
 
                 var text = GetAllText(this.buffer);
 
+                // Check the negative bit. (See below.)
                 if (state < 0)
                 {
+                    // Revert.
                     state = -state;
 
+                    // Advance to the start of the line.
                     while (true)
                     {
                         if (state >= text.Length)
@@ -190,6 +193,8 @@ namespace Pegasus.Package
 
                 if (this.offset == this.source.Length)
                 {
+                    // Set the negative bit to indicate that we are at the end of the line.  (Hey, we had a free bit.)
+                    // This has to be done this way because Visual Studio does not call this method for empty lines.
                     state = -state;
                 }
 
