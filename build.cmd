@@ -1,0 +1,1 @@
+%WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe Pegasus.sln /p:Configuration=Release /t:Clean,Rebuild
