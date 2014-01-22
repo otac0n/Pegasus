@@ -27,4 +27,10 @@
     <MakeDir Directories="$(OutputPath)" />
     <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\$(Configuration)\Pegasus.nuspec -NoPackageAnalysis -NonInteractive -OutputDir $(OutputPath)" />
   </Target>
+  <Target Name="GetNativeManifest"></Target>
+  <Target Name="GetCopyToOutputDirectoryItems"></Target>
+  <Target Name="BuiltProjectOutputGroupDependencies"></Target>
+  <Target Name="BuiltProjectOutputGroup"></Target>
+  <Target Name="SatelliteDllsProjectOutputGroup"></Target>
+  <Target Name="DebugSymbolsProjectOutputGroup"></Target>
 </Project>
