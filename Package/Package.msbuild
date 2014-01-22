@@ -1,4 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(SolutionDir)Version.msbuild" />
   <Target Name="Clean">
     <ItemGroup>
       <ToDelete Include="$(OutputPath)\**\*" />
@@ -20,9 +21,7 @@
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\$(Configuration)\readme.txt" />
     <PropertyGroup>
-      <AssemblyInfo>$([System.IO.File]::ReadAllText("$(SolutionDir)SharedAssemblyInfo.cs"))</AssemblyInfo>
-      <AssemblyVersion>$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfo), "AssemblyVersion\(\"(\d+\.\d+\.\d+)\.\d+\"\)").Groups[1].Value)</AssemblyVersion>
-      <NuSpec>$([System.IO.File]::ReadAllText("Pegasus.nuspec").Replace("$version$", $(AssemblyVersion)).Replace("$version-short$", $([System.Text.RegularExpressions.Regex]::Replace($(AssemblyVersion), "\.0+$", ""))))</NuSpec>
+      <NuSpec>$([System.IO.File]::ReadAllText("Pegasus.nuspec").Replace("$version$", $(PegasusVersion)).Replace("$version-short$", $(PegasusVersionShort)))</NuSpec>
     </PropertyGroup>
     <WriteLinesToFile File="obj\$(Configuration)\Pegasus.nuspec" Lines="$(NuSpec)" />
     <MakeDir Directories="$(OutputPath)" />
