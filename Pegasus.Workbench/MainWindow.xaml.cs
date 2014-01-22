@@ -121,7 +121,7 @@ namespace Pegasus.Workbench
         [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "This is standard for event handlers.")]
         public void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (this.ViewModel.GrammarChanged)
+            if (e != null && this.ViewModel.GrammarChanged)
             {
                 switch (MessageBox.Show(string.Format(CultureInfo.CurrentCulture, Properties.Resources.SaveChangesToFile, Path.GetFileName(this.ViewModel.GrammarFileName)), this.Title, MessageBoxButton.YesNoCancel))
                 {

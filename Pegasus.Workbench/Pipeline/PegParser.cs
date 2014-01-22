@@ -36,6 +36,7 @@ namespace Pegasus.Workbench.Pipeline
 
         public IObservable<Grammar> Grammars { get; private set; }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "TODO: Use this for syntax highlighting.")]
         public IObservable<IList<LexicalElement>> LexicalElements { get; private set; }
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]

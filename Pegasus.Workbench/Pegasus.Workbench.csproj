@@ -113,6 +113,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppViewModel.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PathToFileNameConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
