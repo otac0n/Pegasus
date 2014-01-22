@@ -24,11 +24,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A29EA5
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{88F83132-C588-4868-B767-E29AEAAFF2D4}"
-	ProjectSection(SolutionItems) = preProject
-		Package\Package.msbuild = Package\Package.msbuild
-		Package\Pegasus.nuspec = Package\Pegasus.nuspec
-		Package\Pegasus.targets = Package\Pegasus.targets
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Package", "Package\Package.csproj", "{7D630AC1-62A7-439F-AC80-0EA800F3A846}"
+	ProjectSection(ProjectDependencies) = postProject
+		{21772B0C-0206-4ABD-B88B-41EE4CFCA47E} = {21772B0C-0206-4ABD-B88B-41EE4CFCA47E}
+		{58F12D13-9997-4C29-90CE-3C6C7409BA68} = {58F12D13-9997-4C29-90CE-3C6C7409BA68}
+		{1FC19ADF-446F-4118-8189-C25AADF12397} = {1FC19ADF-446F-4118-8189-C25AADF12397}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Common", "Pegasus.Common\Pegasus.Common.csproj", "{1FC19ADF-446F-4118-8189-C25AADF12397}"
@@ -75,6 +75,10 @@ Global
 		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D630AC1-62A7-439F-AC80-0EA800F3A846}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D630AC1-62A7-439F-AC80-0EA800F3A846}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D630AC1-62A7-439F-AC80-0EA800F3A846}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D630AC1-62A7-439F-AC80-0EA800F3A846}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

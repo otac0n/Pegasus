@@ -1,34 +1,31 @@
-<Project DefaultTargets="Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <SolutionDir>..\</SolutionDir>
-    <Configuration>Release</Configuration>
-  </PropertyGroup>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Target Name="Clean">
-    <RemoveDir Directories="obj;bin" />
-    <MSBuild Projects="$(SolutionDir)Pegasus.sln" Properties="Configuration=$(Configuration)" Targets="Clean" />
+    <ItemGroup>
+      <ToDelete Include="$(OutputPath)\**\*" />
+      <ToDelete Include="obj\$(Configuration)\**\*" />
+    </ItemGroup>
+    <Delete Files="@(ToDelete)" />
+  </Target>
+  <Target Name="Rebuild" DependsOnTargets="Build">
   </Target>
   <Target Name="Build" DependsOnTargets="Clean">
-    <MSBuild Projects="$(SolutionDir)Pegasus.sln" Properties="Configuration=$(Configuration)" Targets="Rebuild" />
-  </Target>
-  <Target Name="Package" DependsOnTargets="Build">
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Roslyn.Compilers.CSharp.dll" DestinationFolder="obj\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Roslyn.Compilers.dll" DestinationFolder="obj\build" />
-    <Copy SourceFiles="Pegasus.targets" DestinationFolder="obj\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\lib\net40" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\lib\net40" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\lib\portable-sl4+win8" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\lib\portable-sl4+win8" />
-    <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\readme.txt" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Roslyn.Compilers.CSharp.dll" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Roslyn.Compilers.dll" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="Pegasus.targets" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\net40" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\net40" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
+    <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\$(Configuration)\readme.txt" />
     <PropertyGroup>
       <AssemblyInfo>$([System.IO.File]::ReadAllText("$(SolutionDir)SharedAssemblyInfo.cs"))</AssemblyInfo>
       <AssemblyVersion>$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfo), "AssemblyVersion\(\"(\d+\.\d+\.\d+)\.\d+\"\)").Groups[1].Value)</AssemblyVersion>
       <NuSpec>$([System.IO.File]::ReadAllText("Pegasus.nuspec").Replace("$version$", $(AssemblyVersion)).Replace("$version-short$", $([System.Text.RegularExpressions.Regex]::Replace($(AssemblyVersion), "\.0+$", ""))))</NuSpec>
     </PropertyGroup>
-    <WriteLinesToFile File="obj\Pegasus.nuspec" Lines="$(NuSpec)" />
-    <MakeDir Directories="bin" />
-    <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\Pegasus.nuspec -NonInteractive -OutputDir bin\" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Package\bin\$(Configuration)\Pegasus.Package.vsix" DestinationFolder="bin" />
+    <WriteLinesToFile File="obj\$(Configuration)\Pegasus.nuspec" Lines="$(NuSpec)" />
+    <MakeDir Directories="$(OutputPath)" />
+    <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\$(Configuration)\Pegasus.nuspec -NoPackageAnalysis -NonInteractive -OutputDir $(OutputPath)" />
   </Target>
 </Project>
