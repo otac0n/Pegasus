@@ -45,7 +45,8 @@
             {
                 break;
             }
-            this.storage[storageKey] = {{: this.currentContext.ResultName }} = {{: nextResultName }};
+            {{: startCursorName }} = {{: startCursorName }}.Touch();
+            this.storage[{{= ToLiteral(model.Identifier.Name + ":") }} + {{: startCursorName }}.StateKey + ":" + {{: startCursorName }}.Location] = this.storage[storageKey] = {{: this.currentContext.ResultName }} = {{: nextResultName }};
             cursor = {{: startCursorName }};
         }
         if ({{: this.currentContext.ResultName }} != null)
