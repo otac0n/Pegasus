@@ -19,7 +19,7 @@ namespace Pegasus.Tests
         [Test(Description = "GitHub bug #31")]
         public void Compile_WhenARuleContainsAStateExpressionAsPartOfASequence_IncludesTheContentOfThatStateExpression()
         {
-            var grammar = new PegParser().Parse("foo = #STATE{TEST} 'OK';");
+            var grammar = new PegParser().Parse("foo = #STATE{TEST;} 'OK';");
 
             var result = PegCompiler.Compile(grammar);
 
@@ -29,7 +29,7 @@ namespace Pegasus.Tests
         [Test(Description = "GitHub bug #31")]
         public void Compile_WhenARuleContainsAStateExpressionAsPartOfASequenceThatEndsWithACodeExpression_IncludesTheContentOfTheCodeExpression()
         {
-            var grammar = new PegParser().Parse("foo = #STATE{ OK } a:'OK' {TEST};");
+            var grammar = new PegParser().Parse("foo = #STATE{OK;} a:'OK' {TEST};");
 
             var result = PegCompiler.Compile(grammar);
 
@@ -51,7 +51,7 @@ namespace Pegasus.Tests
         }
 
         [Test(Description = "GitHub bug #40")]
-        public void Compile_WhenAZeroLengthProductionIsRepeatedWithADelimiter_YieldsNoErrors(string grammarText)
+        public void Compile_WhenAZeroLengthProductionIsRepeatedWithADelimiter_YieldsNoErrors()
         {
             var grammar = new PegParser().Parse("start = ''<0,,'OK'>");
 
