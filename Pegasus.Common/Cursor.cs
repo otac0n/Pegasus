@@ -238,6 +238,15 @@ namespace Pegasus.Common
         }
 
         /// <summary>
+        /// Creates an identical cursor with a unique <see cref="StateKey"/>.
+        /// </summary>
+        /// <returns>A unique cursor.</returns>
+        public Cursor Touch()
+        {
+            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, this.mutable ? new Dictionary<string, object>(this.state) : this.state, GetNextStateKey(), this.mutable);
+        }
+
+        /// <summary>
         /// Returns a <see cref="Cursor"/> with the specified mutability.
         /// </summary>
         /// <param name="mutable">A value indicating whether or not the resulting <see cref="Cursor"/> should be mutable.</param>
