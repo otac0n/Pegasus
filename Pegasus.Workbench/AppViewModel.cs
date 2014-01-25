@@ -21,10 +21,10 @@ namespace Pegasus.Workbench
     /// <summary>
     /// Controls the interaction of the app.
     /// </summary>
-    public class AppViewModel : ReactiveObject
+    public sealed class AppViewModel : ReactiveObject, IDisposable
     {
         [SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Maintained for GC purposes.")]
-        private readonly object[] pipeline;
+        private readonly IDisposable[] pipeline;
 
         private IList<CompilerError> errors = new CompilerError[0];
         private bool grammarChanged = false;
@@ -37,6 +37,8 @@ namespace Pegasus.Workbench
         /// <summary>
         /// Initializes a new instance of the <see cref="AppViewModel"/> class.
         /// </summary>
+        [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "The reactive nature of this object leads to many intermediary types.")]
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The pipeline is disposed properly.")]
         public AppViewModel()
         {
             var grammarNameChanges = this.WhenAny(x => x.GrammarFileName, x => x.Value);
@@ -48,10 +50,10 @@ namespace Pegasus.Workbench
             var pegCompiler = new Pipeline.PegCompiler(pegParser.Grammars);
             var csCompiler = new Pipeline.CsCompiler(pegCompiler.Codes.Zip(pegParser.Grammars, Tuple.Create), grammarNameChanges);
             var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges, testNameChanges);
+            this.pipeline = new IDisposable[] { pegParser, pegCompiler, csCompiler, testParser };
 
             testParser.Results.Select(r => JsonConvert.SerializeObject(r, Formatting.Indented)).BindTo(this, x => x.TestResults);
 
-            this.pipeline = new object[] { pegParser, pegCompiler, csCompiler, testParser };
             var errorObvervables = new List<IObservable<IEnumerable<CompilerError>>>
             {
                 pegParser.Errors,
@@ -172,6 +174,17 @@ namespace Pegasus.Workbench
         {
             get { return this.testText; }
             set { this.RaiseAndSetIfChanged(ref this.testText, value); }
+        }
+
+        /// <summary>
+        /// Disposes the object.
+        /// </summary>
+        public void Dispose()
+        {
+            foreach (var pipe in this.pipeline)
+            {
+                pipe.Dispose();
+            }
         }
     }
 }
