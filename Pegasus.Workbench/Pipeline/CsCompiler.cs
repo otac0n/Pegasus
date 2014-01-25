@@ -20,23 +20,32 @@ namespace Pegasus.Workbench.Pipeline
     using Pegasus.Common;
     using Pegasus.Expressions;
 
-    internal class CsCompiler
+    internal class CsCompiler : IDisposable
     {
+        private readonly IDisposable disposable;
+
         public CsCompiler(IObservable<Tuple<string, Grammar>> codeAndGrammar, IObservable<string> fileNames)
         {
             var csCompilerResults = codeAndGrammar
                 .CombineLatest(fileNames, (cg, fileName) => new { code = cg.Item1, grammar = cg.Item2, fileName })
-                .ObserveOn(Scheduler.Default)
-                .Throttle(TimeSpan.FromMilliseconds(10))
-                .Select(p => Compile(p.code, p.grammar, p.fileName));
+                .Throttle(TimeSpan.FromMilliseconds(10), Scheduler.Default)
+                .Select(p => Compile(p.code, p.grammar, p.fileName))
+                .Publish();
 
             this.Parsers = csCompilerResults.Select(r => r.Parser);
             this.Errors = csCompilerResults.Select(r => r.Errors.AsReadOnly());
+
+            this.disposable = csCompilerResults.Connect();
         }
 
         public IObservable<IList<CompilerError>> Errors { get; private set; }
 
         public IObservable<dynamic> Parsers { get; private set; }
+
+        public void Dispose()
+        {
+            this.disposable.Dispose();
+        }
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during compilation should be reported through the UI.")]
         private static Result Compile(string source, Grammar grammar, string fileName)

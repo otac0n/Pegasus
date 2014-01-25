@@ -17,23 +17,33 @@ namespace Pegasus.Workbench.Pipeline
     using System.Text.RegularExpressions;
     using Pegasus.Common;
 
-    internal class TestParser
+    internal class TestParser : IDisposable
     {
+        private readonly IDisposable disposable;
+
         public TestParser(IObservable<dynamic> parsers, IObservable<string> subjects, IObservable<string> fileNames)
         {
             var testParserResults = subjects
                 .CombineLatest(fileNames, (subject, fileName) => new { subject, fileName })
-                .ObserveOn(Scheduler.Default)
                 .CombineLatest(parsers, (p, parser) => new { p.subject, p.fileName, parser = (object)parser })
-                .Select(p => ParseTest(p.parser, p.subject, p.fileName));
+                .Throttle(TimeSpan.FromMilliseconds(10), Scheduler.Default)
+                .Select(p => ParseTest(p.parser, p.subject, p.fileName))
+                .Publish();
 
             this.Results = testParserResults.Select(r => r.Result);
             this.Errors = testParserResults.Select(r => r.Errors.AsReadOnly());
+
+            this.disposable = testParserResults.Connect();
         }
 
         public IObservable<IList<CompilerError>> Errors { get; set; }
 
         public IObservable<object> Results { get; set; }
+
+        public void Dispose()
+        {
+            this.disposable.Dispose();
+        }
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]
         private static ParseResult ParseTest(dynamic parser, string subject, string fileName)

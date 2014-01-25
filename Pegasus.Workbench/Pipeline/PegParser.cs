@@ -18,18 +18,22 @@ namespace Pegasus.Workbench.Pipeline
     using Pegasus.Common;
     using Pegasus.Expressions;
 
-    internal class PegParser
+    internal class PegParser : IDisposable
     {
+        private readonly IDisposable disposable;
+
         public PegParser(IObservable<string> subjects, IObservable<string> fileNames)
         {
             var internalParseResults = subjects.CombineLatest(fileNames, (subject, filename) => new { subject, filename })
-                .ObserveOn(Scheduler.Default)
-                .Throttle(TimeSpan.FromMilliseconds(10))
-                .Select(p => Parse(p.subject, p.filename));
+                .Throttle(TimeSpan.FromMilliseconds(10), Scheduler.Default)
+                .Select(p => Parse(p.subject, p.filename))
+                .Publish();
 
             this.Grammars = internalParseResults.Select(g => g.Grammar);
             this.Errors = internalParseResults.Select(g => g.Errors.AsReadOnly());
             this.LexicalElements = internalParseResults.Select(g => g.LexicalElements);
+
+            this.disposable = internalParseResults.Connect();
         }
 
         public IObservable<IList<CompilerError>> Errors { get; private set; }
@@ -38,6 +42,11 @@ namespace Pegasus.Workbench.Pipeline
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "TODO: Use this for syntax highlighting.")]
         public IObservable<IList<LexicalElement>> LexicalElements { get; private set; }
+
+        public void Dispose()
+        {
+            this.disposable.Dispose();
+        }
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]
         private static ParseResult Parse(string subject, string fileName)
