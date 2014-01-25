@@ -18,7 +18,7 @@ namespace Pegasus.Workbench.Pipeline
     using Pegasus.Common;
     using Pegasus.Expressions;
 
-    internal class PegParser : IDisposable
+    internal sealed class PegParser : IDisposable
     {
         private readonly IDisposable disposable;
 

@@ -17,7 +17,7 @@ namespace Pegasus.Workbench.Pipeline
     using System.Text.RegularExpressions;
     using Pegasus.Common;
 
-    internal class TestParser : IDisposable
+    internal sealed class TestParser : IDisposable
     {
         private readonly IDisposable disposable;
 

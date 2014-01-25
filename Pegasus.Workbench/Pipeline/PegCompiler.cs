@@ -16,7 +16,7 @@ namespace Pegasus.Workbench.Pipeline
     using Pegasus.Expressions;
     using CompileResult = Pegasus.Compiler.CompileResult;
 
-    internal class PegCompiler : IDisposable
+    internal sealed class PegCompiler : IDisposable
     {
         private readonly IDisposable disposable;
 

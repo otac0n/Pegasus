@@ -20,7 +20,7 @@ namespace Pegasus.Workbench.Pipeline
     using Pegasus.Common;
     using Pegasus.Expressions;
 
-    internal class CsCompiler : IDisposable
+    internal sealed class CsCompiler : IDisposable
     {
         private readonly IDisposable disposable;
 
