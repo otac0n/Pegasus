@@ -68,6 +68,7 @@ namespace Pegasus.Workbench.Pipeline
                 };
                 options.ReferencedAssemblies.Add("System.dll");
                 options.ReferencedAssemblies.Add("System.Core.dll");
+                options.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
                 options.ReferencedAssemblies.Add(typeof(Cursor).Assembly.Location);
 
                 compilerResults = compiler.CompileAssemblyFromSource(options, source);
