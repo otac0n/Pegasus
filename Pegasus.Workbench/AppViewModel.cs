@@ -52,7 +52,7 @@ namespace Pegasus.Workbench
             var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges, testNameChanges);
             this.pipeline = new IDisposable[] { pegParser, pegCompiler, csCompiler, testParser };
 
-            testParser.Results.Select(r => JsonConvert.SerializeObject(r, Formatting.Indented)).BindTo(this, x => x.TestResults);
+            testParser.Results.Select(r => r is string ? (string)r : JsonConvert.SerializeObject(r, Formatting.Indented)).BindTo(this, x => x.TestResults);
 
             var errorObvervables = new List<IObservable<IEnumerable<CompilerError>>>
             {
