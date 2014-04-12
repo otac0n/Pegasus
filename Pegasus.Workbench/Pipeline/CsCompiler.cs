@@ -58,44 +58,45 @@ namespace Pegasus.Workbench.Pipeline
                 };
             }
 
-            CompilerResults compilerResults;
-            using (var compiler = new CSharpCodeProvider())
-            {
-                var options = new CompilerParameters
-                {
-                    GenerateExecutable = false,
-                    GenerateInMemory = true,
-                };
-                options.ReferencedAssemblies.Add("System.dll");
-                options.ReferencedAssemblies.Add("System.Core.dll");
-                options.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
-                options.ReferencedAssemblies.Add(typeof(Cursor).Assembly.Location);
-
-                compilerResults = compiler.CompileAssemblyFromSource(options, source);
-            }
-
-            var fileDirectory = Path.GetDirectoryName(fileName);
-            var fileFileName = Path.GetFileName(fileName);
-
-            var errors = (from CompilerError e in compilerResults.Errors
-                          let errorFileName = Path.GetFileName(e.FileName)
-                          let newName = errorFileName.Equals(fileFileName, StringComparison.CurrentCultureIgnoreCase) ? fileFileName : fileFileName + ".cs"
-                          let newPath = Path.Combine(fileDirectory, newName)
-                          select new CompilerError(newPath, e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning }).ToList();
-
-            if (errors.Any(e => !e.IsWarning))
-            {
-                return new Result
-                {
-                    Errors = errors,
-                };
-            }
-
-            var @namespace = grammar.Settings.Where(s => s.Key.Name == "namespace").Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parsers";
-            var @className = grammar.Settings.Where(s => s.Key.Name == "classname").Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parser";
-
+            var errors = new List<CompilerError>();
             try
             {
+                CompilerResults compilerResults;
+                using (var compiler = new CSharpCodeProvider())
+                {
+                    var options = new CompilerParameters
+                    {
+                        GenerateExecutable = false,
+                        GenerateInMemory = true,
+                    };
+                    options.ReferencedAssemblies.Add("System.dll");
+                    options.ReferencedAssemblies.Add("System.Core.dll");
+                    options.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
+                    options.ReferencedAssemblies.Add(typeof(Cursor).Assembly.Location);
+
+                    compilerResults = compiler.CompileAssemblyFromSource(options, source);
+                }
+
+                var fileDirectory = Path.GetDirectoryName(fileName);
+                var fileFileName = Path.GetFileName(fileName);
+
+                errors.AddRange(from CompilerError e in compilerResults.Errors
+                                let errorFileName = Path.GetFileName(e.FileName)
+                                let newName = errorFileName.Equals(fileFileName, StringComparison.CurrentCultureIgnoreCase) ? fileFileName : fileFileName + ".cs"
+                                let newPath = Path.Combine(fileDirectory, newName)
+                                select new CompilerError(newPath, e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning });
+
+                if (errors.Any(e => !e.IsWarning))
+                {
+                    return new Result
+                    {
+                        Errors = errors,
+                    };
+                }
+
+                var @namespace = grammar.Settings.Where(s => s.Key.Name == "namespace").Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parsers";
+                var @className = grammar.Settings.Where(s => s.Key.Name == "classname").Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parser";
+
                 var parserType = compilerResults.CompiledAssembly.GetType(@namespace + "." + @className);
                 return new Result
                 {
