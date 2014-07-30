@@ -19,7 +19,7 @@ namespace Pegasus.Compiler
     public static class LeftRecursionDetector
     {
         /// <summary>
-        /// Detects which rules in a <see cref="Grammar"/> are left recursive.
+        /// Detects which rules in a <see cref="Grammar"/> are left-recursive.
         /// </summary>
         /// <param name="grammar">The <see cref="Grammar"/> to inspect.</param>
         /// <returns>A <see cref="HashSet{T}"/> containing the left-recursive rules.</returns>
