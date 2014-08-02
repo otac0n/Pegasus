@@ -113,6 +113,7 @@
     <Compile Include="Highlighting\HighlightRuleCollection{T}.cs" />
     <Compile Include="Highlighting\HighlightRule{T}.cs" />
     <Compile Include="Highlighting\SyntaxHighlighter{T}.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Parser\PegParser.peg.cs">
       <DependentUpon>PegParser.peg</DependentUpon>
     </Compile>
