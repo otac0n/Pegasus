@@ -34,6 +34,11 @@ namespace Pegasus.Compiler
                     result.AddError(rule.Identifier.Start, () => Resources.PEG0020_UNMEMOIZED_LEFT_RECURSION, rule.Identifier.Name);
                 }
             }
+
+            foreach (var rule in result.MutuallyRecursiveRules)
+            {
+                result.AddError(rule.Identifier.Start, () => Resources.PEG0023_AMBIGUOUS_LEFT_RECURSION_DETECTED, rule.Identifier.Name);
+            }
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Pegasus.Compiler
         private readonly Lazy<Dictionary<Expression, object>> expressionTypes;
         private readonly Grammar grammar;
         private readonly Lazy<HashSet<Rule>> leftRecursiveRules;
+        private readonly Lazy<HashSet<Rule>> mutuallyRecursiveRules;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompileResult"/> class.
@@ -33,6 +34,7 @@ namespace Pegasus.Compiler
             this.grammar = grammar;
             this.expressionTypes = new Lazy<Dictionary<Expression, object>>(() => ResultTypeFinder.Find(this.grammar));
             this.leftRecursiveRules = new Lazy<HashSet<Rule>>(() => LeftRecursionDetector.Detect(this.grammar));
+            this.mutuallyRecursiveRules = new Lazy<HashSet<Rule>>(() => LeftRecursionDetector.Detect(this.grammar, ignoreSelfRecursion: true));
             this.Errors = new List<CompilerError>();
         }
 
@@ -60,6 +62,14 @@ namespace Pegasus.Compiler
         public HashSet<Rule> LeftRecursiveRules
         {
             get { return this.leftRecursiveRules.Value; }
+        }
+
+        /// <summary>
+        /// Gets the collection of mutually left-recursive rules.
+        /// </summary>
+        public HashSet<Rule> MutuallyRecursiveRules
+        {
+            get { return this.mutuallyRecursiveRules.Value; }
         }
 
         internal void AddError(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, params object[] args)

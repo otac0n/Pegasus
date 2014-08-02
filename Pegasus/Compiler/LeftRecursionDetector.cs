@@ -22,17 +22,19 @@ namespace Pegasus.Compiler
         /// Detects which rules in a <see cref="Grammar"/> are left-recursive.
         /// </summary>
         /// <param name="grammar">The <see cref="Grammar"/> to inspect.</param>
+        /// <param name="ignoreSelfRecursion">Indicates whether or not to ignore self-recursion.</param>
         /// <returns>A <see cref="HashSet{T}"/> containing the left-recursive rules.</returns>
-        public static HashSet<Rule> Detect(Grammar grammar)
+        public static HashSet<Rule> Detect(Grammar grammar, bool ignoreSelfRecursion = false)
         {
             var leftRecursive = new HashSet<Rule>();
             var zeroWidth = ZeroWidthEvaluator.Evaluate(grammar);
-            new LeftRecursionExpressionTreeWalker(grammar, zeroWidth, leftRecursive).WalkGrammar(grammar);
+            new LeftRecursionExpressionTreeWalker(grammar, zeroWidth, leftRecursive, ignoreSelfRecursion).WalkGrammar(grammar);
             return leftRecursive;
         }
 
         private class LeftRecursionExpressionTreeWalker : ExpressionTreeWalker
         {
+            private readonly bool ignoreSelfRecursion;
             private readonly HashSet<Rule> leftRecursive;
             private readonly Dictionary<string, Rule> rules;
             private readonly Dictionary<Expression, bool> zeroWidth;
@@ -41,11 +43,12 @@ namespace Pegasus.Compiler
             private Stack<Rule> ruleStack = new Stack<Rule>();
             private Rule v;
 
-            public LeftRecursionExpressionTreeWalker(Grammar grammar, Dictionary<Expression, bool> zeroWidth, HashSet<Rule> leftRecursive)
+            public LeftRecursionExpressionTreeWalker(Grammar grammar, Dictionary<Expression, bool> zeroWidth, HashSet<Rule> leftRecursive, bool ignoreSelfRecursion)
             {
                 this.rules = grammar.Rules.ToDictionary(r => r.Identifier.Name);
                 this.zeroWidth = zeroWidth;
                 this.leftRecursive = leftRecursive;
+                this.ignoreSelfRecursion = ignoreSelfRecursion;
             }
 
             public override void WalkGrammar(Grammar grammar)
@@ -61,6 +64,11 @@ namespace Pegasus.Compiler
 
             protected override void WalkNameExpression(NameExpression nameExpression)
             {
+                if (this.ignoreSelfRecursion && nameExpression.Identifier.Name == this.ruleStack.Peek().Identifier.Name)
+                {
+                    return;
+                }
+
                 var rule = this.rules[nameExpression.Identifier.Name];
                 RuleData data;
                 if (!this.ruleData.TryGetValue(rule, out data))

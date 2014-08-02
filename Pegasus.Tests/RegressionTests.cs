@@ -156,15 +156,15 @@ namespace Pegasus.Tests
             Assert.That(parser.Parse(" hoge "), Is.EqualTo(" hoge "));
         }
 
-        [Test(Description = "GitHub bug #50")]
-        public void Parse_WhenLeftRecursiveRulesAreNested_AllowsLeftRecursionToExpand()
+        [Test(Description = "GitHub bugs #50 & #52")]
+        public void Parse_WhenLeftRecursiveRulesAreNested_YieldsErrors()
         {
             var grammar = new PegParser().Parse("exp -memoize = dot / call / name; dot -memoize = exp '.' name; call -memoize = exp '(' ')'; name = '' [a-z]+;");
 
             var result = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(result.Code);
 
-            Assert.That(parser.Parse("x.y()"), Is.EqualTo("x.y()"));
+            var errorNumber = result.Errors.Select(e => e.ErrorNumber).Distinct().Single();
+            Assert.That(errorNumber, Is.EqualTo("PEG0023"));
         }
     }
 }

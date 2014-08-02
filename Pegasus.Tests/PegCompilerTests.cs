@@ -192,10 +192,10 @@ namespace Pegasus.Tests
             var parser = new PegParser();
             var grammar = parser.Parse(@"a<o> -memoize = b;
                                          b<o> -memoize = c;
-                                         c<o> -memoize = a / d;
+                                         c<o> -memoize = e / d;
                                          d<o> = e;
                                          e<o> -memoize = f;
-                                         f<o> -memoize = e / g;
+                                         f<o> -memoize = g;
                                          g<o> -memoize = g;");
 
             var result = PegCompiler.Compile(grammar);

@@ -193,4 +193,7 @@
     <value>Repetition of a zero-width expression will always result in the maximum repetition count.</value>
     <comment>warning</comment>
   </data>
+  <data name="PEG0023_AMBIGUOUS_LEFT_RECURSION_DETECTED" xml:space="preserve">
+    <value>The rule '{0}' is ambiguously left-recursive.</value>
+  </data>
 </root>
