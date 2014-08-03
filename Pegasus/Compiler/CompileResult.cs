@@ -12,6 +12,7 @@ namespace Pegasus.Compiler
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using Pegasus.Common;
     using Pegasus.Expressions;
 
@@ -22,6 +23,7 @@ namespace Pegasus.Compiler
     {
         private readonly Lazy<Dictionary<Expression, object>> expressionTypes;
         private readonly Grammar grammar;
+        private readonly Lazy<ILookup<Rule, Expression>> leftAdjacentExpressions;
         private readonly Lazy<HashSet<Rule>> leftRecursiveRules;
         private readonly Lazy<HashSet<Rule>> mutuallyRecursiveRules;
 
@@ -33,8 +35,9 @@ namespace Pegasus.Compiler
         {
             this.grammar = grammar;
             this.expressionTypes = new Lazy<Dictionary<Expression, object>>(() => ResultTypeFinder.Find(this.grammar));
-            this.leftRecursiveRules = new Lazy<HashSet<Rule>>(() => LeftRecursionDetector.Detect(this.grammar));
-            this.mutuallyRecursiveRules = new Lazy<HashSet<Rule>>(() => LeftRecursionDetector.Detect(this.grammar, ignoreSelfRecursion: true));
+            this.leftAdjacentExpressions = new Lazy<ILookup<Rule, Expression>>(() => LeftAdjacencyDetector.Detect(this.grammar));
+            this.leftRecursiveRules = new Lazy<HashSet<Rule>>(() => LeftRecursionDetector.Detect(this.LeftAdjacentExpressions));
+            this.mutuallyRecursiveRules = new Lazy<HashSet<Rule>>(() => MutualRecursionDetector.Detect(this.LeftAdjacentExpressions));
             this.Errors = new List<CompilerError>();
         }
 
@@ -54,6 +57,14 @@ namespace Pegasus.Compiler
         public Dictionary<Expression, object> ExpressionTypes
         {
             get { return this.expressionTypes.Value; }
+        }
+
+        /// <summary>
+        /// Gets the collection of left-recursive rules.
+        /// </summary>
+        public ILookup<Rule, Expression> LeftAdjacentExpressions
+        {
+            get { return this.leftAdjacentExpressions.Value; }
         }
 
         /// <summary>
