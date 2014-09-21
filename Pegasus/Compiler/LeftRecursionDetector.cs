@@ -22,6 +22,7 @@ namespace Pegasus.Compiler
         /// </summary>
         /// <param name="leftAdjacentExpressions">The left-adjacent expressions to inspect.</param>
         /// <returns>A <see cref="HashSet{T}"/> containing the left-recursive rules.</returns>
+        /// <remarks>This does not detect mutual left-recursion.</remarks>
         public static HashSet<Rule> Detect(ILookup<Rule, Expression> leftAdjacentExpressions)
         {
             return new HashSet<Rule>(from i in leftAdjacentExpressions
