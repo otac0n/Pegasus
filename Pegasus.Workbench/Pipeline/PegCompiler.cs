@@ -14,7 +14,6 @@ namespace Pegasus.Workbench.Pipeline
     using System.Linq;
     using System.Reactive.Linq;
     using Pegasus.Expressions;
-    using CompileResult = Pegasus.Compiler.CompileResult;
 
     internal sealed class PegCompiler : IDisposable
     {
@@ -23,7 +22,7 @@ namespace Pegasus.Workbench.Pipeline
         public PegCompiler(IObservable<Grammar> grammars)
         {
             var compileResults = grammars
-                .Select(r => r == null ? new CompileResult(r) : Pegasus.Compiler.PegCompiler.Compile(r))
+                .Select(r => r == null ? new Compiler.CompileResult(r) : Compiler.PegCompiler.Compile(r))
                 .Publish();
 
             this.Codes = compileResults.Select(r => r.Code);

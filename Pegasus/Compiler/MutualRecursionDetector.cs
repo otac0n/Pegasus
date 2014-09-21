@@ -98,8 +98,6 @@ namespace Pegasus.Compiler
         {
             public int Index { get; set; }
 
-            public bool InStack { get; set; }
-
             public int LowLink { get; set; }
         }
     }
