@@ -14,7 +14,7 @@ namespace Pegasus.Compiler
     using Pegasus.Expressions;
 
     /// <summary>
-    /// Provides mutual left-recursion detection services for Pegasus <see cref="Grammar"/>s.
+    /// Provides mutual left-recursion detection services for Pegasus <see cref="Grammar">Grammars</see>.
     /// </summary>
     public static class MutualRecursionDetector
     {

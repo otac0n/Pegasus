@@ -14,7 +14,7 @@ namespace Pegasus.Compiler
     using Pegasus.Expressions;
 
     /// <summary>
-    /// Performs zero-width evaluation services for Pegasus <see cref="Grammar"/>s.
+    /// Performs zero-width evaluation services for Pegasus <see cref="Grammar">Grammars</see>.
     /// </summary>
     public static class ZeroWidthEvaluator
     {

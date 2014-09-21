@@ -13,7 +13,7 @@ namespace Pegasus.Compiler
     using Pegasus.Expressions;
 
     /// <summary>
-    /// Provides left adjacency detection services for Pegasus <see cref="Grammar"/>s.
+    /// Provides left adjacency detection services for Pegasus <see cref="Grammar">Grammars</see>.
     /// </summary>
     public static class LeftAdjacencyDetector
     {
