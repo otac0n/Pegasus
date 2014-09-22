@@ -62,12 +62,8 @@ namespace Pegasus.Compiler
                     this.zeroWidth[expression] = starting;
                 }
 
-                if (starting == null)
-                {
-                    base.WalkExpression(expression);
-
-                    this.changed = this.changed || starting != this.zeroWidth[expression];
-                }
+                base.WalkExpression(expression);
+                this.changed = this.changed || starting != this.zeroWidth[expression];
             }
 
             public override void WalkGrammar(Grammar grammar)
