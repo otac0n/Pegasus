@@ -99,7 +99,7 @@ quantifier <Quantifier> -memoize
   = q:question { new Quantifier(qStart, qEnd, min: 0, max: 1) }
   / q:star { new Quantifier(qStart, qEnd, min: 0, max: null) }
   / q:plus { new Quantifier(qStart, qEnd, min: 1, max: null) }
-  / start:lt _ min:integer _ comma _ max:integer? _ comma _ delimiter:expression? _ end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter.SingleOrDefault()) }
+  / start:lt _ min:integer _ comma _ max:integer? _ comma _ delimiter:expression _ end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter) }
   / start:lt _ min:integer _ comma _ max:integer? _ end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault()) }
   / start:lt _ count:integer _ end:gt { new Quantifier(startStart, endEnd, min: count, max: count) }
 

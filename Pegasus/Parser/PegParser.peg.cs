@@ -1795,42 +1795,27 @@ namespace
                                                     r14 = this._(ref cursor);
                                                     if (r14 != null)
                                                     {
-                                                        IParseResult<IList<Expression>> r15 = null;
+                                                        IParseResult<Expression> r15 = null;
                                                         var delimiterStart = cursor;
-                                                        var startCursor5 = cursor;
-                                                        var l1 = new List<Expression>();
-                                                        while (l1.Count < 1)
-                                                        {
-                                                            IParseResult<Expression> r16 = null;
-                                                            r16 = this.expression(ref cursor);
-                                                            if (r16 != null)
-                                                            {
-                                                                l1.Add(r16.Value);
-                                                            }
-                                                            else
-                                                            {
-                                                                break;
-                                                            }
-                                                        }
-                                                        r15 = this.ReturnHelper<IList<Expression>>(startCursor5, ref cursor, state => l1.AsReadOnly());
+                                                        r15 = this.expression(ref cursor);
                                                         var delimiterEnd = cursor;
                                                         var delimiter = ValueOrDefault(r15);
                                                         if (r15 != null)
                                                         {
-                                                            IParseResult<IList<string>> r17 = null;
-                                                            r17 = this._(ref cursor);
-                                                            if (r17 != null)
+                                                            IParseResult<IList<string>> r16 = null;
+                                                            r16 = this._(ref cursor);
+                                                            if (r16 != null)
                                                             {
-                                                                IParseResult<string> r18 = null;
+                                                                IParseResult<string> r17 = null;
                                                                 var endStart = cursor;
-                                                                r18 = this.gt(ref cursor);
+                                                                r17 = this.gt(ref cursor);
                                                                 var endEnd = cursor;
-                                                                var end = ValueOrDefault(r18);
-                                                                if (r18 != null)
+                                                                var end = ValueOrDefault(r17);
+                                                                if (r17 != null)
                                                                 {
                                                                     r0 = this.ReturnHelper<Quantifier>(startCursor3, ref cursor, state =>
                                                                         #line 102 "PegParser.peg"
-                                                                                             new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter.SingleOrDefault())
+                                                                                            new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault(), delimiter: delimiter)
                                                                         #line default
                                                                         );
                                                                 }
@@ -1901,71 +1886,71 @@ namespace
             }
             if (r0 == null)
             {
-                var startCursor6 = cursor;
-                IParseResult<string> r19 = null;
+                var startCursor5 = cursor;
+                IParseResult<string> r18 = null;
                 var startStart = cursor;
-                r19 = this.lt(ref cursor);
+                r18 = this.lt(ref cursor);
                 var startEnd = cursor;
-                var start = ValueOrDefault(r19);
-                if (r19 != null)
+                var start = ValueOrDefault(r18);
+                if (r18 != null)
                 {
-                    IParseResult<IList<string>> r20 = null;
-                    r20 = this._(ref cursor);
-                    if (r20 != null)
+                    IParseResult<IList<string>> r19 = null;
+                    r19 = this._(ref cursor);
+                    if (r19 != null)
                     {
-                        IParseResult<int> r21 = null;
+                        IParseResult<int> r20 = null;
                         var minStart = cursor;
-                        r21 = this.integer(ref cursor);
+                        r20 = this.integer(ref cursor);
                         var minEnd = cursor;
-                        var min = ValueOrDefault(r21);
-                        if (r21 != null)
+                        var min = ValueOrDefault(r20);
+                        if (r20 != null)
                         {
-                            IParseResult<IList<string>> r22 = null;
-                            r22 = this._(ref cursor);
-                            if (r22 != null)
+                            IParseResult<IList<string>> r21 = null;
+                            r21 = this._(ref cursor);
+                            if (r21 != null)
                             {
-                                IParseResult<string> r23 = null;
-                                r23 = this.comma(ref cursor);
-                                if (r23 != null)
+                                IParseResult<string> r22 = null;
+                                r22 = this.comma(ref cursor);
+                                if (r22 != null)
                                 {
-                                    IParseResult<IList<string>> r24 = null;
-                                    r24 = this._(ref cursor);
-                                    if (r24 != null)
+                                    IParseResult<IList<string>> r23 = null;
+                                    r23 = this._(ref cursor);
+                                    if (r23 != null)
                                     {
-                                        IParseResult<IList<int>> r25 = null;
+                                        IParseResult<IList<int>> r24 = null;
                                         var maxStart = cursor;
-                                        var startCursor7 = cursor;
-                                        var l2 = new List<int>();
-                                        while (l2.Count < 1)
+                                        var startCursor6 = cursor;
+                                        var l1 = new List<int>();
+                                        while (l1.Count < 1)
                                         {
-                                            IParseResult<int> r26 = null;
-                                            r26 = this.integer(ref cursor);
-                                            if (r26 != null)
+                                            IParseResult<int> r25 = null;
+                                            r25 = this.integer(ref cursor);
+                                            if (r25 != null)
                                             {
-                                                l2.Add(r26.Value);
+                                                l1.Add(r25.Value);
                                             }
                                             else
                                             {
                                                 break;
                                             }
                                         }
-                                        r25 = this.ReturnHelper<IList<int>>(startCursor7, ref cursor, state => l2.AsReadOnly());
+                                        r24 = this.ReturnHelper<IList<int>>(startCursor6, ref cursor, state => l1.AsReadOnly());
                                         var maxEnd = cursor;
-                                        var max = ValueOrDefault(r25);
-                                        if (r25 != null)
+                                        var max = ValueOrDefault(r24);
+                                        if (r24 != null)
                                         {
-                                            IParseResult<IList<string>> r27 = null;
-                                            r27 = this._(ref cursor);
-                                            if (r27 != null)
+                                            IParseResult<IList<string>> r26 = null;
+                                            r26 = this._(ref cursor);
+                                            if (r26 != null)
                                             {
-                                                IParseResult<string> r28 = null;
+                                                IParseResult<string> r27 = null;
                                                 var endStart = cursor;
-                                                r28 = this.gt(ref cursor);
+                                                r27 = this.gt(ref cursor);
                                                 var endEnd = cursor;
-                                                var end = ValueOrDefault(r28);
-                                                if (r28 != null)
+                                                var end = ValueOrDefault(r27);
+                                                if (r27 != null)
                                                 {
-                                                    r0 = this.ReturnHelper<Quantifier>(startCursor6, ref cursor, state =>
+                                                    r0 = this.ReturnHelper<Quantifier>(startCursor5, ref cursor, state =>
                                                         #line 103 "PegParser.peg"
                                                              new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault())
                                                         #line default
@@ -1973,82 +1958,82 @@ namespace
                                                 }
                                                 else
                                                 {
-                                                    cursor = startCursor6;
+                                                    cursor = startCursor5;
                                                 }
                                             }
                                             else
                                             {
-                                                cursor = startCursor6;
+                                                cursor = startCursor5;
                                             }
                                         }
                                         else
                                         {
-                                            cursor = startCursor6;
+                                            cursor = startCursor5;
                                         }
                                     }
                                     else
                                     {
-                                        cursor = startCursor6;
+                                        cursor = startCursor5;
                                     }
                                 }
                                 else
                                 {
-                                    cursor = startCursor6;
+                                    cursor = startCursor5;
                                 }
                             }
                             else
                             {
-                                cursor = startCursor6;
+                                cursor = startCursor5;
                             }
                         }
                         else
                         {
-                            cursor = startCursor6;
+                            cursor = startCursor5;
                         }
                     }
                     else
                     {
-                        cursor = startCursor6;
+                        cursor = startCursor5;
                     }
                 }
                 else
                 {
-                    cursor = startCursor6;
+                    cursor = startCursor5;
                 }
             }
             if (r0 == null)
             {
-                var startCursor8 = cursor;
-                IParseResult<string> r29 = null;
+                var startCursor7 = cursor;
+                IParseResult<string> r28 = null;
                 var startStart = cursor;
-                r29 = this.lt(ref cursor);
+                r28 = this.lt(ref cursor);
                 var startEnd = cursor;
-                var start = ValueOrDefault(r29);
-                if (r29 != null)
+                var start = ValueOrDefault(r28);
+                if (r28 != null)
                 {
-                    IParseResult<IList<string>> r30 = null;
-                    r30 = this._(ref cursor);
-                    if (r30 != null)
+                    IParseResult<IList<string>> r29 = null;
+                    r29 = this._(ref cursor);
+                    if (r29 != null)
                     {
-                        IParseResult<int> r31 = null;
+                        IParseResult<int> r30 = null;
                         var countStart = cursor;
-                        r31 = this.integer(ref cursor);
+                        r30 = this.integer(ref cursor);
                         var countEnd = cursor;
-                        var count = ValueOrDefault(r31);
-                        if (r31 != null)
+                        var count = ValueOrDefault(r30);
+                        if (r30 != null)
                         {
-                            IParseResult<IList<string>> r32 = null;
-                            r32 = this._(ref cursor);
-                            if (r32 != null)
+                            IParseResult<IList<string>> r31 = null;
+                            r31 = this._(ref cursor);
+                            if (r31 != null)
                             {
-                                IParseResult<string> r33 = null;
+                                IParseResult<string> r32 = null;
                                 var endStart = cursor;
-                                r33 = this.gt(ref cursor);
+                                r32 = this.gt(ref cursor);
                                 var endEnd = cursor;
-                                var end = ValueOrDefault(r33);
-                                if (r33 != null)
+                                var end = ValueOrDefault(r32);
+                                if (r32 != null)
                                 {
-                                    r0 = this.ReturnHelper<Quantifier>(startCursor8, ref cursor, state =>
+                                    r0 = this.ReturnHelper<Quantifier>(startCursor7, ref cursor, state =>
                                         #line 104 "PegParser.peg"
                                         new Quantifier(startStart, endEnd, min: count, max: count)
                                         #line default
@@ -2056,27 +2041,27 @@ namespace
                                 }
                                 else
                                 {
-                                    cursor = startCursor8;
+                                    cursor = startCursor7;
                                 }
                             }
                             else
                             {
-                                cursor = startCursor8;
+                                cursor = startCursor7;
                             }
                         }
                         else
                         {
-                            cursor = startCursor8;
+                            cursor = startCursor7;
                         }
                     }
                     else
                     {
-                        cursor = startCursor8;
+                        cursor = startCursor7;
                     }
                 }
                 else
                 {
-                    cursor = startCursor8;
+                    cursor = startCursor7;
                 }
             }
             this.storage[storageKey] = r0;
