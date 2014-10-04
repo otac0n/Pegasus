@@ -22,7 +22,7 @@ namespace Pegasus.Compiler
 
         public override IList<string> ErrorsProduced
         {
-            get { return new[] { "PEG0020" }; }
+            get { return new[] { "PEG0020", "PEG0023" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)

@@ -18,7 +18,7 @@ namespace Pegasus.Compiler
     {
         public override IList<string> BlockedByErrors
         {
-            get { return new[] { "CS0000", "PEG0001", "PEG0002", "PEG0003", "PEG0005", "PEG0007", "PEG0008", "PEG0012", "PEG0016", "PEG0019", "PEG0020", "PEG0021" }; }
+            get { return new[] { "CS0000", "PEG0001", "PEG0002", "PEG0003", "PEG0005", "PEG0007", "PEG0008", "PEG0012", "PEG0016", "PEG0019", "PEG0020", "PEG0021", "PEG0023" }; }
         }
 
         public override IList<string> ErrorsProduced
