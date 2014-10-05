@@ -26,7 +26,7 @@ namespace Pegasus.Compiler
 
         public override IList<string> ErrorsProduced
         {
-            get { return new[] { "CS0000" }; }
+            get { return new[] { "CS0000", "CS1026" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)
@@ -71,7 +71,7 @@ namespace Pegasus.Compiler
                 {
                     var sliced = code.Substring(expression.Span.Length);
                     var trimmed = sliced.TrimStart();
-                    this.result.AddError(startCursor.Advance(-prefix.Length + expression.Span.Length + (sliced.Length - trimmed.Length)), () => Resources.CS1026_UNEXPECTED_CHARACTER, trimmed[0]);
+                    this.result.AddCompilerError(startCursor.Advance(-prefix.Length + expression.Span.Length + (sliced.Length - trimmed.Length)), () => Resources.CS1026_ERROR_UnexpectedCharacter, trimmed[0]);
                 }
             }
         }

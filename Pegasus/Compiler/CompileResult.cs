@@ -83,19 +83,26 @@ namespace Pegasus.Compiler
             get { return this.mutuallyRecursiveRules.Value; }
         }
 
-        internal void AddError(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, params object[] args)
+        internal void AddCompilerError(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, params object[] args)
         {
-            this.AddCompilerError(cursor, error, args, isWarning: false);
-        }
+            var parts = ((System.Linq.Expressions.MemberExpression)error.Body).Member.Name.Split('_');
+            var errorId = parts[0];
 
-        internal void AddWarning(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, params object[] args)
-        {
-            this.AddCompilerError(cursor, error, args, isWarning: true);
-        }
+            bool isWarning;
+            switch (parts[1])
+            {
+                case "ERROR":
+                    isWarning = false;
+                    break;
 
-        private void AddCompilerError(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, object[] args, bool isWarning)
-        {
-            var errorId = ((System.Linq.Expressions.MemberExpression)error.Body).Member.Name.Split('_')[0];
+                case "WARNING":
+                    isWarning = true;
+                    break;
+
+                default:
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Unknown error type '{0}'.", parts[1]), "error");
+            }
+
             var errorFormat = error.Compile()();
             var errorText = string.Format(CultureInfo.CurrentCulture, errorFormat, args);
             this.Errors.Add(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, errorId, errorText) { IsWarning = isWarning });

@@ -50,12 +50,12 @@ namespace Pegasus.Compiler
                     if (repetitionExpression.Quantifier.Max == null)
                     {
                         var cursor = repetitionExpression.Quantifier.Start;
-                        this.result.AddError(cursor, () => Resources.PEG0021_ZERO_WIDTH_REPETITION);
+                        this.result.AddCompilerError(cursor, () => Resources.PEG0021_ERROR_ZeroWidthRepetition);
                     }
                     else if (repetitionExpression.Quantifier.Min != repetitionExpression.Quantifier.Max)
                     {
                         var cursor = repetitionExpression.Quantifier.Start;
-                        this.result.AddWarning(cursor, () => Resources.PEG0022_ZERO_WIDTH_REPETITION);
+                        this.result.AddCompilerError(cursor, () => Resources.PEG0022_WARNING_ZeroWidthRepetition);
                     }
                 }
             }

@@ -31,13 +31,13 @@ namespace Pegasus.Compiler
             {
                 if (!rule.Flags.Any(f => f.Name == "memoize"))
                 {
-                    result.AddError(rule.Identifier.Start, () => Resources.PEG0020_UNMEMOIZED_LEFT_RECURSION, rule.Identifier.Name);
+                    result.AddCompilerError(rule.Identifier.Start, () => Resources.PEG0020_ERROR_UnmemoizedLeftRecursion, rule.Identifier.Name);
                 }
             }
 
             foreach (var rule in result.MutuallyRecursiveRules)
             {
-                result.AddError(rule.Identifier.Start, () => Resources.PEG0023_AMBIGUOUS_LEFT_RECURSION_DETECTED, rule.Identifier.Name);
+                result.AddCompilerError(rule.Identifier.Start, () => Resources.PEG0023_ERROR_AmbiguousLeftRecursionDetected, rule.Identifier.Name);
             }
         }
     }

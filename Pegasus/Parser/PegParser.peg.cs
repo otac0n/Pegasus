@@ -854,7 +854,7 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
                         #line 45 "PegParser.peg"
-               "PEG0014:" + Resources.PEG0014_INVALID_TYPE
+               "PEG0014:" + Resources.PEG0014_ERROR_PARSER_InvalidType
                         #line default
                         );
                 }
@@ -2307,7 +2307,7 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
                         #line 119 "PegParser.peg"
-                "PEG0011:" + Resources.PEG0011_UNTERMINATED_CODE
+                "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode
                         #line default
                         );
                 }
@@ -3383,7 +3383,7 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor2, state =>
                         #line 184 "PegParser.peg"
-                "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING
+                "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString
                         #line default
                         );
                 }
@@ -3542,7 +3542,7 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor2, state =>
                         #line 199 "PegParser.peg"
-                "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING
+                "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString
                         #line default
                         );
                 }
@@ -3708,7 +3708,7 @@ namespace
                             var startCursor3 = cursor;
                             throw this.ExceptionHelper(startCursor3, state =>
                                 #line 213 "PegParser.peg"
-                                                                                             "PEG0010:" + Resources.PEG0010_UNTERMINATED_CLASS
+                                                                                             "PEG0010:" + Resources.PEG0010_ERROR_PARSER_UnterminatedClass
                                 #line default
                                 );
                         }
@@ -3738,7 +3738,7 @@ namespace
                             {
                                 r0 = this.ReturnHelper<Expression>(startCursor0, ref cursor, state =>
                                     #line 213 "PegParser.peg"
-                                                                                                                                                              
+                                                                                                                                                                          
         new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
@@ -4526,7 +4526,7 @@ namespace
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
                         #line 311 "PegParser.peg"
-                         "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected)
+                         "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_ERROR_PARSER_UnexpectedEndOfInput, unexpected)
                         #line default
                         );
                 }

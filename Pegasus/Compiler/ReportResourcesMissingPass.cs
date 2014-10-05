@@ -51,7 +51,7 @@ namespace Pegasus.Compiler
             {
                 if (literalExpression.FromResource)
                 {
-                    this.result.AddError(literalExpression.Start, () => Resources.PEG0016_RESOURCES_NOT_SPECIFIED);
+                    this.result.AddCompilerError(literalExpression.Start, () => Resources.PEG0016_ERROR_ResourcesNotSpecified);
                 }
             }
         }

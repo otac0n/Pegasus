@@ -42,7 +42,7 @@ expression <Expression>
 
 expressionType <CodeSpan> -memoize
   = lt _ name:type _ gt { name }
-  / lt #ERROR{ "PEG0014:" + Resources.PEG0014_INVALID_TYPE }
+  / lt #ERROR{ "PEG0014:" + Resources.PEG0014_ERROR_PARSER_InvalidType }
 
 choice <Expression>
   = choices:sequence<1,,_ slash _> { choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) }
@@ -116,7 +116,7 @@ actionType <CodeType> -lexical
 
 code <CodeSpan> -lexical
   = "{" contents:braceContents "}" { new CodeSpan(contents, contentsStart, contentsEnd) }
-  / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_UNTERMINATED_CODE }
+  / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }
 
 braceContents
   = parts:(nonBraceCharacters / "{" braceContents "}")* { string.Concat(parts) }
@@ -181,7 +181,7 @@ string -lexical
 
 doubleQuotedString
   = '"' chars:doubleQuotedCharacter* '"' { string.Concat(chars) }
-  / '"' #ERROR{ "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING }
+  / '"' #ERROR{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }
 
 doubleQuotedCharacter
   = simpleDoubleQuotedCharacter
@@ -196,7 +196,7 @@ simpleDoubleQuotedCharacter
 
 singleQuotedString
   = "'" chars:singleQuotedCharacter* "'" { string.Concat(chars) }
-  / "'" #ERROR{ "PEG0009:" + Resources.PEG0009_UNTERMINATED_STRING }
+  / "'" #ERROR{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }
 
 singleQuotedCharacter
   = simpleSingleQuotedCharacter
@@ -210,7 +210,7 @@ simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) char:. { @char }
 
 class <Expression> -lexical
-  = lbracket inverted:"^"? parts:(classCharacterRange / classCharacter)* (rbracket / #ERROR{ "PEG0010:" + Resources.PEG0010_UNTERMINATED_CLASS }) flags:"i"? {
+  = lbracket inverted:"^"? parts:(classCharacterRange / classCharacter)* (rbracket / #ERROR{ "PEG0010:" + Resources.PEG0010_ERROR_PARSER_UnterminatedClass }) flags:"i"? {
         new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
@@ -308,4 +308,4 @@ whitespace -lexical
 
 EOF
   = !.
-  / unexpected:. #ERROR{ "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_UNEXPECTED_END_OF_INPUT, unexpected) }
+  / unexpected:. #ERROR{ "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_ERROR_PARSER_UnexpectedEndOfInput, unexpected) }

@@ -43,7 +43,7 @@ namespace Pegasus.Compiler
                 if (repetitionExpression.Quantifier.Max == 0 ||
                     repetitionExpression.Quantifier.Max < repetitionExpression.Quantifier.Min)
                 {
-                    this.result.AddWarning(repetitionExpression.Quantifier.Start, () => Resources.PEG0015_QUANTIFIER_INVALID);
+                    this.result.AddCompilerError(repetitionExpression.Quantifier.Start, () => Resources.PEG0015_WARNING_QuantifierInvalid);
                 }
 
                 base.WalkRepetitionExpression(repetitionExpression);

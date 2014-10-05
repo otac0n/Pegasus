@@ -32,7 +32,7 @@ namespace Pegasus.Compiler
             {
                 if (!types.ContainsKey(rule.Expression))
                 {
-                    result.AddError(rule.Identifier.Start, () => Resources.PEG0019_UNKNOWN_TYPE, rule.Identifier.Name);
+                    result.AddCompilerError(rule.Identifier.Start, () => Resources.PEG0019_ERROR_UnknownType, rule.Identifier.Name);
                 }
             }
         }
