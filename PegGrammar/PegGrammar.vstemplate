@@ -16,7 +16,7 @@
   </WizardExtension>
   <WizardData>
     <packages repository="extension" repositoryId="Pegasus.Package.243c099e-6e07-4be4-a418-84e77bb0f038">
-      <package id="Pegasus" version="3.2.0" />
+      <package id="Pegasus" version="4.0.0" />
     </packages>
   </WizardData>
 </VSTemplate>
