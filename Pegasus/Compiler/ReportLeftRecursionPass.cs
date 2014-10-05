@@ -22,7 +22,7 @@ namespace Pegasus.Compiler
 
         public override IList<string> ErrorsProduced
         {
-            get { return new[] { "PEG0020" }; }
+            get { return new[] { "PEG0020", "PEG0023" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)
@@ -31,8 +31,13 @@ namespace Pegasus.Compiler
             {
                 if (!rule.Flags.Any(f => f.Name == "memoize"))
                 {
-                    result.AddError(rule.Identifier.Start, () => Resources.PEG0020_UNMEMOIZED_LEFT_RECURSION, rule.Identifier.Name);
+                    result.AddCompilerError(rule.Identifier.Start, () => Resources.PEG0020_ERROR_UnmemoizedLeftRecursion, rule.Identifier.Name);
                 }
+            }
+
+            foreach (var rule in result.MutuallyRecursiveRules)
+            {
+                result.AddCompilerError(rule.Identifier.Start, () => Resources.PEG0023_ERROR_AmbiguousLeftRecursionDetected, rule.Identifier.Name);
             }
         }
     }

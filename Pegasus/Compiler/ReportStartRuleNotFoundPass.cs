@@ -36,7 +36,7 @@ namespace Pegasus.Compiler
                     var name = setting.Value.ToString().Trim();
                     if (!knownRules.Contains(name))
                     {
-                        result.AddError(setting.Key.Start, () => Resources.PEG0003_RULE_DOES_NOT_EXIST, name);
+                        result.AddCompilerError(setting.Key.Start, () => Resources.PEG0003_ERROR_RuleDoesNotExist, name);
                     }
                 }
             }

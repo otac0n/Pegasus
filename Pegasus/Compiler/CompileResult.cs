@@ -12,6 +12,7 @@ namespace Pegasus.Compiler
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using Pegasus.Common;
     using Pegasus.Expressions;
 
@@ -22,7 +23,9 @@ namespace Pegasus.Compiler
     {
         private readonly Lazy<Dictionary<Expression, object>> expressionTypes;
         private readonly Grammar grammar;
+        private readonly Lazy<ILookup<Rule, Expression>> leftAdjacentExpressions;
         private readonly Lazy<HashSet<Rule>> leftRecursiveRules;
+        private readonly Lazy<HashSet<Rule>> mutuallyRecursiveRules;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompileResult"/> class.
@@ -32,7 +35,9 @@ namespace Pegasus.Compiler
         {
             this.grammar = grammar;
             this.expressionTypes = new Lazy<Dictionary<Expression, object>>(() => ResultTypeFinder.Find(this.grammar));
-            this.leftRecursiveRules = new Lazy<HashSet<Rule>>(() => LeftRecursionDetector.Detect(this.grammar));
+            this.leftAdjacentExpressions = new Lazy<ILookup<Rule, Expression>>(() => LeftAdjacencyDetector.Detect(this.grammar));
+            this.leftRecursiveRules = new Lazy<HashSet<Rule>>(() => LeftRecursionDetector.Detect(this.LeftAdjacentExpressions));
+            this.mutuallyRecursiveRules = new Lazy<HashSet<Rule>>(() => MutualRecursionDetector.Detect(this.LeftAdjacentExpressions));
             this.Errors = new List<CompilerError>();
         }
 
@@ -57,24 +62,47 @@ namespace Pegasus.Compiler
         /// <summary>
         /// Gets the collection of left-recursive rules.
         /// </summary>
+        public ILookup<Rule, Expression> LeftAdjacentExpressions
+        {
+            get { return this.leftAdjacentExpressions.Value; }
+        }
+
+        /// <summary>
+        /// Gets the collection of left-recursive rules.
+        /// </summary>
         public HashSet<Rule> LeftRecursiveRules
         {
             get { return this.leftRecursiveRules.Value; }
         }
 
-        internal void AddError(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, params object[] args)
+        /// <summary>
+        /// Gets the collection of mutually left-recursive rules.
+        /// </summary>
+        public HashSet<Rule> MutuallyRecursiveRules
         {
-            this.AddCompilerError(cursor, error, args, isWarning: false);
+            get { return this.mutuallyRecursiveRules.Value; }
         }
 
-        internal void AddWarning(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, params object[] args)
+        internal void AddCompilerError(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, params object[] args)
         {
-            this.AddCompilerError(cursor, error, args, isWarning: true);
-        }
+            var parts = ((System.Linq.Expressions.MemberExpression)error.Body).Member.Name.Split('_');
+            var errorId = parts[0];
 
-        private void AddCompilerError(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, object[] args, bool isWarning)
-        {
-            var errorId = ((System.Linq.Expressions.MemberExpression)error.Body).Member.Name.Split('_')[0];
+            bool isWarning;
+            switch (parts[1])
+            {
+                case "ERROR":
+                    isWarning = false;
+                    break;
+
+                case "WARNING":
+                    isWarning = true;
+                    break;
+
+                default:
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Unknown error type '{0}'.", parts[1]), "error");
+            }
+
             var errorFormat = error.Compile()();
             var errorText = string.Format(CultureInfo.CurrentCulture, errorFormat, args);
             this.Errors.Add(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, errorId, errorText) { IsWarning = isWarning });

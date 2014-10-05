@@ -71,6 +71,16 @@ namespace Pegasus.Tests
             Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
         }
 
+        [Test(Description = "GitHub bug #58")]
+        public void Compile_WhenErrorExpressionIsRepeated_YieldsNoErrors()
+        {
+            var grammar = new PegParser().Parse("a = (#ERROR{ \"\" })*");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
+        }
+
         [Test(Description = "GitHub bug #21")]
         [TestCase("accessibility", "foo-public-foo")]
         [TestCase("accessibility", "foo-internal-foo")]
@@ -145,6 +155,17 @@ namespace Pegasus.Tests
             Assert.That(parser.Parse("OK"), Is.EqualTo(2));
         }
 
+        [Test]
+        public void Compile_WhenRepetitionExpressionContainsDelimiterButRepetitionIsLimitedToOne_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a = 'foo'<0,1,','>");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0024"));
+        }
+
         [Test(Description = "GitHub bug #38")]
         public void Parse_WhenARepetitionDelimiterFollowsTheRepeatedRule_DoesNotConsumeTheDelimiter()
         {
@@ -156,15 +177,15 @@ namespace Pegasus.Tests
             Assert.That(parser.Parse(" hoge "), Is.EqualTo(" hoge "));
         }
 
-        [Test(Description = "GitHub bug #50")]
-        public void Parse_WhenLeftRecursiveRulesAreNested_AllowsLeftRecursionToExpand()
+        [Test(Description = "GitHub bugs #50 & #52")]
+        public void Parse_WhenLeftRecursiveRulesAreNested_YieldsErrors()
         {
             var grammar = new PegParser().Parse("exp -memoize = dot / call / name; dot -memoize = exp '.' name; call -memoize = exp '(' ')'; name = '' [a-z]+;");
 
             var result = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(result.Code);
 
-            Assert.That(parser.Parse("x.y()"), Is.EqualTo("x.y()"));
+            var errorNumber = result.Errors.Select(e => e.ErrorNumber).Distinct().Single();
+            Assert.That(errorNumber, Is.EqualTo("PEG0023"));
         }
     }
 }

@@ -187,15 +187,31 @@ namespace Pegasus.Tests
         }
 
         [Test]
+        [TestCase("a = b; b = c; c = d; d = a;")]
+        [TestCase("a = b / c; b = 'OK'; c = a;")]
+        [TestCase("a = &b c; b = a; c = 'OK';")]
+        public void Compile_WithAmbiguousLeftRecursion_YieldsError(string subject)
+        {
+            var parser = new PegParser();
+            var grammar = parser.Parse(subject);
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0023"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
         public void Compile_WithComplexLeftRecursion_Succeeds()
         {
             var parser = new PegParser();
             var grammar = parser.Parse(@"a<o> -memoize = b;
                                          b<o> -memoize = c;
-                                         c<o> -memoize = a / d;
+                                         c<o> -memoize = e / d;
                                          d<o> = e;
                                          e<o> -memoize = f;
-                                         f<o> -memoize = e / g;
+                                         f<o> -memoize = g;
                                          g<o> -memoize = g;");
 
             var result = PegCompiler.Compile(grammar);
@@ -293,10 +309,7 @@ namespace Pegasus.Tests
         [TestCase("a = '' a;")]
         [TestCase("a = b a; b = '';")]
         [TestCase("a = ('OK' / '') a;")]
-        [TestCase("a = b; b = c; c = d; d = a;")]
-        [TestCase("a = b / c; b = 'OK'; c = a;")]
         [TestCase("a = !b a; b = 'OK';")]
-        [TestCase("a = &b c; b = a; c = 'OK';")]
         [TestCase("a = b* a; b = 'OK';")]
         [TestCase("a = ''<2,> a;")]
         public void Compile_WithUnmemoizedLeftRecursion_YieldsError(string subject)

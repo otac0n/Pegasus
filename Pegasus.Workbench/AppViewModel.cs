@@ -23,7 +23,6 @@ namespace Pegasus.Workbench
     /// </summary>
     public sealed class AppViewModel : ReactiveObject, IDisposable
     {
-        [SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Maintained for GC purposes.")]
         private readonly IDisposable[] pipeline;
 
         private IList<CompilerError> errors = new CompilerError[0];
@@ -52,7 +51,11 @@ namespace Pegasus.Workbench
             var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges, testNameChanges);
             this.pipeline = new IDisposable[] { pegParser, pegCompiler, csCompiler, testParser };
 
-            testParser.Results.Select(r => r is string ? (string)r : JsonConvert.SerializeObject(r, Formatting.Indented)).BindTo(this, x => x.TestResults);
+            testParser.Results.Select(r =>
+            {
+                var s = r as string;
+                return s != null ? s : JsonConvert.SerializeObject(r, Formatting.Indented);
+            }).BindTo(this, x => x.TestResults);
 
             var errorObvervables = new List<IObservable<IEnumerable<CompilerError>>>
             {

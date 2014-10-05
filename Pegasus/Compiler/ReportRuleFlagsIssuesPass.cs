@@ -39,7 +39,7 @@ namespace Pegasus.Compiler
                     if (!KnownFlags.Contains(flag.Name))
                     {
                         var cursor = flag.Start;
-                        result.AddWarning(cursor, () => Resources.PEG0013_FLAG_UNKNOWN, flag.Name);
+                        result.AddCompilerError(cursor, () => Resources.PEG0013_WARNING_FlagUnknown, flag.Name);
                     }
                 }
             }

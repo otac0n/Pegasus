@@ -13,5 +13,8 @@ namespace Pegasus.Expressions
     /// </summary>
     public abstract class Expression
     {
+        internal Expression()
+        {
+        }
     }
 }

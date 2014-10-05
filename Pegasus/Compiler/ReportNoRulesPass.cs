@@ -29,7 +29,7 @@ namespace Pegasus.Compiler
             if (grammar.Rules.Count == 0)
             {
                 var cursor = grammar.End;
-                result.AddError(cursor, () => Resources.PEG0001_NO_RULES_DEFINED);
+                result.AddCompilerError(cursor, () => Resources.PEG0001_ERROR_NoRulesDefined);
             }
         }
     }

@@ -8,17 +8,32 @@
 
 namespace Pegasus.Compiler
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using Pegasus.Expressions;
+    using Pegasus.Properties;
 
     internal class GenerateCodePass : CompilePass
     {
+        private static readonly Lazy<IList<string>> allErrors = new Lazy<IList<string>>(() =>
+        {
+            return (from p in typeof(Resources).GetProperties(BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetProperty)
+                    let parts = p.Name.Split('_')
+                    where parts.Length == 3
+                    where parts[1] == "ERROR"
+                    select parts[0])
+                    .Concat(new[] { "CS0000" })
+                    .ToList()
+                    .AsReadOnly();
+        });
+
         public override IList<string> BlockedByErrors
         {
-            get { return new[] { "CS0000", "PEG0001", "PEG0002", "PEG0003", "PEG0005", "PEG0007", "PEG0008", "PEG0012", "PEG0016", "PEG0019", "PEG0020", "PEG0021" }; }
+            get { return allErrors.Value; }
         }
 
         public override IList<string> ErrorsProduced

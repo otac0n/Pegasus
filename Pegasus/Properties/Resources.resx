@@ -117,80 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CS1026_UNEXPECTED_CHARACTER" xml:space="preserve">
+  <data name="CS1026_ERROR_UnexpectedCharacter" xml:space="preserve">
     <value>Unexpected character '{0}'.</value>
   </data>
-  <data name="PEG0001_NO_RULES_DEFINED" xml:space="preserve">
+  <data name="PEG0001_ERROR_NoRulesDefined" xml:space="preserve">
     <value>No grammar rules were defined.</value>
   </data>
-  <data name="PEG0002_RULE_ALREADY_DEFINED" xml:space="preserve">
+  <data name="PEG0002_ERROR_RuleAlreadyDefined" xml:space="preserve">
     <value>The rule '{0}' has already been defined.</value>
   </data>
-  <data name="PEG0003_RULE_DOES_NOT_EXIST" xml:space="preserve">
+  <data name="PEG0003_ERROR_RuleDoesNotExist" xml:space="preserve">
     <value>The referenced rule '{0}' does not exist.</value>
   </data>
-  <data name="PEG0004_LEFT_RECURSION_DETECTED" xml:space="preserve">
+  <data name="PEG0004_ERROR_OBSOLETE_LeftRecursionDetected" xml:space="preserve">
     <value>The rule '{0}' is left-recursive.</value>
-    <comment>obsolete</comment>
   </data>
-  <data name="PEG0005_SETTING_ALREADY_SPECIFIED" xml:space="preserve">
+  <data name="PEG0005_ERROR_SettingAlreadySpecified" xml:space="preserve">
     <value>The setting '{0}' has already been specified.</value>
   </data>
-  <data name="PEG0006_SETTING_UNKNOWN" xml:space="preserve">
+  <data name="PEG0006_WARNING_SettingUnknown" xml:space="preserve">
     <value>The setting '{0}' is not recognized.</value>
-    <comment>warning</comment>
   </data>
-  <data name="PEG0007_PREFIX_ALREADY_DECLARED" xml:space="preserve">
+  <data name="PEG0007_ERROR_PrefixAlreadyDeclared" xml:space="preserve">
     <value>A prefix '{0}' cannot be declared here because it would give a different meaning to '{0}' which is already declared in the current scope.</value>
   </data>
-  <data name="PEG0008_UNEXPECTED_END_OF_INPUT" xml:space="preserve">
+  <data name="PEG0008_ERROR_PARSER_UnexpectedEndOfInput" xml:space="preserve">
     <value>Unexpected character '{0}'.</value>
   </data>
-  <data name="PEG0009_UNTERMINATED_STRING" xml:space="preserve">
+  <data name="PEG0009_ERROR_PARSER_UnterminatedString" xml:space="preserve">
     <value>Unterminated string literal.</value>
   </data>
-  <data name="PEG0010_UNTERMINATED_CLASS" xml:space="preserve">
+  <data name="PEG0010_ERROR_PARSER_UnterminatedClass" xml:space="preserve">
     <value>Unterminated character class.</value>
   </data>
-  <data name="PEG0011_UNTERMINATED_CODE" xml:space="preserve">
+  <data name="PEG0011_ERROR_PARSER_UnterminatedCode" xml:space="preserve">
     <value>Unterminated code section.</value>
   </data>
-  <data name="PEG0012_SETTING_VALUE_INVALID" xml:space="preserve">
+  <data name="PEG0012_ERROR_SettingValueInvalid" xml:space="preserve">
     <value>The value '{0}' is invalid for the '{1}' setting.</value>
   </data>
-  <data name="PEG0013_FLAG_UNKNOWN" xml:space="preserve">
+  <data name="PEG0013_WARNING_FlagUnknown" xml:space="preserve">
     <value>The flag '{0}' is not recognized.</value>
-    <comment>warning</comment>
   </data>
-  <data name="PEG0014_INVALID_TYPE" xml:space="preserve">
+  <data name="PEG0014_ERROR_PARSER_InvalidType" xml:space="preserve">
     <value>Invalid type definition.</value>
   </data>
-  <data name="PEG0015_QUANTIFIER_INVALID" xml:space="preserve">
+  <data name="PEG0015_WARNING_QuantifierInvalid" xml:space="preserve">
     <value>This quantifier will always fail to match.</value>
-    <comment>warning</comment>
   </data>
-  <data name="PEG0016_RESOURCES_NOT_SPECIFIED" xml:space="preserve">
+  <data name="PEG0016_ERROR_ResourcesNotSpecified" xml:space="preserve">
     <value>Resource-based literal expressions require a 'resources' setting.</value>
   </data>
-  <data name="PEG0017_UNUSED_RULE" xml:space="preserve">
+  <data name="PEG0017_WARNING_UnusedRule" xml:space="preserve">
     <value>The rule '{0}' is never used.</value>
-    <comment>warning</comment>
   </data>
-  <data name="PEG0018_UNREACHABLE_ALTERNATIVE" xml:space="preserve">
+  <data name="PEG0018_WARNING_UnreachableAlternative" xml:space="preserve">
     <value>Unreachable branch detected.</value>
-    <comment>warning</comment>
   </data>
-  <data name="PEG0019_UNKNOWN_TYPE" xml:space="preserve">
+  <data name="PEG0019_ERROR_UnknownType" xml:space="preserve">
     <value>Could not determine a type for the rule '{0}'.</value>
   </data>
-  <data name="PEG0020_UNMEMOIZED_LEFT_RECURSION" xml:space="preserve">
+  <data name="PEG0020_ERROR_UnmemoizedLeftRecursion" xml:space="preserve">
     <value>The rule '{0}' is left-recursive. Left-recursive rules must be memoized.  Mark this rule with the '-memoize' flag or eliminate the left-recursion.</value>
   </data>
-  <data name="PEG0021_ZERO_WIDTH_REPETITION" xml:space="preserve">
+  <data name="PEG0021_ERROR_ZeroWidthRepetition" xml:space="preserve">
     <value>Repetition of a zero-width expression with no maximum repetition count will result in an infinite loop.</value>
   </data>
-  <data name="PEG0022_ZERO_WIDTH_REPETITION" xml:space="preserve">
+  <data name="PEG0022_WARNING_ZeroWidthRepetition" xml:space="preserve">
     <value>Repetition of a zero-width expression will always result in the maximum repetition count.</value>
-    <comment>warning</comment>
+  </data>
+  <data name="PEG0023_ERROR_AmbiguousLeftRecursionDetected" xml:space="preserve">
+    <value>The rule '{0}' is ambiguously left-recursive.</value>
+  </data>
+  <data name="PEG0024_WARNING_UnusedDelimiter" xml:space="preserve">
+    <value>The delimiter is never used.</value>
   </data>
 </root>

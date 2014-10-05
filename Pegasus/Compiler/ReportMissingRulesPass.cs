@@ -47,7 +47,7 @@ namespace Pegasus.Compiler
                 if (!this.knownRules.Contains(name))
                 {
                     var cursor = nameExpression.Identifier.Start;
-                    this.result.AddError(cursor, () => Resources.PEG0003_RULE_DOES_NOT_EXIST, name);
+                    this.result.AddCompilerError(cursor, () => Resources.PEG0003_ERROR_RuleDoesNotExist, name);
                 }
             }
         }

@@ -54,12 +54,12 @@ namespace Pegasus.Compiler
                 {
                     if (singleAllowed && !seenSettings.Add(setting.Key.Name))
                     {
-                        result.AddError(cursor, () => Resources.PEG0005_SETTING_ALREADY_SPECIFIED, setting.Key.Name);
+                        result.AddCompilerError(cursor, () => Resources.PEG0005_ERROR_SettingAlreadySpecified, setting.Key.Name);
                     }
                 }
                 else
                 {
-                    result.AddWarning(cursor, () => Resources.PEG0006_SETTING_UNKNOWN, setting.Key.Name);
+                    result.AddCompilerError(cursor, () => Resources.PEG0006_WARNING_SettingUnknown, setting.Key.Name);
                 }
 
                 string pattern;
@@ -67,7 +67,7 @@ namespace Pegasus.Compiler
                 {
                     if (!Regex.IsMatch(setting.Value.ToString(), pattern))
                     {
-                        result.AddError(cursor, () => Resources.PEG0012_SETTING_VALUE_INVALID, setting.Value, setting.Key.Name);
+                        result.AddCompilerError(cursor, () => Resources.PEG0012_ERROR_SettingValueInvalid, setting.Value, setting.Key.Name);
                     }
                 }
             }

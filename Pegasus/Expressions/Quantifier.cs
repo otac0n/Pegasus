@@ -35,7 +35,15 @@ namespace Pegasus.Expressions
             this.end = end;
             this.min = min;
             this.max = max;
-            this.delimiter = delimiter;
+
+            if (delimiter != null)
+            {
+                SequenceExpression sequenceExpression;
+                if ((sequenceExpression = delimiter as SequenceExpression) == null || sequenceExpression.Sequence.Count != 0)
+                {
+                    this.delimiter = delimiter;
+                }
+            }
         }
 
         /// <summary>

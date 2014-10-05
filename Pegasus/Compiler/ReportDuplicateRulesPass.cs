@@ -33,7 +33,7 @@ namespace Pegasus.Compiler
                 if (!knownRules.Add(rule.Identifier.Name))
                 {
                     var cursor = rule.Identifier.Start;
-                    result.AddError(cursor, () => Resources.PEG0002_RULE_ALREADY_DEFINED, rule.Identifier.Name);
+                    result.AddCompilerError(cursor, () => Resources.PEG0002_ERROR_RuleAlreadyDefined, rule.Identifier.Name);
                 }
             }
         }

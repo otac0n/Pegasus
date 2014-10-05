@@ -58,7 +58,7 @@ namespace Pegasus.Compiler
                 if (!success)
                 {
                     var cursor = prefixedExpression.Prefix.Start;
-                    this.result.AddError(cursor, () => Resources.PEG0007_PREFIX_ALREADY_DECLARED, prefixedExpression.Prefix.Name);
+                    this.result.AddCompilerError(cursor, () => Resources.PEG0007_ERROR_PrefixAlreadyDeclared, prefixedExpression.Prefix.Name);
                 }
 
                 base.WalkPrefixedExpression(prefixedExpression);

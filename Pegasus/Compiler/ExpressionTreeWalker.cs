@@ -9,88 +9,34 @@
 namespace Pegasus.Compiler
 {
     using System;
-    using System.Globalization;
     using Pegasus.Expressions;
 
     internal abstract class ExpressionTreeWalker
     {
+        private Action<Expression> expressionDispatcher;
+
+        public ExpressionTreeWalker()
+        {
+            this.expressionDispatcher = ExpressionDispatch.CreateDispatcher(
+                And: this.WalkAndExpression,
+                AndCode: this.WalkAndCodeExpression,
+                Choice: this.WalkChoiceExpression,
+                Class: this.WalkClassExpression,
+                Code: this.WalkCodeExpression,
+                Literal: this.WalkLiteralExpression,
+                Name: this.WalkNameExpression,
+                Not: this.WalkNotExpression,
+                NotCode: this.WalkNotCodeExpression,
+                Prefixed: this.WalkPrefixedExpression,
+                Repetition: this.WalkRepetitionExpression,
+                Sequence: this.WalkSequenceExpression,
+                Typed: this.WalkTypedExpression,
+                Wildcard: this.WalkWildcardExpression);
+        }
+
         public virtual void WalkExpression(Expression expression)
         {
-            AndCodeExpression andCodeExpression;
-            AndExpression andExpression;
-            ChoiceExpression choiceExpression;
-            ClassExpression classExpression;
-            CodeExpression codeExpression;
-            LiteralExpression literalExpression;
-            NameExpression nameExpression;
-            NotCodeExpression notCodeExpression;
-            NotExpression notExpression;
-            PrefixedExpression prefixedExpression;
-            RepetitionExpression repetitionExpression;
-            SequenceExpression sequenceExpression;
-            TypedExpression typedExpression;
-            WildcardExpression wildcardExpression;
-
-            if ((andCodeExpression = expression as AndCodeExpression) != null)
-            {
-                this.WalkAndCodeExpression(andCodeExpression);
-            }
-            else if ((andExpression = expression as AndExpression) != null)
-            {
-                this.WalkAndExpression(andExpression);
-            }
-            else if ((choiceExpression = expression as ChoiceExpression) != null)
-            {
-                this.WalkChoiceExpression(choiceExpression);
-            }
-            else if ((classExpression = expression as ClassExpression) != null)
-            {
-                this.WalkClassExpression(classExpression);
-            }
-            else if ((codeExpression = expression as CodeExpression) != null)
-            {
-                this.WalkCodeExpression(codeExpression);
-            }
-            else if ((literalExpression = expression as LiteralExpression) != null)
-            {
-                this.WalkLiteralExpression(literalExpression);
-            }
-            else if ((nameExpression = expression as NameExpression) != null)
-            {
-                this.WalkNameExpression(nameExpression);
-            }
-            else if ((notCodeExpression = expression as NotCodeExpression) != null)
-            {
-                this.WalkNotCodeExpression(notCodeExpression);
-            }
-            else if ((notExpression = expression as NotExpression) != null)
-            {
-                this.WalkNotExpression(notExpression);
-            }
-            else if ((prefixedExpression = expression as PrefixedExpression) != null)
-            {
-                this.WalkPrefixedExpression(prefixedExpression);
-            }
-            else if ((repetitionExpression = expression as RepetitionExpression) != null)
-            {
-                this.WalkRepetitionExpression(repetitionExpression);
-            }
-            else if ((sequenceExpression = expression as SequenceExpression) != null)
-            {
-                this.WalkSequenceExpression(sequenceExpression);
-            }
-            else if ((typedExpression = expression as TypedExpression) != null)
-            {
-                this.WalkTypedExpression(typedExpression);
-            }
-            else if ((wildcardExpression = expression as WildcardExpression) != null)
-            {
-                this.WalkWildcardExpression(wildcardExpression);
-            }
-            else
-            {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Unknown expression type '{0}'.", expression.GetType()), "expression");
-            }
+            this.expressionDispatcher(expression);
         }
 
         public virtual void WalkGrammar(Grammar grammar)

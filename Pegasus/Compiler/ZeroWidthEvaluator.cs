@@ -8,13 +8,15 @@
 
 namespace Pegasus.Compiler
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Linq;
     using Pegasus.Expressions;
 
     /// <summary>
-    /// Performs zero-width evaluation services for Pegasus <see cref="Grammar"/>s.
+    /// Performs zero-width evaluation services for Pegasus <see cref="Grammar">Grammars</see>.
     /// </summary>
     public static class ZeroWidthEvaluator
     {
@@ -62,12 +64,8 @@ namespace Pegasus.Compiler
                     this.zeroWidth[expression] = starting;
                 }
 
-                if (starting == null)
-                {
-                    base.WalkExpression(expression);
-
-                    this.changed = this.changed || starting != this.zeroWidth[expression];
-                }
+                base.WalkExpression(expression);
+                this.changed = this.changed || starting != this.zeroWidth[expression];
             }
 
             public override void WalkGrammar(Grammar grammar)
@@ -113,7 +111,20 @@ namespace Pegasus.Compiler
 
             protected override void WalkCodeExpression(CodeExpression codeExpression)
             {
-                this.zeroWidth[codeExpression] = true;
+                switch (codeExpression.CodeType)
+                {
+                    case CodeType.Result:
+                    case CodeType.State:
+                        this.zeroWidth[codeExpression] = true;
+                        break;
+
+                    case CodeType.Error:
+                        this.zeroWidth[codeExpression] = false;
+                        break;
+
+                    default:
+                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Unknown code type '{0}'.", codeExpression.CodeType));
+                }
             }
 
             [SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength", Justification = "Empty strings and null strings are logically distinct in this method.")]
