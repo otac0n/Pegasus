@@ -8,8 +8,10 @@
 
 namespace Pegasus.Compiler
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Linq;
     using Pegasus.Expressions;
 
@@ -109,7 +111,20 @@ namespace Pegasus.Compiler
 
             protected override void WalkCodeExpression(CodeExpression codeExpression)
             {
-                this.zeroWidth[codeExpression] = true;
+                switch (codeExpression.CodeType)
+                {
+                    case CodeType.Result:
+                    case CodeType.State:
+                        this.zeroWidth[codeExpression] = true;
+                        break;
+
+                    case CodeType.Error:
+                        this.zeroWidth[codeExpression] = false;
+                        break;
+
+                    default:
+                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Unknown code type '{0}'.", codeExpression.CodeType));
+                }
             }
 
             [SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength", Justification = "Empty strings and null strings are logically distinct in this method.")]

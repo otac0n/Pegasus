@@ -71,6 +71,16 @@ namespace Pegasus.Tests
             Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
         }
 
+        [Test(Description = "GitHub bug #58")]
+        public void Compile_WhenErrorExpressionIsRepeated_YieldsNoErrors()
+        {
+            var grammar = new PegParser().Parse("a = (#ERROR{ \"\" })*");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
+        }
+
         [Test(Description = "GitHub bug #21")]
         [TestCase("accessibility", "foo-public-foo")]
         [TestCase("accessibility", "foo-internal-foo")]
