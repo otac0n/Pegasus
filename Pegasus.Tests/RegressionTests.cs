@@ -155,6 +155,17 @@ namespace Pegasus.Tests
             Assert.That(parser.Parse("OK"), Is.EqualTo(2));
         }
 
+        [Test]
+        public void Compile_WhenRepetitionExpressionContainsDelimiterButRepetitionIsLimitedToOne_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a = 'foo'<0,1,','>");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0024"));
+        }
+
         [Test(Description = "GitHub bug #38")]
         public void Parse_WhenARepetitionDelimiterFollowsTheRepeatedRule_DoesNotConsumeTheDelimiter()
         {

@@ -21,7 +21,7 @@ namespace Pegasus.Compiler
 
         public override IList<string> ErrorsProduced
         {
-            get { return new[] { "PEG0015" }; }
+            get { return new[] { "PEG0015", "PEG0024" }; }
         }
 
         public override void Run(Grammar grammar, CompileResult result)
@@ -44,6 +44,12 @@ namespace Pegasus.Compiler
                     repetitionExpression.Quantifier.Max < repetitionExpression.Quantifier.Min)
                 {
                     this.result.AddCompilerError(repetitionExpression.Quantifier.Start, () => Resources.PEG0015_WARNING_QuantifierInvalid);
+                }
+
+                if (repetitionExpression.Quantifier.Max == 1 &&
+                    repetitionExpression.Quantifier.Delimiter != null)
+                {
+                    this.result.AddCompilerError(repetitionExpression.Quantifier.Start, () => Resources.PEG0024_WARNING_UnusedDelimiter);
                 }
 
                 base.WalkRepetitionExpression(repetitionExpression);

@@ -275,5 +275,14 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0023_ERROR_AmbiguousLeftRecursionDetected", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The delimiter is never used..
+        /// </summary>
+        internal static string PEG0024_WARNING_UnusedDelimiter {
+            get {
+                return ResourceManager.GetString("PEG0024_WARNING_UnusedDelimiter", resourceCulture);
+            }
+        }
     }
 }

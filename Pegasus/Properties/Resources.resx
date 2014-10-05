@@ -189,4 +189,7 @@
   <data name="PEG0023_ERROR_AmbiguousLeftRecursionDetected" xml:space="preserve">
     <value>The rule '{0}' is ambiguously left-recursive.</value>
   </data>
+  <data name="PEG0024_WARNING_UnusedDelimiter" xml:space="preserve">
+    <value>The delimiter is never used.</value>
+  </data>
 </root>
