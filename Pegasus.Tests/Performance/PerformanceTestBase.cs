@@ -100,32 +100,60 @@ namespace Pegasus.Tests.Performance
             });
 
             var initialTime = measure(1);
-            Trace.WriteLine(FormatTime("initialTime", initialTime));
             var baseTime = measure(1);
-            Trace.WriteLine(FormatTime("baseTime", baseTime));
 
             var warmupSamples = (int)Math.Max(1, TimeSpan.FromSeconds(0.1).TotalMilliseconds / baseTime.Mean);
-            Trace.WriteLine(string.Format("warmupSamples: {0}", warmupSamples));
             var warmupTime = measure(warmupSamples);
-            Trace.WriteLine(FormatTime("warmupTime", warmupTime));
 
             var testSamples = (int)Math.Max(30, TimeSpan.FromSeconds(1).TotalMilliseconds / warmupTime.Mean);
-            Trace.WriteLine(string.Format("testSamples: {0}", testSamples));
             var testTime = measure(testSamples);
-            Trace.WriteLine(FormatTime("testTime", testTime));
+
+            PublishResults(initialTime.Mean, baseTime.Mean, warmupSamples, warmupTime.Mean, warmupTime.StandardDeviation, testSamples, testTime.Mean, testTime.StandardDeviation);
         }
 
-        private static string FormatTime(string name, RunningStat time)
+        private static string FormatTime(int count, double mean, double stdDev = 0)
         {
-            Func<double, TimeSpan> convert = ms => TimeSpan.FromTicks((long)Math.Round(TimeSpan.TicksPerMillisecond * ms));
-            return time.Count > 1
-                ? string.Format("{0}: {1}±{2}", name, convert(time.Mean), convert(tDistribution[Math.Min(time.Count, tDistribution.Length - 1)] * time.StandardDeviation))
-                : string.Format("{0}: {1}", name, convert(time.Mean));
+            string suffix;
+            double rounded;
+
+            if (count > 1 && stdDev != 0)
+            {
+                var interval = tDistribution[Math.Min(count, tDistribution.Length - 1)] * stdDev;
+                var intervalScale = GetScale(interval);
+
+                suffix = "±" + Math.Round(interval, 3 - intervalScale) + "ms";
+
+                var scale = Math.Min(intervalScale, GetScale(mean));
+
+                rounded = Math.Round(mean, 3 - scale);
+            }
+            else
+            {
+                suffix = "";
+                rounded = Math.Round(mean, 3 - GetScale(mean));
+            }
+
+            return rounded + "ms" + suffix;
+        }
+
+        private static int GetScale(double d)
+        {
+            return d == 0 ? 0 : (int)Math.Floor(Math.Log10(Math.Abs(d))) + 1;
         }
 
         private static Action MakeAction(object fixture, MethodInfo method)
         {
             return (Action)Expression.Lambda(Expression.Call(Expression.Constant(fixture), method)).Compile();
+        }
+
+        private static void PublishResults(double initialTime, double baseTime, int warmupSamples, double warmupMean, double warmupStandardDeviation, int testSamples, double testMean, double testStandardDeviation)
+        {
+            Trace.WriteLine(string.Format("initialTime: {0}:", FormatTime(1, initialTime)));
+            Trace.WriteLine(string.Format("baseTime: {0}:", FormatTime(1, baseTime)));
+            Trace.WriteLine(string.Format("warmupSamples: {0}", warmupSamples));
+            Trace.WriteLine(string.Format("warmupMean: {0}:", FormatTime(warmupSamples, warmupMean, warmupStandardDeviation)));
+            Trace.WriteLine(string.Format("testSamples: {0}", testSamples));
+            Trace.WriteLine(string.Format("testMean: {0}:", FormatTime(testSamples, testMean, testStandardDeviation)));
         }
 
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
