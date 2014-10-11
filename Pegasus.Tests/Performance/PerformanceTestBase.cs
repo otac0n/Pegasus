@@ -20,6 +20,8 @@ namespace Pegasus.Tests.Performance
     public abstract class PerformanceTestBase
     {
         protected readonly TestCaseData[] Methods;
+        protected TimeSpan testTargetTime = TimeSpan.FromSeconds(1);
+        protected TimeSpan warmupTargetTime = TimeSpan.FromSeconds(0.1);
 
         private static double[] tDistribution = new[] {
             0.00, 0.00, 12.71, 4.30, 3.18, 2.78, 2.57, 2.45, 2.36, 2.31,
@@ -102,10 +104,10 @@ namespace Pegasus.Tests.Performance
             var initialTime = measure(1);
             var baseTime = measure(1);
 
-            var warmupSamples = (int)Math.Max(1, TimeSpan.FromSeconds(0.1).TotalMilliseconds / baseTime.Mean);
+            var warmupSamples = (int)Math.Max(1, this.warmupTargetTime.TotalMilliseconds / baseTime.Mean);
             var warmupTime = measure(warmupSamples);
 
-            var testSamples = (int)Math.Max(30, TimeSpan.FromSeconds(1).TotalMilliseconds / warmupTime.Mean);
+            var testSamples = (int)Math.Max(30, this.testTargetTime.TotalMilliseconds / warmupTime.Mean);
             var testTime = measure(testSamples);
 
             PublishResults(initialTime.Mean, baseTime.Mean, warmupSamples, warmupTime.Mean, warmupTime.StandardDeviation, testSamples, testTime.Mean, testTime.StandardDeviation);
