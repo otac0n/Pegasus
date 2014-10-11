@@ -23,55 +23,56 @@ namespace Pegasus.Tests.Performance
         protected TimeSpan testTargetTime = TimeSpan.FromSeconds(1);
         protected TimeSpan warmupTargetTime = TimeSpan.FromSeconds(0.1);
 
-        private static double[] tDistribution = new[] {
-            0.00, 0.00, 12.71, 4.30, 3.18, 2.78, 2.57, 2.45, 2.36, 2.31,
-            2.26, 2.23, 2.20, 2.18, 2.16, 2.14, 2.13, 2.12, 2.11, 2.10,
-            2.09, 2.09, 2.08, 2.07, 2.07, 2.06, 2.06, 2.06, 2.05, 2.05,
-            2.05, 2.04, 2.04, 2.04, 2.03, 2.03, 2.03, 2.03, 2.03, 2.02,
-            2.02, 2.02, 2.02, 2.02, 2.02, 2.02, 2.01, 2.01, 2.01, 2.01,
-            2.01, 2.01, 2.01, 2.01, 2.01, 2.00, 2.00, 2.00, 2.00, 2.00,
-            2.00, 2.00, 2.00, 2.00, 2.00, 2.00, 2.00, 2.00, 2.00, 2.00,
-            1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99,
-            1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99,
-            1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.98, 1.98, 1.98,
-            1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98,
-            1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98,
-            1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98,
-            1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98,
-            1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98,
-            1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98, 1.98,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97, 1.97,
-            1.97, 1.97, 1.97, 1.97, 1.96
+        private static decimal[] tDistribution = new decimal[]
+        {
+            0.00m, 0.00m, 12.71m, 4.30m, 3.18m, 2.78m, 2.57m, 2.45m, 2.36m, 2.31m,
+            2.26m, 2.23m, 2.20m, 2.18m, 2.16m, 2.14m, 2.13m, 2.12m, 2.11m, 2.10m,
+            2.09m, 2.09m, 2.08m, 2.07m, 2.07m, 2.06m, 2.06m, 2.06m, 2.05m, 2.05m,
+            2.05m, 2.04m, 2.04m, 2.04m, 2.03m, 2.03m, 2.03m, 2.03m, 2.03m, 2.02m,
+            2.02m, 2.02m, 2.02m, 2.02m, 2.02m, 2.02m, 2.01m, 2.01m, 2.01m, 2.01m,
+            2.01m, 2.01m, 2.01m, 2.01m, 2.01m, 2.00m, 2.00m, 2.00m, 2.00m, 2.00m,
+            2.00m, 2.00m, 2.00m, 2.00m, 2.00m, 2.00m, 2.00m, 2.00m, 2.00m, 2.00m,
+            1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m,
+            1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m,
+            1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.99m, 1.98m, 1.98m, 1.98m,
+            1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m,
+            1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m,
+            1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m,
+            1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m,
+            1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m,
+            1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m, 1.98m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
+            1.97m, 1.97m, 1.97m, 1.97m, 1.96m
         };
 
         public PerformanceTestBase()
@@ -95,7 +96,7 @@ namespace Pegasus.Tests.Performance
                 {
                     sw.Restart();
                     action();
-                    runningStat.Push(sw.Elapsed.TotalMilliseconds);
+                    runningStat.Push((decimal)sw.Elapsed.TotalMilliseconds);
                 }
 
                 return runningStat;
@@ -104,19 +105,19 @@ namespace Pegasus.Tests.Performance
             var initialTime = measure(1);
             var baseTime = measure(1);
 
-            var warmupSamples = (int)Math.Max(1, this.warmupTargetTime.TotalMilliseconds / baseTime.Mean);
+            var warmupSamples = Math.Max(1, (int)Math.Round(this.warmupTargetTime.TotalMilliseconds / (double)baseTime.Mean));
             var warmupTime = measure(warmupSamples);
 
-            var testSamples = (int)Math.Max(30, this.testTargetTime.TotalMilliseconds / warmupTime.Mean);
+            var testSamples = Math.Max(30, (int)Math.Round(this.testTargetTime.TotalMilliseconds / (double)warmupTime.Mean));
             var testTime = measure(testSamples);
 
             PublishResults(initialTime.Mean, baseTime.Mean, warmupSamples, warmupTime.Mean, warmupTime.StandardDeviation, testSamples, testTime.Mean, testTime.StandardDeviation);
         }
 
-        private static string FormatTime(int count, double mean, double stdDev = 0)
+        private static string FormatTime(int count, decimal mean, decimal stdDev = 0)
         {
             string suffix;
-            double rounded;
+            decimal rounded;
 
             if (count > 1 && stdDev != 0)
             {
@@ -138,9 +139,9 @@ namespace Pegasus.Tests.Performance
             return rounded + "ms" + suffix;
         }
 
-        private static int GetScale(double d)
+        private static int GetScale(decimal d)
         {
-            return d == 0 ? 0 : (int)Math.Floor(Math.Log10(Math.Abs(d))) + 1;
+            return d == 0 ? 0 : (int)Math.Floor(Math.Log10((double)Math.Abs(d))) + 1;
         }
 
         private static Action MakeAction(object fixture, MethodInfo method)
@@ -148,7 +149,7 @@ namespace Pegasus.Tests.Performance
             return (Action)Expression.Lambda(Expression.Call(Expression.Constant(fixture), method)).Compile();
         }
 
-        private static void PublishResults(double initialTime, double baseTime, int warmupSamples, double warmupMean, double warmupStandardDeviation, int testSamples, double testMean, double testStandardDeviation)
+        private static void PublishResults(decimal initialTime, decimal baseTime, int warmupSamples, decimal warmupMean, decimal warmupStandardDeviation, int testSamples, decimal testMean, decimal testStandardDeviation)
         {
             Trace.WriteLine(string.Format("initialTime: {0}:", FormatTime(1, initialTime)));
             Trace.WriteLine(string.Format("baseTime: {0}:", FormatTime(1, baseTime)));
@@ -166,26 +167,26 @@ namespace Pegasus.Tests.Performance
         private class RunningStat
         {
             private int n = 0;
-            private double oldM, newM, oldS, newS;
+            private decimal oldM, newM, oldS, newS;
 
             public int Count
             {
                 get { return this.n; }
             }
 
-            public double Mean
+            public decimal Mean
             {
-                get { return this.n > 0 ? this.newM : 0.0; }
+                get { return this.n > 0 ? this.newM : 0.0m; }
             }
 
-            public double StandardDeviation
+            public decimal StandardDeviation
             {
-                get { return Math.Sqrt(this.Variance); }
+                get { return (decimal)Math.Sqrt((double)this.Variance); }
             }
 
-            public double Variance
+            public decimal Variance
             {
-                get { return this.n > 1 ? this.newS / (this.n - 1) : 0.0; }
+                get { return this.n > 1 ? this.newS / (this.n - 1) : 0.0m; }
             }
 
             public void Clear()
@@ -193,7 +194,7 @@ namespace Pegasus.Tests.Performance
                 this.n = 0;
             }
 
-            public void Push(double value)
+            public void Push(decimal value)
             {
                 this.n++;
 
@@ -201,7 +202,7 @@ namespace Pegasus.Tests.Performance
                 if (this.n == 1)
                 {
                     this.oldM = this.newM = value;
-                    this.oldS = 0.0;
+                    this.oldS = 0.0m;
                 }
                 else
                 {
