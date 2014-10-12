@@ -43,6 +43,7 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CacheKey.cs" />
     <Compile Include="Cursor.cs" />
     <Compile Include="IParseResult{T}.cs" />
     <Compile Include="ParseResult{T}.cs" />

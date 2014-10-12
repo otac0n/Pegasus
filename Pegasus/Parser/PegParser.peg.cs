@@ -51,7 +51,7 @@ namespace
            PegParser
     #line default
     {
-        private Dictionary<string, object> storage;
+        private Dictionary<CacheKey, object> storage;
 
         /// <summary>
         ///  Parses a string according to the rules of the <see cref="PegParser" /> grammar.
@@ -82,7 +82,7 @@ namespace
         {
             try
             {
-                this.storage = new Dictionary<string, object>();
+                this.storage = new Dictionary<CacheKey, object>();
                 var cursor = new Cursor(subject, 0, fileName);
                 var result = this.grammar(ref cursor);
                 if (result == null)
@@ -394,10 +394,13 @@ namespace
                 var startCursor3 = cursor;
                 IParseResult<Quantifier> r4 = null;
                 r4 = this.quantifier(ref cursor);
-                cursor = startCursor3;
                 if (r4 == null)
                 {
                     r3 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+                }
+                else
+                {
+                    cursor = startCursor3;
                 }
                 if (r3 != null)
                 {
@@ -716,7 +719,7 @@ namespace
             > ruleFlag(ref Cursor cursor)
         {
             IParseResult<Identifier> r0 = null;
-            var storageKey = "ruleFlag:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("ruleFlag", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Identifier>)this.storage[storageKey];
@@ -778,7 +781,7 @@ namespace
             > expressionType(ref Cursor cursor)
         {
             IParseResult<CodeSpan> r0 = null;
-            var storageKey = "expressionType:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("expressionType", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<CodeSpan>)this.storage[storageKey];
@@ -1097,7 +1100,7 @@ namespace
             > labeled(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
-            var storageKey = "labeled:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("labeled", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Expression>)this.storage[storageKey];
@@ -1179,9 +1182,9 @@ namespace
                 var startCursor2 = cursor;
                 IParseResult<string> r7 = null;
                 r7 = this.ParseLiteral(ref cursor, "#STATE", ignoreCase: true);
-                cursor = startCursor2;
                 if (r7 != null)
                 {
+                    cursor = startCursor2;
                     r6 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
                 }
                 if (r6 != null)
@@ -1451,7 +1454,7 @@ namespace
             > primary(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
-            var storageKey = "primary:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("primary", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Expression>)this.storage[storageKey];
@@ -1499,10 +1502,13 @@ namespace
                     {
                         cursor = startCursor2;
                     }
-                    cursor = startCursor1;
                     if (r3 == null)
                     {
                         r2 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+                    }
+                    else
+                    {
+                        cursor = startCursor1;
                     }
                     if (r2 != null)
                     {
@@ -1655,7 +1661,7 @@ namespace
             > quantifier(ref Cursor cursor)
         {
             IParseResult<Quantifier> r0 = null;
-            var storageKey = "quantifier:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("quantifier", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Quantifier>)this.storage[storageKey];
@@ -2562,7 +2568,7 @@ namespace
             > identifier(ref Cursor cursor)
         {
             IParseResult<Identifier> r0 = null;
-            var storageKey = "identifier:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("identifier", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Identifier>)this.storage[storageKey];
@@ -2580,10 +2586,13 @@ namespace
             var startCursor2 = cursor;
             IParseResult<string> r3 = null;
             r3 = this.digit(ref cursor);
-            cursor = startCursor2;
             if (r3 == null)
             {
                 r2 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+            }
+            else
+            {
+                cursor = startCursor2;
             }
             if (r2 != null)
             {
@@ -3413,10 +3422,13 @@ namespace
             {
                 r2 = this.eolChar(ref cursor);
             }
-            cursor = startCursor1;
             if (r2 == null)
             {
                 r1 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+            }
+            else
+            {
+                cursor = startCursor1;
             }
             if (r1 != null)
             {
@@ -3563,10 +3575,13 @@ namespace
             {
                 r2 = this.eolChar(ref cursor);
             }
-            cursor = startCursor1;
             if (r2 == null)
             {
                 r1 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+            }
+            else
+            {
+                cursor = startCursor1;
             }
             if (r1 != null)
             {
@@ -3861,10 +3876,13 @@ namespace
             {
                 r2 = this.eolChar(ref cursor);
             }
-            cursor = startCursor1;
             if (r2 == null)
             {
                 r1 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+            }
+            else
+            {
+                cursor = startCursor1;
             }
             if (r1 != null)
             {
@@ -3920,10 +3938,13 @@ namespace
                 {
                     r3 = this.eolChar(ref cursor);
                 }
-                cursor = startCursor1;
                 if (r3 == null)
                 {
                     r2 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+                }
+                else
+                {
+                    cursor = startCursor1;
                 }
                 if (r2 != null)
                 {
@@ -3976,10 +3997,13 @@ namespace
                 var startCursor1 = cursor;
                 IParseResult<string> r3 = null;
                 r3 = this.digit(ref cursor);
-                cursor = startCursor1;
                 if (r3 == null)
                 {
                     r2 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+                }
+                else
+                {
+                    cursor = startCursor1;
                 }
                 if (r2 != null)
                 {
@@ -4276,10 +4300,13 @@ namespace
                     var startCursor3 = cursor;
                     IParseResult<string> r5 = null;
                     r5 = this.eolChar(ref cursor);
-                    cursor = startCursor3;
                     if (r5 == null)
                     {
                         r4 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+                    }
+                    else
+                    {
+                        cursor = startCursor3;
                     }
                     if (r4 != null)
                     {
@@ -4353,10 +4380,13 @@ namespace
                     var startCursor3 = cursor;
                     IParseResult<string> r5 = null;
                     r5 = this.ParseLiteral(ref cursor, "*/");
-                    cursor = startCursor3;
                     if (r5 == null)
                     {
                         r4 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+                    }
+                    else
+                    {
+                        cursor = startCursor3;
                     }
                     if (r4 != null)
                     {
@@ -4468,10 +4498,13 @@ namespace
                 var startCursor0 = cursor;
                 IParseResult<string> r1 = null;
                 r1 = this.ParseAny(ref cursor);
-                cursor = startCursor0;
                 if (r1 == null)
                 {
                     r0 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+                }
+                else
+                {
+                    cursor = startCursor0;
                 }
             }
             if (r0 == null)

@@ -10,11 +10,19 @@
 var {{: startCursorName }} = cursor;
 IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }} = null;
 {{@WalkExpression expression}}
-cursor = {{: startCursorName }};
-if ({{: this.currentContext.ResultName }} {{if mustMatch }}!={{else}}=={{/if}} null)
+if ({{: this.currentContext.ResultName }} {{if mustMatch}}!={{else}}=={{/if}} null)
 {
+    {{if mustMatch}}
+        cursor = {{: startCursorName }};
+    {{/if}}
     {{: oldContext.ResultName }} = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
 }
+{{if !mustMatch}}
+    else
+    {
+        cursor = {{: startCursorName }};
+    }
+{{/if}}
 {{
     this.currentContext = oldContext;
 }}
