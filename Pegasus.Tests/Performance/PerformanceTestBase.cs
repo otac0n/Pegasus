@@ -22,7 +22,7 @@ namespace Pegasus.Tests.Performance
     public abstract class PerformanceTestBase
     {
         protected readonly TestCaseData[] Methods;
-        protected TimeSpan testTargetTime = TimeSpan.FromSeconds(1);
+        protected TimeSpan testTargetTime = TimeSpan.FromSeconds(2);
         protected TimeSpan warmupTargetTime = TimeSpan.FromSeconds(0.1);
 
         private static decimal[] tDistribution = new decimal[]
