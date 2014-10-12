@@ -2137,20 +2137,11 @@ namespace
             }
             if (r2 != null)
             {
-                IParseResult<string> r4 = null;
-                r4 = this.ParseLiteral(ref cursor, "");
-                if (r4 != null)
                 {
-                    {
-                        var len = cursor.Location - startCursor1.Location;
-                        r1 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
-                            state.Subject.Substring(startCursor1.Location, len)
-                            );
-                    }
-                }
-                else
-                {
-                    cursor = startCursor1;
+                    var len = cursor.Location - startCursor1.Location;
+                    r1 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
+                        state.Subject.Substring(startCursor1.Location, len)
+                        );
                 }
             }
             else

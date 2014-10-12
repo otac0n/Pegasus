@@ -16,6 +16,20 @@ namespace Pegasus.Tests
 
     public class PegParserTests
     {
+        [TestCase("a = (('' ('') (())) (('' '') '' ''))")]
+        [TestCase("a = ('' '' ('' () () '') '' (('') ''))")]
+        [TestCase("a = '' ('' ((('' '')))) '' () '' '' ''")]
+        [TestCase("a = (((()) '' '') () ('' '') (() '' ()))")]
+        public void Parse_WhenTheGrammarIsEntirelyEmpty_ReturnsAnEmptySequence(string subject)
+        {
+            var parser = new PegParser();
+
+            var grammar = parser.Parse(subject);
+
+            var result = (SequenceExpression)grammar.Rules.Single().Expression;
+            Assert.That(result.Sequence, Is.Empty);
+        }
+
         [Test]
         [TestCase("a = [abc]i", true)]
         [TestCase("a = [abc]", false)]

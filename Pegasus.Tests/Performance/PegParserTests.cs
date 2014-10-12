@@ -13,11 +13,19 @@ namespace Pegasus.Tests.Performance
 
     public class PegParserTests : PerformanceTestBase
     {
+        private readonly string emptyGrammar;
         private readonly string pegGrammar;
 
         public PegParserTests()
         {
+            this.emptyGrammar = "a = ((())) ((() (() (((()) (() () ()))) ()) () (((((() (( ()) () (( ())))) (() (()))) () () (())) () (() (() () (())) ()) () () (((( ()) ())) ((()) (()) ) () () (((()) ) ()) ) ((() (() ()) ((()) ())))) ) ()) (((() ((() ((()) ()) ())) (() (() (()) () ((())))))) (((() ()))) (() ((() (()) () (()) (() ()))) ()) ()) () ()) ()";
             this.pegGrammar = File.ReadAllText("PegParser.peg");
+        }
+
+        [Evaluate]
+        public void EmptyGrammar()
+        {
+            new PegParser().Parse(this.emptyGrammar);
         }
 
         [Evaluate]

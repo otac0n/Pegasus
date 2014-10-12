@@ -30,7 +30,32 @@ namespace Pegasus.Expressions
                 throw new ArgumentNullException("sequence");
             }
 
-            this.sequence = sequence.ToList().AsReadOnly();
+            var flattened = new List<Expression>();
+            foreach (var e in sequence)
+            {
+                SequenceExpression sequenceExpression;
+                LiteralExpression literalExpression;
+                if ((sequenceExpression = e as SequenceExpression) != null)
+                {
+                    var last = sequenceExpression.Sequence.LastOrDefault() as CodeExpression;
+                    if (last == null || last.CodeType != CodeType.Result)
+                    {
+                        flattened.AddRange(sequenceExpression.Sequence);
+                        continue;
+                    }
+                }
+                else if ((literalExpression = e as LiteralExpression) != null)
+                {
+                    if (literalExpression.Value == string.Empty)
+                    {
+                        continue;
+                    }
+                }
+
+                flattened.Add(e);
+            }
+
+            this.sequence = flattened.AsReadOnly();
         }
 
         /// <summary>
