@@ -51,7 +51,7 @@ namespace
             {{@RenderCode members}}
         {{/each}}
         {{if memoize}}
-            private Dictionary<string, object> storage;
+            private Dictionary<CacheKey, object> storage;
         {{/if}}
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace
             {{if memoize}}
                 try
                 {
-                    this.storage = new Dictionary<string, object>();
+                    this.storage = new Dictionary<CacheKey, object>();
                     var cursor = new Cursor(subject, 0, fileName);
                     var result = this.{{: startRule }}(ref cursor);
                     if (result == null)

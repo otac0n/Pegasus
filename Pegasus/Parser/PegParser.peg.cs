@@ -51,7 +51,7 @@ namespace
            PegParser
     #line default
     {
-        private Dictionary<string, object> storage;
+        private Dictionary<CacheKey, object> storage;
 
         /// <summary>
         ///  Parses a string according to the rules of the <see cref="PegParser" /> grammar.
@@ -82,7 +82,7 @@ namespace
         {
             try
             {
-                this.storage = new Dictionary<string, object>();
+                this.storage = new Dictionary<CacheKey, object>();
                 var cursor = new Cursor(subject, 0, fileName);
                 var result = this.grammar(ref cursor);
                 if (result == null)
@@ -716,7 +716,7 @@ namespace
             > ruleFlag(ref Cursor cursor)
         {
             IParseResult<Identifier> r0 = null;
-            var storageKey = "ruleFlag:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("ruleFlag", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Identifier>)this.storage[storageKey];
@@ -778,7 +778,7 @@ namespace
             > expressionType(ref Cursor cursor)
         {
             IParseResult<CodeSpan> r0 = null;
-            var storageKey = "expressionType:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("expressionType", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<CodeSpan>)this.storage[storageKey];
@@ -1097,7 +1097,7 @@ namespace
             > labeled(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
-            var storageKey = "labeled:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("labeled", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Expression>)this.storage[storageKey];
@@ -1451,7 +1451,7 @@ namespace
             > primary(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
-            var storageKey = "primary:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("primary", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Expression>)this.storage[storageKey];
@@ -1655,7 +1655,7 @@ namespace
             > quantifier(ref Cursor cursor)
         {
             IParseResult<Quantifier> r0 = null;
-            var storageKey = "quantifier:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("quantifier", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Quantifier>)this.storage[storageKey];
@@ -2562,7 +2562,7 @@ namespace
             > identifier(ref Cursor cursor)
         {
             IParseResult<Identifier> r0 = null;
-            var storageKey = "identifier:" + cursor.StateKey + ":" + cursor.Location;
+            var storageKey = new CacheKey("identifier", cursor.StateKey, cursor.Location);
             if (this.storage.ContainsKey(storageKey))
             {
                 r0 = (IParseResult<Identifier>)this.storage[storageKey];

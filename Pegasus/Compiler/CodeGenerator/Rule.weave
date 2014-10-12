@@ -18,7 +18,7 @@
 {
     IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }} = null;
     {{if leftRecursive}}
-        var storageKey = {{= ToLiteral(model.Identifier.Name + ":") }} + cursor.StateKey + ":" + cursor.Location;
+        var storageKey = new CacheKey({{= ToLiteral(model.Identifier.Name) }}, cursor.StateKey, cursor.Location);
         if (this.storage.ContainsKey(storageKey))
         {
             {{: this.currentContext.ResultName }} = (IParseResult<{{= this.currentContext.ResultType }}>)this.storage[storageKey];
@@ -54,7 +54,7 @@
             cursor = {{: this.currentContext.ResultName }}.EndCursor;
         }
     {{elif memoize}}
-        var storageKey = {{= ToLiteral(model.Identifier.Name + ":") }} + cursor.StateKey + ":" + cursor.Location;
+        var storageKey = new CacheKey({{= ToLiteral(model.Identifier.Name) }}, cursor.StateKey, cursor.Location);
         if (this.storage.ContainsKey(storageKey))
         {
             {{: this.currentContext.ResultName }} = (IParseResult<{{= this.currentContext.ResultType }}>)this.storage[storageKey];
