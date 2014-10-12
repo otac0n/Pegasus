@@ -10,6 +10,8 @@ namespace Pegasus.Tests.Performance
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -157,6 +159,45 @@ namespace Pegasus.Tests.Performance
             Trace.WriteLine(string.Format("warmupMean: {0}:", FormatTime(warmupSamples, warmupMean, warmupStandardDeviation)));
             Trace.WriteLine(string.Format("testSamples: {0}", testSamples));
             Trace.WriteLine(string.Format("testMean: {0}:", FormatTime(testSamples, testMean, testStandardDeviation)));
+
+            var testName = TestContext.CurrentContext.Test.FullName;
+            var resultsFolder = Path.Combine(
+                TestContext.CurrentContext.TestDirectory,
+                "performance");
+            var outputPath = Path.Combine(
+                resultsFolder,
+                testName + ".csv");
+
+            var columns = "\"" + testName.Replace("\"", "\"\"") + "\",testSamples,testMax,testMin,testMean,testStandardDeviation,warmupSamples,warmupMean,warmupStandardDeviation,initialTime,baseTime,machine";
+
+            if (File.Exists(outputPath))
+            {
+                var lines = File.ReadAllLines(outputPath);
+                Assume.That(lines.Length, Is.GreaterThanOrEqualTo(1));
+                Assume.That(lines[0], Is.EqualTo(columns));
+            }
+            else
+            {
+                if (!Directory.Exists(resultsFolder))
+                {
+                    Directory.CreateDirectory(resultsFolder);
+                }
+
+                File.WriteAllLines(outputPath, new[]
+                {
+                    columns
+                });
+            }
+
+            var data = new[] { testSamples, testMean, testStandardDeviation, warmupSamples, warmupMean, warmupStandardDeviation, initialTime, baseTime }.Select(d => d.ToString(CultureInfo.InvariantCulture)).ToList();
+            data.Insert(0, DateTime.UtcNow.ToString("O").Replace("T", " ").TrimEnd('Z'));
+            data.Insert(2, "\"=INDIRECT(ADDRESS(ROW(),5))+CONFIDENCE(0.05,INDIRECT(ADDRESS(ROW(),6)),INDIRECT(ADDRESS(ROW(),2)))\"");
+            data.Insert(3, "\"=INDIRECT(ADDRESS(ROW(),5))-CONFIDENCE(0.05,INDIRECT(ADDRESS(ROW(),6)),INDIRECT(ADDRESS(ROW(),2)))\"");
+            data.Insert(11, Environment.MachineName);
+            File.AppendAllLines(outputPath, new[]
+            {
+                string.Join(",", data),
+            });
         }
 
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
