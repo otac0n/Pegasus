@@ -1178,29 +1178,48 @@ namespace
             if (r0 == null)
             {
                 var startCursor1 = cursor;
-                IParseResult<string> r6 = null;
+                IParseResult<CodeType> r6 = null;
+                var typeStart = cursor;
                 var startCursor2 = cursor;
-                IParseResult<string> r7 = null;
-                r7 = this.ParseLiteral(ref cursor, "#STATE", ignoreCase: true);
+                IParseResult<CodeType> r7 = null;
+                r7 = this.actionType(ref cursor);
                 if (r7 != null)
                 {
                     cursor = startCursor2;
-                    r6 = this.ReturnHelper<string>(cursor, ref cursor, state => r7.Value);
+                    r6 = this.ReturnHelper<CodeType>(cursor, ref cursor, state => r7.Value);
                 }
+                var typeEnd = cursor;
+                var type = ValueOrDefault(r6);
                 if (r6 != null)
                 {
-                    IParseResult<Expression> r8 = null;
-                    var codeStart = cursor;
-                    r8 = this.action(ref cursor);
-                    var codeEnd = cursor;
-                    var code = ValueOrDefault(r8);
+                    IParseResult<string> r8 = null;
+                    if (new Func<Cursor, bool>(state =>
+                        #line 65 "PegParser.peg"
+                        type == CodeType.State
+                        #line default
+                        )(cursor))
+                    {
+                        r8 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+                    }
                     if (r8 != null)
                     {
-                        r0 = this.ReturnHelper<Expression>(startCursor1, ref cursor, state =>
-                            #line 65 "PegParser.peg"
-                             code
-                            #line default
-                            );
+                        IParseResult<Expression> r9 = null;
+                        var codeStart = cursor;
+                        r9 = this.action(ref cursor);
+                        var codeEnd = cursor;
+                        var code = ValueOrDefault(r9);
+                        if (r9 != null)
+                        {
+                            r0 = this.ReturnHelper<Expression>(startCursor1, ref cursor, state =>
+                                #line 65 "PegParser.peg"
+                                                               code
+                                #line default
+                                );
+                        }
+                        else
+                        {
+                            cursor = startCursor1;
+                        }
                     }
                     else
                     {

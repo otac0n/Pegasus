@@ -62,7 +62,7 @@ labeled <Expression> -memoize
         new PrefixedExpression(label, expression)
     }
   / prefixed
-  / &"#STATE"i code:action { code }
+  / type:&actionType &{ type == CodeType.State } code:action { code }
 
 prefixed <Expression>
   = and _ code:code {
