@@ -180,8 +180,7 @@ string -lexical
   = string:(doubleQuotedString / singleQuotedString) { @string }
 
 doubleQuotedString
-  = '"' chars:doubleQuotedCharacter* '"' { string.Concat(chars) }
-  / '"' #ERROR{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }
+  = '"' chars:doubleQuotedCharacter* ('"' / #ERROR{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }) { string.Concat(chars) }
 
 doubleQuotedCharacter
   = simpleDoubleQuotedCharacter
@@ -195,8 +194,7 @@ simpleDoubleQuotedCharacter
   = !('"' / "\\" / eolChar) char:. { @char }
 
 singleQuotedString
-  = "'" chars:singleQuotedCharacter* "'" { string.Concat(chars) }
-  / "'" #ERROR{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }
+  = "'" chars:singleQuotedCharacter* ("'" / #ERROR{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }) { string.Concat(chars) }
 
 singleQuotedCharacter
   = simpleSingleQuotedCharacter
