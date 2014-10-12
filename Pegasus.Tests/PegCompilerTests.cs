@@ -32,6 +32,17 @@ namespace Pegasus.Tests
             Assert.That(error.IsWarning, Is.True);
         }
 
+        [TestCase("string")]
+        [TestCase("foo")]
+        [TestCase("bar")]
+        public void Compile_WhenTheGrammarContainsAnAndExpression_TheTypeOfTheAndExpressionReflectsTheInnerExpression(string type)
+        {
+            var grammar = new PegParser().Parse("a = x:&(<" + type + "> 'OK' { null })");
+            var compiled = PegCompiler.Compile(grammar);
+
+            Assert.That(compiled.ExpressionTypes[grammar.Rules.Single().Expression].ToString(), Is.EqualTo(type));
+        }
+
         [Test]
         public void Compile_WhenTheGrammarHasAZeroWidthLexicalRule_ProducesAParserThatReturnsTheLexicalElements()
         {
@@ -184,6 +195,18 @@ namespace Pegasus.Tests
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "b@1:3", "a@0:4" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheResultOfAnAndExpressionIsReturned_ReturnsTheResultOfTheAndExpression([Range(0, 9)] int value)
+        {
+            var grammar = new PegParser().Parse("a <int> = x:&(<int> d:. { int.Parse(d) }) { x }");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<int>(compiled.Code);
+
+            var result = parser.Parse(value.ToString());
+
+            Assert.That(result, Is.EqualTo(value));
         }
 
         [Test]

@@ -15,7 +15,7 @@ if ({{: this.currentContext.ResultName }} {{if mustMatch}}!={{else}}=={{/if}} nu
     {{if mustMatch}}
         cursor = {{: startCursorName }};
     {{/if}}
-    {{: oldContext.ResultName }} = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
+    {{: oldContext.ResultName }} = this.ReturnHelper<{{= oldContext.ResultType }}>(cursor, ref cursor, state => {{if mustMatch}}{{: this.currentContext.ResultName }}.Value{{else}}string.Empty{{/if}}{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
 }
 {{if !mustMatch}}
     else

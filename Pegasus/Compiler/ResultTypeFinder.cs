@@ -81,7 +81,7 @@ namespace Pegasus.Compiler
             protected override void WalkAndExpression(AndExpression andExpression)
             {
                 base.WalkAndExpression(andExpression);
-                this.Set(andExpression, "string");
+                this.Set(andExpression, andExpression.Expression);
             }
 
             protected override void WalkChoiceExpression(ChoiceExpression choiceExpression)

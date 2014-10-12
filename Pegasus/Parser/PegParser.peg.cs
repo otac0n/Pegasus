@@ -1185,7 +1185,7 @@ namespace
                 if (r7 != null)
                 {
                     cursor = startCursor2;
-                    r6 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
+                    r6 = this.ReturnHelper<string>(cursor, ref cursor, state => r7.Value);
                 }
                 if (r6 != null)
                 {
