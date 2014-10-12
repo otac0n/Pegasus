@@ -10,6 +10,10 @@
         cursor = state.WithMutability(mutable: false);
     }
     {{: this.currentContext.ResultName }} = this.ReturnHelper<string>({{: startCursorName }}, ref cursor, state => null{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
+{{elif model.CodeType == CodeType.Error}}
+    throw this.ExceptionHelper(cursor, state =>
+        {{@RenderCode model.CodeSpan}}
+        );
 {{else}}
     {{
         throw new InvalidOperationException("Code expressions are only valid at the end of a sequence expression.");

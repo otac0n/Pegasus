@@ -8,6 +8,7 @@
 
 namespace Pegasus.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using NUnit.Framework;
@@ -41,6 +42,26 @@ namespace Pegasus.Tests
             var compiled = PegCompiler.Compile(grammar);
 
             Assert.That(compiled.ExpressionTypes[grammar.Rules.Single().Expression].ToString(), Is.EqualTo(type));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasAnErrorExpressionInTheMiddleOfASequence_ThrowsException()
+        {
+            var grammar = new PegParser().Parse("a = 'OK' #ERROR{ \"OK\" } 'OK'");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            Assert.That(() => parser.Parse("OK"), Throws.InstanceOf<FormatException>().With.Message.EqualTo("OK"));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasAnErrorExpressionInTheMiddleOfASequenceWrappedInParentheses_ThrowsException()
+        {
+            var grammar = new PegParser().Parse("a = 'OK' (#ERROR{ \"OK\" }) 'OK'");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            Assert.That(() => parser.Parse("OK"), Throws.InstanceOf<FormatException>().With.Message.EqualTo("OK"));
         }
 
         [Test]

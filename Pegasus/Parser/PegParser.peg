@@ -42,7 +42,7 @@ expression <Expression>
 
 expressionType <CodeSpan> -memoize
   = lt _ name:type _ gt { name }
-  / lt #ERROR{ "PEG0014:" + Resources.PEG0014_ERROR_PARSER_InvalidType }
+  / &lt #ERROR{ "PEG0014:" + Resources.PEG0014_ERROR_PARSER_InvalidType }
 
 choice <Expression>
   = choices:sequence<1,,_ slash _> { choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) }
@@ -62,7 +62,7 @@ labeled <Expression> -memoize
         new PrefixedExpression(label, expression)
     }
   / prefixed
-  / type:&actionType &{ type == CodeType.State } code:action { code }
+  / type:&actionType &{ type != CodeType.Result } code:action { code }
 
 prefixed <Expression>
   = and _ code:code {
@@ -306,4 +306,4 @@ whitespace -lexical
 
 EOF
   = !.
-  / unexpected:. #ERROR{ "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_ERROR_PARSER_UnexpectedEndOfInput, unexpected) }
+  / unexpected:&. #ERROR{ "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_ERROR_PARSER_UnexpectedEndOfInput, unexpected) }

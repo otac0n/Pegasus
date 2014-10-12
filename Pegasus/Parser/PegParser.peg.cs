@@ -852,12 +852,19 @@ namespace
             {
                 var startCursor1 = cursor;
                 IParseResult<string> r6 = null;
-                r6 = this.lt(ref cursor);
+                var startCursor2 = cursor;
+                IParseResult<string> r7 = null;
+                r7 = this.lt(ref cursor);
+                if (r7 != null)
+                {
+                    cursor = startCursor2;
+                    r6 = this.ReturnHelper<string>(cursor, ref cursor, state => r7.Value);
+                }
                 if (r6 != null)
                 {
-                    throw this.ExceptionHelper(startCursor1, state =>
+                    throw this.ExceptionHelper(cursor, state =>
                         #line 45 "PegParser.peg"
-               "PEG0014:" + Resources.PEG0014_ERROR_PARSER_InvalidType
+                "PEG0014:" + Resources.PEG0014_ERROR_PARSER_InvalidType
                         #line default
                         );
                 }
@@ -1195,7 +1202,7 @@ namespace
                     IParseResult<string> r8 = null;
                     if (new Func<Cursor, bool>(state =>
                         #line 65 "PegParser.peg"
-                        type == CodeType.State
+                        type != CodeType.Result
                         #line default
                         )(cursor))
                     {
@@ -1212,7 +1219,7 @@ namespace
                         {
                             r0 = this.ReturnHelper<Expression>(startCursor1, ref cursor, state =>
                                 #line 65 "PegParser.peg"
-                                                               code
+                                                                code
                                 #line default
                                 );
                         }
@@ -2315,7 +2322,7 @@ namespace
                 r4 = this.ParseLiteral(ref cursor, "{");
                 if (r4 != null)
                 {
-                    throw this.ExceptionHelper(startCursor1, state =>
+                    throw this.ExceptionHelper(cursor, state =>
                         #line 119 "PegParser.peg"
                 "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode
                         #line default
@@ -3360,8 +3367,7 @@ namespace
                     }
                     if (r4 == null)
                     {
-                        var startCursor2 = cursor;
-                        throw this.ExceptionHelper(startCursor2, state =>
+                        throw this.ExceptionHelper(cursor, state =>
                             #line 183 "PegParser.peg"
                                                     "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString
                             #line default
@@ -3513,8 +3519,7 @@ namespace
                     }
                     if (r4 == null)
                     {
-                        var startCursor2 = cursor;
-                        throw this.ExceptionHelper(startCursor2, state =>
+                        throw this.ExceptionHelper(cursor, state =>
                             #line 197 "PegParser.peg"
                                                     "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString
                             #line default
@@ -3699,8 +3704,7 @@ namespace
                         }
                         if (r6 == null)
                         {
-                            var startCursor3 = cursor;
-                            throw this.ExceptionHelper(startCursor3, state =>
+                            throw this.ExceptionHelper(cursor, state =>
                                 #line 211 "PegParser.peg"
                                                                                              "PEG0010:" + Resources.PEG0010_ERROR_PARSER_UnterminatedClass
                                 #line default
@@ -4531,14 +4535,21 @@ namespace
                 var startCursor1 = cursor;
                 IParseResult<string> r2 = null;
                 var unexpectedStart = cursor;
-                r2 = this.ParseAny(ref cursor);
+                var startCursor2 = cursor;
+                IParseResult<string> r3 = null;
+                r3 = this.ParseAny(ref cursor);
+                if (r3 != null)
+                {
+                    cursor = startCursor2;
+                    r2 = this.ReturnHelper<string>(cursor, ref cursor, state => r3.Value);
+                }
                 var unexpectedEnd = cursor;
                 var unexpected = ValueOrDefault(r2);
                 if (r2 != null)
                 {
-                    throw this.ExceptionHelper(startCursor1, state =>
+                    throw this.ExceptionHelper(cursor, state =>
                         #line 309 "PegParser.peg"
-                         "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_ERROR_PARSER_UnexpectedEndOfInput, unexpected)
+                          "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_ERROR_PARSER_UnexpectedEndOfInput, unexpected)
                         #line default
                         );
                 }
