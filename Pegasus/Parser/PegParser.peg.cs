@@ -767,10 +767,7 @@ namespace
             > expression(ref Cursor cursor)
         {
             IParseResult<Expression> r0 = null;
-            var choiceStart = cursor;
             r0 = this.choice(ref cursor);
-            var choiceEnd = cursor;
-            var choice = ValueOrDefault(r0);
             return r0;
         }
 
