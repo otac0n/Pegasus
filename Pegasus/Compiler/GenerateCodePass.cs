@@ -19,21 +19,23 @@ namespace Pegasus.Compiler
 
     internal class GenerateCodePass : CompilePass
     {
-        private static readonly Lazy<IList<string>> allErrors = new Lazy<IList<string>>(() =>
+        private static readonly Lazy<IList<string>> AllErrors = new Lazy<IList<string>>(() =>
         {
+            var additionalErrors = new[] { "CS0000" };
+
             return (from p in typeof(Resources).GetProperties(BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetProperty)
                     let parts = p.Name.Split('_')
                     where parts.Length == 3
                     where parts[1] == "ERROR"
                     select parts[0])
-                    .Concat(new[] { "CS0000" })
+                    .Concat(additionalErrors)
                     .ToList()
                     .AsReadOnly();
         });
 
         public override IList<string> BlockedByErrors
         {
-            get { return allErrors.Value; }
+            get { return AllErrors.Value; }
         }
 
         public override IList<string> ErrorsProduced

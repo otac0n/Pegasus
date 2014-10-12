@@ -2,10 +2,16 @@
 {{
     var startCursorName = this.CreateVariable("startCursor");
 }}
-var {{: startCursorName }} = cursor;
-{
-    var state = cursor.WithMutability(mutable: true);
-    {{@RenderCode model.CodeSpan}}
-    cursor = state.WithMutability(mutable: false);
-}
-{{: this.currentContext.ResultName }} = this.ReturnHelper<string>({{: startCursorName }}, ref cursor, state => null{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
+{{if model.CodeType == CodeType.State}}
+    var {{: startCursorName }} = cursor;
+    {
+        var state = cursor.WithMutability(mutable: true);
+        {{@RenderCode model.CodeSpan}}
+        cursor = state.WithMutability(mutable: false);
+    }
+    {{: this.currentContext.ResultName }} = this.ReturnHelper<string>({{: startCursorName }}, ref cursor, state => null{{if this.currentContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(this.currentContext.ResultRuleName) }}{{/if}});
+{{else}}
+    {{
+        throw new InvalidOperationException("Code expressions are only valid at the end of a sequence expression.");
+    }}
+{{/if}}

@@ -8,7 +8,6 @@
 
 namespace Pegasus.Compiler
 {
-    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -83,11 +82,6 @@ namespace Pegasus.Compiler
 
         protected override void WalkCodeExpression(CodeExpression codeExpression)
         {
-            if (codeExpression.CodeType != CodeType.State)
-            {
-                throw new InvalidOperationException("Code expressions are only valid at the end of a sequence expression.");
-            }
-
             this.RenderCodeExpression(codeExpression, this.writer, this.currentIndentation);
         }
 

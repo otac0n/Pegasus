@@ -38,6 +38,7 @@ namespace Pegasus.Compiler
         /// <returns>The expression dispatcher that will take perform specified action for a given <see cref="Expression"/>.</returns>
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "This function is not actually complex.")]
         [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Justification = "In order to avoid keyword collision and to maintain a consistent API, these are intentionally pascal-cased.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "In order to avoid keyword collision and to maintain a consistent API, these are intentionally pascal-cased.")]
         public static Action<Expression> CreateDispatcher(
             Action<AndExpression> And = null,
             Action<AndCodeExpression> AndCode = null,
