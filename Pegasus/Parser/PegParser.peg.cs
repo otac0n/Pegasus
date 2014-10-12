@@ -3208,14 +3208,7 @@ namespace
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
             var valueStart = cursor;
-            if (r1 == null)
-            {
-                r1 = this.doubleQuotedString(ref cursor);
-            }
-            if (r1 == null)
-            {
-                r1 = this.singleQuotedString(ref cursor);
-            }
+            r1 = this.@string(ref cursor);
             var valueEnd = cursor;
             var value = ValueOrDefault(r1);
             if (r1 != null)
@@ -3254,7 +3247,7 @@ namespace
                 {
                     r0 = this.ReturnHelper<Expression>(startCursor0, ref cursor, state =>
                         #line 175 "PegParser.peg"
-                                                                                        
+                                                     
         new LiteralExpression(valueStart, flagsEnd, value, ignoreCase: flags.Contains('i'), fromResource: flags.Contains('r'))
                         #line default
                         , ruleName: "literal");
