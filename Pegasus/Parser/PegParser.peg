@@ -38,7 +38,7 @@ ruleFlag <Identifier> -memoize -lexical
   = "-" flag:identifier { flag }
 
 expression <Expression>
-  = choice:choice
+  = choice
 
 expressionType <CodeSpan> -memoize
   = lt _ name:type _ gt { name }
