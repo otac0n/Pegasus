@@ -36,7 +36,7 @@ namespace Pegasus.Common
             unchecked
             {
                 var hash = (int)2166136261;
-                hash = hash * 16777619 ^ this.ruleName.GetHashCode();
+                hash = hash * 16777619 ^ (this.ruleName == null ? 0 : this.ruleName.GetHashCode());
                 hash = hash * 16777619 ^ this.stateKey;
                 hash = hash * 16777619 ^ this.location;
                 this.hash = hash;
