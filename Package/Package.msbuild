@@ -17,8 +17,8 @@
     <Copy SourceFiles="Pegasus.targets" DestinationFolder="obj\$(Configuration)\build" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\net40" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\portable-net45-netcore45-wpa81-MonoAndroid1-MonoTouch1" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\portable-net45-netcore45-wpa81-MonoAndroid1-MonoTouch1" />
     <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\$(Configuration)\readme.txt" />
     <PropertyGroup>
       <NuSpec>$([System.IO.File]::ReadAllText("Pegasus.nuspec").Replace("$version$", $(PegasusVersion)).Replace("$version-short$", $(PegasusVersionShort)))</NuSpec>
