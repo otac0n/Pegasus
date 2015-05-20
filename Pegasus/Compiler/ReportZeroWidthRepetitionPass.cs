@@ -26,17 +26,20 @@ namespace Pegasus.Compiler
 
         public override void Run(Grammar grammar, CompileResult result)
         {
+            var containsAssertions = ContainsAssertionsEvaluator.Evaluate(grammar);
             var zeroWidth = ZeroWidthEvaluator.Evaluate(grammar);
-            new ZeroWidthRepetitionTreeWalker(zeroWidth, result).WalkGrammar(grammar);
+            new ZeroWidthRepetitionTreeWalker(containsAssertions, zeroWidth, result).WalkGrammar(grammar);
         }
 
         private class ZeroWidthRepetitionTreeWalker : ExpressionTreeWalker
         {
+            private readonly Dictionary<Expression, bool> containsAssertions;
             private readonly CompileResult result;
             private readonly Dictionary<Expression, bool> zeroWidth;
 
-            public ZeroWidthRepetitionTreeWalker(Dictionary<Expression, bool> zeroWidth, CompileResult result)
+            public ZeroWidthRepetitionTreeWalker(Dictionary<Expression, bool> containsAssertions, Dictionary<Expression, bool> zeroWidth, CompileResult result)
             {
+                this.containsAssertions = containsAssertions;
                 this.result = result;
                 this.zeroWidth = zeroWidth;
             }
@@ -50,7 +53,14 @@ namespace Pegasus.Compiler
                     if (repetitionExpression.Quantifier.Max == null)
                     {
                         var cursor = repetitionExpression.Quantifier.Start;
-                        this.result.AddCompilerError(cursor, () => Resources.PEG0021_ERROR_ZeroWidthRepetition);
+                        if (this.containsAssertions[repetitionExpression.Expression] || (repetitionExpression.Quantifier.Delimiter != null && this.containsAssertions[repetitionExpression.Quantifier.Delimiter]))
+                        {
+                            this.result.AddCompilerError(cursor, () => Resources.PEG0021_WARNING_ZeroWidthRepetition);
+                        }
+                        else
+                        {
+                            this.result.AddCompilerError(cursor, () => Resources.PEG0021_ERROR_ZeroWidthRepetition);
+                        }
                     }
                     else if (repetitionExpression.Quantifier.Min != repetitionExpression.Quantifier.Max)
                     {
