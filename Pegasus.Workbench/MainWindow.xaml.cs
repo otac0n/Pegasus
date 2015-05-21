@@ -121,18 +121,9 @@ namespace Pegasus.Workbench
         [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "This is standard for event handlers.")]
         public void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (e != null && this.ViewModel.GrammarChanged)
+            if (e != null && this.SaveOrDiscard() == MessageBoxResult.Cancel)
             {
-                switch (MessageBox.Show(string.Format(CultureInfo.CurrentCulture, Properties.Resources.SaveChangesToFile, Path.GetFileName(this.ViewModel.GrammarFileName)), this.Title, MessageBoxButton.YesNoCancel))
-                {
-                    case MessageBoxResult.Cancel:
-                        e.Cancel = true;
-                        return;
-
-                    case MessageBoxResult.Yes:
-                        this.ViewModel.Save.Execute(null);
-                        break;
-                }
+                e.Cancel = true;
             }
         }
 
@@ -179,17 +170,9 @@ namespace Pegasus.Workbench
 
         private void Open(object sender, ExecutedRoutedEventArgs e)
         {
-            if (this.ViewModel.GrammarChanged)
+            if (this.SaveOrDiscard() == MessageBoxResult.Cancel)
             {
-                switch (MessageBox.Show(string.Format(CultureInfo.CurrentCulture, Properties.Resources.SaveChangesToFile, Path.GetFileName(this.ViewModel.GrammarFileName)), this.Title, MessageBoxButton.YesNoCancel))
-                {
-                    case MessageBoxResult.Cancel:
-                        return;
-
-                    case MessageBoxResult.Yes:
-                        this.ViewModel.Save.Execute(null);
-                        break;
-                }
+                return;
             }
 
             var dialog = new OpenFileDialog
@@ -235,6 +218,29 @@ namespace Pegasus.Workbench
             {
                 this.ViewModel.SaveAs.Execute(dialog.FileName);
             }
+        }
+
+        private MessageBoxResult SaveOrDiscard()
+        {
+            if (!this.ViewModel.GrammarChanged)
+            {
+                return MessageBoxResult.OK;
+            }
+
+            var result = MessageBox.Show(string.Format(CultureInfo.CurrentCulture, Properties.Resources.SaveChangesToFile, Path.GetFileName(this.ViewModel.GrammarFileName)), this.Title, MessageBoxButton.YesNoCancel);
+
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    this.ViewModel.Save.Execute(null);
+                    goto case MessageBoxResult.No;
+
+                case MessageBoxResult.No:
+                    result = MessageBoxResult.OK;
+                    break;
+            }
+
+            return result;
         }
     }
 }
