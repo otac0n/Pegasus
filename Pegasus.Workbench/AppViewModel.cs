@@ -14,6 +14,7 @@ namespace Pegasus.Workbench
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
+    using System.Reactive.Disposables;
     using System.Reactive.Linq;
     using Newtonsoft.Json;
     using ReactiveUI;
@@ -23,7 +24,7 @@ namespace Pegasus.Workbench
     /// </summary>
     public sealed class AppViewModel : ReactiveObject, IDisposable
     {
-        private readonly IDisposable[] pipeline;
+        private readonly CompositeDisposable pipeline;
 
         private IList<CompilerError> errors = new CompilerError[0];
         private bool grammarChanged = false;
@@ -49,7 +50,7 @@ namespace Pegasus.Workbench
             var pegCompiler = new Pipeline.PegCompiler(pegParser.Grammars);
             var csCompiler = new Pipeline.CsCompiler(pegCompiler.Codes.Zip(pegParser.Grammars, Tuple.Create), grammarNameChanges);
             var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges, testNameChanges);
-            this.pipeline = new IDisposable[] { pegParser, pegCompiler, csCompiler, testParser };
+            this.pipeline = new CompositeDisposable(pegParser, pegCompiler, csCompiler, testParser);
 
             testParser.Results.Select(r =>
             {
@@ -184,10 +185,7 @@ namespace Pegasus.Workbench
         /// </summary>
         public void Dispose()
         {
-            foreach (var pipe in this.pipeline)
-            {
-                pipe.Dispose();
-            }
+            this.pipeline.Dispose();
         }
     }
 }
