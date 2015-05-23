@@ -25,6 +25,7 @@ namespace Pegasus.Workbench
     public sealed class AppViewModel : ReactiveObject, IDisposable
     {
         private readonly CompositeDisposable pipeline;
+        private readonly IReadOnlyList<Tutorial> tutorials;
 
         private IList<CompilerError> errors = new CompilerError[0];
         private bool grammarChanged = false;
@@ -41,6 +42,8 @@ namespace Pegasus.Workbench
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The pipeline is disposed properly.")]
         public AppViewModel()
         {
+            this.tutorials = Tutorial.FindAll().AsReadOnly();
+
             var grammarNameChanges = this.WhenAny(x => x.GrammarFileName, x => x.Value);
             var grammarTextChanges = this.WhenAny(x => x.GrammarText, x => x.Value);
             var testNameChanges = this.WhenAny(x => x.TestFileName, x => x.Value);
@@ -94,6 +97,16 @@ namespace Pegasus.Workbench
                 this.GrammarChanged = false;
                 this.TestText = "";
             });
+
+            this.LoadTutorial = new ReactiveCommand();
+            this.LoadTutorial.RegisterAsyncAction(_ =>
+            {
+                var tutorial = (Tutorial)_;
+                this.GrammarText = File.Exists(tutorial.FileName) ? File.ReadAllText(tutorial.FileName) : tutorial.GrammarText;
+                this.GrammarFileName = tutorial.FileName;
+                this.GrammarChanged = false;
+                this.TestText = tutorial.TestText;
+            });
         }
 
         /// <summary>
@@ -146,6 +159,11 @@ namespace Pegasus.Workbench
         public IReactiveCommand Load { get; private set; }
 
         /// <summary>
+        /// Gets the load tutorial command.
+        /// </summary>
+        public IReactiveCommand LoadTutorial { get; private set; }
+
+        /// <summary>
         /// Gets the save command.
         /// </summary>
         public IReactiveCommand Save { get; private set; }
@@ -181,6 +199,11 @@ namespace Pegasus.Workbench
             get { return this.testText; }
             set { this.RaiseAndSetIfChanged(ref this.testText, value); }
         }
+
+        /// <summary>
+        /// Gets the list of tutorials.
+        /// </summary>
+        public IReadOnlyList<Tutorial> Tutorials { get { return this.tutorials; } }
 
         /// <summary>
         /// Disposes the object.

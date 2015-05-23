@@ -168,6 +168,16 @@ namespace Pegasus.Workbench
             // Note: This does not occur until both TextEditor controls have been shown at least once.
         }
 
+        private void LoadTutorial(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (this.SaveOrDiscard() == MessageBoxResult.Cancel)
+            {
+                return;
+            }
+
+            this.ViewModel.LoadTutorial.Execute(e.Parameter);
+        }
+
         private void Open(object sender, ExecutedRoutedEventArgs e)
         {
             if (this.SaveOrDiscard() == MessageBoxResult.Cancel)
