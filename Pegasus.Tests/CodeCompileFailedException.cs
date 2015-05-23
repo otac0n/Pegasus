@@ -16,6 +16,7 @@ namespace Pegasus.Tests
     public class CodeCompileFailedException : Exception
     {
         public CodeCompileFailedException(IEnumerable<CompilerError> errors, IEnumerable<string> messages)
+            : base("Compile failed:" + Environment.NewLine + string.Join(Environment.NewLine, errors.Select(e => e.ToString())))
         {
             this.Errors = errors.ToList().AsReadOnly();
             this.Messages = messages.ToList().AsReadOnly();

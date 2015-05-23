@@ -97,5 +97,11 @@ namespace Pegasus.Workbench
 
             return tutorials.ToList();
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return this.name;
+        }
     }
 }
