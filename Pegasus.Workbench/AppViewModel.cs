@@ -70,6 +70,7 @@ namespace Pegasus.Workbench
             this.Save = new ReactiveCommand(grammarNameChanges.Select(n => n != "Untitled.peg"));
             this.Save.RegisterAsyncAction(_ =>
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(this.grammarFileName));
                 File.WriteAllText(this.grammarFileName, this.grammarText);
                 this.GrammarChanged = false;
             });
@@ -78,6 +79,7 @@ namespace Pegasus.Workbench
             this.SaveAs.RegisterAsyncAction(_ =>
             {
                 var fileName = (string)_;
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
                 File.WriteAllText(fileName, this.grammarText);
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
