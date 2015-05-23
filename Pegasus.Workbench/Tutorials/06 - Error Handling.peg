@@ -1,0 +1,16 @@
+// This grammar will match any set of balanced
+//  parentheses and will return a similarly
+//  nested IList<object>.
+// Note the two different ways that error
+//  expressions have been used to produce
+//  messages specific to the problem detected.
+
+subject <object>
+    = p:prens* EOF { p }
+
+prens <object>
+    = "(" p:prens* (")" / #ERROR{ "Expected )" }) { p }
+
+EOF
+    = !.
+    / c:. #ERROR{ "Unexpected character " + c }

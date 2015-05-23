@@ -106,6 +106,8 @@
     <EmbeddedResource Include="Tutorials\03 - Code Blocks.txt" />
     <EmbeddedResource Include="Tutorials\04 - Class Members.peg" />
     <EmbeddedResource Include="Tutorials\04 - Class Members.txt" />
+    <EmbeddedResource Include="Tutorials\05 - Calculator.peg" />
+    <EmbeddedResource Include="Tutorials\06 - Error Handling.peg" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -169,6 +171,12 @@
     <Resource Include="..\Pegasus.ico">
       <Link>Resources\Pegasus.ico</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Tutorials\05 - Calculator.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Tutorials\06 - Error Handling.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" Condition="Exists('$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets')" />
