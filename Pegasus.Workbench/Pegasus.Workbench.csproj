@@ -98,14 +98,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <EmbeddedResource Include="Tutorials\01.peg" />
-    <EmbeddedResource Include="Tutorials\01.txt" />
-    <EmbeddedResource Include="Tutorials\02.peg" />
-    <EmbeddedResource Include="Tutorials\02.txt" />
-    <EmbeddedResource Include="Tutorials\03.peg" />
-    <EmbeddedResource Include="Tutorials\03.txt" />
-    <EmbeddedResource Include="Tutorials\04.peg" />
-    <EmbeddedResource Include="Tutorials\04.txt" />
+    <EmbeddedResource Include="Tutorials\01 - Hello, world!.peg" />
+    <EmbeddedResource Include="Tutorials\01 - Hello, world!.txt" />
+    <EmbeddedResource Include="Tutorials\02 - Variables.peg" />
+    <EmbeddedResource Include="Tutorials\02 - Variables.txt" />
+    <EmbeddedResource Include="Tutorials\03 - Code Blocks.peg" />
+    <EmbeddedResource Include="Tutorials\03 - Code Blocks.txt" />
+    <EmbeddedResource Include="Tutorials\04 - Class Members.peg" />
+    <EmbeddedResource Include="Tutorials\04 - Class Members.txt" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
