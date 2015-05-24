@@ -270,6 +270,15 @@ namespace Pegasus.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Repetition of a zero-width expression will always result in the maximum repetition count..
         /// </summary>
+        internal static string PEG0022_ERROR_ZeroWidthRepetition {
+            get {
+                return ResourceManager.GetString("PEG0022_ERROR_ZeroWidthRepetition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repetition of a zero-width expression may always result in the maximum repetition count..
+        /// </summary>
         internal static string PEG0022_WARNING_ZeroWidthRepetition {
             get {
                 return ResourceManager.GetString("PEG0022_WARNING_ZeroWidthRepetition", resourceCulture);

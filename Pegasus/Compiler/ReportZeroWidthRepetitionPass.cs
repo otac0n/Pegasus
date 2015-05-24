@@ -50,10 +50,12 @@ namespace Pegasus.Compiler
 
                 if (this.zeroWidth[repetitionExpression.Expression] && (repetitionExpression.Quantifier.Delimiter == null || this.zeroWidth[repetitionExpression.Quantifier.Delimiter]))
                 {
+                    var containsAssertions = this.containsAssertions[repetitionExpression.Expression] || (repetitionExpression.Quantifier.Delimiter != null && this.containsAssertions[repetitionExpression.Quantifier.Delimiter]);
+                    var cursor = repetitionExpression.Quantifier.Start;
+
                     if (repetitionExpression.Quantifier.Max == null)
                     {
-                        var cursor = repetitionExpression.Quantifier.Start;
-                        if (this.containsAssertions[repetitionExpression.Expression] || (repetitionExpression.Quantifier.Delimiter != null && this.containsAssertions[repetitionExpression.Quantifier.Delimiter]))
+                        if (containsAssertions)
                         {
                             this.result.AddCompilerError(cursor, () => Resources.PEG0021_WARNING_ZeroWidthRepetition);
                         }
@@ -64,8 +66,14 @@ namespace Pegasus.Compiler
                     }
                     else if (repetitionExpression.Quantifier.Min != repetitionExpression.Quantifier.Max)
                     {
-                        var cursor = repetitionExpression.Quantifier.Start;
-                        this.result.AddCompilerError(cursor, () => Resources.PEG0022_WARNING_ZeroWidthRepetition);
+                        if (containsAssertions)
+                        {
+                            this.result.AddCompilerError(cursor, () => Resources.PEG0022_WARNING_ZeroWidthRepetition);
+                        }
+                        else
+                        {
+                            this.result.AddCompilerError(cursor, () => Resources.PEG0022_ERROR_ZeroWidthRepetition);
+                        }
                     }
                 }
             }
