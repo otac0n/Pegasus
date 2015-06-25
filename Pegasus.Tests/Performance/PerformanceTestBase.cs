@@ -207,17 +207,17 @@ namespace Pegasus.Tests.Performance
 
         private class RunningStat
         {
-            private int n = 0;
-            private decimal oldM, newM, oldS, newS;
+            private int count = 0;
+            private decimal mean, s;
 
             public int Count
             {
-                get { return this.n; }
+                get { return this.count; }
             }
 
             public decimal Mean
             {
-                get { return this.n > 0 ? this.newM : 0.0m; }
+                get { return this.count > 0 ? this.mean : 0.0m; }
             }
 
             public decimal StandardDeviation
@@ -227,32 +227,27 @@ namespace Pegasus.Tests.Performance
 
             public decimal Variance
             {
-                get { return this.n > 1 ? this.newS / (this.n - 1) : 0.0m; }
+                get { return this.count > 1 ? this.s / (this.count - 1) : 0.0m; }
             }
 
             public void Clear()
             {
-                this.n = 0;
+                this.count = 0;
             }
 
             public void Push(decimal value)
             {
-                this.n++;
-
-                // See Knuth TAOCP vol 2, 3rd edition, page 232
-                if (this.n == 1)
+                this.count++;
+                if (this.count == 1)
                 {
-                    this.oldM = this.newM = value;
-                    this.oldS = 0.0m;
+                    this.mean = value;
                 }
                 else
                 {
-                    this.newM = this.oldM + (value - this.oldM) / this.n;
-                    this.newS = this.oldS + (value - this.oldM) * (value - this.newM);
-
-                    // set up for next iteration
-                    this.oldM = this.newM;
-                    this.oldS = this.newS;
+                    var a = value - this.mean;
+                    this.mean = this.mean + (value - this.mean) / this.count;
+                    var b = value - this.mean;
+                    this.s += a * b;
                 }
             }
         }
