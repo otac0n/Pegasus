@@ -38,11 +38,12 @@ namespace Pegasus.Workbench
         /// <summary>
         /// Initializes a new instance of the <see cref="AppViewModel"/> class.
         /// </summary>
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "The reactive nature of this object causes the code analyzer to assume more complexity than actually exists.")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "The reactive nature of this object leads to many intermediary types.")]
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The pipeline is disposed properly.")]
         public AppViewModel()
         {
-            this.tutorials = Tutorial.FindAll().AsReadOnly();
+            this.tutorials = Tutorial.FindAll();
 
             var grammarNameChanges = this.WhenAny(x => x.GrammarFileName, x => x.Value);
             var grammarTextChanges = this.WhenAny(x => x.GrammarText, x => x.Value);
@@ -203,7 +204,10 @@ namespace Pegasus.Workbench
         /// <summary>
         /// Gets the list of tutorials.
         /// </summary>
-        public IReadOnlyList<Tutorial> Tutorials { get { return this.tutorials; } }
+        public IReadOnlyList<Tutorial> Tutorials
+        {
+            get { return this.tutorials; }
+        }
 
         /// <summary>
         /// Disposes the object.

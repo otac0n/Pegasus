@@ -9,6 +9,7 @@
 namespace Pegasus.Tests.Workbench
 {
     using System.Collections.Generic;
+    using System.Linq;
     using NUnit.Framework;
     using Pegasus.Compiler;
     using Pegasus.Parser;
@@ -17,11 +18,11 @@ namespace Pegasus.Tests.Workbench
     [TestFixture]
     public class TutorialTests
     {
-        private List<TestCaseData> Tutorials
+        private IEnumerable<TestCaseData> Tutorials
         {
             get
             {
-                return Tutorial.FindAll().ConvertAll(t => new TestCaseData(t));
+                return Tutorial.FindAll().Select(t => new TestCaseData(t));
             }
         }
 

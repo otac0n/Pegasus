@@ -8,6 +8,7 @@
 
 namespace Pegasus.Workbench
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows.Input;
 
     /// <summary>
@@ -15,11 +16,10 @@ namespace Pegasus.Workbench
     /// </summary>
     public static class Commands
     {
-        private static readonly RoutedUICommand loadTutorial = new RoutedUICommand("Load Tutorial", "LoadTutorial", typeof(Commands));
-
         /// <summary>
-        /// Get the "LoadTutorial" command.
+        /// Gets the "LoadTutorial" command.
         /// </summary>
-        public static RoutedUICommand LoadTutorial { get { return loadTutorial; } }
+        [SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "This is the intended usage of the RoutedUICommand class.")]
+        public static readonly RoutedUICommand LoadTutorial = new RoutedUICommand("Load Tutorial", "LoadTutorial", typeof(Commands));
     }
 }

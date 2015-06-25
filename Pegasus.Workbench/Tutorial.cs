@@ -13,12 +13,16 @@ namespace Pegasus.Workbench
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
+    using System.Threading;
 
     /// <summary>
     /// Implements loading of tutorials.
     /// </summary>
     public class Tutorial
     {
+        private static IReadOnlyList<Tutorial> allTutorials;
+
         private readonly string fileName;
         private readonly string grammar;
         private readonly string name;
@@ -69,33 +73,34 @@ namespace Pegasus.Workbench
         /// Loads all tutorials found in the assembly.
         /// </summary>
         /// <returns>All tutorials that were found.</returns>
-        public static List<Tutorial> FindAll()
+        public static IReadOnlyList<Tutorial> FindAll()
         {
-            var assembly = Assembly.GetExecutingAssembly();
-
-            var resourcePrefix = assembly.GetName().Name + ".Tutorials.";
-            var path = Path.Combine(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(assembly.CodeBase).Path)), "Tutorials");
-
-            var load = new Func<string, string>(name =>
+            return LazyInitializer.EnsureInitialized(ref allTutorials, () =>
             {
-                using (var stream = assembly.GetManifestResourceStream(resourcePrefix + name))
-                using (var reader = new StreamReader(stream))
+                var assembly = Assembly.GetExecutingAssembly();
+
+                var resourcePrefix = assembly.GetName().Name + ".Tutorials.";
+                var path = Path.Combine(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(assembly.CodeBase).Path)), "Tutorials");
+
+                var load = new Func<string, string>(name =>
                 {
-                    return reader.ReadToEnd();
-                }
+                    using (var stream = assembly.GetManifestResourceStream(resourcePrefix + name))
+                    using (var reader = new StreamReader(stream, Encoding.Default, true, 1024, true))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                });
+
+                var resources = assembly.GetManifestResourceNames();
+                var tutorialFiles = (from r in resources
+                                     where r.StartsWith(resourcePrefix, StringComparison.Ordinal)
+                                     select r.Substring(resourcePrefix.Length)).ToLookup(r => Path.GetExtension(r));
+                return (from peg in tutorialFiles[".peg"]
+                        let name = Path.GetFileNameWithoutExtension(peg)
+                        join txt in tutorialFiles[".txt"]
+                        on name equals Path.GetFileNameWithoutExtension(txt)
+                        select new Tutorial(name, load(peg), load(txt), Path.Combine(path, peg))).ToList().AsReadOnly();
             });
-
-            var resources = assembly.GetManifestResourceNames();
-            var tutorialFiles = (from r in resources
-                                 where r.StartsWith(resourcePrefix)
-                                 select r.Substring(resourcePrefix.Length)).ToLookup(r => Path.GetExtension(r));
-            var tutorials = (from peg in tutorialFiles[".peg"]
-                             let name = Path.GetFileNameWithoutExtension(peg)
-                             join txt in tutorialFiles[".txt"]
-                             on name equals Path.GetFileNameWithoutExtension(txt)
-                             select new Tutorial(name, load(peg), load(txt), Path.Combine(path, peg)));
-
-            return tutorials.ToList();
         }
 
         /// <inheritdoc />
