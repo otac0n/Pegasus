@@ -3,8 +3,8 @@ using System.Reflection;
 
 [assembly: AssemblyProduct("Pegasus")]
 [assembly: AssemblyCopyright("Copyright © 2014 John Gietzen")]
-[assembly: AssemblyVersion("3.1.2.0")]
-[assembly: AssemblyFileVersion("3.1.2.0")]
+[assembly: AssemblyVersion("3.1.3.0")]
+[assembly: AssemblyFileVersion("3.1.3.0")]
 #if !PORTABLE
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 #endif
