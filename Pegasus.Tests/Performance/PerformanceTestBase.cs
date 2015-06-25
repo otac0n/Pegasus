@@ -168,7 +168,7 @@ namespace Pegasus.Tests.Performance
                 resultsFolder,
                 testName + ".csv");
 
-            var columns = "\"" + testName.Replace("\"", "\"\"") + "\",testSamples,testMax,testMin,testMean,testStandardDeviation,warmupSamples,warmupMean,warmupStandardDeviation,initialTime,baseTime,machine";
+            var columns = "date,testSamples,testMean,testStandardDeviation,warmupSamples,warmupMean,warmupStandardDeviation,initialTime,baseTime,machine";
 
             if (File.Exists(outputPath))
             {
@@ -190,10 +190,8 @@ namespace Pegasus.Tests.Performance
             }
 
             var data = new[] { testSamples, testMean, testStandardDeviation, warmupSamples, warmupMean, warmupStandardDeviation, initialTime, baseTime }.Select(d => d.ToString(CultureInfo.InvariantCulture)).ToList();
-            data.Insert(0, DateTime.UtcNow.ToString("O").Replace("T", " ").TrimEnd('Z'));
-            data.Insert(2, "\"=INDIRECT(ADDRESS(ROW(),5))+CONFIDENCE(0.05,INDIRECT(ADDRESS(ROW(),6)),INDIRECT(ADDRESS(ROW(),2)))\"");
-            data.Insert(3, "\"=INDIRECT(ADDRESS(ROW(),5))-CONFIDENCE(0.05,INDIRECT(ADDRESS(ROW(),6)),INDIRECT(ADDRESS(ROW(),2)))\"");
-            data.Insert(11, Environment.MachineName);
+            data.Insert(0, DateTime.UtcNow.ToString("O"));
+            data.Insert(9, Environment.MachineName);
             File.AppendAllLines(outputPath, new[]
             {
                 string.Join(",", data),
