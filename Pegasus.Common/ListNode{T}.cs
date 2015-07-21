@@ -14,9 +14,6 @@ namespace Pegasus.Common
     /// <typeparam name="T">The type of elements in the list.</typeparam>
     public class ListNode<T>
     {
-        private readonly T head;
-        private readonly ListNode<T> tail;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ListNode&lt;T&gt;"/> class.
         /// </summary>
@@ -24,24 +21,18 @@ namespace Pegasus.Common
         /// <param name="tail">The tail of the list.</param>
         public ListNode(T head, ListNode<T> tail = null)
         {
-            this.head = head;
-            this.tail = tail;
+            this.Head = head;
+            this.Tail = tail;
         }
 
         /// <summary>
         /// Gets the head of the list.
         /// </summary>
-        public T Head
-        {
-            get { return this.head; }
-        }
+        public T Head { get; }
 
         /// <summary>
         /// Gets the tail of the list.
         /// </summary>
-        public ListNode<T> Tail
-        {
-            get { return this.tail; }
-        }
+        public ListNode<T> Tail { get; }
     }
 }

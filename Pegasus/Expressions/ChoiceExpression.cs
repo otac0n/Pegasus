@@ -17,8 +17,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class ChoiceExpression : Expression
     {
-        private readonly IList<Expression> choices;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ChoiceExpression"/> class.
         /// </summary>
@@ -27,18 +25,15 @@ namespace Pegasus.Expressions
         {
             if (choices == null)
             {
-                throw new ArgumentNullException("choices");
+                throw new ArgumentNullException(nameof(choices));
             }
 
-            this.choices = choices.ToList().AsReadOnly();
+            this.Choices = choices.ToList().AsReadOnly();
         }
 
         /// <summary>
         /// Gets the ordered set of choices that this expression can match.
         /// </summary>
-        public IList<Expression> Choices
-        {
-            get { return this.choices; }
-        }
+        public IList<Expression> Choices { get; }
     }
 }

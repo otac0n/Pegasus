@@ -15,12 +15,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class Quantifier
     {
-        private readonly Expression delimiter;
-        private readonly Cursor end;
-        private readonly int? max;
-        private readonly int min;
-        private readonly Cursor start;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Quantifier"/> class.
         /// </summary>
@@ -31,17 +25,17 @@ namespace Pegasus.Expressions
         /// <param name="delimiter">The expression to use as a delimiter.</param>
         public Quantifier(Cursor start, Cursor end, int min, int? max = null, Expression delimiter = null)
         {
-            this.start = start;
-            this.end = end;
-            this.min = min;
-            this.max = max;
+            this.Start = start;
+            this.End = end;
+            this.Min = min;
+            this.Max = max;
 
             if (delimiter != null)
             {
                 SequenceExpression sequenceExpression;
                 if ((sequenceExpression = delimiter as SequenceExpression) == null || sequenceExpression.Sequence.Count != 0)
                 {
-                    this.delimiter = delimiter;
+                    this.Delimiter = delimiter;
                 }
             }
         }
@@ -49,41 +43,26 @@ namespace Pegasus.Expressions
         /// <summary>
         /// Gets the expression to use as a delimiter.
         /// </summary>
-        public Expression Delimiter
-        {
-            get { return this.delimiter; }
-        }
+        public Expression Delimiter { get; }
 
         /// <summary>
         /// Gets the cursor just after the <see cref="Quantifier"/>.
         /// </summary>
-        public Cursor End
-        {
-            get { return this.end; }
-        }
+        public Cursor End { get; }
 
         /// <summary>
         /// Gets the maximum number of times to match, if limited; or null, if there is no limit.
         /// </summary>
-        public int? Max
-        {
-            get { return this.max; }
-        }
+        public int? Max { get; }
 
         /// <summary>
         /// Gets the minimum number of times to match.
         /// </summary>
-        public int Min
-        {
-            get { return this.min; }
-        }
+        public int Min { get; }
 
         /// <summary>
         /// Gets the cursor just before the <see cref="Quantifier"/>.
         /// </summary>
-        public Cursor Start
-        {
-            get { return this.start; }
-        }
+        public Cursor Start { get; }
     }
 }

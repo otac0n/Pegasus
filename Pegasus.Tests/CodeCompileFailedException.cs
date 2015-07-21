@@ -22,8 +22,8 @@ namespace Pegasus.Tests
             this.Messages = messages.ToList().AsReadOnly();
         }
 
-        public IList<CompilerError> Errors { get; private set; }
+        public IList<CompilerError> Errors { get; }
 
-        public IList<string> Messages { get; private set; }
+        public IList<string> Messages { get; }
     }
 }

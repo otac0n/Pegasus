@@ -16,9 +16,6 @@ namespace Pegasus.Highlighting
     /// <typeparam name="T">The type of the value of the match.</typeparam>
     public class HighlightRule<T>
     {
-        private Regex pattern;
-        private T value;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HighlightRule&lt;T&gt;"/> class.
         /// </summary>
@@ -26,24 +23,18 @@ namespace Pegasus.Highlighting
         /// <param name="value">The value of the match.</param>
         public HighlightRule(string pattern, T value)
         {
-            this.pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
-            this.value = value;
+            this.Pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+            this.Value = value;
         }
 
         /// <summary>
         /// Gets the pattern to use for matching.
         /// </summary>
-        public Regex Pattern
-        {
-            get { return this.pattern; }
-        }
+        public Regex Pattern { get; }
 
         /// <summary>
         /// Gets the value of the match.
         /// </summary>
-        public T Value
-        {
-            get { return this.value; }
-        }
+        public T Value { get; }
     }
 }

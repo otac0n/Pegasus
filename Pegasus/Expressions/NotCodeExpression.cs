@@ -13,23 +13,18 @@ namespace Pegasus.Expressions
     /// </summary>
     public class NotCodeExpression : Expression
     {
-        private readonly CodeSpan code;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="NotCodeExpression"/> class.
         /// </summary>
         /// <param name="code">The code to execute for the negative assertion.</param>
         public NotCodeExpression(CodeSpan code)
         {
-            this.code = code;
+            this.Code = code;
         }
 
         /// <summary>
         /// Gets the code expression to be used as an assertion.
         /// </summary>
-        public CodeSpan Code
-        {
-            get { return this.code; }
-        }
+        public CodeSpan Code { get; }
     }
 }

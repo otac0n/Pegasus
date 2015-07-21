@@ -15,9 +15,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class RepetitionExpression : Expression
     {
-        private readonly Expression expression;
-        private readonly Quantifier quantifier;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RepetitionExpression"/> class.
         /// </summary>
@@ -27,32 +24,26 @@ namespace Pegasus.Expressions
         {
             if (expression == null)
             {
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException(nameof(expression));
             }
 
             if (quantifier == null)
             {
-                throw new ArgumentNullException("quantifier");
+                throw new ArgumentNullException(nameof(quantifier));
             }
 
-            this.expression = expression;
-            this.quantifier = quantifier;
+            this.Expression = expression;
+            this.Quantifier = quantifier;
         }
 
         /// <summary>
         /// Gets the expression to be repeatedly matched.
         /// </summary>
-        public Expression Expression
-        {
-            get { return this.expression; }
-        }
+        public Expression Expression { get; }
 
         /// <summary>
         /// Gets the quantifier that specifies how many times to match and the delimiter of the matches.
         /// </summary>
-        public Quantifier Quantifier
-        {
-            get { return this.quantifier; }
-        }
+        public Quantifier Quantifier { get; }
     }
 }

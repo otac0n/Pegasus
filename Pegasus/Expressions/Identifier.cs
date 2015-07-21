@@ -18,10 +18,6 @@ namespace Pegasus.Expressions
     [DebuggerDisplay("{Name}")]
     public class Identifier
     {
-        private readonly Cursor end;
-        private readonly string name;
-        private readonly Cursor start;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Identifier"/> class.
         /// </summary>
@@ -32,36 +28,27 @@ namespace Pegasus.Expressions
         {
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
-            this.name = name;
-            this.start = start;
-            this.end = end;
+            this.Name = name;
+            this.Start = start;
+            this.End = end;
         }
 
         /// <summary>
         /// Gets the cursor just after the <see cref="Identifier"/>.
         /// </summary>
-        public Cursor End
-        {
-            get { return this.end; }
-        }
+        public Cursor End { get; }
 
         /// <summary>
         /// Gets the name of the <see cref="Identifier"/>.
         /// </summary>
-        public string Name
-        {
-            get { return this.name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the cursor just before the <see cref="Identifier"/>.
         /// </summary>
-        public Cursor Start
-        {
-            get { return this.start; }
-        }
+        public Cursor Start { get; }
     }
 }

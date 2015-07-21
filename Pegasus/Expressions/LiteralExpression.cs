@@ -16,12 +16,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class LiteralExpression : Expression
     {
-        private readonly Cursor end;
-        private readonly bool fromResource;
-        private readonly bool ignoreCase;
-        private readonly Cursor start;
-        private readonly string value;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LiteralExpression"/> class.
         /// </summary>
@@ -34,23 +28,20 @@ namespace Pegasus.Expressions
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
 
-            this.start = start;
-            this.end = end;
-            this.value = value;
-            this.ignoreCase = ignoreCase;
-            this.fromResource = fromResource;
+            this.Start = start;
+            this.End = end;
+            this.Value = value;
+            this.IgnoreCase = ignoreCase;
+            this.FromResource = fromResource;
         }
 
         /// <summary>
         /// Gets the cursor just after the <see cref="LiteralExpression"/>.
         /// </summary>
-        public Cursor End
-        {
-            get { return this.end; }
-        }
+        public Cursor End { get; }
 
         /// <summary>
         /// Gets a value indicating whether <see cref="Value"/> corresponds to a resource name or a literal value.
@@ -58,33 +49,21 @@ namespace Pegasus.Expressions
         /// <value>
         /// True, if <see cref="Value"/> corresponds to a resource name that will be used as the literal value; false, otherwise.
         /// </value>
-        public bool FromResource
-        {
-            get { return this.fromResource; }
-        }
+        public bool FromResource { get; }
 
         /// <summary>
         /// Gets a value indicating whether the expression should ignore case differences when matching.
         /// </summary>
-        public bool IgnoreCase
-        {
-            get { return this.ignoreCase; }
-        }
+        public bool IgnoreCase { get; }
 
         /// <summary>
         /// Gets the cursor just before the <see cref="LiteralExpression"/>.
         /// </summary>
-        public Cursor Start
-        {
-            get { return this.start; }
-        }
+        public Cursor Start { get; }
 
         /// <summary>
         /// Gets the value of this expression.
         /// </summary>
-        public string Value
-        {
-            get { return this.value; }
-        }
+        public string Value { get; }
     }
 }

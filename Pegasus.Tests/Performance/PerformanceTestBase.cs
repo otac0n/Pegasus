@@ -153,12 +153,12 @@ namespace Pegasus.Tests.Performance
 
         private static void PublishResults(decimal initialTime, decimal baseTime, int warmupSamples, decimal warmupMean, decimal warmupStandardDeviation, int testSamples, decimal testMean, decimal testStandardDeviation)
         {
-            Trace.WriteLine(string.Format("initialTime: {0}:", FormatTime(1, initialTime)));
-            Trace.WriteLine(string.Format("baseTime: {0}:", FormatTime(1, baseTime)));
-            Trace.WriteLine(string.Format("warmupSamples: {0}", warmupSamples));
-            Trace.WriteLine(string.Format("warmupMean: {0}:", FormatTime(warmupSamples, warmupMean, warmupStandardDeviation)));
-            Trace.WriteLine(string.Format("testSamples: {0}", testSamples));
-            Trace.WriteLine(string.Format("testMean: {0}:", FormatTime(testSamples, testMean, testStandardDeviation)));
+            Trace.WriteLine($"initialTime: {FormatTime(1, initialTime)}:");
+            Trace.WriteLine($"baseTime: {FormatTime(1, baseTime)}:");
+            Trace.WriteLine($"warmupSamples: {warmupSamples}");
+            Trace.WriteLine($"warmupMean: {FormatTime(warmupSamples, warmupMean, warmupStandardDeviation)}:");
+            Trace.WriteLine($"testSamples: {testSamples}");
+            Trace.WriteLine($"testMean: {FormatTime(testSamples, testMean, testStandardDeviation)}:");
 
             var testName = TestContext.CurrentContext.Test.FullName;
             var resultsFolder = Path.Combine(
@@ -208,25 +208,13 @@ namespace Pegasus.Tests.Performance
             private int count = 0;
             private decimal mean, s;
 
-            public int Count
-            {
-                get { return this.count; }
-            }
+            public int Count => this.count;
 
-            public decimal Mean
-            {
-                get { return this.count > 0 ? this.mean : 0.0m; }
-            }
+            public decimal Mean => this.count > 0 ? this.mean : 0;
 
-            public decimal StandardDeviation
-            {
-                get { return (decimal)Math.Sqrt((double)this.Variance); }
-            }
+            public decimal StandardDeviation => (decimal)Math.Sqrt((double)this.Variance);
 
-            public decimal Variance
-            {
-                get { return this.count > 1 ? this.s / (this.count - 1) : 0.0m; }
-            }
+            public decimal Variance => this.count > 1 ? this.s / (this.count - 1) : 0;
 
             public void Clear()
             {

@@ -19,20 +19,11 @@ namespace Pegasus.Compiler
 
     internal class ReportCodeSyntaxIssuesPass : CompilePass
     {
-        public override IList<string> BlockedByErrors
-        {
-            get { return new string[0]; }
-        }
+        public override IList<string> BlockedByErrors => new string[0];
 
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "CS0000", "CS1026" }; }
-        }
+        public override IList<string> ErrorsProduced => new[] { "CS0000", "CS1026" };
 
-        public override void Run(Grammar grammar, CompileResult result)
-        {
-            new CodeSyntaxTreeWalker(result).WalkGrammar(grammar);
-        }
+        public override void Run(Grammar grammar, CompileResult result) => new CodeSyntaxTreeWalker(result).WalkGrammar(grammar);
 
         private class CodeSyntaxTreeWalker : ExpressionTreeWalker
         {
@@ -85,40 +76,19 @@ namespace Pegasus.Compiler
                 this.node = this.CloneNodeAsRoot<CompilationUnitSyntax>(Syntax.ParseCompilationUnit(string.Empty, 0, null));
             }
 
-            public override string FilePath
-            {
-                get { return string.Empty; }
-            }
+            public override string FilePath => string.Empty;
 
-            public override int Length
-            {
-                get { return 0; }
-            }
+            public override int Length => 0;
 
-            public override ParseOptions Options
-            {
-                get { return ParseOptions.Default; }
-            }
+            public override ParseOptions Options => ParseOptions.Default;
 
-            public override FileLinePositionSpan GetLineSpan(TextSpan span, bool usePreprocessorDirectives, CancellationToken cancellationToken = new CancellationToken())
-            {
-                return new FileLinePositionSpan();
-            }
+            public override FileLinePositionSpan GetLineSpan(TextSpan span, bool usePreprocessorDirectives, CancellationToken cancellationToken = new CancellationToken()) => new FileLinePositionSpan();
 
-            public override SyntaxReference GetReference(SyntaxNode node)
-            {
-                return null;
-            }
+            public override SyntaxReference GetReference(SyntaxNode node) => null;
 
-            public override CompilationUnitSyntax GetRoot(CancellationToken cancellationToken)
-            {
-                return this.node;
-            }
+            public override CompilationUnitSyntax GetRoot(CancellationToken cancellationToken) => this.node;
 
-            public override IText GetText(CancellationToken cancellationToken)
-            {
-                return new StringText(string.Empty);
-            }
+            public override IText GetText(CancellationToken cancellationToken) => new StringText(string.Empty);
 
             public override bool TryGetRoot(out CompilationUnitSyntax root)
             {

@@ -36,9 +36,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class CodeExpression : Expression
     {
-        private readonly CodeSpan codeSpan;
-        private readonly CodeType codeType;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeExpression"/> class.
         /// </summary>
@@ -48,27 +45,21 @@ namespace Pegasus.Expressions
         {
             if (codeSpan == null)
             {
-                throw new ArgumentNullException("codeSpan");
+                throw new ArgumentNullException(nameof(codeSpan));
             }
 
-            this.codeSpan = codeSpan;
-            this.codeType = codeType;
+            this.CodeSpan = codeSpan;
+            this.CodeType = codeType;
         }
 
         /// <summary>
         /// Gets the code that this expression contains.
         /// </summary>
-        public CodeSpan CodeSpan
-        {
-            get { return this.codeSpan; }
-        }
+        public CodeSpan CodeSpan { get; }
 
         /// <summary>
         /// Gets the semantic usage of this expression.
         /// </summary>
-        public CodeType CodeType
-        {
-            get { return this.codeType; }
-        }
+        public CodeType CodeType { get; }
     }
 }

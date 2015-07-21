@@ -55,80 +55,35 @@ namespace Pegasus.Compiler
             this.leftRecursiveRules = leftRecursiveRules;
         }
 
-        public override void WalkGrammar(Grammar grammar)
-        {
-            this.RenderGrammar(grammar, this.writer, this.currentIndentation);
-        }
+        public override void WalkGrammar(Grammar grammar) => this.RenderGrammar(grammar, this.writer, this.currentIndentation);
 
-        protected override void WalkAndCodeExpression(AndCodeExpression andCodeExpression)
-        {
-            this.RenderCodeAssertion(new { Code = andCodeExpression.Code, MustMatch = true }, this.writer, this.currentIndentation);
-        }
+        protected override void WalkAndCodeExpression(AndCodeExpression andCodeExpression) => this.RenderCodeAssertion(new { Code = andCodeExpression.Code, MustMatch = true }, this.writer, this.currentIndentation);
 
-        protected override void WalkAndExpression(AndExpression andExpression)
-        {
-            this.RenderAssertion(new { Expression = andExpression.Expression, MustMatch = true }, this.writer, this.currentIndentation);
-        }
+        protected override void WalkAndExpression(AndExpression andExpression) => this.RenderAssertion(new { Expression = andExpression.Expression, MustMatch = true }, this.writer, this.currentIndentation);
 
-        protected override void WalkChoiceExpression(ChoiceExpression choiceExpression)
-        {
-            this.RenderChoiceExpression(choiceExpression, this.writer, this.currentIndentation);
-        }
+        protected override void WalkChoiceExpression(ChoiceExpression choiceExpression) => this.RenderChoiceExpression(choiceExpression, this.writer, this.currentIndentation);
 
-        protected override void WalkClassExpression(ClassExpression classExpression)
-        {
-            this.RenderClassExpression(classExpression, this.writer, this.currentIndentation);
-        }
+        protected override void WalkClassExpression(ClassExpression classExpression) => this.RenderClassExpression(classExpression, this.writer, this.currentIndentation);
 
-        protected override void WalkCodeExpression(CodeExpression codeExpression)
-        {
-            this.RenderCodeExpression(codeExpression, this.writer, this.currentIndentation);
-        }
+        protected override void WalkCodeExpression(CodeExpression codeExpression) => this.RenderCodeExpression(codeExpression, this.writer, this.currentIndentation);
 
-        protected override void WalkLiteralExpression(LiteralExpression literalExpression)
-        {
-            this.RenderLiteralExpression(literalExpression, this.writer, this.currentIndentation);
-        }
+        protected override void WalkLiteralExpression(LiteralExpression literalExpression) => this.RenderLiteralExpression(literalExpression, this.writer, this.currentIndentation);
 
-        protected override void WalkNameExpression(NameExpression nameExpression)
-        {
-            this.RenderNameExpression(nameExpression, this.writer, this.currentIndentation);
-        }
+        protected override void WalkNameExpression(NameExpression nameExpression) => this.RenderNameExpression(nameExpression, this.writer, this.currentIndentation);
 
-        protected override void WalkNotCodeExpression(NotCodeExpression notCodeExpression)
-        {
-            this.RenderCodeAssertion(new { Code = notCodeExpression.Code, MustMatch = false }, this.writer, this.currentIndentation);
-        }
+        protected override void WalkNotCodeExpression(NotCodeExpression notCodeExpression) => this.RenderCodeAssertion(new { Code = notCodeExpression.Code, MustMatch = false }, this.writer, this.currentIndentation);
 
-        protected override void WalkNotExpression(NotExpression notExpression)
-        {
-            this.RenderAssertion(new { Expression = notExpression.Expression, MustMatch = false }, this.writer, this.currentIndentation);
-        }
+        protected override void WalkNotExpression(NotExpression notExpression) => this.RenderAssertion(new { Expression = notExpression.Expression, MustMatch = false }, this.writer, this.currentIndentation);
 
-        protected override void WalkPrefixedExpression(PrefixedExpression prefixedExpression)
-        {
-            this.RenderPrefixedExpression(prefixedExpression, this.writer, this.currentIndentation);
-        }
+        protected override void WalkPrefixedExpression(PrefixedExpression prefixedExpression) => this.RenderPrefixedExpression(prefixedExpression, this.writer, this.currentIndentation);
 
-        protected override void WalkRepetitionExpression(RepetitionExpression repetitionExpression)
-        {
-            this.RenderRepetitionExpression(repetitionExpression, this.writer, this.currentIndentation);
-        }
+        protected override void WalkRepetitionExpression(RepetitionExpression repetitionExpression) => this.RenderRepetitionExpression(repetitionExpression, this.writer, this.currentIndentation);
 
-        protected override void WalkRule(Rule rule)
-        {
-            this.RenderRule(rule, this.writer, this.currentIndentation);
-        }
+        protected override void WalkRule(Rule rule) => this.RenderRule(rule, this.writer, this.currentIndentation);
 
-        protected override void WalkSequenceExpression(SequenceExpression sequenceExpression)
-        {
-            this.RenderSequenceExpression(sequenceExpression, this.writer, this.currentIndentation);
-        }
+        protected override void WalkSequenceExpression(SequenceExpression sequenceExpression) => this.RenderSequenceExpression(sequenceExpression, this.writer, this.currentIndentation);
 
-        protected override void WalkWildcardExpression(WildcardExpression wildcardExpression)
-        {
-            this.RenderWildcardExpression(wildcardExpression, this.writer, this.currentIndentation);
-        }
+        protected override void WalkWildcardExpression(WildcardExpression wildcardExpression) => this.RenderWildcardExpression(wildcardExpression, this.writer, this.currentIndentation);
 
         private static string EscapeName(object name)
         {
@@ -205,39 +160,23 @@ namespace Pegasus.Compiler
 
         private struct ResultContext
         {
-            private string resultName;
-            private string resultRuleName;
-            private object resultType;
-
             public ResultContext(string resultName = null, string resultRuleName = null, object resultType = null)
             {
-                this.resultName = resultName;
-                this.resultType = resultType;
-                this.resultRuleName = resultRuleName;
+                this.ResultName = resultName;
+                this.ResultType = resultType;
+                this.ResultRuleName = resultRuleName;
             }
 
-            public string ResultName
-            {
-                get { return this.resultName; }
-            }
+            public string ResultName { get; }
 
-            public string ResultRuleName
-            {
-                get { return this.resultRuleName; }
-            }
+            public string ResultRuleName { get; }
 
-            public object ResultType
-            {
-                get { return this.resultType; }
-            }
+            public object ResultType { get; }
 
-            public ResultContext WithResultName(string resultName)
-            {
-                return new ResultContext(
-                    resultName: resultName,
-                    resultRuleName: this.resultRuleName,
-                    resultType: this.resultType);
-            }
+            public ResultContext WithResultName(string resultName) => new ResultContext(
+                resultName: resultName,
+                resultRuleName: this.ResultRuleName,
+                resultType: this.ResultType);
         }
     }
 }

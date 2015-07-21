@@ -17,10 +17,6 @@ namespace Pegasus.Highlighting
     [DebuggerDisplay("[{Start}, {End}) {Value}")]
     public class HighlightedSegment<T>
     {
-        private int end;
-        private int start;
-        private T value;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HighlightedSegment&lt;T&gt;"/> class.
         /// </summary>
@@ -29,33 +25,24 @@ namespace Pegasus.Highlighting
         /// <param name="value">The value of the segment.</param>
         public HighlightedSegment(int start, int end, T value)
         {
-            this.start = start;
-            this.end = end;
-            this.value = value;
+            this.Start = start;
+            this.End = end;
+            this.Value = value;
         }
 
         /// <summary>
         /// Gets the ending index of the segment.
         /// </summary>
-        public int End
-        {
-            get { return this.end; }
-        }
+        public int End { get; }
 
         /// <summary>
         /// Gets the starting index of the segment.
         /// </summary>
-        public int Start
-        {
-            get { return this.start; }
-        }
+        public int Start { get; }
 
         /// <summary>
         /// Gets the value of the segment.
         /// </summary>
-        public T Value
-        {
-            get { return this.value; }
-        }
+        public T Value { get; }
     }
 }

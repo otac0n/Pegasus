@@ -33,15 +33,9 @@ namespace Pegasus.Compiler
                     .AsReadOnly();
         });
 
-        public override IList<string> BlockedByErrors
-        {
-            get { return AllErrors.Value; }
-        }
+        public override IList<string> BlockedByErrors => AllErrors.Value;
 
-        public override IList<string> ErrorsProduced
-        {
-            get { return new string[0]; }
-        }
+        public override IList<string> ErrorsProduced => new string[0];
 
         public override void Run(Grammar grammar, CompileResult result)
         {

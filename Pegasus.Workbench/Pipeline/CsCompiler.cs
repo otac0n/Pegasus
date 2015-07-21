@@ -38,14 +38,11 @@ namespace Pegasus.Workbench.Pipeline
             this.disposable = csCompilerResults.Connect();
         }
 
-        public IObservable<IList<CompilerError>> Errors { get; private set; }
+        public IObservable<IList<CompilerError>> Errors { get; }
 
-        public IObservable<dynamic> Parsers { get; private set; }
+        public IObservable<dynamic> Parsers { get; }
 
-        public void Dispose()
-        {
-            this.disposable.Dispose();
-        }
+        public void Dispose() => this.disposable.Dispose();
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during compilation should be reported through the UI.")]
         private static Result Compile(string source, Grammar grammar, string fileName)

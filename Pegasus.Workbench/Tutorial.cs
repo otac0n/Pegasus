@@ -23,51 +23,34 @@ namespace Pegasus.Workbench
     {
         private static IReadOnlyList<Tutorial> allTutorials;
 
-        private readonly string fileName;
-        private readonly string grammar;
-        private readonly string name;
-        private readonly string testText;
-
-        private Tutorial(string name, string grammar, string testText, string fileName)
+        private Tutorial(string name, string grammarText, string testText, string fileName)
         {
-            this.name = name;
-            this.grammar = grammar;
-            this.testText = testText;
-            this.fileName = fileName;
+            this.Name = name;
+            this.GrammarText = grammarText;
+            this.TestText = testText;
+            this.FileName = fileName;
         }
 
         /// <summary>
         /// Gets the filename of this tutorial.
         /// </summary>
         /// <remarks>This file may not exist.</remarks>
-        public string FileName
-        {
-            get { return this.fileName; }
-        }
+        public string FileName { get; }
 
         /// <summary>
         /// Gets the grammar text for this tutorial.
         /// </summary>
-        public string GrammarText
-        {
-            get { return this.grammar; }
-        }
+        public string GrammarText { get; }
 
         /// <summary>
         /// Gets the name of this tutorial.
         /// </summary>
-        public string Name
-        {
-            get { return this.name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the test text for this tutorial.
         /// </summary>
-        public string TestText
-        {
-            get { return this.testText; }
-        }
+        public string TestText { get; }
 
         /// <summary>
         /// Loads all tutorials found in the assembly.
@@ -104,9 +87,6 @@ namespace Pegasus.Workbench
         }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return this.name;
-        }
+        public override string ToString() => this.Name;
     }
 }

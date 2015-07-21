@@ -15,9 +15,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class TypedExpression : Expression
     {
-        private readonly Expression expression;
-        private readonly CodeSpan type;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TypedExpression"/> class.
         /// </summary>
@@ -27,34 +24,27 @@ namespace Pegasus.Expressions
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
-
-            this.type = type;
 
             if (expression == null)
             {
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException(nameof(expression));
             }
 
-            this.expression = expression;
+            this.Type = type;
+            this.Expression = expression;
         }
 
         /// <summary>
         /// Gets the wrapped expression.
         /// </summary>
-        public Expression Expression
-        {
-            get { return this.expression; }
-        }
+        public Expression Expression { get; }
 
         /// <summary>
         /// Gets the specific type of the wrapped expression.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "Since 'GetType' is defined on the root object type, this is not a confusing usage.")]
-        public CodeSpan Type
-        {
-            get { return this.type; }
-        }
+        public CodeSpan Type { get; }
     }
 }

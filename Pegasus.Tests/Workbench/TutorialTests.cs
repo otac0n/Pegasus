@@ -18,13 +18,7 @@ namespace Pegasus.Tests.Workbench
     [TestFixture]
     public class TutorialTests
     {
-        private IEnumerable<TestCaseData> Tutorials
-        {
-            get
-            {
-                return Tutorial.FindAll().Select(t => new TestCaseData(t));
-            }
-        }
+        private IEnumerable<TestCaseData> Tutorials => Tutorial.FindAll().Select(t => new TestCaseData(t));
 
         [TestCaseSource("Tutorials")]
         public void Compile_ForAllFoundTutorials_Succeeds(Tutorial tutorial)

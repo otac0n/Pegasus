@@ -14,15 +14,9 @@ namespace Pegasus.Compiler
 
     internal class ReportNoRulesPass : CompilePass
     {
-        public override IList<string> BlockedByErrors
-        {
-            get { return new string[0]; }
-        }
+        public override IList<string> BlockedByErrors => new string[0];
 
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "PEG0001" }; }
-        }
+        public override IList<string> ErrorsProduced => new[] { "PEG0001" };
 
         public override void Run(Grammar grammar, CompileResult result)
         {

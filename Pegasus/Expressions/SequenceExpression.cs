@@ -17,8 +17,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class SequenceExpression : Expression
     {
-        private readonly IList<Expression> sequence;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceExpression"/> class.
         /// </summary>
@@ -27,7 +25,7 @@ namespace Pegasus.Expressions
         {
             if (sequence == null)
             {
-                throw new ArgumentNullException("sequence");
+                throw new ArgumentNullException(nameof(sequence));
             }
 
             var flattened = new List<Expression>();
@@ -55,15 +53,12 @@ namespace Pegasus.Expressions
                 flattened.Add(e);
             }
 
-            this.sequence = flattened.AsReadOnly();
+            this.Sequence = flattened.AsReadOnly();
         }
 
         /// <summary>
         /// Gets the sequence of expressions to match.
         /// </summary>
-        public IList<Expression> Sequence
-        {
-            get { return this.sequence; }
-        }
+        public IList<Expression> Sequence { get; }
     }
 }

@@ -30,48 +30,33 @@ namespace Pegasus.Package
         /// <summary>
         /// Gets the name of the language service.
         /// </summary>
-        public override string Name
-        {
-            get { return "Pegasus"; }
-        }
+        public override string Name => "Pegasus";
 
         /// <summary>
         /// Returns a list of file extension filters suitable for a Save As dialog box.
         /// </summary>
         /// <returns>If successful, returns a string containing the file extension filters; otherwise, returns an empty string.</returns>
-        public override string GetFormatFilterList()
-        {
-            return "Pegasus Grammars (*.peg)|*.peg";
-        }
+        public override string GetFormatFilterList() => "Pegasus Grammars (*.peg)|*.peg";
 
         /// <summary>
         /// Returns a <see cref="LanguagePreferences"/> object for this language service.
         /// </summary>
         /// <returns>If successful, returns a <see cref="LanguagePreferences"/> object; otherwise, returns a null value.</returns>
-        public override LanguagePreferences GetLanguagePreferences()
-        {
-            return preferences;
-        }
+        public override LanguagePreferences GetLanguagePreferences() => preferences;
 
         /// <summary>
         /// Returns a single instantiation of a parser.
         /// </summary>
         /// <param name="buffer">An <see cref="IVsTextLines"/> representing the lines of source to parse.</param>
         /// <returns>If successful, returns an <see cref="IScanner"/> object; otherwise, returns a null value.</returns>
-        public override IScanner GetScanner(IVsTextLines buffer)
-        {
-            return new Scanner(buffer);
-        }
+        public override IScanner GetScanner(IVsTextLines buffer) => new Scanner(buffer);
 
         /// <summary>
         /// Parses the source based on the specified <see cref="ParseRequest"/> object.
         /// </summary>
         /// <param name="req">The <see cref="ParseRequest"/> describing how to parse the source file.</param>
         /// <returns>If successful, returns an <see cref="AuthoringScope"/> object; otherwise, returns a null value.</returns>
-        public override AuthoringScope ParseSource(ParseRequest req)
-        {
-            return null;
-        }
+        public override AuthoringScope ParseSource(ParseRequest req) => null;
 
         private class Scanner : IScanner
         {
@@ -114,7 +99,7 @@ namespace Pegasus.Package
             {
                 if (tokenInfo == null)
                 {
-                    throw new ArgumentNullException("tokenInfo");
+                    throw new ArgumentNullException(nameof(tokenInfo));
                 }
 
                 if (this.offset == this.source.Length)

@@ -34,11 +34,10 @@ namespace Pegasus.Workbench
         });
 
         private readonly Dictionary<string, HighlightColor> environmentColors;
-        private readonly Dictionary<string, string> properties;
 
         public PegasusHighlightingStrategy()
         {
-            this.properties = new Dictionary<string, string>();
+            this.Properties = new Dictionary<string, string>();
             this.environmentColors = new Dictionary<string, HighlightColor>
             {
                 { "Default", new HighlightBackground("WindowText", "Window", false, false) },
@@ -57,20 +56,11 @@ namespace Pegasus.Workbench
             };
         }
 
-        public string[] Extensions
-        {
-            get { return new[] { "peg", "pegasus" }; }
-        }
+        public string[] Extensions => new[] { "peg", "pegasus" };
 
-        public string Name
-        {
-            get { return "Pegasus"; }
-        }
+        public string Name => "Pegasus";
 
-        public Dictionary<string, string> Properties
-        {
-            get { return this.properties; }
-        }
+        public Dictionary<string, string> Properties { get; }
 
         public HighlightColor GetColorFor(string name)
         {
@@ -102,7 +92,7 @@ namespace Pegasus.Workbench
         {
             if (document == null)
             {
-                throw new ArgumentNullException("document");
+                throw new ArgumentNullException(nameof(document));
             }
 
             var tokens = GetHighlightedTokens(document.TextContent);
@@ -150,10 +140,7 @@ namespace Pegasus.Workbench
             document.CommitUpdate();
         }
 
-        public void MarkTokens(IDocument document, List<LineSegment> lines)
-        {
-            this.MarkTokens(document);
-        }
+        public void MarkTokens(IDocument document, List<LineSegment> lines) => this.MarkTokens(document);
 
         private static IList<HighlightedSegment<string>> GetHighlightedTokens(string text)
         {

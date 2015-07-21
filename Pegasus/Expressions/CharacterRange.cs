@@ -15,9 +15,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class CharacterRange : IEquatable<CharacterRange>
     {
-        private readonly char max;
-        private readonly char min;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CharacterRange"/> class.
         /// </summary>
@@ -25,48 +22,36 @@ namespace Pegasus.Expressions
         /// <param name="max">The maximum character value, inclusive.</param>
         public CharacterRange(char min, char max)
         {
-            this.min = min;
-            this.max = max;
+            this.Min = min;
+            this.Max = max;
         }
 
         /// <summary>
         /// Gets the minimum character value, inclusive.
         /// </summary>
-        public char Max
-        {
-            get { return this.max; }
-        }
+        public char Max { get; }
 
         /// <summary>
         /// Gets the maximum character value, inclusive.
         /// </summary>
-        public char Min
-        {
-            get { return this.min; }
-        }
+        public char Min { get; }
 
         /// <summary>
         /// Determines whether the specified <see cref="object"/> is equal to the current <see cref="CharacterRange"/>.
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="CharacterRange"/>.</param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="CharacterRange"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as CharacterRange);
-        }
+        public override bool Equals(object obj) => this.Equals(obj as CharacterRange);
 
         /// <summary>
         /// Determines whether the specified <see cref="CharacterRange"/> is equal to the current <see cref="CharacterRange"/>.
         /// </summary>
         /// <param name="other">The <see cref="CharacterRange"/> to compare with the current <see cref="CharacterRange"/>.</param>
         /// <returns>true if the specified <see cref="CharacterRange"/> is equal to the current <see cref="CharacterRange"/>; otherwise, false.</returns>
-        public bool Equals(CharacterRange other)
-        {
-            return
-                other != null &&
-                other.min == this.min &&
-                other.max == this.max;
-        }
+        public bool Equals(CharacterRange other) =>
+            other != null &&
+            other.Min == this.Min &&
+            other.Max == this.Max;
 
         /// <summary>
         /// Returns the hash code for this instance.
@@ -75,8 +60,8 @@ namespace Pegasus.Expressions
         public override int GetHashCode()
         {
             int hash = 0x51ED270B;
-            hash = (hash * -0x25555529) + this.min.GetHashCode();
-            hash = (hash * -0x25555529) + this.max.GetHashCode();
+            hash = (hash * -0x25555529) + this.Min.GetHashCode();
+            hash = (hash * -0x25555529) + this.Max.GetHashCode();
             return hash;
         }
     }

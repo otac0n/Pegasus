@@ -48,10 +48,7 @@ namespace Pegasus.Compiler
                 this.containsAssertions = containsAssertions;
             }
 
-            public bool Changed
-            {
-                get { return this.changed; }
-            }
+            public bool Changed => this.changed;
 
             public override void WalkExpression(Expression expression)
             {

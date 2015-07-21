@@ -14,20 +14,11 @@ namespace Pegasus.Compiler
 
     internal class ReportInvalidQuantifiersPass : CompilePass
     {
-        public override IList<string> BlockedByErrors
-        {
-            get { return new[] { "PEG0001" }; }
-        }
+        public override IList<string> BlockedByErrors => new[] { "PEG0001" };
 
-        public override IList<string> ErrorsProduced
-        {
-            get { return new[] { "PEG0015", "PEG0024" }; }
-        }
+        public override IList<string> ErrorsProduced => new[] { "PEG0015", "PEG0024" };
 
-        public override void Run(Grammar grammar, CompileResult result)
-        {
-            new InvalidQuantifierTreeWalker(result).WalkGrammar(grammar);
-        }
+        public override void Run(Grammar grammar, CompileResult result) => new InvalidQuantifierTreeWalker(result).WalkGrammar(grammar);
 
         private class InvalidQuantifierTreeWalker : ExpressionTreeWalker
         {

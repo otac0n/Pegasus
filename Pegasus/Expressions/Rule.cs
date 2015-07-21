@@ -19,10 +19,6 @@ namespace Pegasus.Expressions
     [DebuggerDisplay("Rule {Identifier.Name}")]
     public class Rule
     {
-        private readonly Expression expression;
-        private readonly IList<Identifier> flags;
-        private readonly Identifier identifier;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Rule"/> class.
         /// </summary>
@@ -34,37 +30,28 @@ namespace Pegasus.Expressions
         {
             if (expression == null)
             {
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException(nameof(expression));
             }
 
-            this.identifier = identifier;
-            this.expression = expression;
-            this.flags = flags.ToList().AsReadOnly();
+            this.Identifier = identifier;
+            this.Expression = expression;
+            this.Flags = flags.ToList().AsReadOnly();
         }
 
         /// <summary>
         /// Gets the expression that this <see cref="Rule"/> represents.
         /// </summary>
-        public Expression Expression
-        {
-            get { return this.expression; }
-        }
+        public Expression Expression { get; }
 
         /// <summary>
         /// Gets the flags that have been set on this <see cref="Rule"/>.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "The usage of 'Flags' here is intentional and desired.")]
-        public IList<Identifier> Flags
-        {
-            get { return this.flags; }
-        }
+        public IList<Identifier> Flags { get; }
 
         /// <summary>
         /// Gets the name of this <see cref="Rule"/>.
         /// </summary>
-        public Identifier Identifier
-        {
-            get { return this.identifier; }
-        }
+        public Identifier Identifier { get; }
     }
 }

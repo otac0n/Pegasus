@@ -36,17 +36,14 @@ namespace Pegasus.Workbench.Pipeline
             this.disposable = internalParseResults.Connect();
         }
 
-        public IObservable<IList<CompilerError>> Errors { get; private set; }
+        public IObservable<IList<CompilerError>> Errors { get; }
 
-        public IObservable<Grammar> Grammars { get; private set; }
+        public IObservable<Grammar> Grammars { get; }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "TODO: Use this for syntax highlighting.")]
-        public IObservable<IList<LexicalElement>> LexicalElements { get; private set; }
+        public IObservable<IList<LexicalElement>> LexicalElements { get; }
 
-        public void Dispose()
-        {
-            this.disposable.Dispose();
-        }
+        public void Dispose() => this.disposable.Dispose();
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]
         private static ParseResult Parse(string subject, string fileName)

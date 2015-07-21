@@ -25,7 +25,6 @@ namespace Pegasus.Workbench
     public sealed class AppViewModel : ReactiveObject, IDisposable
     {
         private readonly CompositeDisposable pipeline;
-        private readonly IReadOnlyList<Tutorial> tutorials;
 
         private IList<CompilerError> errors = new CompilerError[0];
         private bool grammarChanged = false;
@@ -43,7 +42,7 @@ namespace Pegasus.Workbench
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The pipeline is disposed properly.")]
         public AppViewModel()
         {
-            this.tutorials = Tutorial.FindAll();
+            this.Tutorials = Tutorial.FindAll();
 
             var grammarNameChanges = this.WhenAny(x => x.GrammarFileName, x => x.Value);
             var grammarTextChanges = this.WhenAny(x => x.GrammarText, x => x.Value);
@@ -157,22 +156,22 @@ namespace Pegasus.Workbench
         /// <summary>
         /// Gets the load command.
         /// </summary>
-        public IReactiveCommand Load { get; private set; }
+        public IReactiveCommand Load { get; }
 
         /// <summary>
         /// Gets the load tutorial command.
         /// </summary>
-        public IReactiveCommand LoadTutorial { get; private set; }
+        public IReactiveCommand LoadTutorial { get; }
 
         /// <summary>
         /// Gets the save command.
         /// </summary>
-        public IReactiveCommand Save { get; private set; }
+        public IReactiveCommand Save { get; }
 
         /// <summary>
         /// Gets the save-as command.
         /// </summary>
-        public IReactiveCommand SaveAs { get; private set; }
+        public IReactiveCommand SaveAs { get; }
 
         /// <summary>
         /// Gets the name of the test file.
@@ -204,17 +203,11 @@ namespace Pegasus.Workbench
         /// <summary>
         /// Gets the list of tutorials.
         /// </summary>
-        public IReadOnlyList<Tutorial> Tutorials
-        {
-            get { return this.tutorials; }
-        }
+        public IReadOnlyList<Tutorial> Tutorials { get; }
 
         /// <summary>
         /// Disposes the object.
         /// </summary>
-        public void Dispose()
-        {
-            this.pipeline.Dispose();
-        }
+        public void Dispose() => this.pipeline.Dispose();
     }
 }

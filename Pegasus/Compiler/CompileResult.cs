@@ -49,39 +49,27 @@ namespace Pegasus.Compiler
         /// <summary>
         /// Gets the collection of errors that occurred during compilation.
         /// </summary>
-        public IList<CompilerError> Errors { get; private set; }
+        public IList<CompilerError> Errors { get; }
 
         /// <summary>
         /// Gets a dictionary of expressions and their corresponding types.
         /// </summary>
-        public Dictionary<Expression, object> ExpressionTypes
-        {
-            get { return this.expressionTypes.Value; }
-        }
+        public Dictionary<Expression, object> ExpressionTypes => this.expressionTypes.Value;
 
         /// <summary>
         /// Gets the collection of left-recursive rules.
         /// </summary>
-        public ILookup<Rule, Expression> LeftAdjacentExpressions
-        {
-            get { return this.leftAdjacentExpressions.Value; }
-        }
+        public ILookup<Rule, Expression> LeftAdjacentExpressions => this.leftAdjacentExpressions.Value;
 
         /// <summary>
         /// Gets the collection of left-recursive rules.
         /// </summary>
-        public HashSet<Rule> LeftRecursiveRules
-        {
-            get { return this.leftRecursiveRules.Value; }
-        }
+        public HashSet<Rule> LeftRecursiveRules => this.leftRecursiveRules.Value;
 
         /// <summary>
         /// Gets the collection of mutually left-recursive rules.
         /// </summary>
-        public HashSet<Rule> MutuallyRecursiveRules
-        {
-            get { return this.mutuallyRecursiveRules.Value; }
-        }
+        public HashSet<Rule> MutuallyRecursiveRules => this.mutuallyRecursiveRules.Value;
 
         internal void AddCompilerError(Cursor cursor, System.Linq.Expressions.Expression<Func<string>> error, params object[] args)
         {

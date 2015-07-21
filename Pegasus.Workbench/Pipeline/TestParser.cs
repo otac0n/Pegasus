@@ -40,10 +40,7 @@ namespace Pegasus.Workbench.Pipeline
 
         public IObservable<object> Results { get; set; }
 
-        public void Dispose()
-        {
-            this.disposable.Dispose();
-        }
+        public void Dispose() => this.disposable.Dispose();
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]
         private static ParseResult ParseTest(dynamic parser, string subject, string fileName)

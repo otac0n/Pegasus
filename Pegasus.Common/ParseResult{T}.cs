@@ -16,10 +16,6 @@ namespace Pegasus.Common
     /// <typeparam name="T">The type of the parsing operation's result.</typeparam>
     public class ParseResult<T> : IParseResult<T>, IEquatable<ParseResult<T>>
     {
-        private readonly Cursor endCursor;
-        private readonly Cursor startCursor;
-        private readonly T value;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ParseResult&lt;T&gt;"/> class.
         /// </summary>
@@ -31,43 +27,25 @@ namespace Pegasus.Common
         /// <param name="value">The value of the match.</param>
         public ParseResult(Cursor startCursor, Cursor endCursor, T value)
         {
-            this.startCursor = startCursor;
-            this.endCursor = endCursor;
-            this.value = value;
+            this.StartCursor = startCursor;
+            this.EndCursor = endCursor;
+            this.Value = value;
         }
 
         /// <summary>
         /// Gets the ending cursor of the match.
         /// </summary>
-        public Cursor EndCursor
-        {
-            get
-            {
-                return this.endCursor;
-            }
-        }
+        public Cursor EndCursor { get; }
 
         /// <summary>
         /// Gets the starting cursor of the match.
         /// </summary>
-        public Cursor StartCursor
-        {
-            get
-            {
-                return this.startCursor;
-            }
-        }
+        public Cursor StartCursor { get; }
 
         /// <summary>
         /// Gets the resulting value of the parsing operation.
         /// </summary>
-        public T Value
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public T Value { get; }
 
         /// <summary>
         /// Determines whether two specified parse results have different values.
@@ -75,10 +53,7 @@ namespace Pegasus.Common
         /// <param name="left">The first <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
         /// <param name="right">The second <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
         /// <returns>true if the value of <paramref name="left"/> is different from the value of <paramref name="right"/>; otherwise, false.</returns>
-        public static bool operator !=(ParseResult<T> left, ParseResult<T> right)
-        {
-            return !object.Equals(left, right);
-        }
+        public static bool operator !=(ParseResult<T> left, ParseResult<T> right) => !object.Equals(left, right);
 
         /// <summary>
         /// Determines whether two specified parse results have the same value.
@@ -86,33 +61,25 @@ namespace Pegasus.Common
         /// <param name="left">The first <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
         /// <param name="right">The second <see cref="ParseResult&lt;T&gt;"/> to compare, or null.</param>
         /// <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
-        public static bool operator ==(ParseResult<T> left, ParseResult<T> right)
-        {
-            return object.Equals(left, right);
-        }
+        public static bool operator ==(ParseResult<T> left, ParseResult<T> right) => object.Equals(left, right);
 
         /// <summary>
         /// Determines whether the specified object is equal to the current <see cref="ParseResult&lt;T&gt;"/>.
         /// </summary>
         /// <param name="obj">An object to compare with this <see cref="ParseResult&lt;T&gt;"/>.</param>
         /// <returns>true if the objects are considered equal; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as ParseResult<T>);
-        }
+        public override bool Equals(object obj) => this.Equals(obj as ParseResult<T>);
 
         /// <summary>
         /// Determines whether the specified <see cref="ParseResult&lt;T&gt;"/> is equal to the current <see cref="ParseResult&lt;T&gt;"/>.
         /// </summary>
         /// <param name="other">A <see cref="ParseResult&lt;T&gt;"/> to compare with this <see cref="ParseResult&lt;T&gt;"/>.</param>
         /// <returns>true if the parse results are considered equal; otherwise, false.</returns>
-        public bool Equals(ParseResult<T> other)
-        {
-            return !object.ReferenceEquals(other, null) &&
-                this.startCursor == other.startCursor &&
-                this.endCursor == other.endCursor &&
-                object.Equals(this.value, other.value);
-        }
+        public bool Equals(ParseResult<T> other) =>
+            !object.ReferenceEquals(other, null) &&
+            this.StartCursor == other.StartCursor &&
+            this.EndCursor == other.EndCursor &&
+            object.Equals(this.Value, other.Value);
 
         /// <summary>
         /// Serves as a hash function for this <see cref="ParseResult&lt;T&gt;"/>.
@@ -121,9 +88,9 @@ namespace Pegasus.Common
         public override int GetHashCode()
         {
             int hash = 0x51ED270B;
-            hash = (hash * -0x25555529) + this.startCursor.GetHashCode();
-            hash = (hash * -0x25555529) + this.endCursor.GetHashCode();
-            hash = (hash * -0x25555529) + (object.ReferenceEquals(this.value, null) ? 0 : this.value.GetHashCode());
+            hash = (hash * -0x25555529) + this.StartCursor.GetHashCode();
+            hash = (hash * -0x25555529) + this.EndCursor.GetHashCode();
+            hash = (hash * -0x25555529) + (object.ReferenceEquals(this.Value, null) ? 0 : this.Value.GetHashCode());
 
             return hash;
         }

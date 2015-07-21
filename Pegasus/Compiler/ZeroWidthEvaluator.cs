@@ -51,10 +51,7 @@ namespace Pegasus.Compiler
                 this.zeroWidth = zeroWidth;
             }
 
-            public bool Changed
-            {
-                get { return this.changed; }
-            }
+            public bool Changed => this.changed;
 
             public override void WalkExpression(Expression expression)
             {

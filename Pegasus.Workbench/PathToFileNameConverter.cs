@@ -55,9 +55,6 @@ namespace Pegasus.Workbench
         /// </summary>
         /// <param name="serviceProvider">A service provider helper that can provide services for the markup extension.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return this;
-        }
+        public override object ProvideValue(IServiceProvider serviceProvider) => this;
     }
 }

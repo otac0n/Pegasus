@@ -32,12 +32,12 @@ namespace Pegasus
         {
             if (string.IsNullOrEmpty(inputFile))
             {
-                throw new ArgumentNullException("inputFile");
+                throw new ArgumentNullException(nameof(inputFile));
             }
 
             if (logError == null)
             {
-                throw new ArgumentNullException("logError");
+                throw new ArgumentNullException(nameof(logError));
             }
 
             outputFile = outputFile ?? inputFile + ".cs";

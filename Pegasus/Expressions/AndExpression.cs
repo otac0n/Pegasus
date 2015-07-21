@@ -15,8 +15,6 @@ namespace Pegasus.Expressions
     /// </summary>
     public class AndExpression : Expression
     {
-        private readonly Expression expression;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AndExpression"/> class.
         /// </summary>
@@ -25,18 +23,15 @@ namespace Pegasus.Expressions
         {
             if (expression == null)
             {
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException(nameof(expression));
             }
 
-            this.expression = expression;
+            this.Expression = expression;
         }
 
         /// <summary>
         /// Gets the expression that must match at a location for this expression to match at that location.
         /// </summary>
-        public Expression Expression
-        {
-            get { return this.expression; }
-        }
+        public Expression Expression { get; }
     }
 }

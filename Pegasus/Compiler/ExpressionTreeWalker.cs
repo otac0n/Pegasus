@@ -34,10 +34,7 @@ namespace Pegasus.Compiler
                 Wildcard: this.WalkWildcardExpression);
         }
 
-        public virtual void WalkExpression(Expression expression)
-        {
-            this.expressionDispatcher(expression);
-        }
+        public virtual void WalkExpression(Expression expression) => this.expressionDispatcher(expression);
 
         public virtual void WalkGrammar(Grammar grammar)
         {

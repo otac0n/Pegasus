@@ -23,14 +23,9 @@ namespace Pegasus.Common
     {
         private static int previousStateKey = -1;
 
-        private readonly int column;
-        private readonly string fileName;
         private readonly bool inTransition;
-        private readonly int line;
-        private readonly int location;
         private readonly bool mutable;
         private readonly IDictionary<string, object> state;
-        private readonly string subject;
         private int stateKey;
 
         /// <summary>
@@ -43,7 +38,7 @@ namespace Pegasus.Common
         {
             if (subject == null)
             {
-                throw new ArgumentNullException("subject");
+                throw new ArgumentNullException(nameof(subject));
             }
 
             if (location < 0 || location > subject.Length)
@@ -51,17 +46,17 @@ namespace Pegasus.Common
                 throw new ArgumentOutOfRangeException("location");
             }
 
-            this.subject = subject;
-            this.location = location;
-            this.fileName = fileName;
+            this.Subject = subject;
+            this.Location = location;
+            this.FileName = fileName;
 
             var line = 1;
             var column = 1;
             var inTransition = false;
-            TrackLines(this.subject, 0, location, ref line, ref column, ref inTransition);
+            TrackLines(this.Subject, 0, location, ref line, ref column, ref inTransition);
 
-            this.line = line;
-            this.column = column;
+            this.Line = line;
+            this.Column = column;
             this.inTransition = inTransition;
             this.state = new Dictionary<string, object>();
             this.stateKey = GetNextStateKey();
@@ -70,11 +65,11 @@ namespace Pegasus.Common
 
         private Cursor(string subject, int location, string fileName, int line, int column, bool inTransition, IDictionary<string, object> state, int stateKey, bool mutable)
         {
-            this.subject = subject;
-            this.location = location;
-            this.fileName = fileName;
-            this.line = line;
-            this.column = column;
+            this.Subject = subject;
+            this.Location = location;
+            this.FileName = fileName;
+            this.Line = line;
+            this.Column = column;
             this.inTransition = inTransition;
             this.state = state;
             this.stateKey = stateKey;
@@ -84,51 +79,33 @@ namespace Pegasus.Common
         /// <summary>
         /// Gets the column number represented by the location.
         /// </summary>
-        public int Column
-        {
-            get { return this.column; }
-        }
+        public int Column { get; }
 
         /// <summary>
         /// Gets the filename of the parsing subject.
         /// </summary>
-        public string FileName
-        {
-            get { return this.fileName; }
-        }
+        public string FileName { get; }
 
         /// <summary>
         /// Gets the line number of the cursor.
         /// </summary>
-        public int Line
-        {
-            get { return this.line; }
-        }
+        public int Line { get; }
 
         /// <summary>
         /// Gets the location within the parsing subject.
         /// </summary>
-        public int Location
-        {
-            get { return this.location; }
-        }
+        public int Location { get; }
 
         /// <summary>
         /// Gets a hash code that varies with this cursor's state object.
         /// </summary>
         /// <remarks>This value, along with this cursor's location uniquely identify the parsing state.</remarks>
-        public int StateKey
-        {
-            get { return this.stateKey; }
-        }
+        public int StateKey => this.stateKey;
 
         /// <summary>
         /// Gets the parsing subject.
         /// </summary>
-        public string Subject
-        {
-            get { return this.subject; }
-        }
+        public string Subject { get; }
 
         /// <summary>
         /// Gets the state value with the specified key.
@@ -162,10 +139,7 @@ namespace Pegasus.Common
         /// <param name="left">The first <see cref="Cursor"/> to compare, or null.</param>
         /// <param name="right">The second <see cref="Cursor"/> to compare, or null.</param>
         /// <returns>true if the value of <paramref name="left"/> is different from the value of <paramref name="right"/>; otherwise, false.</returns>
-        public static bool operator !=(Cursor left, Cursor right)
-        {
-            return !object.Equals(left, right);
-        }
+        public static bool operator !=(Cursor left, Cursor right) => !object.Equals(left, right);
 
         /// <summary>
         /// Determines whether two specified cursors represent the same location.
@@ -173,10 +147,7 @@ namespace Pegasus.Common
         /// <param name="left">The first <see cref="Cursor"/> to compare, or null.</param>
         /// <param name="right">The second <see cref="Cursor"/> to compare, or null.</param>
         /// <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
-        public static bool operator ==(Cursor left, Cursor right)
-        {
-            return object.Equals(left, right);
-        }
+        public static bool operator ==(Cursor left, Cursor right) => object.Equals(left, right);
 
         /// <summary>
         /// Returns a new <see cref="Cursor"/> representing the location after consuming the given <see cref="ParseResult&lt;T&gt;"/>.
@@ -190,12 +161,12 @@ namespace Pegasus.Common
                 throw new InvalidOperationException();
             }
 
-            var line = this.line;
-            var column = this.column;
+            var line = this.Line;
+            var column = this.Column;
             var inTransition = this.inTransition;
-            TrackLines(this.subject, this.location, count, ref line, ref column, ref inTransition);
+            TrackLines(this.Subject, this.Location, count, ref line, ref column, ref inTransition);
 
-            return new Cursor(this.subject, this.location + count, this.fileName, line, column, inTransition, this.state, this.stateKey, this.mutable);
+            return new Cursor(this.Subject, this.Location + count, this.FileName, line, column, inTransition, this.state, this.stateKey, this.mutable);
         }
 
         /// <summary>
@@ -203,24 +174,19 @@ namespace Pegasus.Common
         /// </summary>
         /// <param name="obj">An object to compare with this <see cref="Cursor"/>.</param>
         /// <returns>true if the objects are considered equal; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as Cursor);
-        }
+        public override bool Equals(object obj) => this.Equals(obj as Cursor);
 
         /// <summary>
         /// Determines whether the specified <see cref="Cursor"/> is equal to the current <see cref="Cursor"/>.
         /// </summary>
         /// <param name="other">A <see cref="Cursor"/> to compare with this <see cref="Cursor"/>.</param>
         /// <returns>true if the cursors represent the same location at the same state; otherwise, false.</returns>
-        public bool Equals(Cursor other)
-        {
-            return !object.ReferenceEquals(other, null) &&
-                this.location == other.location &&
-                this.subject == other.subject &&
-                this.fileName == other.fileName &&
-                this.stateKey == other.stateKey;
-        }
+        public bool Equals(Cursor other) =>
+            !object.ReferenceEquals(other, null) &&
+            this.Location == other.Location &&
+            this.Subject == other.Subject &&
+            this.FileName == other.FileName &&
+            this.stateKey == other.stateKey;
 
         /// <summary>
         /// Serves as a hash function for this <see cref="Cursor"/>.
@@ -229,9 +195,9 @@ namespace Pegasus.Common
         public override int GetHashCode()
         {
             int hash = 0x51ED270B;
-            hash = (hash * -0x25555529) + this.subject.GetHashCode();
-            hash = (hash * -0x25555529) + this.location.GetHashCode();
-            hash = (hash * -0x25555529) + (this.fileName == null ? 0 : this.fileName.GetHashCode());
+            hash = (hash * -0x25555529) + this.Subject.GetHashCode();
+            hash = (hash * -0x25555529) + this.Location.GetHashCode();
+            hash = (hash * -0x25555529) + (this.FileName == null ? 0 : this.FileName.GetHashCode());
             hash = (hash * -0x25555529) + this.stateKey;
 
             return hash;
@@ -243,7 +209,7 @@ namespace Pegasus.Common
         /// <returns>A unique cursor.</returns>
         public Cursor Touch()
         {
-            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, this.mutable ? new Dictionary<string, object>(this.state) : this.state, GetNextStateKey(), this.mutable);
+            return new Cursor(this.Subject, this.Location, this.FileName, this.Line, this.Column, this.inTransition, this.mutable ? new Dictionary<string, object>(this.state) : this.state, GetNextStateKey(), this.mutable);
         }
 
         /// <summary>
@@ -253,13 +219,10 @@ namespace Pegasus.Common
         /// <returns>A <see cref="Cursor"/> with the specified mutability.</returns>
         public Cursor WithMutability(bool mutable)
         {
-            return new Cursor(this.subject, this.location, this.fileName, this.line, this.column, this.inTransition, new Dictionary<string, object>(this.state), this.stateKey, mutable);
+            return new Cursor(this.Subject, this.Location, this.FileName, this.Line, this.Column, this.inTransition, new Dictionary<string, object>(this.state), this.stateKey, mutable);
         }
 
-        private static int GetNextStateKey()
-        {
-            return Interlocked.Increment(ref previousStateKey);
-        }
+        private static int GetNextStateKey() => Interlocked.Increment(ref previousStateKey);
 
         private static void TrackLines(string subject, int start, int count, ref int line, ref int column, ref bool inTransition)
         {

@@ -31,13 +31,10 @@ namespace Pegasus.Workbench.Pipeline
             this.disposable = compileResults.Connect();
         }
 
-        public IObservable<string> Codes { get; private set; }
+        public IObservable<string> Codes { get; }
 
-        public IObservable<IList<CompilerError>> Errors { get; private set; }
+        public IObservable<IList<CompilerError>> Errors { get; }
 
-        public void Dispose()
-        {
-            this.disposable.Dispose();
-        }
+        public void Dispose() => this.disposable.Dispose();
     }
 }

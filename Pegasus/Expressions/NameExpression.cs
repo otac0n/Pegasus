@@ -13,23 +13,18 @@ namespace Pegasus.Expressions
     /// </summary>
     public class NameExpression : Expression
     {
-        private readonly Identifier identifier;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="NameExpression"/> class.
         /// </summary>
         /// <param name="identifier">The name of the referenced expression.</param>
         public NameExpression(Identifier identifier)
         {
-            this.identifier = identifier;
+            this.Identifier = identifier;
         }
 
         /// <summary>
         /// Gets the name of the referenced expression.
         /// </summary>
-        public Identifier Identifier
-        {
-            get { return this.identifier; }
-        }
+        public Identifier Identifier { get; }
     }
 }
