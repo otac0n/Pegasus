@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="AppViewModel.cs" company="(none)">
-//   Copyright © 2014 John Gietzen.  All Rights Reserved.
+//   Copyright © 2015 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.md for more information.
 // </copyright>
@@ -14,6 +14,7 @@ namespace Pegasus.Workbench
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
+    using System.Reactive.Disposables;
     using System.Reactive.Linq;
     using Newtonsoft.Json;
     using ReactiveUI;
@@ -23,7 +24,8 @@ namespace Pegasus.Workbench
     /// </summary>
     public sealed class AppViewModel : ReactiveObject, IDisposable
     {
-        private readonly IDisposable[] pipeline;
+        private readonly CompositeDisposable pipeline;
+        private readonly IReadOnlyList<Tutorial> tutorials;
 
         private IList<CompilerError> errors = new CompilerError[0];
         private bool grammarChanged = false;
@@ -36,10 +38,13 @@ namespace Pegasus.Workbench
         /// <summary>
         /// Initializes a new instance of the <see cref="AppViewModel"/> class.
         /// </summary>
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "The reactive nature of this object causes the code analyzer to assume more complexity than actually exists.")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "The reactive nature of this object leads to many intermediary types.")]
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The pipeline is disposed properly.")]
         public AppViewModel()
         {
+            this.tutorials = Tutorial.FindAll();
+
             var grammarNameChanges = this.WhenAny(x => x.GrammarFileName, x => x.Value);
             var grammarTextChanges = this.WhenAny(x => x.GrammarText, x => x.Value);
             var testNameChanges = this.WhenAny(x => x.TestFileName, x => x.Value);
@@ -49,7 +54,7 @@ namespace Pegasus.Workbench
             var pegCompiler = new Pipeline.PegCompiler(pegParser.Grammars);
             var csCompiler = new Pipeline.CsCompiler(pegCompiler.Codes.Zip(pegParser.Grammars, Tuple.Create), grammarNameChanges);
             var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges, testNameChanges);
-            this.pipeline = new IDisposable[] { pegParser, pegCompiler, csCompiler, testParser };
+            this.pipeline = new CompositeDisposable(pegParser, pegCompiler, csCompiler, testParser);
 
             testParser.Results.Select(r =>
             {
@@ -69,6 +74,7 @@ namespace Pegasus.Workbench
             this.Save = new ReactiveCommand(grammarNameChanges.Select(n => n != "Untitled.peg"));
             this.Save.RegisterAsyncAction(_ =>
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(this.grammarFileName));
                 File.WriteAllText(this.grammarFileName, this.grammarText);
                 this.GrammarChanged = false;
             });
@@ -77,6 +83,7 @@ namespace Pegasus.Workbench
             this.SaveAs.RegisterAsyncAction(_ =>
             {
                 var fileName = (string)_;
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
                 File.WriteAllText(fileName, this.grammarText);
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
@@ -90,6 +97,16 @@ namespace Pegasus.Workbench
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
                 this.TestText = "";
+            });
+
+            this.LoadTutorial = new ReactiveCommand();
+            this.LoadTutorial.RegisterAsyncAction(_ =>
+            {
+                var tutorial = (Tutorial)_;
+                this.GrammarText = File.Exists(tutorial.FileName) ? File.ReadAllText(tutorial.FileName) : tutorial.GrammarText;
+                this.GrammarFileName = tutorial.FileName;
+                this.GrammarChanged = false;
+                this.TestText = tutorial.TestText;
             });
         }
 
@@ -143,6 +160,11 @@ namespace Pegasus.Workbench
         public IReactiveCommand Load { get; private set; }
 
         /// <summary>
+        /// Gets the load tutorial command.
+        /// </summary>
+        public IReactiveCommand LoadTutorial { get; private set; }
+
+        /// <summary>
         /// Gets the save command.
         /// </summary>
         public IReactiveCommand Save { get; private set; }
@@ -180,14 +202,19 @@ namespace Pegasus.Workbench
         }
 
         /// <summary>
+        /// Gets the list of tutorials.
+        /// </summary>
+        public IReadOnlyList<Tutorial> Tutorials
+        {
+            get { return this.tutorials; }
+        }
+
+        /// <summary>
         /// Disposes the object.
         /// </summary>
         public void Dispose()
         {
-            foreach (var pipe in this.pipeline)
-            {
-                pipe.Dispose();
-            }
+            this.pipeline.Dispose();
         }
     }
 }

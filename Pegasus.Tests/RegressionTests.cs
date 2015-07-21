@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="RegressionTests.cs" company="(none)">
-//   Copyright © 2014 John Gietzen.  All Rights Reserved.
+//   Copyright © 2015 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.md for more information.
 // </copyright>
@@ -46,7 +46,7 @@ namespace Pegasus.Tests
 
             var result = PegCompiler.Compile(grammar);
 
-            var error = result.Errors.Single();
+            var error = result.Errors.Where(e => !e.IsWarning).Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0021"));
         }
 
@@ -186,6 +186,18 @@ namespace Pegasus.Tests
 
             var errorNumber = result.Errors.Select(e => e.ErrorNumber).Distinct().Single();
             Assert.That(errorNumber, Is.EqualTo("PEG0023"));
+        }
+
+        [Test(Description = "GitHub bug #61")]
+        [TestCase("foo = (#STATE{ state[\"ok\"] = false; } ('x' #STATE{ state[\"ok\"] = true; })* &{ state[\"ok\"] })*;")]
+        [TestCase(@"EOF = !.; EOL = '\n'; line = !EOF (!EOL .)* (EOL / EOF); lines = line*;")]
+        public void Parse_WhenZeroWidthRepetitionIsBlockedByAssertions_YieldsNoErrors(string grammarText)
+        {
+            var grammar = new PegParser().Parse(grammarText);
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
         }
     }
 }

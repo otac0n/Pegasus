@@ -1,0 +1,29 @@
+﻿// This calculator makes use of Pegasus' "left
+//  recursion" support to provide the correct
+//  order of operations.
+// Left recursion happens when a rule calls
+//  itself immediately, before consuming any
+//  characters.
+// Left recursive rules must be memoized.
+
+additive <double> -memoize
+    = left:additive "+" right:multiplicative { left + right }
+    / left:additive "-" right:multiplicative { left - right }
+    / multiplicative
+
+multiplicative <double> -memoize
+    = left:multiplicative "*" right:power { left * right }
+    / left:multiplicative "/" right:power { left / right }
+    / power
+
+power <double> -memoize
+    = left:power "^" right:primary { Math.Pow(left, right) }
+    / primary
+
+primary <double>
+    = decimal
+    / "-" primary:primary { -primary }
+    / "(" additive:additive ")" { additive }
+
+decimal <double>
+    = value:([0-9]+ ("." [0-9]+)?) { double.Parse(value) }

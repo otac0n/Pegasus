@@ -74,11 +74,16 @@
     <Compile Include="Performance\PerformanceTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegressionTests.cs" />
+    <Compile Include="Workbench\TutorialTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
       <Project>{1FC19ADF-446F-4118-8189-C25AADF12397}</Project>
       <Name>Pegasus.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pegasus.Workbench\Pegasus.Workbench.csproj">
+      <Project>{1da0d4f0-3867-4061-a466-8ba66a6fec71}</Project>
+      <Name>Pegasus.Workbench</Name>
     </ProjectReference>
     <ProjectReference Include="..\Pegasus\Pegasus.csproj">
       <Project>{58F12D13-9997-4C29-90CE-3C6C7409BA68}</Project>

@@ -4,10 +4,12 @@
 // Here is an example of inline C# statements.
 // Note the extra set of curly braces.
 
+@using System.Text.RegularExpressions
+
 greeting <object>
   = x:"Hello, world!" EOF {{
-      var greeting = x.Replace("e", "i");
-      return new { Greeting = x };
+      var greeting = Regex.Replace(x, "[aeou]", "i");
+      return new { Greeting = greeting };
   }}
 
 EOF

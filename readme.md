@@ -24,22 +24,27 @@ Here is an example of a simple parser for mathematical expressions:
     @namespace MyProject
     @classname ExpressionParser
 
-    additive <decimal> -memoize
+    additive <double> -memoize
         = left:additive "+" right:multiplicative { left + right }
         / left:additive "-" right:multiplicative { left - right }
         / multiplicative
 
-    multiplicative <decimal> -memoize
-        = left:multiplicative "*" right:primary { left * right }
-        / left:multiplicative "/" right:primary { left / right }
+    multiplicative <double> -memoize
+        = left:multiplicative "*" right:power { left * right }
+        / left:multiplicative "/" right:power { left / right }
+        / power
+
+    power <double> -memoize
+        = left:power "^" right:primary { Math.Pow(left, right) }
         / primary
 
-    primary <decimal>
+    primary <double>
         = decimal
+        / "-" primary:primary { -primary }
         / "(" additive:additive ")" { additive }
 
-    decimal <decimal>
-        = value:([0-9]+ ("." [0-9]+)?) { decimal.Parse(value) }
+    decimal <double>
+        = value:([0-9]+ ("." [0-9]+)?) { double.Parse(value) }
 
 This will take mathematical expressions as strings and evaluate them with the proper order of operations and associativity to produce a result as a decimal.
 

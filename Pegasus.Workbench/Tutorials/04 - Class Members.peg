@@ -3,9 +3,12 @@
 
 @members
 {
-    private static string RepalceGreeting(string x)
+    private static string ReplaceGreeting(string x)
     {
+        x = x.Replace("a", "i");
         x = x.Replace("e", "i");
+        x = x.Replace("o", "i");
+        x = x.Replace("u", "i");
         return x;
     }
 }

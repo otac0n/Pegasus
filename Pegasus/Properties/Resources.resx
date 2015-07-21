@@ -183,8 +183,14 @@
   <data name="PEG0021_ERROR_ZeroWidthRepetition" xml:space="preserve">
     <value>Repetition of a zero-width expression with no maximum repetition count will result in an infinite loop.</value>
   </data>
-  <data name="PEG0022_WARNING_ZeroWidthRepetition" xml:space="preserve">
+  <data name="PEG0021_WARNING_ZeroWidthRepetition" xml:space="preserve">
+    <value>Repetition of a zero-width expression with no maximum repetition count may result in an infinite loop.</value>
+  </data>
+  <data name="PEG0022_ERROR_ZeroWidthRepetition" xml:space="preserve">
     <value>Repetition of a zero-width expression will always result in the maximum repetition count.</value>
+  </data>
+  <data name="PEG0022_WARNING_ZeroWidthRepetition" xml:space="preserve">
+    <value>Repetition of a zero-width expression may always result in the maximum repetition count.</value>
   </data>
   <data name="PEG0023_ERROR_AmbiguousLeftRecursionDetected" xml:space="preserve">
     <value>The rule '{0}' is ambiguously left-recursive.</value>

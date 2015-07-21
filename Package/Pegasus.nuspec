@@ -7,7 +7,10 @@
     <owners>John Gietzen</owners>
     <projectUrl>https://github.com/otac0n/Pegasus</projectUrl>
     <iconUrl>https://raw.github.com/otac0n/Pegasus/v$version-short$/Pegasus.ico</iconUrl>
+    <copyright>Copyright © 2015 John Gietzen</copyright>
     <description>A PEG (Parsing Expression Grammar) Style parser compiler that integrates with MSBuild / Visual Studio.  Inspired by the excellent peg.js project.</description>
-    <tags></tags>
+    <tags>parser generator compiler lexer PEG DSL AST</tags>
+    <licenseUrl>https://raw.github.com/otac0n/Pegasus/v$version-short$/license.md</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
   </metadata>
 </package>
