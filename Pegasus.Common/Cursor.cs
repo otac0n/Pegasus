@@ -150,10 +150,10 @@ namespace Pegasus.Common
         public static bool operator ==(Cursor left, Cursor right) => object.Equals(left, right);
 
         /// <summary>
-        /// Returns a new <see cref="Cursor"/> representing the location after consuming the given <see cref="ParseResult&lt;T&gt;"/>.
+        /// Returns a new <see cref="Cursor"/> representing the location after consuming the given <see cref="ParseResult{T}"/>.
         /// </summary>
         /// <param name="count">The number of characters to advance.</param>
-        /// <returns>A <see cref="Cursor"/> that represents the location after consuming the given <see cref="ParseResult&lt;T&gt;"/>.</returns>
+        /// <returns>A <see cref="Cursor"/> that represents the location after consuming the given <see cref="ParseResult{T}"/>.</returns>
         public Cursor Advance(int count)
         {
             if (this.mutable)

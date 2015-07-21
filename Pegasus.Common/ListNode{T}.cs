@@ -15,7 +15,7 @@ namespace Pegasus.Common
     public class ListNode<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ListNode&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="ListNode{T}"/> class.
         /// </summary>
         /// <param name="head">The head of the list.</param>
         /// <param name="tail">The tail of the list.</param>

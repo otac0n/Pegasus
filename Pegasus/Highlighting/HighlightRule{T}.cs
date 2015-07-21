@@ -17,7 +17,7 @@ namespace Pegasus.Highlighting
     public class HighlightRule<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HighlightRule&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="HighlightRule{T}"/> class.
         /// </summary>
         /// <param name="pattern">The <see cref="Regex"/> pattern to use for matching.</param>
         /// <param name="value">The value of the match.</param>

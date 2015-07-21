@@ -18,7 +18,7 @@ namespace Pegasus.Highlighting
     public class HighlightedSegment<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HighlightedSegment&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="HighlightedSegment{T}"/> class.
         /// </summary>
         /// <param name="start">The starting index of the segment.</param>
         /// <param name="end">The ending index of the segment.</param>

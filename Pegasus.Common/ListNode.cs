@@ -12,12 +12,12 @@ namespace Pegasus.Common
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
-    /// Provides static methods for operating on <see cref="ListNode&lt;T&gt;"/> objects.
+    /// Provides static methods for operating on <see cref="ListNode{T}"/> objects.
     /// </summary>
     public static class ListNode
     {
         /// <summary>
-        /// Prepends a element to the given read-only  <see cref="ListNode&lt;T&gt;"/>.
+        /// Prepends a element to the given read-only  <see cref="ListNode{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the list.</typeparam>
         /// <param name="this">The list being prepended.</param>
@@ -29,11 +29,11 @@ namespace Pegasus.Common
         }
 
         /// <summary>
-        /// Converts a read-only <see cref="ListNode&lt;T&gt;"/> into a <see cref="List&lt;T&gt;"/>.
+        /// Converts a read-only <see cref="ListNode{T}"/> into a <see cref="List{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the list.</typeparam>
         /// <param name="this">The list to convert.</param>
-        /// <returns>A <see cref="List&lt;T&gt;"/> containing the elements in the read-only <see cref="ListNode&lt;T&gt;"/>.</returns>
+        /// <returns>A <see cref="List{T}"/> containing the elements in the read-only <see cref="ListNode{T}"/>.</returns>
         [SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "This does not expose an internal list, it is a utility method explicitly for the purpose of creating generic lists.")]
         public static List<T> ToList<T>(this ListNode<T> @this)
         {
