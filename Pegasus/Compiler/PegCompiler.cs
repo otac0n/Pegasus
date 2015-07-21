@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="PegCompiler.cs" company="(none)">
-//   Copyright © 2014 John Gietzen.  All Rights Reserved.
+//   Copyright © 2015 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.md for more information.
 // </copyright>
@@ -36,7 +36,7 @@ namespace Pegasus.Compiler
             var passes = PassTypes.Select(t => (CompilePass)Activator.CreateInstance(t)).ToList();
             while (true)
             {
-                var existingErrors = new HashSet<string>(result.Errors.Select(e => e.ErrorNumber));
+                var existingErrors = new HashSet<string>(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorNumber));
                 var pendingErrors = new HashSet<string>(passes.SelectMany(p => p.ErrorsProduced));
 
                 var nextPasses = passes

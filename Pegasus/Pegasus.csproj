@@ -68,6 +68,7 @@
     <Compile Include="Compiler\CodeGenerator.cs" />
     <Compile Include="Compiler\CompilePass.cs" />
     <Compile Include="Compiler\CompileResult.cs" />
+    <Compile Include="Compiler\ContainsAssertionsEvaluator.cs" />
     <Compile Include="Compiler\ExpressionDispatch.cs" />
     <Compile Include="Compiler\ExpressionTreeWalker.cs" />
     <Compile Include="Compiler\GenerateCodePass.cs" />

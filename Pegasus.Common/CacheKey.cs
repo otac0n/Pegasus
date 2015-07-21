@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="CacheKey.cs" company="(none)">
-//   Copyright © 2014 John Gietzen.  All Rights Reserved.
+//   Copyright © 2015 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.md for more information.
 // </copyright>
@@ -36,7 +36,7 @@ namespace Pegasus.Common
             unchecked
             {
                 var hash = (int)2166136261;
-                hash = hash * 16777619 ^ this.ruleName.GetHashCode();
+                hash = hash * 16777619 ^ (this.ruleName == null ? 0 : this.ruleName.GetHashCode());
                 hash = hash * 16777619 ^ this.stateKey;
                 hash = hash * 16777619 ^ this.location;
                 this.hash = hash;

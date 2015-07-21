@@ -21,10 +21,21 @@
         <CommandBinding Command="Open" Executed="Open" />
         <CommandBinding Command="Save" Executed="Save" />
         <CommandBinding Command="SaveAs" Executed="SaveAs" />
+        <CommandBinding Command="p:Commands.LoadTutorial" Executed="LoadTutorial" />
     </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
+                <MenuItem Header="Open Tutorial" ItemsSource="{Binding Tutorials}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Command" Value="p:Commands.LoadTutorial" />
+                            <Setter Property="CommandParameter" Value="{Binding}" />
+                            <Setter Property="Header" Value="{Binding Name}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <Separator />
                 <MenuItem Command="Open" Header="Open" InputGestureText="Ctrl+O" />
                 <MenuItem Command="{Binding Save}" Header="Save" InputGestureText="Ctrl+S" />
                 <MenuItem Command="SaveAs" Header="SaveAs" InputGestureText="Ctrl+Shift+S" />

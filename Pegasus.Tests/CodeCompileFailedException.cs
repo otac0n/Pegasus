@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="CodeCompileFailedException.cs" company="(none)">
-//   Copyright © 2014 John Gietzen.  All Rights Reserved.
+//   Copyright © 2015 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.md for more information.
 // </copyright>
@@ -16,6 +16,7 @@ namespace Pegasus.Tests
     public class CodeCompileFailedException : Exception
     {
         public CodeCompileFailedException(IEnumerable<CompilerError> errors, IEnumerable<string> messages)
+            : base("Compile failed:" + Environment.NewLine + string.Join(Environment.NewLine, errors.Select(e => e.ToString())))
         {
             this.Errors = errors.ToList().AsReadOnly();
             this.Messages = messages.ToList().AsReadOnly();

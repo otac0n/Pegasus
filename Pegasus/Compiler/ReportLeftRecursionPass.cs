@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="ReportLeftRecursionPass.cs" company="(none)">
-//   Copyright © 2014 John Gietzen.  All Rights Reserved.
+//   Copyright © 2015 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.md for more information.
 // </copyright>

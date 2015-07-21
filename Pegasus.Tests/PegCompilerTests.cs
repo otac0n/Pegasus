@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="PegCompilerTests.cs" company="(none)">
-//   Copyright © 2014 John Gietzen.  All Rights Reserved.
+//   Copyright © 2015 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.md for more information.
 // </copyright>
@@ -337,6 +337,17 @@ namespace Pegasus.Tests
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0001"));
             Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
+        public void Compile_WithSimpleLeftRecursion_ProducesCorrectParser()
+        {
+            var grammar = new PegParser().Parse("a <int> -memoize = a:a '+' b:b { a + b } / b; b <int> = c:[0-9] { int.Parse(c) };");
+
+            var result = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<int>(result.Code);
+
+            Assert.That(parser.Parse("1+3"), Is.EqualTo(4));
         }
 
         [Test]

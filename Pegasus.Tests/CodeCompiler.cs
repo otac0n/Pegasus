@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="CodeCompiler.cs" company="(none)">
-//   Copyright © 2014 John Gietzen.  All Rights Reserved.
+//   Copyright © 2015 John Gietzen.  All Rights Reserved.
 //   This source is subject to the MIT license.
 //   Please see license.md for more information.
 // </copyright>
@@ -53,12 +53,21 @@ namespace Pegasus.Tests
 
             public T Parse(string subject, string fileName = null)
             {
-                return ((dynamic)this.instance).Parse(subject, fileName);
+                return (T)this.instance
+                    .GetType()
+                    .GetMethod("Parse", new[] { typeof(string), typeof(string) })
+                    .Invoke(this.instance, new[] { subject, fileName });
             }
 
             public T Parse(string subject, string fileName, out IList<LexicalElement> lexicalElements)
             {
-                return ((dynamic)this.instance).Parse(subject, fileName, out lexicalElements);
+                var args = new object[] { subject, fileName, null };
+                var result = (T)this.instance
+                    .GetType()
+                    .GetMethod("Parse", new[] { typeof(string), typeof(string), typeof(IList<LexicalElement>).MakeByRefType() })
+                    .Invoke(this.instance, args);
+                lexicalElements = (IList<LexicalElement>)args[2];
+                return result;
             }
         }
     }
