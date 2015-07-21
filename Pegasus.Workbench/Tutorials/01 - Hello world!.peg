@@ -1,10 +1,10 @@
-// This is a simple "Hello, world!" example.
+// This is a simple "Hello world!" example.
 // As you can see from the right hand pane, this
 //   grammar has successfully parsed the text
 //   from the "Test" tab.
 
 greeting
-  = "Hello, world!" EOF
+  = "Hello world!" EOF
 
 EOF
   = !.
