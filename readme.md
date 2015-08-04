@@ -1,6 +1,8 @@
 Pegasus
 =======
 
+[![Join the chat at https://gitter.im/otac0n/Pegasus](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/otac0n/Pegasus?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Pegasus is a PEG-style parser generator for C# that integrates with MSBuild and Visual Studio.
 
 Getting Started
