@@ -1,5 +1,11 @@
 os: Visual Studio 2015
+configuration: Release
+install:
+  - choco install gitversion.portable -pre -y
 before_build:
   - nuget restore
+  - ps: gitversion /l console /output buildserver
 cache:
   - packages -> **\packages.config
+artifacts:
+  - path: 'Package\bin\**\*.nupkg'
