@@ -17,6 +17,7 @@ namespace Pegasus.Package
         public const string PegasusPackageGuid = "243c099e-6e07-4be4-a418-84e77bb0f038";
 
         [SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Required.")]
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Required.")]
         public static readonly Guid PegasusCommandSet = new Guid(PegasusCommandSetGuid);
     }
 }

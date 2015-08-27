@@ -46,10 +46,10 @@ namespace Pegasus.Expressions
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="CharacterRange"/>.
+        /// Determines whether the specified <see cref="object"/> is equal to the current <see cref="CharacterRange"/>.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="CharacterRange"/>.</param>
-        /// <returns>true if the specified <see cref="System.Object"/> is equal to the current <see cref="CharacterRange"/>; otherwise, false.</returns>
+        /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="CharacterRange"/>.</param>
+        /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="CharacterRange"/>; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             return this.Equals(obj as CharacterRange);

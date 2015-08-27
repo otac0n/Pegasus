@@ -52,7 +52,7 @@ namespace Pegasus.Workbench
                 if (e.PropertyName == "GrammarText" && !updatingGrammar)
                 {
                     updatingGrammar = true;
-                    Dispatcher.Invoke(() => { this.GrammarEditor.Text = this.ViewModel.GrammarText; });
+                    this.Dispatcher.Invoke(() => { this.GrammarEditor.Text = this.ViewModel.GrammarText; });
                     updatingGrammar = false;
                 }
             };
@@ -73,7 +73,7 @@ namespace Pegasus.Workbench
                 if (e.PropertyName == "TestText" && !updatingTest)
                 {
                     updatingTest = true;
-                    Dispatcher.Invoke(() => { this.TestEditor.Text = this.ViewModel.TestText; });
+                    this.Dispatcher.Invoke(() => { this.TestEditor.Text = this.ViewModel.TestText; });
                     updatingTest = false;
                 }
             };

@@ -20,6 +20,7 @@ namespace Pegasus.Workbench
         /// Gets the "LoadTutorial" command.
         /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "This is the intended usage of the RoutedUICommand class.")]
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is the intended usage of the RoutedUICommand class.")]
         public static readonly RoutedUICommand LoadTutorial = new RoutedUICommand("Load Tutorial", "LoadTutorial", typeof(Commands));
     }
 }

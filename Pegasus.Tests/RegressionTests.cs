@@ -116,7 +116,8 @@ namespace Pegasus.Tests
         [Test(Description = "GitHub bug #35")]
         public void Compile_WhenMemoizedRuleIsReVisitedWithoutStateMutation_UsesTheMemoizedValue()
         {
-            var grammar = new PegParser().Parse(string.Join("\n", new[] {
+            var grammar = new PegParser().Parse(string.Join("\n", new[]
+            {
                 "@members",
                 "{",
                 "    private int callCount = 0;",
@@ -137,7 +138,8 @@ namespace Pegasus.Tests
         [Test(Description = "GitHub bug #35")]
         public void Compile_WhenMemoizedRuleIsVisitedAfterAMutation_DoesNotUseTheMemoizedValue()
         {
-            var grammar = new PegParser().Parse(string.Join("\n", new[] {
+            var grammar = new PegParser().Parse(string.Join("\n", new[]
+            {
                 "@members",
                 "{",
                 "    private int callCount = 0;",
