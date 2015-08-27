@@ -21,13 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Version.msbuild = Version.msbuild
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A29EA574-FC6E-4BD4-AAC3-074D06854CEE}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\nuget.exe = .nuget\nuget.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Package", "Package\Package.csproj", "{7D630AC1-62A7-439F-AC80-0EA800F3A846}"
 	ProjectSection(ProjectDependencies) = postProject
 		{21772B0C-0206-4ABD-B88B-41EE4CFCA47E} = {21772B0C-0206-4ABD-B88B-41EE4CFCA47E}
