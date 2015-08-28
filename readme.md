@@ -36,11 +36,11 @@ Here is an example of a simple parser for mathematical expressions:
         / left:multiplicative "/" right:power { left / right }
         / power
 
-    power <double> -memoize
-        = left:power "^" right:primary { Math.Pow(left, right) }
+    power <double>
+        = left:primary "^" right:power { Math.Pow(left, right) }
         / primary
 
-    primary <double>
+    primary <double> -memoize
         = decimal
         / "-" primary:primary { -primary }
         / "(" additive:additive ")" { additive }
