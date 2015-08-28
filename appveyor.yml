@@ -9,3 +9,4 @@ cache:
   - packages -> **\packages.config
 artifacts:
   - path: 'Package\bin\**\*.nupkg'
+  - path: 'Pegasus.Package\bin\**\*.vsix'
