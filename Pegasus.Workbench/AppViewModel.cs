@@ -70,42 +70,41 @@ namespace Pegasus.Workbench
             };
             errorObvervables.Aggregate((a, b) => a.CombineLatest(b, (e, r) => e.Concat(r))).Select(e => e.ToList()).BindTo(this, x => x.CompileErrors);
 
-            this.Save = new ReactiveCommand(grammarNameChanges.Select(n => n != "Untitled.peg"));
-            this.Save.RegisterAsyncAction(_ =>
+            this.Save = ReactiveCommand.CreateAsyncTask(grammarNameChanges.Select(n => n != "Untitled.peg"), async _ =>
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(this.grammarFileName));
-                File.WriteAllText(this.grammarFileName, this.grammarText);
+                await FileUtils.WriteAllTextAsync(this.grammarFileName, this.grammarText);
                 this.GrammarChanged = false;
             });
 
-            this.SaveAs = new ReactiveCommand();
-            this.SaveAs.RegisterAsyncAction(_ =>
+            this.SaveAs = ReactiveCommand.CreateAsyncTask(async _ =>
             {
                 var fileName = (string)_;
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                File.WriteAllText(fileName, this.grammarText);
+                await FileUtils.WriteAllTextAsync(this.grammarFileName, this.grammarText);
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
+                return true;
             });
 
-            this.Load = new ReactiveCommand();
-            this.Load.RegisterAsyncAction(_ =>
+            this.Load = ReactiveCommand.CreateAsyncTask(async _ =>
             {
                 var fileName = (string)_;
-                this.GrammarText = File.ReadAllText(fileName);
+                this.GrammarText = await FileUtils.ReadAllTextAsync(fileName);
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
                 this.TestText = "";
+                return true;
             });
 
-            this.LoadTutorial = new ReactiveCommand();
-            this.LoadTutorial.RegisterAsyncAction(_ =>
+            this.LoadTutorial = ReactiveCommand.CreateAsyncTask(async _ =>
             {
                 var tutorial = (Tutorial)_;
-                this.GrammarText = File.Exists(tutorial.FileName) ? File.ReadAllText(tutorial.FileName) : tutorial.GrammarText;
+                this.GrammarText = File.Exists(tutorial.FileName) ? await FileUtils.ReadAllTextAsync(tutorial.FileName) : tutorial.GrammarText;
                 this.GrammarFileName = tutorial.FileName;
                 this.GrammarChanged = false;
                 this.TestText = tutorial.TestText;
+                return true;
             });
         }
 
