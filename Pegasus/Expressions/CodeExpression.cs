@@ -25,6 +25,11 @@ namespace Pegasus.Expressions
         /// Indicates that the code should be used to modify the current parser state.
         /// </summary>
         State,
+
+        /// <summary>
+        /// Indicates that the code should be used as the body of a parse method.
+        /// </summary>
+        Parse,
     }
 
     /// <summary>

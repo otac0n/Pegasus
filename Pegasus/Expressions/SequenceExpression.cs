@@ -32,7 +32,7 @@ namespace Pegasus.Expressions
                 if ((sequenceExpression = e as SequenceExpression) != null)
                 {
                     var last = sequenceExpression.Sequence.LastOrDefault() as CodeExpression;
-                    if (last == null || last.CodeType != CodeType.Result)
+                    if (last == null || last.CodeType == CodeType.State || last.CodeType == CodeType.Error)
                     {
                         flattened.AddRange(sequenceExpression.Sequence);
                         continue;

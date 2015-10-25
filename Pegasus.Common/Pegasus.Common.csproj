@@ -58,6 +58,7 @@
     <Compile Include="LexicalElement.cs" />
     <Compile Include="ListNode.cs" />
     <Compile Include="ListNode{T}.cs" />
+    <Compile Include="ParseDelegate.cs" />
     <Compile Include="ParseResult{T}.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

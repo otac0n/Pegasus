@@ -7,7 +7,7 @@
     var expression = sequence[index];
 
     var codeExpression = expression as CodeExpression;
-    if (codeExpression != null && codeExpression.CodeType != CodeType.Result && codeExpression.CodeType != CodeType.Error)
+    if (codeExpression != null && codeExpression.CodeType == CodeType.State)
     {
         codeExpression = null;
     }
@@ -24,8 +24,16 @@
         {{: finalContext.ResultName }} = this.ReturnHelper<{{= finalContext.ResultType }}>({{: startCursorName }}, ref cursor, state =>
             {{@RenderCode codeExpression.CodeSpan}}
             {{if finalContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(finalContext.ResultRuleName) }}{{/if}});
+    {{elif codeExpression.CodeType == CodeType.Parse}}
+        {{: finalContext.ResultName }} = this.ParseHelper<{{= finalContext.ResultType }}>(ref cursor, (ref Cursor state) =>
+            {{@RenderCode codeExpression.CodeSpan}}
+            {{if finalContext.ResultRuleName != null}}, ruleName: {{= ToLiteral(finalContext.ResultRuleName) }}{{/if}});
     {{elif codeExpression.CodeType == CodeType.Error}}
         {{@WalkExpression expression}}
+    {{else}}
+        {{
+            throw new NotImplementedException();
+        }}
     {{/if}}
 {{else}}
     {{

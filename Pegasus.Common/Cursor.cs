@@ -217,7 +217,9 @@ namespace Pegasus.Common
         /// <returns>A <see cref="Cursor"/> with the specified mutability.</returns>
         public Cursor WithMutability(bool mutable)
         {
-            return new Cursor(this.Subject, this.Location, this.FileName, this.Line, this.Column, this.inTransition, new Dictionary<string, object>(this.state), this.stateKey, mutable);
+            return !mutable && !this.mutable
+                ? this
+                : new Cursor(this.Subject, this.Location, this.FileName, this.Line, this.Column, this.inTransition, new Dictionary<string, object>(this.state), this.stateKey, mutable);
         }
 
         private static int GetNextStateKey() => Interlocked.Increment(ref previousStateKey);

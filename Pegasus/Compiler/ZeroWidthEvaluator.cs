@@ -106,6 +106,7 @@ namespace Pegasus.Compiler
             {
                 switch (codeExpression.CodeType)
                 {
+                    case CodeType.Parse:
                     case CodeType.Result:
                     case CodeType.State:
                         this.zeroWidth[codeExpression] = true;

@@ -49,6 +49,7 @@
     <Compile Include="CacheKey.cs" />
     <Compile Include="Cursor.cs" />
     <Compile Include="IParseResult{T}.cs" />
+    <Compile Include="ParseDelegate.cs" />
     <Compile Include="ParseResult{T}.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

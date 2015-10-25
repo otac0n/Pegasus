@@ -101,7 +101,7 @@ namespace Pegasus.Compiler
 
             protected override void WalkCodeExpression(CodeExpression codeExpression)
             {
-                this.containsAssertions[codeExpression] = false;
+                this.containsAssertions[codeExpression] = codeExpression.CodeType == CodeType.Parse;
             }
 
             protected override void WalkLiteralExpression(LiteralExpression literalExpression)

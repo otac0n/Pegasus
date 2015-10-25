@@ -1,8 +1,8 @@
 ﻿@model CodeExpression
-{{
-    var startCursorName = this.CreateVariable("startCursor");
-}}
 {{if model.CodeType == CodeType.State}}
+    {{
+        var startCursorName = this.CreateVariable("startCursor");
+    }}
     var {{: startCursorName }} = cursor;
     {
         var state = cursor.WithMutability(mutable: true);

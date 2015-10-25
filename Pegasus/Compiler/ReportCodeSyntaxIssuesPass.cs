@@ -32,9 +32,9 @@ namespace Pegasus.Compiler
 
             protected override void WalkCodeExpression(CodeExpression codeExpression)
             {
-                var ix = (codeExpression.CodeType == CodeType.Error || codeExpression.CodeType == CodeType.Result)
-                    ? Tuple.Create("state =>", "")
-                    : Tuple.Create("state => {", "}");
+                var ix = codeExpression.CodeType == CodeType.State
+                    ? Tuple.Create("state => {", "}")
+                    : Tuple.Create("state =>", "");
                 var prefix = ix.Item1;
                 var suffix = ix.Item2;
 

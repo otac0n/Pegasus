@@ -206,6 +206,32 @@ namespace
             return new ParseResult<T>(startCursor, endCursor, result);
         }
 
+        private IParseResult<T> ParseHelper<T>(ref Cursor cursor, ParseDelegate<T> wrappedCode{{if lexical}}, string ruleName = null{{/if}})
+        {
+            var startCursor = cursor;
+            var result = wrappedCode(ref cursor);
+            if (result == null)
+            {
+                cursor = startCursor;
+                return null;
+            }
+            else
+            {
+                cursor = cursor.WithMutability(false);
+                {{if lexical}}
+                    if (ruleName != null)
+                    {
+                        var state = cursor.WithMutability(true);
+                        var element = new LexicalElement { StartCursor = startCursor, EndCursor = cursor, Name = ruleName };
+                        state["_lexical"] = (state["_lexical"] as ListNode<LexicalElement>).Push(element);
+                        element.EndCursor = cursor = state.WithMutability(false);
+                    }
+
+                {{/if}}
+                return result;
+            }
+        }
+
         private Exception ExceptionHelper(Cursor cursor, Func<Cursor, string> wrappedCode)
         {
             var ex = new FormatException(wrappedCode(cursor));

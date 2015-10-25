@@ -62,7 +62,7 @@ labeled <Expression> -memoize
         new PrefixedExpression(label, expression)
     }
   / prefixed
-  / type:&actionType &{ type != CodeType.Result } code:action { code }
+  / code:action &{ code.CodeType == CodeType.State || code.CodeType == CodeType.Error } { code }
 
 prefixed <Expression>
   = and _ code:code {
@@ -106,12 +106,13 @@ quantifier <Quantifier> -memoize
 integer <int> -lexical
   = digits:(digit+ "") { int.Parse(digits) }
 
-action <Expression>
+action <CodeExpression> -memoize
   = type:actionType code:code { new CodeExpression(code, type) }
 
 actionType <CodeType> -lexical
   = "#ERROR"i { CodeType.Error }
   / "#STATE"i { CodeType.State }
+  / "#PARSE"i { CodeType.Parse }
   /           { CodeType.Result }
 
 code <CodeSpan> -lexical
