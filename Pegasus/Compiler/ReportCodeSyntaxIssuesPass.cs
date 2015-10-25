@@ -1,10 +1,6 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ReportCodeSyntaxIssuesPass.cs" company="(none)">
-//   Copyright © 2015 John Gietzen.  All Rights Reserved.
-//   This source is subject to the MIT license.
-//   Please see license.md for more information.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿// Copyright © 2015 John Gietzen.  All Rights Reserved.
+// This source is subject to the MIT license.
+// Please see license.md for more information.
 
 namespace Pegasus.Compiler
 {
@@ -82,7 +78,7 @@ namespace Pegasus.Compiler
 
             public override ParseOptions Options => ParseOptions.Default;
 
-            public override FileLinePositionSpan GetLineSpan(TextSpan span, bool usePreprocessorDirectives, CancellationToken cancellationToken = new CancellationToken()) => new FileLinePositionSpan();
+            public override FileLinePositionSpan GetLineSpan(TextSpan span, bool usePreprocessorDirectives, CancellationToken cancellationToken = default(CancellationToken)) => default(FileLinePositionSpan);
 
             public override SyntaxReference GetReference(SyntaxNode node) => null;
 

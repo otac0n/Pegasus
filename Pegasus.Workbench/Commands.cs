@@ -1,10 +1,6 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Commands.cs" company="(none)">
-//   Copyright © 2015 John Gietzen.  All Rights Reserved.
-//   This source is subject to the MIT license.
-//   Please see license.md for more information.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿// Copyright © 2015 John Gietzen.  All Rights Reserved.
+// This source is subject to the MIT license.
+// Please see license.md for more information.
 
 namespace Pegasus.Workbench
 {
@@ -21,6 +17,6 @@ namespace Pegasus.Workbench
         /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "This is the intended usage of the RoutedUICommand class.")]
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is the intended usage of the RoutedUICommand class.")]
-        public static readonly RoutedUICommand LoadTutorial = new RoutedUICommand("Load Tutorial", "LoadTutorial", typeof(Commands));
+        public static readonly RoutedUICommand LoadTutorial = new RoutedUICommand("Load Tutorial", nameof(LoadTutorial), typeof(Commands));
     }
 }

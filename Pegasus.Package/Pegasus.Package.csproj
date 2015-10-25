@@ -158,6 +158,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <None Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </None>
     <None Include="NuGetPackage.msbuild" />
     <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
