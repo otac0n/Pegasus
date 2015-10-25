@@ -167,14 +167,17 @@
     </CodeAnalysisDictionary>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta008\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta014\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta014\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Weave.1.1.0\build\Weave.targets" Condition="Exists('..\packages\Weave.1.1.0\build\Weave.targets')" />
+  <Import Project="..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets" Condition="Exists('..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets')" />
+  <Import Project="..\packages\Weave.1.1.2\build\Weave.targets" Condition="Exists('..\packages\Weave.1.1.2\build\Weave.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Weave.1.1.0\build\Weave.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Weave.1.1.0\build\Weave.targets'))" />
+    <Error Condition="!Exists('..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.Analyzers.1.0.0-beta014\build\StyleCop.Analyzers.targets'))" />
+    <Error Condition="!Exists('..\packages\Weave.1.1.2\build\Weave.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Weave.1.1.2\build\Weave.targets'))" />
   </Target>
 </Project>
