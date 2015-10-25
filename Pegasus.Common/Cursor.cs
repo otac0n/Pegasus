@@ -6,6 +6,7 @@ namespace Pegasus.Common
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Threading;
 
     /// <summary>
@@ -15,6 +16,7 @@ namespace Pegasus.Common
 
     [Serializable]
 #endif
+    [DebuggerDisplay("({Line},{Column})")]
     public class Cursor : IEquatable<Cursor>
     {
         private static int previousStateKey = -1;

@@ -46,5 +46,11 @@ namespace Pegasus.Expressions
         /// Gets the cursor just before the <see cref="Identifier"/>.
         /// </summary>
         public Cursor Start { get; }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }
