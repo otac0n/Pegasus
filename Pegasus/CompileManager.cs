@@ -65,7 +65,7 @@ namespace Pegasus
             Grammar grammar;
             try
             {
-                grammar = new PegParser().Parse(subject ?? "", fileName);
+                grammar = new PegParser().Parse(subject ?? string.Empty, fileName);
             }
             catch (FormatException ex)
             {

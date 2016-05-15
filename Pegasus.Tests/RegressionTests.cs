@@ -121,8 +121,7 @@ namespace Pegasus.Tests
                 "start <int>",
                 "  = 'OK'           t:test 'NO' { t }",
                 "  / 'OK' #STATE{ } t:test      { t }",
-                "",
-                "test <int> -memoize = { ++callCount }"
+                "test <int> -memoize = { ++callCount }",
             }));
 
             var result = PegCompiler.Compile(grammar);
@@ -143,8 +142,7 @@ namespace Pegasus.Tests
                 "start <int>",
                 "  = 'OK'                                     t:test 'NO' { t }",
                 "  / 'OK' #STATE{ state[\"foo\"] = \"bar\"; } t:test      { t }",
-                "",
-                "test <int> -memoize = { ++callCount }"
+                "test <int> -memoize = { ++callCount }",
             }));
 
             var result = PegCompiler.Compile(grammar);

@@ -91,7 +91,7 @@ namespace Pegasus.Workbench.Pipeline
             }
             catch (Exception ex)
             {
-                errors.Add(new CompilerError(SentinelFileName, 1, 1, "", "Internal Error: " + ex.Message));
+                errors.Add(new CompilerError(SentinelFileName, 1, 1, string.Empty, "Internal Error: " + ex.Message));
                 return new Result
                 {
                     Errors = errors.AsReadOnly(),

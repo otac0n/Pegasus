@@ -25,10 +25,10 @@ namespace Pegasus.Workbench
         private IList<CompilerError> errors = new CompilerError[0];
         private bool grammarChanged = false;
         private string grammarFileName = "Untitled.peg";
-        private string grammarText = "";
+        private string grammarText = string.Empty;
         private string testFileName = "Test";
         private string testResults;
-        private string testText = "";
+        private string testText = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppViewModel"/> class.
@@ -116,7 +116,7 @@ namespace Pegasus.Workbench
                 this.GrammarText = await FileUtils.ReadAllTextAsync(fileName);
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
-                this.TestText = "";
+                this.TestText = string.Empty;
                 return true;
             });
 

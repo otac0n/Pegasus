@@ -132,7 +132,7 @@ namespace Pegasus.Tests.Performance
             }
             else
             {
-                suffix = "";
+                suffix = string.Empty;
                 rounded = Math.Round(mean, 3 - GetScale(mean));
             }
 

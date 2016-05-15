@@ -34,7 +34,7 @@ namespace Pegasus.Compiler
             {
                 var ix = codeExpression.CodeType == CodeType.State
                     ? Tuple.Create("state => {", "}")
-                    : Tuple.Create("state =>", "");
+                    : Tuple.Create("state =>", string.Empty);
                 var prefix = ix.Item1;
                 var suffix = ix.Item2;
 

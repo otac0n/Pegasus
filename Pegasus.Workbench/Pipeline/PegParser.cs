@@ -41,7 +41,7 @@ namespace Pegasus.Workbench.Pipeline
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]
         private static ParseResult Parse(string subject)
         {
-            subject = subject ?? "";
+            subject = subject ?? string.Empty;
 
             try
             {
@@ -62,7 +62,7 @@ namespace Pegasus.Workbench.Pipeline
                 var parts = Regex.Split(ex.Message, @"(?<=^\w+):");
                 if (parts.Length == 1)
                 {
-                    parts = new[] { "", parts[0] };
+                    parts = new[] { string.Empty, parts[0] };
                 }
 
                 return new ParseResult

@@ -46,7 +46,7 @@ namespace Pegasus.Workbench.Pipeline
                 };
             }
 
-            subject = subject ?? "";
+            subject = subject ?? string.Empty;
 
             try
             {
@@ -63,7 +63,7 @@ namespace Pegasus.Workbench.Pipeline
                 var parts = Regex.Split(ex.Message, @"(?<=^\w+):");
                 if (parts.Length == 1)
                 {
-                    parts = new[] { "", parts[0] };
+                    parts = new[] { string.Empty, parts[0] };
                 }
 
                 return new ParseResult

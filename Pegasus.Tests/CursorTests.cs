@@ -13,7 +13,7 @@ namespace Pegasus.Tests
         [Test]
         public void Constructor_WhenGivenALocationPastTheEndOfTheString_ThrowsException()
         {
-            Assert.That(() => new Cursor("", 1), Throws.Exception);
+            Assert.That(() => new Cursor(string.Empty, 1), Throws.Exception);
         }
 
         [Test]
