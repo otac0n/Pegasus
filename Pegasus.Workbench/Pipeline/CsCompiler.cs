@@ -29,7 +29,7 @@ namespace Pegasus.Workbench.Pipeline
                 .Publish();
 
             this.Parsers = csCompilerResults.Select(r => r.Parser);
-            this.Errors = csCompilerResults.Select(r => r.Errors.AsReadOnly());
+            this.Errors = csCompilerResults.Select(r => r.Errors);
 
             this.disposable = csCompilerResults.Connect();
         }
@@ -47,7 +47,7 @@ namespace Pegasus.Workbench.Pipeline
             {
                 return new Result
                 {
-                    Errors = new List<CompilerError>(),
+                    Errors = new CompilerError[0],
                 };
             }
 
@@ -83,7 +83,7 @@ namespace Pegasus.Workbench.Pipeline
                 {
                     return new Result
                     {
-                        Errors = errors,
+                        Errors = errors.AsReadOnly(),
                     };
                 }
 
@@ -94,7 +94,7 @@ namespace Pegasus.Workbench.Pipeline
                 return new Result
                 {
                     Parser = Activator.CreateInstance(parserType),
-                    Errors = errors,
+                    Errors = errors.AsReadOnly(),
                 };
             }
             catch (Exception ex)
@@ -102,14 +102,14 @@ namespace Pegasus.Workbench.Pipeline
                 errors.Add(new CompilerError(fileName, 1, 1, "", "Internal Error: " + ex.Message));
                 return new Result
                 {
-                    Errors = errors,
+                    Errors = errors.AsReadOnly(),
                 };
             }
         }
 
         private class Result
         {
-            public List<CompilerError> Errors { get; set; }
+            public IList<CompilerError> Errors { get; set; }
 
             public dynamic Parser { get; set; }
         }

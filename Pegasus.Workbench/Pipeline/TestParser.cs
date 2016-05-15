@@ -27,7 +27,7 @@ namespace Pegasus.Workbench.Pipeline
                 .Publish();
 
             this.Results = testParserResults.Select(r => r.Result);
-            this.Errors = testParserResults.Select(r => r.Errors.AsReadOnly());
+            this.Errors = testParserResults.Select(r => r.Errors);
 
             this.disposable = testParserResults.Connect();
         }
@@ -45,7 +45,7 @@ namespace Pegasus.Workbench.Pipeline
             {
                 return new ParseResult
                 {
-                    Errors = new List<CompilerError>(),
+                    Errors = new CompilerError[0],
                     Result = null,
                 };
             }
@@ -57,7 +57,7 @@ namespace Pegasus.Workbench.Pipeline
                 return new ParseResult
                 {
                     Result = parser.Parse(subject, fileName),
-                    Errors = new List<CompilerError>(),
+                    Errors = new CompilerError[0],
                 };
             }
             catch (Exception ex)
@@ -75,14 +75,14 @@ namespace Pegasus.Workbench.Pipeline
                     Errors = new List<CompilerError>
                     {
                         new CompilerError(fileName, cursor.Line, cursor.Column, errorNumber: parts[0], errorText: parts[1]),
-                    },
+                    }.AsReadOnly(),
                 };
             }
         }
 
         private class ParseResult
         {
-            public List<CompilerError> Errors { get; set; }
+            public IList<CompilerError> Errors { get; set; }
 
             public object Result { get; set; }
         }
