@@ -1,18 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Strict" Description="A strict ruleset based on the Microsoft All Rules rule set." ToolsVersion="14.0">
+<RuleSet Name="Strict" Description="A strict ruleset based on the Microsoft All Rules ruleset." ToolsVersion="14.0">
   <IncludeAll Action="Warning" />
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1006" Action="None" />
+    <Rule Id="CA1020" Action="None" />
     <Rule Id="CA1026" Action="None" />
     <Rule Id="CA1500" Action="None" />
+    <Rule Id="CA1721" Action="None" />
+    <Rule Id="CA1810" Action="None" />
     <Rule Id="CA2202" Action="None" />
     <Rule Id="CA2210" Action="None" />
+    <Rule Id="CA2243" Action="None" />
   </Rules>
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
     <Rule Id="SA1115" Action="None" />
     <Rule Id="SA1116" Action="None" />
     <Rule Id="SA1118" Action="None" />
-    <Rule Id="SA1122" Action="None" />
     <Rule Id="SA1407" Action="None" />
     <Rule Id="SA1600" Action="None" />
     <Rule Id="SA1601" Action="None" />
