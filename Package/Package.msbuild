@@ -1,5 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(SolutionDir)Version.msbuild" />
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <Target Name="Clean">
     <ItemGroup>
       <ToDelete Include="$(OutputPath)\**\*" />
@@ -25,7 +24,7 @@
     </PropertyGroup>
     <WriteLinesToFile File="obj\$(Configuration)\Pegasus.nuspec" Lines="$(NuSpec)" />
     <MakeDir Directories="$(OutputPath)" />
-    <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\$(Configuration)\Pegasus.nuspec -NoPackageAnalysis -NonInteractive -OutputDir $(OutputPath)" />
+    <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\$(Configuration)\Pegasus.nuspec -NoPackageAnalysis -NonInteractive -OutputDir $(OutputPath) -Version $(NuGetVersion)" />
   </Target>
   <Target Name="GetNativeManifest"></Target>
   <Target Name="GetCopyToOutputDirectoryItems"></Target>

@@ -4,7 +4,7 @@ install:
   - choco install gitversion.portable -pre -y
 before_build:
   - nuget restore
-  - ps: gitversion /l console /output buildserver
+  - ps: gitversion /l console /output buildserver /updateAssemblyInfo
 cache:
   - packages -> **\packages.config
 artifacts:

@@ -6,11 +6,11 @@
     <authors>John Gietzen</authors>
     <owners>John Gietzen</owners>
     <projectUrl>https://github.com/otac0n/Pegasus</projectUrl>
-    <iconUrl>https://raw.github.com/otac0n/Pegasus/v$version-short$/Pegasus.ico</iconUrl>
+    <iconUrl>https://raw.github.com/otac0n/Pegasus/master/Pegasus.ico</iconUrl>
     <copyright>Copyright © 2015 John Gietzen</copyright>
     <description>A PEG (Parsing Expression Grammar) parser compiler that integrates with MSBuild / Visual Studio.  Features selective packrat parsing and syntax-highlighting output.</description>
     <tags>parser generator compiler lexer PEG DSL AST</tags>
-    <licenseUrl>https://raw.github.com/otac0n/Pegasus/v$version-short$/license.md</licenseUrl>
+    <licenseUrl>https://raw.github.com/otac0n/Pegasus/master/license.md</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
   </metadata>
 </package>

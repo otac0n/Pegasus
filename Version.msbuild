@@ -1,7 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <AssemblyInfo>$([System.IO.File]::ReadAllText("$(SolutionDir)SharedAssemblyInfo.cs"))</AssemblyInfo>
-    <PegasusVersion>$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfo), "AssemblyVersion\(\"(\d+\.\d+\.\d+)\.\d+\"\)").Groups[1].Value)</PegasusVersion>
-    <PegasusVersionShort>$([System.Text.RegularExpressions.Regex]::Replace($(PegasusVersion), "(\.0+)+$", ""))</PegasusVersionShort>
-  </PropertyGroup>
-</Project>
