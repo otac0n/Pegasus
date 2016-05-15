@@ -9,6 +9,7 @@ namespace Pegasus.Workbench
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -32,45 +33,41 @@ namespace Pegasus.Workbench
             this.GrammarEditor.Text = this.ViewModel.GrammarText;
             this.TestEditor.Text = this.ViewModel.TestText;
 
-            var updatingGrammar = false;
+            var updatingGrammar = 0;
             this.GrammarEditor.TextChanged += (s, e) =>
             {
-                if (!updatingGrammar)
+                if (Interlocked.CompareExchange(ref updatingGrammar, 1, 0) == 0)
                 {
-                    updatingGrammar = true;
                     this.ViewModel.GrammarText = this.GrammarEditor.Text;
-                    updatingGrammar = false;
+                    Interlocked.Exchange(ref updatingGrammar, 0);
                 }
             };
 
             this.ViewModel.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == "GrammarText" && !updatingGrammar)
+                if (e.PropertyName == "GrammarText" && Interlocked.CompareExchange(ref updatingGrammar, 1, 0) == 0)
                 {
-                    updatingGrammar = true;
                     this.Dispatcher.Invoke(() => { this.GrammarEditor.Text = this.ViewModel.GrammarText; });
-                    updatingGrammar = false;
+                    Interlocked.Exchange(ref updatingGrammar, 0);
                 }
             };
 
-            var updatingTest = false;
+            var updatingTest = 0;
             this.TestEditor.TextChanged += (s, e) =>
             {
-                if (!updatingTest)
+                if (Interlocked.CompareExchange(ref updatingTest, 1, 0) == 0)
                 {
-                    updatingTest = true;
                     this.ViewModel.TestText = this.TestEditor.Text;
-                    updatingTest = false;
+                    Interlocked.Exchange(ref updatingTest, 0);
                 }
             };
 
             this.ViewModel.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == "TestText" && !updatingTest)
+                if (e.PropertyName == "TestText" && Interlocked.CompareExchange(ref updatingTest, 1, 0) == 0)
                 {
-                    updatingTest = true;
                     this.Dispatcher.Invoke(() => { this.TestEditor.Text = this.ViewModel.TestText; });
-                    updatingTest = false;
+                    Interlocked.Exchange(ref updatingTest, 0);
                 }
             };
         }
