@@ -38,9 +38,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <None Include="..\stylecop.json">
+    <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
-    </None>
+    </AdditionalFiles>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">

@@ -66,15 +66,15 @@
     <None Include="..\Key.snk">
       <Link>Key.snk</Link>
     </None>
-    <None Include="..\stylecop.json">
+    <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
-    </None>
+    </AdditionalFiles>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -82,8 +82,6 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\GitVersionTask.3.3.0\build\portable-net+sl+win+wpa+wp\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.3.3.0\build\portable-net+sl+win+wpa+wp\GitVersionTask.targets'))" />
-    <Error Condition="!Exists('..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets'))" />
   </Target>
   <Import Project="..\packages\GitVersionTask.3.3.0\build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.3.3.0\build\portable-net+sl+win+wpa+wp\GitVersionTask.targets')" />
-  <Import Project="..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets" Condition="Exists('..\packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" />
 </Project>
