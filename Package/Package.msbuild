@@ -9,6 +9,9 @@
   <Target Name="Rebuild" DependsOnTargets="Build">
   </Target>
   <Target Name="Build" DependsOnTargets="Clean">
+    <GetVersion SolutionDirectory="$(SolutionDir)" NoFetch="$(GitVersion_NoFetchEnabled)">
+      <Output TaskParameter="NuGetVersion" PropertyName="GitVersion_NuGetVersion" />
+    </GetVersion>
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\$(Configuration)\build" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\build" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Roslyn.Compilers.CSharp.dll" DestinationFolder="obj\$(Configuration)\build" />
@@ -19,12 +22,9 @@
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\$(Configuration)\readme.txt" />
-    <PropertyGroup>
-      <NuSpec>$([System.IO.File]::ReadAllText("Pegasus.nuspec").Replace("$version$", $(PegasusVersion)).Replace("$version-short$", $(PegasusVersionShort)))</NuSpec>
-    </PropertyGroup>
-    <WriteLinesToFile File="obj\$(Configuration)\Pegasus.nuspec" Lines="$(NuSpec)" />
+    <Copy SourceFiles="Pegasus.nuspec" DestinationFiles="obj\$(Configuration)\Pegasus.nuspec" />
     <MakeDir Directories="$(OutputPath)" />
-    <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\$(Configuration)\Pegasus.nuspec -NoPackageAnalysis -NonInteractive -OutputDir $(OutputPath) -Version $(NuGetVersion)" />
+    <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\$(Configuration)\Pegasus.nuspec -NoPackageAnalysis -NonInteractive -OutputDir $(OutputPath) -Version $(GitVersion_NuGetVersion)" />
   </Target>
   <Target Name="GetNativeManifest"></Target>
   <Target Name="GetCopyToOutputDirectoryItems"></Target>

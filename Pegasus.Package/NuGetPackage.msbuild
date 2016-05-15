@@ -1,9 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Content Include="$(SolutionDir)Package\bin\$(Configuration)\Pegasus.$(PegasusVersion).nupkg">
-      <Link>Packages\Pegasus.$(PegasusVersion).nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-  </ItemGroup>
+  <Target Name="NuGetPackage" BeforeTargets="CoreCompile">
+    <GetVersion SolutionDirectory="$(SolutionDir)" NoFetch="$(GitVersion_NoFetchEnabled)">
+      <Output TaskParameter="NuGetVersion" PropertyName="GitVersion_NuGetVersion" />
+    </GetVersion>
+    <ItemGroup>
+      <Content Include="$(SolutionDir)Package\bin\$(Configuration)\Pegasus.$(GitVersion_NuGetVersion).nupkg">
+        <Link>Packages\Pegasus.$(GitVersion_NuGetVersion).nupkg</Link>
+        <IncludeInVSIX>true</IncludeInVSIX>
+      </Content>
+    </ItemGroup>
+  </Target>
 </Project>
