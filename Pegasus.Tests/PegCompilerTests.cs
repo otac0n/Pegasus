@@ -410,5 +410,16 @@ namespace Pegasus.Tests
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0021"));
             Assert.That(error.IsWarning, Is.True);
         }
+
+        [Test]
+        public void Compile_WhenTheGrammarContainsAParseExpression_ExecutesTheParseExpression()
+        {
+            var grammar = new PegParser().Parse("a = #PARSE{ this.ReturnHelper<string>(state, ref state, _ => \"OK\") };");
+
+            var result = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(result.Code);
+
+            Assert.That(parser.Parse(string.Empty), Is.EqualTo("OK"));
+        }
     }
 }
