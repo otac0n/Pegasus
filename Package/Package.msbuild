@@ -21,6 +21,10 @@
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
+    <ItemGroup>
+      <WorkbenchFiles Include="$(SolutionDir)Pegasus.Workbench\bin\$(Configuration)\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(WorkbenchFiles)" DestinationFiles="@(WorkbenchFiles->'obj\$(Configuration)\tools\workbench\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\$(Configuration)\readme.txt" />
     <Copy SourceFiles="Pegasus.nuspec" DestinationFiles="obj\$(Configuration)\Pegasus.nuspec" />
     <MakeDir Directories="$(OutputPath)" />
