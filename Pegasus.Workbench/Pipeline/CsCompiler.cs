@@ -16,32 +16,28 @@ namespace Pegasus.Workbench.Pipeline
     using Pegasus.Common;
     using Pegasus.Expressions;
 
-    internal sealed class CsCompiler : IDisposable
+    internal sealed class CsCompiler
     {
-        private readonly IDisposable disposable;
+        public const string SentinelFileName = "_.peg.cs";
 
-        public CsCompiler(IObservable<Tuple<string, Grammar>> codeAndGrammar, IObservable<string> fileNames)
+        public CsCompiler(IObservable<Tuple<string, Grammar>> codeAndGrammar)
         {
             var csCompilerResults = codeAndGrammar
-                .CombineLatest(fileNames, (cg, fileName) => new { code = cg.Item1, grammar = cg.Item2, fileName })
-                .Throttle(TimeSpan.FromMilliseconds(10), Scheduler.Default)
-                .Select(p => Compile(p.code, p.grammar, p.fileName))
-                .Publish();
+                .ObserveOn(Scheduler.Default)
+                .Select(p => Compile(p.Item1, p.Item2))
+                .Publish()
+                .RefCount();
 
             this.Parsers = csCompilerResults.Select(r => r.Parser);
             this.Errors = csCompilerResults.Select(r => r.Errors);
-
-            this.disposable = csCompilerResults.Connect();
         }
 
         public IObservable<IList<CompilerError>> Errors { get; }
 
         public IObservable<dynamic> Parsers { get; }
 
-        public void Dispose() => this.disposable.Dispose();
-
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during compilation should be reported through the UI.")]
-        private static Result Compile(string source, Grammar grammar, string fileName)
+        private static Result Compile(string source, Grammar grammar)
         {
             if (source == null || grammar == null)
             {
@@ -70,14 +66,10 @@ namespace Pegasus.Workbench.Pipeline
                     compilerResults = compiler.CompileAssemblyFromSource(options, source);
                 }
 
-                var fileDirectory = Path.GetDirectoryName(fileName);
-                var fileFileName = Path.GetFileName(fileName);
-
                 errors.AddRange(from CompilerError e in compilerResults.Errors
-                                let errorFileName = Path.GetFileName(e.FileName)
-                                let newName = errorFileName.Equals(fileFileName, StringComparison.CurrentCultureIgnoreCase) ? fileFileName : fileFileName + ".cs"
-                                let newPath = Path.Combine(fileDirectory, newName)
-                                select new CompilerError(newPath, e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning });
+                                let fileName = Path.GetFileName(e.FileName)
+                                let newName = fileName == PegParser.SentinelFileName ? fileName : SentinelFileName
+                                select new CompilerError(newName, e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning });
 
                 if (errors.Any(e => !e.IsWarning))
                 {
@@ -99,7 +91,7 @@ namespace Pegasus.Workbench.Pipeline
             }
             catch (Exception ex)
             {
-                errors.Add(new CompilerError(fileName, 1, 1, "", "Internal Error: " + ex.Message));
+                errors.Add(new CompilerError(SentinelFileName, 1, 1, "", "Internal Error: " + ex.Message));
                 return new Result
                 {
                     Errors = errors.AsReadOnly(),

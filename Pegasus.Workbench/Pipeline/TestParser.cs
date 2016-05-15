@@ -13,33 +13,29 @@ namespace Pegasus.Workbench.Pipeline
     using System.Text.RegularExpressions;
     using Pegasus.Common;
 
-    internal sealed class TestParser : IDisposable
+    internal sealed class TestParser
     {
-        private readonly IDisposable disposable;
+        public const string SentinelFileName = "_.txt";
 
-        public TestParser(IObservable<dynamic> parsers, IObservable<string> subjects, IObservable<string> fileNames)
+        public TestParser(IObservable<dynamic> parsers, IObservable<string> subjects)
         {
             var testParserResults = subjects
-                .CombineLatest(fileNames, (subject, fileName) => new { subject, fileName })
-                .CombineLatest(parsers, (p, parser) => new { p.subject, p.fileName, parser = (object)parser })
-                .Throttle(TimeSpan.FromMilliseconds(10), Scheduler.Default)
-                .Select(p => ParseTest(p.parser, p.subject, p.fileName))
-                .Publish();
+                .CombineLatest(parsers, (subject, parser) => new { subject, parser = (object)parser })
+                .ObserveOn(Scheduler.Default)
+                .Select(p => ParseTest(p.parser, p.subject))
+                .Publish()
+                .RefCount();
 
             this.Results = testParserResults.Select(r => r.Result);
             this.Errors = testParserResults.Select(r => r.Errors);
-
-            this.disposable = testParserResults.Connect();
         }
 
         public IObservable<IList<CompilerError>> Errors { get; set; }
 
         public IObservable<object> Results { get; set; }
 
-        public void Dispose() => this.disposable.Dispose();
-
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]
-        private static ParseResult ParseTest(dynamic parser, string subject, string fileName)
+        private static ParseResult ParseTest(dynamic parser, string subject)
         {
             if (parser == null)
             {
@@ -56,13 +52,13 @@ namespace Pegasus.Workbench.Pipeline
             {
                 return new ParseResult
                 {
-                    Result = parser.Parse(subject, fileName),
+                    Result = parser.Parse(subject, SentinelFileName),
                     Errors = new CompilerError[0],
                 };
             }
             catch (Exception ex)
             {
-                var cursor = ex.Data["cursor"] as Cursor ?? new Cursor(subject, 0, fileName);
+                var cursor = ex.Data["cursor"] as Cursor ?? new Cursor(subject, 0, SentinelFileName);
 
                 var parts = Regex.Split(ex.Message, @"(?<=^\w+):");
                 if (parts.Length == 1)
@@ -74,7 +70,7 @@ namespace Pegasus.Workbench.Pipeline
                 {
                     Errors = new List<CompilerError>
                     {
-                        new CompilerError(fileName, cursor.Line, cursor.Column, errorNumber: parts[0], errorText: parts[1]),
+                        new CompilerError(SentinelFileName, cursor.Line, cursor.Column, errorNumber: parts[0], errorText: parts[1]),
                     }.AsReadOnly(),
                 };
             }

@@ -14,22 +14,21 @@ namespace Pegasus.Workbench.Pipeline
     using Pegasus.Common;
     using Pegasus.Expressions;
 
-    internal sealed class PegParser : IDisposable
+    internal sealed class PegParser
     {
-        private readonly IDisposable disposable;
+        public const string SentinelFileName = "_.peg";
 
-        public PegParser(IObservable<string> subjects, IObservable<string> fileNames)
+        public PegParser(IObservable<string> subjects)
         {
-            var internalParseResults = subjects.CombineLatest(fileNames, (subject, filename) => new { subject, filename })
-                .Throttle(TimeSpan.FromMilliseconds(10), Scheduler.Default)
-                .Select(p => Parse(p.subject, p.filename))
-                .Publish();
+            var internalParseResults = subjects
+                .ObserveOn(Scheduler.Default)
+                .Select(Parse)
+                .Publish()
+                .RefCount();
 
             this.Grammars = internalParseResults.Select(g => g.Grammar);
             this.Errors = internalParseResults.Select(g => g.Errors.AsReadOnly());
             this.LexicalElements = internalParseResults.Select(g => g.LexicalElements);
-
-            this.disposable = internalParseResults.Connect();
         }
 
         public IObservable<IList<CompilerError>> Errors { get; }
@@ -39,17 +38,15 @@ namespace Pegasus.Workbench.Pipeline
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "TODO: Use this for syntax highlighting.")]
         public IObservable<IList<LexicalElement>> LexicalElements { get; }
 
-        public void Dispose() => this.disposable.Dispose();
-
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]
-        private static ParseResult Parse(string subject, string fileName)
+        private static ParseResult Parse(string subject)
         {
             subject = subject ?? "";
 
             try
             {
                 IList<LexicalElement> lexicalElements;
-                var grammar = new Pegasus.Parser.PegParser().Parse(subject, fileName, out lexicalElements);
+                var grammar = new Pegasus.Parser.PegParser().Parse(subject, SentinelFileName, out lexicalElements);
 
                 return new ParseResult
                 {
@@ -60,7 +57,7 @@ namespace Pegasus.Workbench.Pipeline
             }
             catch (Exception ex)
             {
-                var cursor = ex.Data["cursor"] as Cursor ?? new Cursor(subject, 0, fileName);
+                var cursor = ex.Data["cursor"] as Cursor ?? new Cursor(subject, 0, SentinelFileName);
 
                 var parts = Regex.Split(ex.Message, @"(?<=^\w+):");
                 if (parts.Length == 1)
@@ -72,7 +69,7 @@ namespace Pegasus.Workbench.Pipeline
                 {
                     Errors = new List<CompilerError>
                     {
-                        new CompilerError(fileName, cursor.Line, cursor.Column, errorNumber: parts[0], errorText: parts[1]),
+                        new CompilerError(SentinelFileName, cursor.Line, cursor.Column, errorNumber: parts[0], errorText: parts[1]),
                     },
                 };
             }

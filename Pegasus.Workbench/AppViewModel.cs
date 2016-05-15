@@ -40,31 +40,58 @@ namespace Pegasus.Workbench
         {
             this.Tutorials = Tutorial.FindAll();
 
-            var grammarNameChanges = this.WhenAny(x => x.GrammarFileName, x => x.Value);
-            var grammarTextChanges = this.WhenAny(x => x.GrammarText, x => x.Value);
-            var testNameChanges = this.WhenAny(x => x.TestFileName, x => x.Value);
-            var testTextChanges = this.WhenAny(x => x.TestText, x => x.Value);
+            var grammarTextChanges = this.WhenAny(x => x.GrammarText, grammarText => grammarText.GetValue());
+            var testTextChanges = this.WhenAny(x => x.TestText, testText => testText.GetValue());
 
-            var pegParser = new Pipeline.PegParser(grammarTextChanges, grammarNameChanges);
+            var pegParser = new Pipeline.PegParser(grammarTextChanges);
             var pegCompiler = new Pipeline.PegCompiler(pegParser.Grammars);
-            var csCompiler = new Pipeline.CsCompiler(pegCompiler.Codes.Zip(pegParser.Grammars, Tuple.Create), grammarNameChanges);
-            var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges, testNameChanges);
-            this.pipeline = new CompositeDisposable(pegParser, pegCompiler, csCompiler, testParser);
-
-            testParser.Results.Select(r =>
+            var csCompiler = new Pipeline.CsCompiler(pegCompiler.Codes.Zip(pegParser.Grammars, Tuple.Create));
+            var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges);
+            var testResults = testParser.Results.Select(r =>
             {
                 var s = r as string;
                 return s != null ? s : JsonConvert.SerializeObject(r, Formatting.Indented);
-            }).BindTo(this, x => x.TestResults);
+            });
 
-            var errorObvervables = new List<IObservable<IEnumerable<CompilerError>>>
-            {
-                pegParser.Errors,
-                pegCompiler.Errors,
-                csCompiler.Errors,
-                testParser.Errors,
-            };
-            errorObvervables.Aggregate((a, b) => a.CombineLatest(b, (e, r) => e.Concat(r))).Select(e => e.ToList()).BindTo(this, x => x.CompileErrors);
+            var comparer = new CompilerErrorListEqualityComparer();
+            var allErrors = Observable.CombineLatest(
+                pegParser.Errors.DistinctUntilChanged(comparer),
+                pegCompiler.Errors.DistinctUntilChanged(comparer),
+                csCompiler.Errors.DistinctUntilChanged(comparer),
+                testParser.Errors.DistinctUntilChanged(comparer))
+                .Select(errorLists => errorLists.SelectMany(e => e));
+
+            var grammarNameChanges = this.WhenAny(x => x.GrammarFileName, grammarFileName => grammarFileName.GetValue());
+            var testNameChanges = this.WhenAny(x => x.TestFileName, testFileName => testFileName.GetValue());
+
+            var compileErrors = Observable.CombineLatest(
+                allErrors,
+                grammarNameChanges,
+                testNameChanges,
+                (errors, grammarName, testName) =>
+                {
+                    return errors.Select(e =>
+                    {
+                        switch (e.FileName)
+                        {
+                            case Pipeline.PegParser.SentinelFileName:
+                                return new CompilerError(grammarName, e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning };
+
+                            case Pipeline.CsCompiler.SentinelFileName:
+                                return new CompilerError(grammarName + ".cs", e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning };
+
+                            case Pipeline.TestParser.SentinelFileName:
+                                return new CompilerError(testName, e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning };
+
+                            default:
+                                return e;
+                        }
+                    }).ToList();
+                });
+
+            this.pipeline = new CompositeDisposable(
+                testResults.BindTo(this, x => x.TestResults),
+                compileErrors.BindTo(this, x => x.CompileErrors));
 
             this.Save = ReactiveCommand.CreateAsyncTask(grammarNameChanges.Select(n => n != "Untitled.peg"), async _ =>
             {
@@ -204,5 +231,23 @@ namespace Pegasus.Workbench
         /// Disposes the object.
         /// </summary>
         public void Dispose() => this.pipeline.Dispose();
+
+        private class CompilerErrorListEqualityComparer : IEqualityComparer<IList<CompilerError>>
+        {
+            public bool Equals(IList<CompilerError> x, IList<CompilerError> y)
+            {
+                if (x != null && y != null && x.Count == 0 && y.Count == 0)
+                {
+                    return true;
+                }
+
+                return object.Equals(x, y);
+            }
+
+            public int GetHashCode(IList<CompilerError> obj)
+            {
+                return obj.Count == 0 ? 0 : obj.GetHashCode();
+            }
+        }
     }
 }
