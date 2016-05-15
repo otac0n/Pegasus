@@ -73,9 +73,9 @@ namespace Pegasus.Workbench
                 this.GrammarChanged = false;
             });
 
-            this.SaveAs = ReactiveCommand.CreateAsyncTask(async _ =>
+            this.SaveAs = ReactiveCommand.CreateAsyncTask(async f =>
             {
-                var fileName = (string)_;
+                var fileName = (string)f;
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
                 await FileUtils.WriteAllTextAsync(this.grammarFileName, this.grammarText);
                 this.GrammarFileName = fileName;
@@ -83,9 +83,9 @@ namespace Pegasus.Workbench
                 return true;
             });
 
-            this.Load = ReactiveCommand.CreateAsyncTask(async _ =>
+            this.Load = ReactiveCommand.CreateAsyncTask(async f =>
             {
-                var fileName = (string)_;
+                var fileName = (string)f;
                 this.GrammarText = await FileUtils.ReadAllTextAsync(fileName);
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
@@ -93,9 +93,9 @@ namespace Pegasus.Workbench
                 return true;
             });
 
-            this.LoadTutorial = ReactiveCommand.CreateAsyncTask(async _ =>
+            this.LoadTutorial = ReactiveCommand.CreateAsyncTask(async t =>
             {
-                var tutorial = (Tutorial)_;
+                var tutorial = (Tutorial)t;
                 this.GrammarText = File.Exists(tutorial.FileName) ? await FileUtils.ReadAllTextAsync(tutorial.FileName) : tutorial.GrammarText;
                 this.GrammarFileName = tutorial.FileName;
                 this.GrammarChanged = false;
