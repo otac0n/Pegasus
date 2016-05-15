@@ -6,6 +6,8 @@
 *.orig
 
 # Ignore all Visual Studio generated files.
+*.sln.ide/
+.vs/
 *.suo
 *.user
 *.ncb
@@ -13,8 +15,6 @@ _ReSharper.*
 *.[Cc]ache
 *.ncrunch*
 *.docstates
-*.sln.ide/
-.vs/
 
 # Ignore all MonoDevelop generated files.
 *.userprefs
