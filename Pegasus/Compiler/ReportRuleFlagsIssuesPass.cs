@@ -14,6 +14,8 @@ namespace Pegasus.Compiler
         {
             "memoize",
             "lexical",
+            "public",
+            "export",
         };
 
         public override IList<string> BlockedByErrors => new[] { "PEG0001" };
