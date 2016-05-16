@@ -6,6 +6,7 @@ namespace Pegasus.Workbench
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Input;
+    using Pegasus.Workbench.Properties;
 
     /// <summary>
     /// Contains commands that are available to the application.
@@ -17,6 +18,6 @@ namespace Pegasus.Workbench
         /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "This is the intended usage of the RoutedUICommand class.")]
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is the intended usage of the RoutedUICommand class.")]
-        public static readonly RoutedUICommand LoadTutorial = new RoutedUICommand("Load Tutorial", nameof(LoadTutorial), typeof(Commands));
+        public static readonly RoutedUICommand LoadTutorial = new RoutedUICommand(Resources.LoadTutorial, nameof(LoadTutorial), typeof(Commands));
     }
 }

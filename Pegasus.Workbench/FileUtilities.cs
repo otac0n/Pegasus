@@ -8,7 +8,7 @@ namespace Pegasus.Workbench
     using System.Text;
     using System.Threading.Tasks;
 
-    public static class FileUtils
+    public static class FileUtilities
     {
         private const int BufferSize = 4096;
 

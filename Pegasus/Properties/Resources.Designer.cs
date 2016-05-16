@@ -302,5 +302,15 @@ namespace Pegasus.Properties {
                 return ResourceManager.GetString("PEG0024_WARNING_UnusedDelimiter", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usage:
+        ///    pegasus file.
+        /// </summary>
+        internal static string Usage {
+            get {
+                return ResourceManager.GetString("Usage", resourceCulture);
+            }
+        }
     }
 }

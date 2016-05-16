@@ -11,7 +11,7 @@
 {{if model.Expression is TypedExpression}}
     private IParseResult<
         {{@RenderCode this.currentContext.ResultType}}
-        > {{: model.Identifier.Name}}(ref Cursor cursor)
+        > {{: model.Identifier.Name }}(ref Cursor cursor)
 {{else}}
     private IParseResult<{{= this.currentContext.ResultType }}> {{: model.Identifier.Name }}(ref Cursor cursor)
 {{/if}}

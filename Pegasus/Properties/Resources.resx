@@ -198,4 +198,8 @@
   <data name="PEG0024_WARNING_UnusedDelimiter" xml:space="preserve">
     <value>The delimiter is never used.</value>
   </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Usage:
+    pegasus file</value>
+  </data>
 </root>

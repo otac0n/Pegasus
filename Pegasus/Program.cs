@@ -7,6 +7,7 @@ namespace Pegasus
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using Pegasus.Properties;
 
     internal class Program
     {
@@ -40,8 +41,7 @@ namespace Pegasus
 
         private static void ShowUsage()
         {
-            Console.WriteLine("Usage:");
-            Console.WriteLine("    pegasus file");
+            Console.WriteLine(Resources.Usage);
         }
     }
 }

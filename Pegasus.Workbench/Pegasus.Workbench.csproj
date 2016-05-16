@@ -98,7 +98,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Commands.cs" />
-    <Compile Include="FileUtils.cs" />
+    <Compile Include="FileUtilities.cs" />
     <Compile Include="Tutorial.cs" />
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>

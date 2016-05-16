@@ -96,7 +96,7 @@ namespace Pegasus.Workbench
             this.Save = ReactiveCommand.CreateAsyncTask(grammarNameChanges.Select(n => n != "Untitled.peg"), async _ =>
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(this.grammarFileName));
-                await FileUtils.WriteAllTextAsync(this.grammarFileName, this.grammarText);
+                await FileUtilities.WriteAllTextAsync(this.grammarFileName, this.grammarText);
                 this.GrammarChanged = false;
             });
 
@@ -104,7 +104,7 @@ namespace Pegasus.Workbench
             {
                 var fileName = (string)f;
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                await FileUtils.WriteAllTextAsync(this.grammarFileName, this.grammarText);
+                await FileUtilities.WriteAllTextAsync(this.grammarFileName, this.grammarText);
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
                 return true;
@@ -113,7 +113,7 @@ namespace Pegasus.Workbench
             this.Load = ReactiveCommand.CreateAsyncTask(async f =>
             {
                 var fileName = (string)f;
-                this.GrammarText = await FileUtils.ReadAllTextAsync(fileName);
+                this.GrammarText = await FileUtilities.ReadAllTextAsync(fileName);
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
                 this.TestText = string.Empty;
@@ -123,7 +123,7 @@ namespace Pegasus.Workbench
             this.LoadTutorial = ReactiveCommand.CreateAsyncTask(async t =>
             {
                 var tutorial = (Tutorial)t;
-                this.GrammarText = File.Exists(tutorial.FileName) ? await FileUtils.ReadAllTextAsync(tutorial.FileName) : tutorial.GrammarText;
+                this.GrammarText = File.Exists(tutorial.FileName) ? await FileUtilities.ReadAllTextAsync(tutorial.FileName) : tutorial.GrammarText;
                 this.GrammarFileName = tutorial.FileName;
                 this.GrammarChanged = false;
                 this.TestText = tutorial.TestText;
@@ -246,7 +246,7 @@ namespace Pegasus.Workbench
 
             public int GetHashCode(IList<CompilerError> obj)
             {
-                return obj.Count == 0 ? 0 : obj.GetHashCode();
+                return obj == null || obj.Count == 0 ? 0 : obj.GetHashCode();
             }
         }
     }
