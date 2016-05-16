@@ -83,44 +83,48 @@ namespace
         {{/if}}
         public {{= type }} Parse(string subject, string fileName{{if !lexical}} = null{{else}}, out IList<LexicalElement> lexicalElements{{/if}})
         {
+            var cursor = new Cursor(subject, 0, fileName);
+            return this.StartRuleHelper(cursor, this.{{= startRule }}, "{{= startRule }}"{{if lexical}}, out lexicalElements{{/if}}).Value;
+        }
+
+        {{@WalkGrammar model}}
+        private IParseResult<T> StartRuleHelper<T>(Cursor cursor, ParseDelegate<T> startRule, string ruleName{{if lexical}}, out IList<LexicalElement> lexicalElements{{/if}})
+        {
             {{if memoize}}
                 try
                 {
                     this.storage = new Dictionary<CacheKey, object>();
-                    var cursor = new Cursor(subject, 0, fileName);
-                    var result = this.{{: startRule }}(ref cursor);
+                    var result = startRule(ref cursor);
                     if (result == null)
                     {
-                        throw ExceptionHelper(cursor, state => "Failed to parse '{{= startRule }}'.");
+                        throw ExceptionHelper(cursor, state => "Failed to parse '" + ruleName + "'.");
                     }
                     {{if lexical}}
                         var lexical = (cursor["_lexical"] as ListNode<LexicalElement>).ToList();
                         lexical.Reverse();
                         lexicalElements = lexical.AsReadOnly();
                     {{/if}}
-                    return result.Value;
+                    return result;
                 }
                 finally
                 {
                     this.storage = null;
                 }
             {{else}}
-                var cursor = new Cursor(subject, 0, fileName);
-                var result = this.{{: startRule }}(ref cursor);
+                var result = startRule(ref cursor);
                 if (result == null)
                 {
-                    throw ExceptionHelper(cursor, state => "Failed to parse '{{= startRule }}'.");
+                    throw ExceptionHelper(cursor, state => "Failed to parse '" + ruleName + "'.");
                 }
                 {{if lexical}}
                     var lexical = (cursor["_lexical"] as ListNode<LexicalElement>).ToList();
                     lexical.Reverse();
                     lexicalElements = lexical.AsReadOnly();
                 {{/if}}
-                return result.Value;
+                return result;
             {{/if}}
         }
 
-        {{@WalkGrammar model}}
         private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false{{if lexical}}, string ruleName = null{{/if}})
         {
             if (cursor.Location + literal.Length <= cursor.Subject.Length)

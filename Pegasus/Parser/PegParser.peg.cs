@@ -80,24 +80,8 @@ namespace
         /// </exception>
         public Grammar Parse(string subject, string fileName, out IList<LexicalElement> lexicalElements)
         {
-            try
-            {
-                this.storage = new Dictionary<CacheKey, object>();
-                var cursor = new Cursor(subject, 0, fileName);
-                var result = this.grammar(ref cursor);
-                if (result == null)
-                {
-                    throw ExceptionHelper(cursor, state => "Failed to parse 'grammar'.");
-                }
-                var lexical = (cursor["_lexical"] as ListNode<LexicalElement>).ToList();
-                lexical.Reverse();
-                lexicalElements = lexical.AsReadOnly();
-                return result.Value;
-            }
-            finally
-            {
-                this.storage = null;
-            }
+            var cursor = new Cursor(subject, 0, fileName);
+            return this.StartRuleHelper(cursor, this.grammar, "grammar", out lexicalElements).Value;
         }
 
         private IParseResult<
@@ -4557,6 +4541,27 @@ namespace
                 }
             }
             return r0;
+        }
+
+        private IParseResult<T> StartRuleHelper<T>(Cursor cursor, ParseDelegate<T> startRule, string ruleName, out IList<LexicalElement> lexicalElements)
+        {
+            try
+            {
+                this.storage = new Dictionary<CacheKey, object>();
+                var result = startRule(ref cursor);
+                if (result == null)
+                {
+                    throw ExceptionHelper(cursor, state => "Failed to parse '" + ruleName + "'.");
+                }
+                var lexical = (cursor["_lexical"] as ListNode<LexicalElement>).ToList();
+                lexical.Reverse();
+                lexicalElements = lexical.AsReadOnly();
+                return result;
+            }
+            finally
+            {
+                this.storage = null;
+            }
         }
 
         private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false, string ruleName = null)
