@@ -1,7 +1,12 @@
 os: Visual Studio 2015
 configuration: Release
+install:
+  - choco install gitversion.portable -pre -y
 before_build:
   - nuget restore
+  - ps: gitversion /l console /output buildserver
+build:
+  project: Pegasus.sln
 after_test:
   - .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:".\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe" -targetargs:".\Pegasus.Tests\bin\%CONFIGURATION%\Pegasus.Tests.dll /noshadow /exclude=Performance" -filter:"+[Pegasus]* +[Pegasus.Common]*" -hideskipped:All -output:.\Pegasus.Tests\bin\%CONFIGURATION%\coverage.xml
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
