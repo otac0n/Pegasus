@@ -324,6 +324,18 @@ namespace Pegasus.Tests
         }
 
         [Test]
+        public void Compile_WithMissingStartRule_YieldsError()
+        {
+            var grammar = new PegParser().Parse("@start b; a = 'OK'");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0003"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
         public void Compile_WithNoRules_YieldsError()
         {
             var grammar = new PegParser().Parse(" ");
@@ -332,6 +344,42 @@ namespace Pegasus.Tests
 
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0001"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarRepeatsALabel_YieldsError()
+        {
+            var grammar = new PegParser().Parse("a = foo:'OK' foo:'OK'");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0007"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarUsesAnUnknownFlag_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a -unknown = 'OK'");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0013"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarHasResourceStringWithoutResourcesSpecified_YieldsError()
+        {
+            var grammar = new PegParser().Parse("a = 'OkResource'r");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0016"));
             Assert.That(error.IsWarning, Is.False);
         }
 
@@ -420,6 +468,42 @@ namespace Pegasus.Tests
             var parser = CodeCompiler.Compile<string>(result.Code);
 
             Assert.That(parser.Parse(string.Empty), Is.EqualTo("OK"));
+        }
+
+        [Test]
+        public void Compile_WhenACSharpExpressionContainsWarnings_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a = {{\n#warning OK\nreturn \"OK\";\n}}");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("CS1030"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenACSharpExpressionContainsError_YieldsError()
+        {
+            var grammar = new PegParser().Parse("a = {{ return \"OK\" }}");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("CS1002"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
+        public void Compile_WhenACSharpExpressionDoesntConsumeAllOfTheSourceText_YieldsError()
+        {
+            var grammar = new PegParser().Parse("a = {{ return \"OK\"; } extra }");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("CS1026"));
+            Assert.That(error.IsWarning, Is.False);
         }
     }
 }
