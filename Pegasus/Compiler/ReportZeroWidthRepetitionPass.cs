@@ -47,22 +47,22 @@ namespace Pegasus.Compiler
                     {
                         if (containsAssertions)
                         {
-                            this.result.AddCompilerError(cursor, () => Resources.PEG0021_WARNING_ZeroWidthRepetition);
+                            this.result.AddCompilerError(cursor, () => Resources.PEG0021_WARNING_ZeroWidthRepetition_Possible);
                         }
                         else
                         {
-                            this.result.AddCompilerError(cursor, () => Resources.PEG0021_ERROR_ZeroWidthRepetition);
+                            this.result.AddCompilerError(cursor, () => Resources.PEG0021_ERROR_ZeroWidthRepetition_Certain);
                         }
                     }
                     else if (repetitionExpression.Quantifier.Min != repetitionExpression.Quantifier.Max)
                     {
                         if (containsAssertions)
                         {
-                            this.result.AddCompilerError(cursor, () => Resources.PEG0022_WARNING_ZeroWidthRepetition);
+                            this.result.AddCompilerError(cursor, () => Resources.PEG0022_WARNING_ZeroWidthRepetition_Possible);
                         }
                         else
                         {
-                            this.result.AddCompilerError(cursor, () => Resources.PEG0022_ERROR_ZeroWidthRepetition);
+                            this.result.AddCompilerError(cursor, () => Resources.PEG0022_WARNING_ZeroWidthRepetition_Certain);
                         }
                     }
                 }

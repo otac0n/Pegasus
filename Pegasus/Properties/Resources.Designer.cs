@@ -252,36 +252,36 @@ namespace Pegasus.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Repetition of a zero-width expression with no maximum repetition count will result in an infinite loop..
         /// </summary>
-        internal static string PEG0021_ERROR_ZeroWidthRepetition {
+        internal static string PEG0021_ERROR_ZeroWidthRepetition_Certain {
             get {
-                return ResourceManager.GetString("PEG0021_ERROR_ZeroWidthRepetition", resourceCulture);
+                return ResourceManager.GetString("PEG0021_ERROR_ZeroWidthRepetition_Certain", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Repetition of a zero-width expression with no maximum repetition count may result in an infinite loop..
         /// </summary>
-        internal static string PEG0021_WARNING_ZeroWidthRepetition {
+        internal static string PEG0021_WARNING_ZeroWidthRepetition_Possible {
             get {
-                return ResourceManager.GetString("PEG0021_WARNING_ZeroWidthRepetition", resourceCulture);
+                return ResourceManager.GetString("PEG0021_WARNING_ZeroWidthRepetition_Possible", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Repetition of a zero-width expression will always result in the maximum repetition count..
         /// </summary>
-        internal static string PEG0022_ERROR_ZeroWidthRepetition {
+        internal static string PEG0022_WARNING_ZeroWidthRepetition_Certain {
             get {
-                return ResourceManager.GetString("PEG0022_ERROR_ZeroWidthRepetition", resourceCulture);
+                return ResourceManager.GetString("PEG0022_WARNING_ZeroWidthRepetition_Certain", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Repetition of a zero-width expression may always result in the maximum repetition count..
         /// </summary>
-        internal static string PEG0022_WARNING_ZeroWidthRepetition {
+        internal static string PEG0022_WARNING_ZeroWidthRepetition_Possible {
             get {
-                return ResourceManager.GetString("PEG0022_WARNING_ZeroWidthRepetition", resourceCulture);
+                return ResourceManager.GetString("PEG0022_WARNING_ZeroWidthRepetition_Possible", resourceCulture);
             }
         }
         
