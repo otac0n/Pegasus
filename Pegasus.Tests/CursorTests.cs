@@ -4,6 +4,7 @@
 
 namespace Pegasus.Tests
 {
+    using System;
     using NUnit.Framework;
     using Pegasus.Common;
 
@@ -11,9 +12,15 @@ namespace Pegasus.Tests
     public class CursorTests
     {
         [Test]
+        public void Constructor_WhenGivenANullSubject_ThrowsException()
+        {
+            Assert.That(() => new Cursor(null, 0), Throws.InstanceOf<ArgumentNullException>());
+        }
+
+        [Test]
         public void Constructor_WhenGivenALocationPastTheEndOfTheString_ThrowsException()
         {
-            Assert.That(() => new Cursor(string.Empty, 1), Throws.Exception);
+            Assert.That(() => new Cursor(string.Empty, 1), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -58,6 +65,149 @@ namespace Pegasus.Tests
             var result = mutable.WithMutability(false);
 
             Assert.That(result, Is.EqualTo(cursor));
+        }
+
+        [Test]
+        public void SetItem_WhenTheCursorIsNotMutable_ThrowsException()
+        {
+            var cursor = new Cursor("OK", 0);
+            Assert.That(() => cursor["OK"] = "OK", Throws.InvalidOperationException);
+        }
+
+        [Test]
+        public void OpEquality_WithBothSidesNullReference_ReturnsTrue()
+        {
+            var subjectA = (Cursor)null;
+            var subjectB = (Cursor)null;
+
+            Assert.That(subjectA == subjectB, Is.True);
+        }
+
+        [Test]
+        public void OpEquality_WithEqualSubjectAndIndex_ReturnsTrue()
+        {
+            var subjectA = new Cursor("OK", 0);
+            var subjectB = subjectA.Advance(0);
+
+            Assert.That(subjectA == subjectB, Is.True);
+        }
+
+        [Test]
+        public void OpEquality_WithNullReferenceOnLeft_ReturnsFalse()
+        {
+            var subjectA = (Cursor)null;
+            var subjectB = new Cursor("OK", 0);
+
+            Assert.That(subjectA == subjectB, Is.False);
+        }
+
+        [Test]
+        public void OpEquality_WithNullReferenceOnRight_ReturnsFalse()
+        {
+            var subjectA = new Cursor("OK", 0);
+            var subjectB = (Cursor)null;
+
+            Assert.That(subjectA == subjectB, Is.False);
+        }
+
+        [Test]
+        public void OpEquality_WithUnequalEndSubjects_ReturnsFalse()
+        {
+            var subjectA = new Cursor("OK1", 0);
+            var subjectB = new Cursor("OK2", 0);
+
+            Assert.That(subjectA == subjectB, Is.False);
+        }
+
+        [Test]
+        public void OpEquality_WithUnequalIndexes_ReturnsFalse()
+        {
+            var subjectA = new Cursor("OK", 0);
+            var subjectB = new Cursor("OK", 1);
+
+            Assert.That(subjectA == subjectB, Is.False);
+        }
+
+        [Test]
+        public void OpInequality_WithBothSidesNullReference_ReturnsFalse()
+        {
+            var subjectA = (Cursor)null;
+            var subjectB = (Cursor)null;
+
+            Assert.That(subjectA != subjectB, Is.False);
+        }
+
+        [Test]
+        public void OpInequality_WithEqualSubjectAndIndex_ReturnsFalse()
+        {
+            var subjectA = new Cursor("OK", 0);
+            var subjectB = subjectA.Advance(0);
+
+            Assert.That(subjectA != subjectB, Is.False);
+        }
+
+        [Test]
+        public void OpInequality_WithNullReferenceOnLeft_ReturnsTrue()
+        {
+            var subjectA = (Cursor)null;
+            var subjectB = new Cursor("OK", 0);
+
+            Assert.That(subjectA != subjectB, Is.True);
+        }
+
+        [Test]
+        public void OpInequality_WithNullReferenceOnRight_ReturnsTrue()
+        {
+            var subjectA = new Cursor("OK", 0);
+            var subjectB = (Cursor)null;
+
+            Assert.That(subjectA != subjectB, Is.True);
+        }
+
+        [Test]
+        public void OpInequality_WithUnequalEndSubjects_ReturnsTrue()
+        {
+            var subjectA = new Cursor("OK1", 0);
+            var subjectB = new Cursor("OK2", 0);
+
+            Assert.That(subjectA != subjectB, Is.True);
+        }
+
+        [Test]
+        public void OpInequality_WithUnequalIndexes_ReturnsTrue()
+        {
+            var subjectA = new Cursor("OK", 0);
+            var subjectB = new Cursor("OK", 1);
+
+            Assert.That(subjectA != subjectB, Is.True);
+        }
+
+        [Test]
+        public void GetHashCode_WithEqualSubjectsAndIndexesAndStateKey_ReturnsSameValue([Values(0, 1, 2)] int index)
+        {
+            var subjectA = new Cursor("OK", index);
+            var subjectB = subjectA.Advance(0);
+
+            Assert.That(subjectB.GetHashCode(), Is.EqualTo(subjectA.GetHashCode()));
+        }
+
+        [TestCase(0, 1, 1)]
+        [TestCase(1, 1, 2)]
+        [TestCase(2, 1, 3)]
+        [TestCase(3, 1, 4)]
+        [TestCase(4, 2, 1)]
+        [TestCase(8, 3, 1)]
+        [TestCase(12, 4, 1)]
+        [TestCase(16, 5, 1)]
+        [TestCase(20, 5, 5)]
+        [TestCase(21, 6, 1)]
+        [TestCase(25, 6, 5)]
+        [TestCase(26, 7, 1)]
+        public void GetLineAndColumn_Always_ReturnsExpectedValues(int index, int line, int column)
+        {
+            var cursor = new Cursor("OK1\rOK2\nOK3\u2028OK4\u2029OK5\r\nOK6\n\rOK7", index);
+
+            Assert.That($"({cursor.Line},{cursor.Column})", Is.EqualTo($"({line},{column})"));
         }
     }
 }

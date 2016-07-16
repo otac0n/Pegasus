@@ -173,5 +173,16 @@ namespace Pegasus.Tests
 
             Assert.That(subjectA != subjectB, Is.True);
         }
+
+        [Test]
+        public void GetHashCode_WithEqualValuesAndCursors_ReturnsSameValue([Values(0, 1, 2)] int index)
+        {
+            var start = new Cursor("OK", 0);
+            var end = start.Advance(index);
+            var subjectA = new ParseResult<int>(start, end, 0);
+            var subjectB = new ParseResult<int>(start, end, 0);
+
+            Assert.That(subjectB.GetHashCode(), Is.EqualTo(subjectA.GetHashCode()));
+        }
     }
 }

@@ -62,6 +62,7 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CacheKeyTests.cs" />
     <Compile Include="CodeCompileFailedException.cs" />
     <Compile Include="CodeCompiler.cs" />
     <Compile Include="CursorTests.cs" />
