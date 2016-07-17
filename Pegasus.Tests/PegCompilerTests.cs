@@ -40,6 +40,21 @@ namespace Pegasus.Tests
             Assert.That(compiled.ExpressionTypes[grammar.Rules.Single().Expression].ToString(), Is.EqualTo(type));
         }
 
+        [TestCase(true, "&", "OK")]
+        [TestCase(false, "&", "")]
+        [TestCase(true, "!", "")]
+        [TestCase(false, "!", "OK")]
+        public void Compile_WhenTheGrammarHasACodeAssertion_RespectsTheReturnValueOfTheExpression(bool expression, string assertion, string expected)
+        {
+            var grammar = new PegParser().Parse($"a = 'OK' {assertion}{{ {expression.ToString().ToLower()} }} / ;");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled.Code);
+
+            var result = parser.Parse("OK");
+
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
         [Test]
         public void Compile_WhenTheGrammarHasAnErrorExpressionInTheMiddleOfASequence_ThrowsException()
         {
