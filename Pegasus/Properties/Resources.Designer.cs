@@ -304,6 +304,24 @@ namespace Pegasus.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The rule &apos;{0}&apos; is exported. Exported rule names should begin with an uppercase letter..
+        /// </summary>
+        internal static string PEG0025_WARNING_LowercaseExportedRule {
+            get {
+                return ResourceManager.GetString("PEG0025_WARNING_LowercaseExportedRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The rule &apos;{0}&apos; is public. Public rule names should begin with an uppercase letter..
+        /// </summary>
+        internal static string PEG0025_WARNING_LowercasePublicRule {
+            get {
+                return ResourceManager.GetString("PEG0025_WARNING_LowercasePublicRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Usage:
         ///    pegasus file.
         /// </summary>
