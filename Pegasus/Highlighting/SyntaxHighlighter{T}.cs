@@ -89,7 +89,7 @@ namespace Pegasus.Highlighting
         {
             if (maxRule.HasValue && (maxRule.Value > this.list.Count || maxRule.Value < 0))
             {
-                throw new ArgumentOutOfRangeException("maxRule");
+                throw new ArgumentOutOfRangeException(nameof(maxRule));
             }
 
             maxRule = maxRule ?? this.list.Count;
