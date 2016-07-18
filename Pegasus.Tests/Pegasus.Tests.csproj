@@ -35,6 +35,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.dll</HintPath>
@@ -73,6 +75,7 @@
     <Compile Include="Performance\PegCompilerTests.cs" />
     <Compile Include="Performance\PegParserTests.cs" />
     <Compile Include="Performance\PerformanceTestBase.cs" />
+    <Compile Include="CompilePegGrammarTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegressionTests.cs" />
     <Compile Include="Workbench\TutorialTests.cs" />
