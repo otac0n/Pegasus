@@ -13,6 +13,7 @@
 *.ncb
 _ReSharper.*
 *.[Cc]ache
+_NCrunch*/
 *.ncrunch*
 *.docstates
 
