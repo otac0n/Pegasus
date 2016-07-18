@@ -13,7 +13,7 @@ namespace Pegasus.Package
     using Microsoft.VisualStudio.Package;
     using Microsoft.VisualStudio.TextManager.Interop;
     using Pegasus.Common;
-    using Pegasus.Highlighting;
+    using Pegasus.Common.Highlighting;
     using Pegasus.Parser;
 
     /// <summary>

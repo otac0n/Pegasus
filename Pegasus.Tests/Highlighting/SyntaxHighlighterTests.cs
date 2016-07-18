@@ -12,7 +12,7 @@ namespace Pegasus.Tests.Highlighting
     using Compiler;
     using NUnit.Framework;
     using Parser;
-    using Pegasus.Highlighting;
+    using Pegasus.Common.Highlighting;
 
     public class SyntaxHighlighterTests
     {

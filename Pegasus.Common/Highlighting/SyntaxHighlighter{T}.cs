@@ -2,7 +2,7 @@
 // This source is subject to the MIT license.
 // Please see license.md for more information.
 
-namespace Pegasus.Highlighting
+namespace Pegasus.Common.Highlighting
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace Pegasus.Highlighting
         /// <param name="rules">The rules for the syntax highlighter.</param>
         public SyntaxHighlighter(IEnumerable<HighlightRule<T>> rules)
         {
-            this.list = rules.ToList().AsReadOnly();
+            this.list = rules.ToList();
         }
 
         /// <summary>
@@ -31,14 +31,14 @@ namespace Pegasus.Highlighting
         /// </summary>
         /// <param name="lexicalElements">The lexical elements for which to generate tokens.</param>
         /// <returns>The list of tokens for the specified list of lexical elements.</returns>
-        public IList<HighlightedSegment<T>> GetTokens(IList<LexicalElement> lexicalElements)
+        public List<HighlightedSegment<T>> GetTokens(IList<LexicalElement> lexicalElements)
         {
             var highlightedElements = this.HighlightLexicalElements(lexicalElements);
             var simplifiedTokens = SimplifyHighlighting(highlightedElements);
             return simplifiedTokens;
         }
 
-        private static IList<HighlightedSegment<T>> SimplifyHighlighting(IList<HighlightedSegment<T>> tokens)
+        private static List<HighlightedSegment<T>> SimplifyHighlighting(IList<HighlightedSegment<T>> tokens)
         {
             var simplified = new List<HighlightedSegment<T>>(tokens.Count);
 
@@ -82,7 +82,7 @@ namespace Pegasus.Highlighting
             }
 
             simplified.Reverse();
-            return simplified.AsReadOnly();
+            return simplified;
         }
 
         private Tuple<int, T> Highlight(string key, int? maxRule = null)
@@ -107,14 +107,14 @@ namespace Pegasus.Highlighting
             return null;
         }
 
-        private IList<HighlightedSegment<T>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
+        private List<HighlightedSegment<T>> HighlightLexicalElements(IList<LexicalElement> lexicalElements)
         {
+            var highlighted = new List<HighlightedSegment<T>>(lexicalElements.Count);
+
             if (lexicalElements.Count == 0)
             {
-                return new HighlightedSegment<T>[0];
+                return highlighted;
             }
-
-            var highlighted = new List<HighlightedSegment<T>>(lexicalElements.Count);
 
             var lexicalStack = new Stack<Tuple<int, LexicalElement>>();
             foreach (var e in lexicalElements.Reverse().Where(e => e.StartCursor.Location != e.EndCursor.Location))
@@ -155,7 +155,7 @@ namespace Pegasus.Highlighting
                 }
             }
 
-            return highlighted.AsReadOnly();
+            return highlighted;
         }
     }
 }

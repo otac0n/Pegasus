@@ -2,7 +2,7 @@
 // This source is subject to the MIT license.
 // Please see license.md for more information.
 
-namespace Pegasus.Highlighting
+namespace Pegasus.Common.Highlighting
 {
     using System.Collections.Generic;
 

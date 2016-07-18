@@ -48,7 +48,15 @@
     </Compile>
     <Compile Include="CacheKey.cs" />
     <Compile Include="Cursor.cs" />
+    <Compile Include="Highlighting\HighlightedSegment{T}.cs" />
+    <Compile Include="Highlighting\HighlightRuleCollection{T}.cs" />
+    <Compile Include="Highlighting\HighlightRule{T}.cs" />
+    <Compile Include="Highlighting\SyntaxHighlighter{T}.cs" />
+    <Compile Include="ILexical.cs" />
     <Compile Include="IParseResult{T}.cs" />
+    <Compile Include="LexicalElement.cs" />
+    <Compile Include="ListNode.cs" />
+    <Compile Include="ListNode{T}.cs" />
     <Compile Include="ParseDelegate.cs" />
     <Compile Include="ParseResult{T}.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

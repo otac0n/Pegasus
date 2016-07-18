@@ -2,7 +2,7 @@
 // This source is subject to the MIT license.
 // Please see license.md for more information.
 
-namespace Pegasus.Highlighting
+namespace Pegasus.Common.Highlighting
 {
     using System.Text.RegularExpressions;
 
@@ -19,7 +19,12 @@ namespace Pegasus.Highlighting
         /// <param name="value">The value of the match.</param>
         public HighlightRule(string pattern, T value)
         {
-            this.Pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+            this.Pattern = new Regex(
+                pattern,
+#if !PORTABLE
+                RegexOptions.Compiled |
+#endif
+                RegexOptions.IgnorePatternWhitespace);
             this.Value = value;
         }
 
