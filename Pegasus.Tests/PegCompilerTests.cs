@@ -574,5 +574,29 @@ namespace Pegasus.Tests
             Assert.That(error.ErrorNumber, Is.EqualTo("CS1026"));
             Assert.That(error.IsWarning, Is.False);
         }
+
+        [Test]
+        public void Compile_WhenExportedRuleNameIsLowercase_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a -export = 'OK'");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0025"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenPublicRuleNameIsLowercase_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a -public = 'OK'");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0025"));
+            Assert.That(error.IsWarning, Is.True);
+        }
     }
 }
