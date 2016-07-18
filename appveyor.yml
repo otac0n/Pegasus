@@ -10,7 +10,7 @@ before_build:
 build:
   project: Pegasus.sln
 after_test:
-  - .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit-console.exe" -targetargs:".\Pegasus.Tests\bin\%CONFIGURATION%\Pegasus.Tests.dll /noshadow /exclude=Performance" -filter:"+[Pegasus]* +[Pegasus.Common]*" -hideskipped:All -output:.\Pegasus.Tests\bin\%CONFIGURATION%\coverage.xml
+  - .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit-console.exe" -targetargs:".\Pegasus.Tests\bin\%CONFIGURATION%\Pegasus.Tests.dll /noshadow /exclude=Performance" -filter:"+[Pegasus]* +[Pegasus.Common]* -[Pegasus]Pegasus.Parser.* -[Pegasus]Pegasus.Properties.*" -hideskipped:All -output:.\Pegasus.Tests\bin\%CONFIGURATION%\coverage.xml
   - codecov -X gcov -f ".\Pegasus.Tests\bin\%CONFIGURATION%\coverage.xml"
 cache:
   - packages -> **\packages.config
