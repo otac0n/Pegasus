@@ -20,6 +20,7 @@ namespace Pegasus.Tests
                 GenerateInMemory = true,
             };
             options.ReferencedAssemblies.Add("System.dll");
+            options.ReferencedAssemblies.Add("System.Core.dll");
             options.ReferencedAssemblies.Add(typeof(Pegasus.Common.Cursor).Assembly.Location);
 
             var results = compiler.CompileAssemblyFromSource(options, source);
