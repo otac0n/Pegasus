@@ -3,9 +3,13 @@
 namespace Pegasus.Tests.Performance
 {
     using System.IO;
+    using NUnit.Framework;
     using Pegasus.Parser;
+    using static PerformanceTests;
 
-    public class PegParserTests : PerformanceTestBase
+    [TestFixture]
+    [Category("Performance")]
+    public class PegParserTests
     {
         private readonly string emptyGrammar;
         private readonly string pegGrammar;
@@ -16,16 +20,22 @@ namespace Pegasus.Tests.Performance
             this.pegGrammar = File.ReadAllText("PegParser.peg");
         }
 
-        [Evaluate]
+        [Test]
         public void EmptyGrammar()
         {
-            new PegParser().Parse(this.emptyGrammar);
+            Evaluate(() =>
+            {
+                new PegParser().Parse(this.emptyGrammar);
+            });
         }
 
-        [Evaluate]
+        [Test]
         public void PegGrammar()
         {
-            new PegParser().Parse(this.pegGrammar);
+            Evaluate(() =>
+            {
+                new PegParser().Parse(this.pegGrammar);
+            });
         }
     }
 }

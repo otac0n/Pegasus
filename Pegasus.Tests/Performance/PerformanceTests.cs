@@ -11,9 +11,7 @@ namespace Pegasus.Tests.Performance
     using System.Reflection;
     using NUnit.Framework;
 
-    [TestFixture]
-    [Category("Performance")]
-    public abstract class PerformanceTestBase
+    public static class PerformanceTests
     {
         private static decimal[] tDistribution = new decimal[]
         {
@@ -67,24 +65,13 @@ namespace Pegasus.Tests.Performance
             1.97m, 1.97m, 1.97m, 1.97m, 1.96m
         };
 
-        public PerformanceTestBase()
-        {
-            this.Methods = (from m in this.GetType().GetMethods()
-                            from e in m.GetCustomAttributes(typeof(EvaluateAttribute), inherit: true).Cast<EvaluateAttribute>()
-                            select new TestCaseData(m)).ToArray();
-        }
+        private static TimeSpan TestTargetTime => TimeSpan.FromSeconds(2);
 
-        protected TestCaseData[] Methods { get; }
-
-        protected TimeSpan TestTargetTime => TimeSpan.FromSeconds(2);
-
-        protected TimeSpan WarmupTargetTime => TimeSpan.FromSeconds(0.1);
+        private static TimeSpan WarmupTargetTime => TimeSpan.FromSeconds(0.1);
 
         [TestCaseSource("Methods")]
-        public void Evaluate(MethodInfo method)
+        public static void Evaluate(Action action)
         {
-            var action = MakeAction(this, method);
-
             var measure = new Func<int, RunningStat>(samples =>
             {
                 var runningStat = new RunningStat();
@@ -103,10 +90,10 @@ namespace Pegasus.Tests.Performance
             var initialTime = measure(1);
             var baseTime = measure(1);
 
-            var warmupSamples = Math.Max(1, (int)Math.Round(this.WarmupTargetTime.TotalMilliseconds / (double)baseTime.Mean));
+            var warmupSamples = Math.Max(1, (int)Math.Round(WarmupTargetTime.TotalMilliseconds / (double)baseTime.Mean));
             var warmupTime = measure(warmupSamples);
 
-            var testSamples = Math.Max(30, (int)Math.Round(this.TestTargetTime.TotalMilliseconds / (double)warmupTime.Mean));
+            var testSamples = Math.Max(30, (int)Math.Round(TestTargetTime.TotalMilliseconds / (double)warmupTime.Mean));
             var testTime = measure(testSamples);
 
             PublishResults(initialTime.Mean, baseTime.Mean, warmupSamples, warmupTime.Mean, warmupTime.StandardDeviation, testSamples, testTime.Mean, testTime.StandardDeviation);
@@ -192,11 +179,6 @@ namespace Pegasus.Tests.Performance
             {
                 string.Join(",", data),
             });
-        }
-
-        [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-        protected class EvaluateAttribute : Attribute
-        {
         }
 
         private class RunningStat
