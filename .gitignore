@@ -28,8 +28,8 @@ Thumbs.db
 TestResult.xml
 *.VisualState.xml
 
-# Ignore Weave generated files.
-*.weave.cs
-
 # Ignore NuGet packages (let package restore handle these)
 /packages/
+
+# Ignore Weave generated files.
+*.weave.cs
