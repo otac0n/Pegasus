@@ -48,7 +48,7 @@ namespace Pegasus.Compiler
                             ? startCursor.Advance(-prefix.Length + diag.Location.SourceSpan.Start)
                             : startCursor;
 
-                        this.result.Errors.Add(new CompilerError(startCursor.FileName, cursor.Line, cursor.Column, diag.Info.MessageIdentifier, diag.Info.GetMessage()) { IsWarning = diag.Info.Severity == DiagnosticSeverity.Warning });
+                        this.result.Errors.Add(new CompilerError(startCursor.FileName ?? string.Empty, cursor.Line, cursor.Column, diag.Info.MessageIdentifier, diag.Info.GetMessage()) { IsWarning = diag.Info.Severity == DiagnosticSeverity.Warning });
                     }
                 }
 

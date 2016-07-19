@@ -72,7 +72,7 @@ namespace Pegasus
                 {
                     var parts = ex.Message.Split(new[] { ':' }, 2);
                     var result = new CompileResult(null);
-                    result.Errors.Add(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, parts[0], parts[1]));
+                    result.Errors.Add(new CompilerError(cursor.FileName ?? string.Empty, cursor.Line, cursor.Column, parts[0], parts[1]));
                     return result;
                 }
 

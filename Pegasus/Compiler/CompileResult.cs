@@ -87,7 +87,7 @@ namespace Pegasus.Compiler
 
             var errorFormat = error.Compile()();
             var errorText = string.Format(CultureInfo.CurrentCulture, errorFormat, args);
-            this.Errors.Add(new CompilerError(cursor.FileName, cursor.Line, cursor.Column, errorId, errorText) { IsWarning = isWarning });
+            this.Errors.Add(new CompilerError(cursor.FileName ?? string.Empty, cursor.Line, cursor.Column, errorId, errorText) { IsWarning = isWarning });
         }
     }
 }
