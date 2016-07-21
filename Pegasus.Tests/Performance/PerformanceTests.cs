@@ -107,18 +107,16 @@ namespace Pegasus.Tests.Performance
             if (count > 1 && stdDev != 0)
             {
                 var interval = tDistribution[Math.Min(count, tDistribution.Length - 1)] * stdDev;
-                var intervalScale = GetScale(interval);
+                var scale = Math.Max(GetScale(interval), GetScale(mean));
 
-                suffix = "±" + Math.Round(interval, 3 - intervalScale) + "ms";
+                suffix = "±" + Math.Round(interval, scale) + "ms";
 
-                var scale = Math.Min(intervalScale, GetScale(mean));
-
-                rounded = Math.Round(mean, 3 - scale);
+                rounded = Math.Round(mean, scale);
             }
             else
             {
                 suffix = string.Empty;
-                rounded = Math.Round(mean, 3 - GetScale(mean));
+                rounded = Math.Round(mean, GetScale(mean));
             }
 
             return rounded + "ms" + suffix;
@@ -126,7 +124,7 @@ namespace Pegasus.Tests.Performance
 
         private static int GetScale(decimal d)
         {
-            return d == 0 ? 0 : (int)Math.Floor(Math.Log10((double)Math.Abs(d))) + 1;
+            return d == 0 || d >= 10 || d <= -10 ? 0 : Math.Min(28, 1 - (int)Math.Floor(Math.Log10((double)Math.Abs(d))));
         }
 
         private static Action MakeAction(object fixture, MethodInfo method)
@@ -149,7 +147,7 @@ namespace Pegasus.Tests.Performance
                 "performance");
             var outputPath = Path.Combine(
                 resultsFolder,
-                testName + ".csv");
+                Enumerable.Aggregate(Path.GetInvalidPathChars(), testName, (n, c) => n.Replace(c, '_')) + ".csv");
 
             var columns = "date,testSamples,testMean,testStandardDeviation,warmupSamples,warmupMean,warmupStandardDeviation,initialTime,baseTime,machine";
 
