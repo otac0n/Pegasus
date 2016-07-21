@@ -7,6 +7,7 @@
         resultRuleName: lexical ? model.Identifier.Name : null,
         resultType: this.types[model.Expression]);
     var leftRecursive = memoize && this.leftRecursiveRules.Contains(model);
+    var trace = true;
 }}
 {{if model.Expression is TypedExpression}}
     private IParseResult<
@@ -16,53 +17,73 @@
     private IParseResult<{{= this.currentContext.ResultType }}> {{: model.Identifier.Name }}(ref Cursor cursor)
 {{/if}}
 {
-    IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }} = null;
-    {{wrapif leftRecursive || memoize}}
-        var storageKey = new CacheKey({{= ToLiteral(model.Identifier.Name) }}, cursor.StateKey, cursor.Location);
-        if (this.storage.ContainsKey(storageKey))
-        {
-            {{: this.currentContext.ResultName }} = (IParseResult<{{= this.currentContext.ResultType }}>)this.storage[storageKey];
-            if ({{: this.currentContext.ResultName }} != null)
-            {
-                cursor = {{: this.currentContext.ResultName }}.EndCursor;
-            }
-        }
-        else
-        {
-            {{body}}
-                {{if leftRecursive}}
-                    {{
-                        var startCursorName = this.CreateVariable("startCursor");
-                        var resultName = this.currentContext.ResultName;
-                        var nextResultName = this.CreateVariable("r");
-                    }}
-                    this.storage[storageKey] = null;
-                    var {{: startCursorName }} = cursor;
-                    while (true)
-                    {
-                        IParseResult<{{= this.currentContext.ResultType }}> {{: nextResultName }} = null;
-                        {{ this.currentContext = this.currentContext.WithResultName(nextResultName); }}
-                        {{@WalkRule model}}
-                        {{ this.currentContext = this.currentContext.WithResultName(resultName); }}
-                        if ({{: nextResultName }} == null || ({{: this.currentContext.ResultName }} != null && {{: this.currentContext.ResultName }}.EndCursor.Location >= r1.EndCursor.Location))
-                        {
-                            break;
-                        }
-                        this.storage[storageKey] = {{: this.currentContext.ResultName }} = {{: nextResultName }};
-                        cursor = {{: startCursorName }};
-                    }
+    {{wrapif trace}}
+        System.Diagnostics.Trace.WriteLine({{= ToLiteral("Begin '" + model.Identifier.Name + "' at (") }} + cursor.Line + "," + cursor.Column + ") with state key " + cursor.StateKey);
+        System.Diagnostics.Trace.Indent();
+        {{body}}
+            IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }} = null;
+            {{wrapif leftRecursive || memoize}}
+                var storageKey = new CacheKey({{= ToLiteral(model.Identifier.Name) }}, cursor.StateKey, cursor.Location);
+                if (this.storage.ContainsKey(storageKey))
+                {
+                    {{if trace}}
+                        System.Diagnostics.Trace.WriteLine("Cache hit.");
+                    {{/if}}
+                    {{: this.currentContext.ResultName }} = (IParseResult<{{= this.currentContext.ResultType }}>)this.storage[storageKey];
                     if ({{: this.currentContext.ResultName }} != null)
                     {
                         cursor = {{: this.currentContext.ResultName }}.EndCursor;
                     }
-                {{elif memoize}}
-                    {{@WalkRule model}}
-                    this.storage[storageKey] = {{: this.currentContext.ResultName }};
-                {{else}}
-                    {{@WalkRule model}}
-                {{/if}}
-            {{/body}}
-        }
+                }
+                else
+                {
+                    {{if trace}}
+                        System.Diagnostics.Trace.WriteLine("Cache miss.");
+                    {{/if}}
+                    {{body}}
+                        {{if leftRecursive}}
+                            {{
+                                var startCursorName = this.CreateVariable("startCursor");
+                                var resultName = this.currentContext.ResultName;
+                                var nextResultName = this.CreateVariable("r");
+                            }}
+                            {{if trace}}
+                                System.Diagnostics.Trace.WriteLine("Seeding left-recursion with an unsuccessful match.");
+                            {{/if}}
+                            this.storage[storageKey] = null;
+                            var {{: startCursorName }} = cursor;
+                            while (true)
+                            {
+                                IParseResult<{{= this.currentContext.ResultType }}> {{: nextResultName }} = null;
+                                {{ this.currentContext = this.currentContext.WithResultName(nextResultName); }}
+                                {{@WalkRule model}}
+                                {{ this.currentContext = this.currentContext.WithResultName(resultName); }}
+                                if ({{: nextResultName }} == null || ({{: this.currentContext.ResultName }} != null && {{: this.currentContext.ResultName }}.EndCursor.Location >= r1.EndCursor.Location))
+                                {
+                                    break;
+                                }
+                                this.storage[storageKey] = {{: this.currentContext.ResultName }} = {{: nextResultName }};
+                                cursor = {{: startCursorName }};
+                            }
+                            if ({{: this.currentContext.ResultName }} != null)
+                            {
+                                cursor = {{: this.currentContext.ResultName }}.EndCursor;
+                            }
+                        {{elif memoize}}
+                            {{@WalkRule model}}
+                            {{if trace}}
+                                System.Diagnostics.Trace.WriteLine({{= ToLiteral("Caching '" + model.Identifier.Name + "' result.") }});
+                            {{/if}}
+                            this.storage[storageKey] = {{: this.currentContext.ResultName }};
+                        {{else}}
+                            {{@WalkRule model}}
+                        {{/if}}
+                    {{/body}}
+                }
+            {{/wrapif}}
+        {{/body}}
+        System.Diagnostics.Trace.Unindent();
+        System.Diagnostics.Trace.WriteLine({{= ToLiteral("End '" + model.Identifier.Name + "' with ") }} + ({{: this.currentContext.ResultName }} != null ? "success" : "failure") + " at (" + cursor.Line + "," + cursor.Column + ") with state key " + cursor.StateKey);
     {{/wrapif}}
     return {{: this.currentContext.ResultName }};
 }
