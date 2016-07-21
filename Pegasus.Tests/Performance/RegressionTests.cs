@@ -14,6 +14,7 @@ namespace Pegasus.Tests.Performance
     public class RegressionTests
     {
         [TestCase("simple")]
+        [TestCase("gitter-piratejon")]
         public void GeneratedParserPerformanceRegression(string testName)
         {
             var parserSource = File.ReadAllText($@"Performance\Regression\{testName}.peg");

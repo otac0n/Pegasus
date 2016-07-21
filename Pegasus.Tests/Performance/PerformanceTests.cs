@@ -69,7 +69,6 @@ namespace Pegasus.Tests.Performance
 
         private static TimeSpan WarmupTargetTime => TimeSpan.FromSeconds(0.1);
 
-        [TestCaseSource("Methods")]
         public static void Evaluate(Action action)
         {
             var measure = new Func<int, RunningStat>(samples =>

@@ -1,0 +1,218 @@
+﻿// https://gitter.im/otac0n/Pegasus?at=574ba7cef44fde236e5184e1
+@namespace Parsers
+@classname Parser
+@using System.IO
+@members {
+	private ISet<string> keywords = new HashSet<string>(new[]
+	{
+		"avg", "bottomn", "count", "mavg", "max", "median", "ntile", "min"
+		, "percentile", "rank", "stddev", "sum", "topn", "msum", "rsum"
+		, "rcount", "rmax", "rmin", "ascii", "bit_length", "char"
+		, "char_length", "concat", "insert", "left", "length", "locate"
+		, "locaten", "lower", "octet_length", "repeat", "replace", "right"
+		, "space", "upper", "abs", "acos", "asin", "atan", "atan2", "ceiling"
+		, "cos", "cot", "degrees", "exp", "floor", "log", "log10", "mod", "pi"
+		, "power", "radians", "rand", "randfromseed", "round", "sign", "sin"
+		, "sqrt", "tan", "truncate", "current_time", "day_of_quarter"
+		, "dayname", "dayofmonth", "dayofweek", "dayofyear", "hour", "minute"
+		, "month", "month_of_quarter", "monthname", "now", "quarter_of_year"
+		, "second", "week_of_quarter", "week_of_year", "year", "ifnull"
+		, "database", "user", "ago", "periodrolling", "todate"
+		, "trim"
+	}, StringComparer.CurrentCultureIgnoreCase);
+}
+
+start<object> = e:expression
+
+expression<object> = term
+
+comparison<object>
+	= conjunction
+
+conjunction<object> -memoize
+	= left:conjunction _ op:"or"i _ right:disjunction {
+		new { left, op, right }
+	}
+	/ disjunction
+
+disjunction<object> -memoize
+	= left:disjunction _ op:"and"i _ right:cmp_expr {
+		new { left, op, right }
+	}
+	/ cmp_expr
+
+cmpop<string> = "<=" / ">=" / "<>" / "<" / "=" / ">"
+cmp_expr<object>
+	= left:expression _ op:cmpop _ right:expression {
+		new { left, op, right }
+	}
+	/ left:expression _ i:is_null {
+		new { left, op = "null", right = (object)null }
+	}
+	/ left:expression _ i:is_not_null {
+		new { left, op = "not null", right = (object)null }
+	}
+	/ left:expression _ op:"in"i _ "(" _ right:expression_list _ ")" {
+		new { left, op = string.Concat(op), right = new { right } }
+	}
+	/ left:expression _ op:"like"i _ right:expression {
+		new { left, op = string.Concat(op), right }
+	}
+	/ "(" _ c:comparison _ ")" { c }
+
+is_not_null<string> = "not"i _ "null"i / "is"i _ "not"i _ "null"i
+
+is_null<string> = "null"i / "is"i _ "null"i
+
+addop = "+" / "-"
+term<object> -memoize
+	= left:term _ op:addop _ right:factor {
+		new { left, op, right }
+	}
+	/ factor
+
+mulop = "*" / "/"
+factor<object> -memoize
+	= left:factor _ op:mulop _ right:primary {
+		new { left, op, right }
+	}
+	/ primary
+
+primary<object>
+	= paren_primary / neg / number / null / quoted_string / filter_using
+	/ function / time_shortcut / case_switch / case_if / valueof
+	/ timestamp_cast / column
+
+timestamp_cast<object>
+	= "timestamp"i _ q:quoted_string { new { q } }
+
+valueof<object>
+	= "valueof"i _ "(" _ q:quoted_identifier _ ")" {
+		new { q }
+	}
+
+case_if<object>
+	= "case"i _ w:if_when+ _ e:else _ "end"i {
+		new { ifwhen = w, @else = e }
+	}
+
+if_when<object> = "when"i _ when:comparison _ "then"i _ then:expression _ {
+	new { when, then }
+}
+
+case_switch<object>
+	= "case"i _ expr:expression _ w:switch_when+ _ e:else _ "end"i {
+		new { expr, w, e }
+	}
+
+switch_when<object> = "when"i _ when:expression _ "then"i _ then:expression _ {
+	new { when, then }
+}
+
+else<object> = "else"i _ e:expression { e } / "" { null }
+
+paren_primary<object> = "(" _ e:expression _ ")" { e }
+
+unop = "-"
+neg<object> = op:unop _ e:expression {
+	new { op, e }
+}
+
+null<object>
+	= n:"null"i { new { n } }
+
+number<object>
+	= bare_number
+	/ "+" n:bare_number { new { n } }
+
+bare_number<object>
+	= a:[0-9]+ "." b:[0-9]+ { new { n = string.Concat(a) + "." + string.Concat(b) } }
+	/ a:[0-9]+ { new { n = string.Concat(a) } }
+	/ "." a:[0-9]+ { new { n = "." + string.Concat(a) } }
+
+quoted_string<object>
+	= "'" a:([^'] / "''")* "'" { new  { q = string.Concat(a).Replace("''", "'") } }
+
+column<object>
+	= t:identifier _ "." _ c:identifier { new { t, c } }
+	/ c:identifier { new { t = (object)null, c } }
+
+function<object> = substring / timestamp_function / cast / countdistinct / simple_function
+
+countdistinct<object>
+	= "count"i _ "(" _ "distinct"i _ e:expression _ ")" {
+		new { e }
+	}
+
+substring<object>
+	= "substring"i _ "(" _ e:expression _ "from"i _ from_arg:number _ "for"i _ for_arg:number _ ")" {
+		new { e, from_arg, for_arg }
+	}
+
+cast<object>
+	= "cast"i _ "(" _ e:expression _ "as"i _ t:type _ ")" {
+		new { e, t }
+	}
+
+type<object>
+	= no_width_type / width_type
+
+width_type<object>
+	= name:("char"i / "varchar"i) _ "(" _ size:[0-9]+ _ ")" {
+		new { name = string.Concat(name), size = string.Concat(size) }
+	}
+
+no_width_type<object>
+	= name:("integer"i / "int"i / "float"i / "smallint"i / "double"i _ "precision"i / "date"i
+	/ "timestamp"i / "time"i / "bit"i _ "varying"i) {
+		new { name }
+	}
+
+time_shortcut<object> = t:time_shortcut_name { new { t } }
+time_shortcut_name = "current_timestamp"i / "current_date"i / "current_time"i
+
+filter_using<object> = "filter("i _ e:expression _ "using"i _ u:comparison _ ")" {
+	new { e, u }
+}
+
+timestamp_function_name<string> = "timestampadd"i / "timestampdiff"i
+timestamp_function<object> = n:timestamp_function_name _ "(" _ i:interval _ "," _ e0:expression _ "," _ e1:expression _ ")" {{
+	var args = new List<object>();
+	args.Add(i);
+	args.Add(e0);
+	args.Add(e1);
+	return new { n, args };
+}}
+
+interval<object> = n:interval_string { new { n } }
+interval_string<string>
+	= "SQL_TSI_SECOND" / "SQL_TSI_MINUTE" / "SQL_TSI_HOUR" / "SQL_TSI_DAY"
+	/ "SQL_TSI_WEEK" / "SQL_TSI_MONTH" / "SQL_TSI_QUARTER" / "SQL_TSI_YEAR"
+
+simple_function<object> = n:simple_function_name _ "(" _ a:expression_list _ ")" {
+	new { n, a }
+}
+
+expression_list<List<object>> = head:expression _ tail:following_items* {{
+	var args = new List<object>();
+	args.Add(head);
+	args.AddRange(tail);
+	return args;
+}}
+
+following_items<object> = "," _ e:expression { e }
+
+simple_function_name<string> -memoize
+	= word:("" [a-zA-Z]+) &{ keywords.Contains(word) } { word }
+
+identifier<object> = b:(bare_identifier / quoted_identifier) {
+	new { b }
+}
+
+bare_identifier = i:[-A-Za-z_]+ { string.Concat(i) }
+
+quoted_identifier = "\"" i:[- #A-Za-z0-9_(/)%+.]+ "\"" { string.Concat(i) }
+
+_ = [ \t\n\r]*
+
+EOF = !.
