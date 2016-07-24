@@ -65,7 +65,21 @@ namespace
             private Dictionary<CacheKey, object> storage;
         {{/if}}
         {{if trace}}
-            private ITracer tracer = new NullTracer();
+
+            private ITracer tracer = NullTracer.Instance;
+
+            public ITracer Tracer
+            {
+                get
+                {
+                    return this.tracer;
+                }
+
+                set
+                {
+                    this.tracer = value ?? NullTracer.Instance;
+                }
+            }
         {{/if}}
         {{if hasExported}}
 

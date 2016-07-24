@@ -10,6 +10,15 @@ namespace Pegasus.Common.Tracing
     /// </summary>
     public class DiagnosticsTracer : ITracer
     {
+        private DiagnosticsTracer()
+        {
+        }
+
+        /// <summary>
+        /// Gets the instance of <see cref="NullTracer"/>.
+        /// </summary>
+        public static DiagnosticsTracer Instance { get; } = new DiagnosticsTracer();
+
         /// <inheritdoc/>
         public void TraceCacheHit<T>(string ruleName, Cursor cursor, CacheKey cacheKey, IParseResult<T> parseResult)
         {

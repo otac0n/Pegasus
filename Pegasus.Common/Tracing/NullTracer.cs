@@ -7,6 +7,15 @@ namespace Pegasus.Common.Tracing
     /// </summary>
     public class NullTracer : ITracer
     {
+        private NullTracer()
+        {
+        }
+
+        /// <summary>
+        /// Gets the instance of <see cref="NullTracer"/>.
+        /// </summary>
+        public static NullTracer Instance { get; } = new NullTracer();
+
         /// <inheritdoc/>
         public void TraceCacheHit<T>(string ruleName, Cursor cursor, CacheKey cacheKey, IParseResult<T> parseResult)
         {
