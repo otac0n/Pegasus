@@ -18,18 +18,17 @@
 {{/if}}
 {
     {{wrapif trace}}
-        System.Diagnostics.Trace.WriteLine({{= ToLiteral("Begin '" + model.Identifier.Name + "' at (") }} + cursor.Line + "," + cursor.Column + ") with state key " + cursor.StateKey);
-        System.Diagnostics.Trace.Indent();
+        this.tracer.TraceRuleEnter({{= ToLiteral(model.Identifier.Name) }}, cursor);
         {{body}}
             IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }} = null;
             {{wrapif leftRecursive || memoize}}
                 var storageKey = new CacheKey({{= ToLiteral(model.Identifier.Name) }}, cursor.StateKey, cursor.Location);
                 if (this.storage.ContainsKey(storageKey))
                 {
-                    {{if trace}}
-                        System.Diagnostics.Trace.WriteLine("Cache hit.");
-                    {{/if}}
                     {{: this.currentContext.ResultName }} = (IParseResult<{{= this.currentContext.ResultType }}>)this.storage[storageKey];
+                    {{if trace}}
+                        this.tracer.TraceCacheHit({{= ToLiteral(model.Identifier.Name) }}, cursor, storageKey, {{: this.currentContext.ResultName }});
+                    {{/if}}
                     if ({{: this.currentContext.ResultName }} != null)
                     {
                         cursor = {{: this.currentContext.ResultName }}.EndCursor;
@@ -38,7 +37,7 @@
                 else
                 {
                     {{if trace}}
-                        System.Diagnostics.Trace.WriteLine("Cache miss.");
+                        this.tracer.TraceCacheMiss({{= ToLiteral(model.Identifier.Name) }}, cursor, storageKey);
                     {{/if}}
                     {{body}}
                         {{if leftRecursive}}
@@ -48,7 +47,7 @@
                                 var nextResultName = this.CreateVariable("r");
                             }}
                             {{if trace}}
-                                System.Diagnostics.Trace.WriteLine("Seeding left-recursion with an unsuccessful match.");
+                                this.tracer.TraceInfo({{= ToLiteral(model.Identifier.Name) }}, cursor, "Seeding left-recursion with an unsuccessful match.");
                             {{/if}}
                             this.storage[storageKey] = null;
                             var {{: startCursorName }} = cursor;
@@ -72,7 +71,7 @@
                         {{elif memoize}}
                             {{@WalkRule model}}
                             {{if trace}}
-                                System.Diagnostics.Trace.WriteLine({{= ToLiteral("Caching '" + model.Identifier.Name + "' result.") }});
+                                this.tracer.TraceInfo({{= ToLiteral(model.Identifier.Name) }}, cursor, "Caching result.");
                             {{/if}}
                             this.storage[storageKey] = {{: this.currentContext.ResultName }};
                         {{else}}
@@ -82,8 +81,7 @@
                 }
             {{/wrapif}}
         {{/body}}
-        System.Diagnostics.Trace.Unindent();
-        System.Diagnostics.Trace.WriteLine({{= ToLiteral("End '" + model.Identifier.Name + "' with ") }} + ({{: this.currentContext.ResultName }} != null ? "success" : "failure") + " at (" + cursor.Line + "," + cursor.Column + ") with state key " + cursor.StateKey);
+        this.tracer.TraceRuleExit({{= ToLiteral(model.Identifier.Name) }}, cursor, {{: this.currentContext.ResultName }});
     {{/wrapif}}
     return {{: this.currentContext.ResultName }};
 }

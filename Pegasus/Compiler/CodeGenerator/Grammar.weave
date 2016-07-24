@@ -23,6 +23,7 @@
     var accessibility = settings["accessibility"].SingleOrDefault() ?? "public";
     var resources = settings["resources"].SingleOrDefault();
     var startRule = settings["start"].Select(n => n.ToString()).SingleOrDefault();
+    var trace = true;
 
     if (startRule == null && !hasPublic && !hasExported)
     {
@@ -35,6 +36,9 @@ namespace
     using System;
     using System.Collections.Generic;
     using Pegasus.Common;
+    {{if trace}}
+        using Pegasus.Common.Tracing;
+    {{/if}}
     {{each @using in settings["using"]}}
         using
             {{@RenderCode @using}}
@@ -59,6 +63,9 @@ namespace
         {{/each}}
         {{if hasMemoized}}
             private Dictionary<CacheKey, object> storage;
+        {{/if}}
+        {{if trace}}
+            private ITracer tracer = new NullTracer();
         {{/if}}
         {{if hasExported}}
 

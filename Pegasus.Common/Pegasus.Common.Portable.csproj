@@ -60,6 +60,8 @@
     <Compile Include="ParseDelegate.cs" />
     <Compile Include="ParseResult{T}.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tracing\ITracer.cs" />
+    <Compile Include="Tracing\NullTracer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\GitVersionTask.3.5.4\build\portable-net+sl+win+wpa+wp\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.3.5.4\build\portable-net+sl+win+wpa+wp\GitVersionTask.targets')" />
