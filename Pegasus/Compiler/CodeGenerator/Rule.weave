@@ -7,7 +7,6 @@
         resultRuleName: lexical ? model.Identifier.Name : null,
         resultType: this.types[model.Expression]);
     var leftRecursive = memoize && this.leftRecursiveRules.Contains(model);
-    var trace = true;
 }}
 {{if model.Expression is TypedExpression}}
     private IParseResult<
@@ -17,7 +16,7 @@
     private IParseResult<{{= this.currentContext.ResultType }}> {{: model.Identifier.Name }}(ref Cursor cursor)
 {{/if}}
 {
-    {{wrapif trace}}
+    {{wrapif this.trace}}
         this.tracer.TraceRuleEnter({{= ToLiteral(model.Identifier.Name) }}, cursor);
         {{body}}
             IParseResult<{{= this.currentContext.ResultType }}> {{: this.currentContext.ResultName }} = null;
@@ -26,7 +25,7 @@
                 if (this.storage.ContainsKey(storageKey))
                 {
                     {{: this.currentContext.ResultName }} = (IParseResult<{{= this.currentContext.ResultType }}>)this.storage[storageKey];
-                    {{if trace}}
+                    {{if this.trace}}
                         this.tracer.TraceCacheHit({{= ToLiteral(model.Identifier.Name) }}, cursor, storageKey, {{: this.currentContext.ResultName }});
                     {{/if}}
                     if ({{: this.currentContext.ResultName }} != null)
@@ -36,7 +35,7 @@
                 }
                 else
                 {
-                    {{if trace}}
+                    {{if this.trace}}
                         this.tracer.TraceCacheMiss({{= ToLiteral(model.Identifier.Name) }}, cursor, storageKey);
                     {{/if}}
                     {{body}}
@@ -46,7 +45,7 @@
                                 var resultName = this.currentContext.ResultName;
                                 var nextResultName = this.CreateVariable("r");
                             }}
-                            {{if trace}}
+                            {{if this.trace}}
                                 this.tracer.TraceInfo({{= ToLiteral(model.Identifier.Name) }}, cursor, "Seeding left-recursion with an unsuccessful match.");
                             {{/if}}
                             this.storage[storageKey] = null;
@@ -70,7 +69,7 @@
                             }
                         {{elif memoize}}
                             {{@WalkRule model}}
-                            {{if trace}}
+                            {{if this.trace}}
                                 this.tracer.TraceInfo({{= ToLiteral(model.Identifier.Name) }}, cursor, "Caching result.");
                             {{/if}}
                             this.storage[storageKey] = {{: this.currentContext.ResultName }};

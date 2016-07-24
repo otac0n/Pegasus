@@ -18,11 +18,13 @@ namespace Pegasus.Compiler
             { "start", true },
             { "members", false },
             { "using", false },
+            { "trace", true }
         };
 
         private static readonly Dictionary<string, string> ValuePatterns = new Dictionary<string, string>
         {
             { "accessibility", @"^\s*(public|internal)\s*$" },
+            { "trace", @"^\s*(true|false)\s*$" },
         };
 
         public override IList<string> BlockedByErrors => new string[0];

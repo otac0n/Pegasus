@@ -23,7 +23,7 @@
     var accessibility = settings["accessibility"].SingleOrDefault() ?? "public";
     var resources = settings["resources"].SingleOrDefault();
     var startRule = settings["start"].Select(n => n.ToString()).SingleOrDefault();
-    var trace = true;
+    this.trace = settings["trace"].Select(v => bool.Parse(v.ToString().Trim())).SingleOrDefault();
 
     if (startRule == null && !hasPublic && !hasExported)
     {

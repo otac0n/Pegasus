@@ -41,6 +41,7 @@ namespace Pegasus.Compiler
 
         private ResultContext currentContext;
         private string currentIndentation;
+        private bool trace;
 
         public CodeGenerator(TextWriter writer, Dictionary<Expression, object> types, HashSet<Rule> leftRecursiveRules)
         {
