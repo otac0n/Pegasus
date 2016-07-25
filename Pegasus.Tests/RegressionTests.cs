@@ -59,8 +59,8 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a = () b; b = 'OK';");
 
-            var result = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(result.Code);
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
         }
@@ -110,8 +110,7 @@ namespace Pegasus.Tests
         [Test(Description = "GitHub bug #35")]
         public void Compile_WhenMemoizedRuleIsReVisitedWithoutStateMutation_UsesTheMemoizedValue()
         {
-            var grammar = new PegParser().Parse(string.Join("\n", new[]
-            {
+            var grammar = new PegParser().Parse(StringUtilities.JoinLines(
                 "@members",
                 "{",
                 "    private int callCount = 0;",
@@ -119,11 +118,10 @@ namespace Pegasus.Tests
                 "start <int>",
                 "  = 'OK'           t:test 'NO' { t }",
                 "  / 'OK' #STATE{ } t:test      { t }",
-                "test <int> -memoize = { ++callCount }",
-            }));
+                "test <int> -memoize = { ++callCount }"));
 
-            var result = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<int>(result.Code);
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<int>(compiled);
 
             Assert.That(parser.Parse("OK"), Is.EqualTo(1));
         }
@@ -131,8 +129,7 @@ namespace Pegasus.Tests
         [Test(Description = "GitHub bug #35")]
         public void Compile_WhenMemoizedRuleIsVisitedAfterAMutation_DoesNotUseTheMemoizedValue()
         {
-            var grammar = new PegParser().Parse(string.Join("\n", new[]
-            {
+            var grammar = new PegParser().Parse(StringUtilities.JoinLines(
                 "@members",
                 "{",
                 "    private int callCount = 0;",
@@ -140,11 +137,10 @@ namespace Pegasus.Tests
                 "start <int>",
                 "  = 'OK'                                     t:test 'NO' { t }",
                 "  / 'OK' #STATE{ state[\"foo\"] = \"bar\"; } t:test      { t }",
-                "test <int> -memoize = { ++callCount }",
-            }));
+                "test <int> -memoize = { ++callCount }"));
 
-            var result = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<int>(result.Code);
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<int>(compiled);
 
             Assert.That(parser.Parse("OK"), Is.EqualTo(2));
         }
@@ -165,8 +161,8 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("start = ' ' 'hoge'<1,,' '> ' ';");
 
-            var result = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(result.Code);
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             Assert.That(parser.Parse(" hoge "), Is.EqualTo(" hoge "));
         }

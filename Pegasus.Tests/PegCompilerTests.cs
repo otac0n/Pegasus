@@ -46,7 +46,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse($"a = 'OK' {assertion}{{ {expression.ToString().ToLower()} }} / ;");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             var result = parser.Parse("OK");
 
@@ -58,7 +58,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a = 'OK' #ERROR{ \"OK\" } 'OK'");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             Assert.That(() => parser.Parse("OK"), Throws.InnerException.InstanceOf<FormatException>().With.InnerException.Message.EqualTo("OK"));
         }
@@ -68,7 +68,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a = 'OK' (#ERROR{ \"OK\" }) 'OK'");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             Assert.That(() => parser.Parse("OK"), Throws.InnerException.InstanceOf<FormatException>().With.InnerException.Message.EqualTo("OK"));
         }
@@ -78,7 +78,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a = b 'OK'; b -lexical = ;");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse("OK", null, out lexicalElements);
@@ -92,7 +92,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = [O];");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse("OK", null, out lexicalElements);
@@ -106,7 +106,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = 'OK';");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse("OK", null, out lexicalElements);
@@ -120,7 +120,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = b; b = 'OK';");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse("OK", null, out lexicalElements);
@@ -134,7 +134,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = [OK]+;");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<IList<string>>(compiled.Code);
+            var parser = CodeCompiler.Compile<IList<string>>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse("OK", null, out lexicalElements);
@@ -148,7 +148,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = #STATE{};");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse("OK", null, out lexicalElements);
@@ -162,7 +162,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = .;");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse("OK", null, out lexicalElements);
@@ -176,7 +176,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = b; b -lexical = 'OK';");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse("OK", null, out lexicalElements);
@@ -190,7 +190,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = b ' '; b -lexical = 'OK';");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse("OK ", null, out lexicalElements);
@@ -204,7 +204,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = ' ' b; b -lexical = 'OK';");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse(" OK", null, out lexicalElements);
@@ -218,7 +218,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a -lexical = ' ' b ' '; b -lexical = 'OK';");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             var result = parser.Parse(" OK ", null, out lexicalElements);
@@ -232,7 +232,7 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a <int> = x:&(<int> d:. { int.Parse(d) }) { x }");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<int>(compiled.Code);
+            var parser = CodeCompiler.Compile<int>(compiled);
 
             var result = parser.Parse(value.ToString());
 
@@ -401,8 +401,8 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a <int> -memoize = a:a '+' b:b { a + b } / b; b <int> = c:[0-9] { int.Parse(c) };");
 
-            var result = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<int>(result.Code);
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<int>(compiled);
 
             Assert.That(parser.Parse("1+3"), Is.EqualTo(4));
         }
@@ -546,8 +546,8 @@ namespace Pegasus.Tests
         {
             var grammar = new PegParser().Parse("a = #PARSE{ this.ReturnHelper<string>(state, ref state, _ => \"OK\") };");
 
-            var result = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(result.Code);
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             Assert.That(parser.Parse(string.Empty), Is.EqualTo("OK"));
         }

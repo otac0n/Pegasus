@@ -29,7 +29,7 @@ namespace Pegasus.Tests.Workbench
         {
             var grammar = new PegParser().Parse(tutorial.GrammarText);
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<object>(compiled.Code);
+            var parser = CodeCompiler.Compile<object>(compiled);
 
             var result = parser.Parse(tutorial.TestText);
 
@@ -50,7 +50,7 @@ namespace Pegasus.Tests.Workbench
             var tutorial = Tutorial.FindAll().Single(t => t.Name == "05 - Calculator");
             var grammar = new PegParser().Parse(tutorial.GrammarText);
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<object>(compiled.Code);
+            var parser = CodeCompiler.Compile<object>(compiled);
 
             var result = parser.Parse(expression);
 

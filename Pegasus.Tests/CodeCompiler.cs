@@ -7,13 +7,17 @@ namespace Pegasus.Tests
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CSharp;
+    using NUnit.Framework;
     using Pegasus.Common;
     using Pegasus.Common.Tracing;
+    using Pegasus.Compiler;
 
     public static class CodeCompiler
     {
-        public static ParserWrapper<T> Compile<T>(string source)
+        public static ParserWrapper<T> Compile<T>(CompileResult result)
         {
+            Assert.That(result.Errors.Where(e => !e.IsWarning), Is.Empty);
+
             var compiler = new CSharpCodeProvider();
             var options = new CompilerParameters
             {
@@ -24,7 +28,7 @@ namespace Pegasus.Tests
             options.ReferencedAssemblies.Add("System.Core.dll");
             options.ReferencedAssemblies.Add(typeof(Pegasus.Common.Cursor).Assembly.Location);
 
-            var results = compiler.CompileAssemblyFromSource(options, source);
+            var results = compiler.CompileAssemblyFromSource(options, result.Code);
             if (results.Errors.HasErrors)
             {
                 throw new CodeCompileFailedException(results.Errors.Cast<CompilerError>().ToArray(), results.Output.Cast<string>().ToArray());

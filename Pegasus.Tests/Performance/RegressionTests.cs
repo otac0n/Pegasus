@@ -22,7 +22,7 @@ namespace Pegasus.Tests.Performance
             var parsed = new PegParser().Parse(parserSource);
             var compiled = PegCompiler.Compile(parsed);
             Assert.That(compiled.Errors.Where(e => !e.IsWarning), Is.Empty);
-            var pegParser = CodeCompiler.Compile<dynamic>(compiled.Code);
+            var pegParser = CodeCompiler.Compile<dynamic>(compiled);
 
             Evaluate(() =>
             {

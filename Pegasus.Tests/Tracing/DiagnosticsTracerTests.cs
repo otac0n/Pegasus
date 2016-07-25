@@ -17,7 +17,7 @@ namespace Pegasus.Tests.Tracing
         {
             var grammar = new PegParser().Parse("@trace true; start = basicRule leftRecursiveRule outerRule (memoizedRule 'NO' / memoizedRule)*; basicRule = 'OK'; leftRecursiveRule -memoize = leftRecursiveRule '+' 'OK' / 'OK'; memoizedRule -memoize = 'OK'; outerRule = innerRule; innerRule = 'OK';");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             parser.Tracer = DiagnosticsTracer.Instance;
             var output = TraceUtility.Trace(() =>
@@ -26,8 +26,7 @@ namespace Pegasus.Tests.Tracing
             });
 
             var stateKey = Regex.Match(output, @"state key (\d+)").Groups[1].Value;
-            Assert.That(output, Is.EqualTo(string.Join(Environment.NewLine, new[]
-            {
+            Assert.That(output, Is.EqualTo(StringUtilities.JoinLines(
                 $"Begin 'start' at (1,1) with state key {stateKey}",
                 $"    Begin 'basicRule' at (1,1) with state key {stateKey}",
                 $"    End 'basicRule' with success at (1,3) with state key {stateKey}",
@@ -65,9 +64,7 @@ namespace Pegasus.Tests.Tracing
                 $"    Begin 'memoizedRule' at (1,12) with state key {stateKey}",
                 $"        Cache hit.",
                 $"    End 'memoizedRule' with failure at (1,12) with state key {stateKey}",
-                $"End 'start' with success at (1,12) with state key {stateKey}",
-                string.Empty,
-            })));
+                $"End 'start' with success at (1,12) with state key {stateKey}")));
         }
     }
 }

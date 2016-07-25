@@ -59,7 +59,7 @@ namespace Pegasus.Tests.Highlighting
         private static void TestScenario(string grammar, HighlightRuleCollection<Token> rules, string subject, IEnumerable<HighlightedSegment<Token>> result)
         {
             var compiled = PegCompiler.Compile(new PegParser().Parse(grammar));
-            var parser = CodeCompiler.Compile<string>(compiled.Code);
+            var parser = CodeCompiler.Compile<string>(compiled);
 
             IList<LexicalElement> lexicalElements;
             parser.Parse(subject, null, out lexicalElements);
@@ -70,7 +70,7 @@ namespace Pegasus.Tests.Highlighting
             Assert.That(ToAssertString(tokens), Is.EqualTo(ToAssertString(result)));
         }
 
-        private static string ToAssertString(IEnumerable<HighlightedSegment<Token>> segments) => string.Join("\n", segments.Select(s => $"({s.Start}:{s.End}:{s.Value})"));
+        private static string ToAssertString(IEnumerable<HighlightedSegment<Token>> segments) => StringUtilities.JoinLines(segments.Select(s => $"({s.Start}:{s.End}:{s.Value})"));
 
         private class TokenList : List<Tuple<string, Token>>
         {
