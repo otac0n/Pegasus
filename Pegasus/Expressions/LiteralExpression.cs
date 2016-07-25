@@ -20,6 +20,16 @@ namespace Pegasus.Expressions
         /// <param name="fromResource">A value indicating whether <paramref name="value"/> corresponds to a resource name or a literal value.</param>
         public LiteralExpression(Cursor start, Cursor end, string value, bool ignoreCase = false, bool fromResource = false)
         {
+            if (start == null)
+            {
+                throw new ArgumentNullException(nameof(start));
+            }
+
+            if (end == null)
+            {
+                throw new ArgumentNullException(nameof(end));
+            }
+
             if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));

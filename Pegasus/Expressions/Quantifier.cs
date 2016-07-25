@@ -2,6 +2,7 @@
 
 namespace Pegasus.Expressions
 {
+    using System;
     using Pegasus.Common;
 
     /// <summary>
@@ -19,6 +20,16 @@ namespace Pegasus.Expressions
         /// <param name="delimiter">The expression to use as a delimiter.</param>
         public Quantifier(Cursor start, Cursor end, int min, int? max = null, Expression delimiter = null)
         {
+            if (start == null)
+            {
+                throw new ArgumentNullException(nameof(start));
+            }
+
+            if (end == null)
+            {
+                throw new ArgumentNullException(nameof(end));
+            }
+
             this.Start = start;
             this.End = end;
             this.Min = min;

@@ -2,6 +2,8 @@
 
 namespace Pegasus.Expressions
 {
+    using System;
+
     /// <summary>
     /// Represents an assertion.
     /// </summary>
@@ -13,6 +15,11 @@ namespace Pegasus.Expressions
         /// <param name="code">The code to execute for the assertion.</param>
         public AndCodeExpression(CodeSpan code)
         {
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             this.Code = code;
         }
 

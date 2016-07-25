@@ -2,6 +2,8 @@
 
 namespace Pegasus.Expressions
 {
+    using System;
+
     /// <summary>
     /// Represents a reference to another expression by name.
     /// </summary>
@@ -13,6 +15,11 @@ namespace Pegasus.Expressions
         /// <param name="identifier">The name of the referenced expression.</param>
         public NameExpression(Identifier identifier)
         {
+            if (identifier == null)
+            {
+                throw new ArgumentNullException(nameof(identifier));
+            }
+
             this.Identifier = identifier;
         }
 

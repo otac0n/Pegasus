@@ -2,6 +2,7 @@
 
 namespace Pegasus.Expressions
 {
+    using System;
     using Pegasus.Common;
 
     /// <summary>
@@ -20,6 +21,21 @@ namespace Pegasus.Expressions
         /// <param name="value">The value of the code span.</param>
         public CodeSpan(string code, Cursor start, Cursor end, string value = null)
         {
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (start == null)
+            {
+                throw new ArgumentNullException(nameof(start));
+            }
+
+            if (end == null)
+            {
+                throw new ArgumentNullException(nameof(end));
+            }
+
             this.Code = code;
             this.Start = start;
             this.End = end;

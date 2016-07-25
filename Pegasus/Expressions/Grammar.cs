@@ -25,6 +25,11 @@ namespace Pegasus.Expressions
                 throw new ArgumentNullException(nameof(rules));
             }
 
+            if (end == null)
+            {
+                throw new ArgumentNullException(nameof(end));
+            }
+
             this.Rules = rules.ToList().AsReadOnly();
             this.Settings = (settings ?? Enumerable.Empty<KeyValuePair<Identifier, object>>()).ToList().AsReadOnly();
             this.End = end;

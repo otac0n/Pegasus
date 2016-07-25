@@ -25,6 +25,16 @@ namespace Pegasus.Expressions
                 throw new ArgumentNullException(nameof(name));
             }
 
+            if (start == null)
+            {
+                throw new ArgumentNullException(nameof(start));
+            }
+
+            if (end == null)
+            {
+                throw new ArgumentNullException(nameof(end));
+            }
+
             this.Name = name;
             this.Start = start;
             this.End = end;
