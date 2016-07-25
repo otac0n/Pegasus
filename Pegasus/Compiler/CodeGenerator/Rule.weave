@@ -58,8 +58,14 @@
                                 {{ this.currentContext = this.currentContext.WithResultName(resultName); }}
                                 if ({{: nextResultName }} == null || ({{: this.currentContext.ResultName }} != null && {{: this.currentContext.ResultName }}.EndCursor.Location >= r1.EndCursor.Location))
                                 {
+                                    {{if this.trace}}
+                                        this.tracer.TraceInfo({{= ToLiteral(model.Identifier.Name) }}, cursor, "No forward progress made, current cache entry will be kept.");
+                                    {{/if}}
                                     break;
                                 }
+                                {{if this.trace}}
+                                    this.tracer.TraceInfo({{= ToLiteral(model.Identifier.Name) }}, cursor, "Caching result and retrying.");
+                                {{/if}}
                                 this.storage[storageKey] = {{: this.currentContext.ResultName }} = {{: nextResultName }};
                                 cursor = {{: startCursorName }};
                             }
