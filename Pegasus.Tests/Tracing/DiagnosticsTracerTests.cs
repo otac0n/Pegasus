@@ -4,10 +4,10 @@ namespace Pegasus.Tests.Tracing
 {
     using System.IO;
     using System.Text.RegularExpressions;
-    using Compiler;
     using NUnit.Framework;
-    using Parser;
     using Pegasus.Common.Tracing;
+    using Pegasus.Compiler;
+    using Pegasus.Parser;
 
     [TestFixture]
     public class DiagnosticsTracerTests

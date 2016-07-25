@@ -4,8 +4,8 @@ namespace Pegasus.Tests.Performance
 {
     using System.IO;
     using System.Linq;
-    using Compiler;
     using NUnit.Framework;
+    using Pegasus.Compiler;
     using Pegasus.Parser;
     using static PerformanceTests;
 

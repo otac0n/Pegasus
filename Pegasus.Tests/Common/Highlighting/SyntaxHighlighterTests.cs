@@ -1,16 +1,16 @@
 ﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
-namespace Pegasus.Tests.Highlighting
+namespace Pegasus.Tests.Common.Highlighting
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Common;
-    using Compiler;
     using NUnit.Framework;
-    using Parser;
+    using Pegasus.Common;
     using Pegasus.Common.Highlighting;
+    using Pegasus.Compiler;
+    using Pegasus.Parser;
 
     public class SyntaxHighlighterTests
     {

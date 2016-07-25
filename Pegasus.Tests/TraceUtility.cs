@@ -5,7 +5,6 @@ namespace Pegasus.Tests
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Text;
 
     internal static class TraceUtility
     {
