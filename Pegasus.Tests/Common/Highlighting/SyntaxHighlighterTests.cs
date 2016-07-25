@@ -72,19 +72,19 @@ namespace Pegasus.Tests.Common.Highlighting
 
         private static string ToAssertString(IEnumerable<HighlightedSegment<Token>> segments) => StringUtilities.JoinLines(segments.Select(s => $"({s.Start}:{s.End}:{s.Value})"));
 
-        private class TokenList : List<Tuple<string, Token>>
-        {
-            public void Add(string value, Token token)
-            {
-                this.Add(Tuple.Create(value, token));
-            }
-        }
-
         private class SegmentList : List<HighlightedSegment<Token>>
         {
             public void Add(int start, int end, Token token)
             {
                 this.Add(new HighlightedSegment<Token>(start, end, token));
+            }
+        }
+
+        private class TokenList : List<Tuple<string, Token>>
+        {
+            public void Add(string value, Token token)
+            {
+                this.Add(Tuple.Create(value, token));
             }
         }
     }

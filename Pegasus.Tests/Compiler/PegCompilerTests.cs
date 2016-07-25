@@ -27,6 +27,66 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.True);
         }
 
+        [Test]
+        public void Compile_WhenACSharpExpressionContainsError_YieldsError()
+        {
+            var grammar = new PegParser().Parse("a = {{ return \"OK\" }}");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("CS1002"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
+        public void Compile_WhenACSharpExpressionContainsWarnings_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a = {{\n#warning OK\nreturn \"OK\";\n}}");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("CS1030"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenACSharpExpressionDoesntConsumeAllOfTheSourceText_YieldsError()
+        {
+            var grammar = new PegParser().Parse("a = {{ return \"OK\"; } extra }");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("CS1026"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
+        public void Compile_WhenExportedRuleNameIsLowercase_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a -export = 'OK'");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0025"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenPublicRuleNameIsLowercase_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a -public = 'OK'");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0025"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
         [TestCase("string")]
         [TestCase("foo")]
         [TestCase("bar")]
@@ -36,6 +96,17 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
 
             Assert.That(compiled.ExpressionTypes[grammar.Rules.Single().Expression].ToString(), Is.EqualTo(type));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarContainsAParseExpression_ExecutesTheParseExpression()
+        {
+            var grammar = new PegParser().Parse("a = #PARSE{ this.ReturnHelper<string>(state, ref state, _ => \"OK\") };");
+
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
+
+            Assert.That(parser.Parse(string.Empty), Is.EqualTo("OK"));
         }
 
         [TestCase(true, "&", "OK")]
@@ -172,6 +243,18 @@ namespace Pegasus.Tests.Compiler
         }
 
         [Test]
+        public void Compile_WhenTheGrammarHasResourceStringWithoutResourcesSpecified_YieldsError()
+        {
+            var grammar = new PegParser().Parse("a = 'OkResource'r");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0016"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
         public void Compile_WhenTheGrammarHasTwoLexicalRulesThatBeginAndEndOnTheSameCharacter_ProducesAParserThatReturnsBothLexicalElements()
         {
             var grammar = new PegParser().Parse("a -lexical = b; b -lexical = 'OK';");
@@ -225,6 +308,111 @@ namespace Pegasus.Tests.Compiler
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "b@1:3", "a@0:4" }));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarRepeatsALabel_YieldsError()
+        {
+            var grammar = new PegParser().Parse("a = foo:'OK' foo:'OK'");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0007"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [TestCase("a = (#PARSE{ this.b(ref state) })* b; b = 'OK';", "PEG0021")]
+        [TestCase("a = (#PARSE{ this.b(ref state) })<1,5> b; b = 'OK';", "PEG0022")]
+        public void Compile_WhenTheGrammarRepeatsAParseCodeExpressionWithNoMaximum_YieldsWarning(string subject, string errorNumber)
+        {
+            var grammar = new PegParser().Parse(subject);
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo(errorNumber));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionContainingAnAssertionWithFiniteMaximum_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a = (&{false} '')<1,5>");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0022"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionContainingAnAssertionWithNoMaximum_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a = (&{false} '')*");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0021"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionContainingAnAssertionWithSameMinAndMax_YieldsNone()
+        {
+            var grammar = new PegParser().Parse("a = (&{false} '')<5>");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors, Is.Empty);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionWithFiniteMaximum_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a = ''<1,5>");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0022"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionWithNoMaximum_YieldsError()
+        {
+            var grammar = new PegParser().Parse("a = ''*");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0021"));
+            Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionWithSameMinAndMax_YieldsNone()
+        {
+            var grammar = new PegParser().Parse("a = ''<5>");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors, Is.Empty);
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarUsesAnUnknownFlag_YieldsWarning()
+        {
+            var grammar = new PegParser().Parse("a -unknown = 'OK'");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0013"));
+            Assert.That(error.IsWarning, Is.True);
         }
 
         [Test]
@@ -361,42 +549,6 @@ namespace Pegasus.Tests.Compiler
         }
 
         [Test]
-        public void Compile_WhenTheGrammarRepeatsALabel_YieldsError()
-        {
-            var grammar = new PegParser().Parse("a = foo:'OK' foo:'OK'");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.Single();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0007"));
-            Assert.That(error.IsWarning, Is.False);
-        }
-
-        [Test]
-        public void Compile_WhenTheGrammarUsesAnUnknownFlag_YieldsWarning()
-        {
-            var grammar = new PegParser().Parse("a -unknown = 'OK'");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.Single();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0013"));
-            Assert.That(error.IsWarning, Is.True);
-        }
-
-        [Test]
-        public void Compile_WhenTheGrammarHasResourceStringWithoutResourcesSpecified_YieldsError()
-        {
-            var grammar = new PegParser().Parse("a = 'OkResource'r");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.Single();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0016"));
-            Assert.That(error.IsWarning, Is.False);
-        }
-
-        [Test]
         public void Compile_WithSimpleLeftRecursion_ProducesCorrectParser()
         {
             var grammar = new PegParser().Parse("a <int> -memoize = a:a '+' b:b { a + b } / b; b <int> = c:[0-9] { int.Parse(c) };");
@@ -457,158 +609,6 @@ namespace Pegasus.Tests.Compiler
 
             var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0017"));
-            Assert.That(error.IsWarning, Is.True);
-        }
-
-        [Test]
-        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionWithNoMaximum_YieldsError()
-        {
-            var grammar = new PegParser().Parse("a = ''*");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0021"));
-            Assert.That(error.IsWarning, Is.False);
-        }
-
-        [Test]
-        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionWithFiniteMaximum_YieldsWarning()
-        {
-            var grammar = new PegParser().Parse("a = ''<1,5>");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0022"));
-            Assert.That(error.IsWarning, Is.True);
-        }
-
-        [Test]
-        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionWithSameMinAndMax_YieldsNone()
-        {
-            var grammar = new PegParser().Parse("a = ''<5>");
-
-            var result = PegCompiler.Compile(grammar);
-
-            Assert.That(result.Errors, Is.Empty);
-        }
-
-        [Test]
-        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionContainingAnAssertionWithNoMaximum_YieldsWarning()
-        {
-            var grammar = new PegParser().Parse("a = (&{false} '')*");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0021"));
-            Assert.That(error.IsWarning, Is.True);
-        }
-
-        [Test]
-        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionContainingAnAssertionWithFiniteMaximum_YieldsWarning()
-        {
-            var grammar = new PegParser().Parse("a = (&{false} '')<1,5>");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0022"));
-            Assert.That(error.IsWarning, Is.True);
-        }
-
-        [Test]
-        public void Compile_WhenTheGrammarRepeatsAZeroWidthExpressionContainingAnAssertionWithSameMinAndMax_YieldsNone()
-        {
-            var grammar = new PegParser().Parse("a = (&{false} '')<5>");
-
-            var result = PegCompiler.Compile(grammar);
-
-            Assert.That(result.Errors, Is.Empty);
-        }
-
-        [TestCase("a = (#PARSE{ this.b(ref state) })* b; b = 'OK';", "PEG0021")]
-        [TestCase("a = (#PARSE{ this.b(ref state) })<1,5> b; b = 'OK';", "PEG0022")]
-        public void Compile_WhenTheGrammarRepeatsAParseCodeExpressionWithNoMaximum_YieldsWarning(string subject, string errorNumber)
-        {
-            var grammar = new PegParser().Parse(subject);
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo(errorNumber));
-            Assert.That(error.IsWarning, Is.True);
-        }
-
-        [Test]
-        public void Compile_WhenTheGrammarContainsAParseExpression_ExecutesTheParseExpression()
-        {
-            var grammar = new PegParser().Parse("a = #PARSE{ this.ReturnHelper<string>(state, ref state, _ => \"OK\") };");
-
-            var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled);
-
-            Assert.That(parser.Parse(string.Empty), Is.EqualTo("OK"));
-        }
-
-        [Test]
-        public void Compile_WhenACSharpExpressionContainsWarnings_YieldsWarning()
-        {
-            var grammar = new PegParser().Parse("a = {{\n#warning OK\nreturn \"OK\";\n}}");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("CS1030"));
-            Assert.That(error.IsWarning, Is.True);
-        }
-
-        [Test]
-        public void Compile_WhenACSharpExpressionContainsError_YieldsError()
-        {
-            var grammar = new PegParser().Parse("a = {{ return \"OK\" }}");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("CS1002"));
-            Assert.That(error.IsWarning, Is.False);
-        }
-
-        [Test]
-        public void Compile_WhenACSharpExpressionDoesntConsumeAllOfTheSourceText_YieldsError()
-        {
-            var grammar = new PegParser().Parse("a = {{ return \"OK\"; } extra }");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("CS1026"));
-            Assert.That(error.IsWarning, Is.False);
-        }
-
-        [Test]
-        public void Compile_WhenExportedRuleNameIsLowercase_YieldsWarning()
-        {
-            var grammar = new PegParser().Parse("a -export = 'OK'");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0025"));
-            Assert.That(error.IsWarning, Is.True);
-        }
-
-        [Test]
-        public void Compile_WhenPublicRuleNameIsLowercase_YieldsWarning()
-        {
-            var grammar = new PegParser().Parse("a -public = 'OK'");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0025"));
             Assert.That(error.IsWarning, Is.True);
         }
     }

@@ -29,6 +29,14 @@ namespace Pegasus.Common.Tracing
         void TraceCacheMiss(string ruleName, Cursor cursor, CacheKey cacheKey);
 
         /// <summary>
+        /// Allows the parser to trace additional info relevant to the parse.
+        /// </summary>
+        /// <param name="ruleName">The name of the rule being parsed.</param>
+        /// <param name="cursor">The cursor where the info is presented.</param>
+        /// <param name="info">The info being included.</param>
+        void TraceInfo(string ruleName, Cursor cursor, string info);
+
+        /// <summary>
         /// Signifies that the parser has began parsing the specified rule.
         /// </summary>
         /// <param name="ruleName">The name of the rule being parsed.</param>
@@ -43,13 +51,5 @@ namespace Pegasus.Common.Tracing
         /// <param name="cursor">The cursor where this rule has left off.</param>
         /// <param name="parseResult">The result of the parse.</param>
         void TraceRuleExit<T>(string ruleName, Cursor cursor, IParseResult<T> parseResult);
-
-        /// <summary>
-        /// Allows the parser to trace additional info relevant to the parse.
-        /// </summary>
-        /// <param name="ruleName">The name of the rule being parsed.</param>
-        /// <param name="cursor">The cursor where the info is presented.</param>
-        /// <param name="info">The info being included.</param>
-        void TraceInfo(string ruleName, Cursor cursor, string info);
     }
 }

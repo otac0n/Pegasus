@@ -9,12 +9,12 @@ namespace Pegasus.Tests.Common
     public class CacheKeyTests
     {
         [Test]
-        public void GetHashCode_WithIdenticalCacheKeys_ReturnsTheSameValue([Values(0, 1, 2)] int stateKey, [Values(0, 1, 2)] int location)
+        public void Equals_WithDifferentCacheKeys_ReturnsFalse()
         {
-            var subjectA = new CacheKey("OK", stateKey, location);
-            var subjectB = new CacheKey("OK", stateKey, location);
+            var subjectA = new CacheKey("OK", 0, 0);
+            var subjectB = new CacheKey("OK", 1, 0);
 
-            Assert.That(subjectA.GetHashCode(), Is.EqualTo(subjectB.GetHashCode()));
+            Assert.That(subjectA.Equals(subjectB), Is.False);
         }
 
         [Test]
@@ -27,21 +27,21 @@ namespace Pegasus.Tests.Common
         }
 
         [Test]
-        public void Equals_WithDifferentCacheKeys_ReturnsFalse()
-        {
-            var subjectA = new CacheKey("OK", 0, 0);
-            var subjectB = new CacheKey("OK", 1, 0);
-
-            Assert.That(subjectA.Equals(subjectB), Is.False);
-        }
-
-        [Test]
         public void Equals_WithNullReference_ReturnsFalse()
         {
             var subjectA = new CacheKey("OK", 0, 0);
             var subjectB = (CacheKey)null;
 
             Assert.That(subjectA.Equals(subjectB), Is.False);
+        }
+
+        [Test]
+        public void GetHashCode_WithIdenticalCacheKeys_ReturnsTheSameValue([Values(0, 1, 2)] int stateKey, [Values(0, 1, 2)] int location)
+        {
+            var subjectA = new CacheKey("OK", stateKey, location);
+            var subjectB = new CacheKey("OK", stateKey, location);
+
+            Assert.That(subjectA.GetHashCode(), Is.EqualTo(subjectB.GetHashCode()));
         }
     }
 }

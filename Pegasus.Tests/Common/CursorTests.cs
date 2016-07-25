@@ -10,12 +10,6 @@ namespace Pegasus.Tests.Common
     public class CursorTests
     {
         [Test]
-        public void Constructor_WhenGivenANullSubject_ThrowsException()
-        {
-            Assert.That(() => new Cursor(null), Throws.InstanceOf<ArgumentNullException>());
-        }
-
-        [Test]
         public void Constructor_WhenGivenALocationLessThanZero_ThrowsException()
         {
             Assert.That(() => new Cursor(string.Empty, -1), Throws.InstanceOf<ArgumentOutOfRangeException>());
@@ -25,6 +19,12 @@ namespace Pegasus.Tests.Common
         public void Constructor_WhenGivenALocationPastTheEndOfTheString_ThrowsException()
         {
             Assert.That(() => new Cursor(string.Empty, 1), Throws.InstanceOf<ArgumentOutOfRangeException>());
+        }
+
+        [Test]
+        public void Constructor_WhenGivenANullSubject_ThrowsException()
+        {
+            Assert.That(() => new Cursor(null), Throws.InstanceOf<ArgumentNullException>());
         }
 
         [Test]
@@ -49,33 +49,31 @@ namespace Pegasus.Tests.Common
         }
 
         [Test]
-        public void WithMutability_WhenTheStateHasBeenModified_ReturnsAnUnequalCursor()
+        public void GetHashCode_WithEqualSubjectsAndIndexesAndStateKey_ReturnsSameValue([Values(0, 1, 2)] int index)
         {
-            var cursor = new Cursor("OK");
-            var mutable = cursor.WithMutability(true);
-            mutable["OK"] = "OK";
+            var subjectA = new Cursor("OK", index);
+            var subjectB = subjectA.Advance(0);
 
-            var result = mutable.WithMutability(false);
-
-            Assert.That(result, Is.Not.EqualTo(cursor));
+            Assert.That(subjectB.GetHashCode(), Is.EqualTo(subjectA.GetHashCode()));
         }
 
-        [Test]
-        public void WithMutability_WhenTheStateHasNotBeenModified_ReturnsAnEqualCursor()
+        [TestCase(0, 1, 1)]
+        [TestCase(1, 1, 2)]
+        [TestCase(2, 1, 3)]
+        [TestCase(3, 1, 4)]
+        [TestCase(4, 2, 1)]
+        [TestCase(8, 3, 1)]
+        [TestCase(12, 4, 1)]
+        [TestCase(16, 5, 1)]
+        [TestCase(20, 5, 5)]
+        [TestCase(21, 6, 1)]
+        [TestCase(25, 6, 5)]
+        [TestCase(26, 7, 1)]
+        public void GetLineAndColumn_Always_ReturnsExpectedValues(int index, int line, int column)
         {
-            var cursor = new Cursor("OK");
-            var mutable = cursor.WithMutability(true);
+            var cursor = new Cursor("OK1\rOK2\nOK3\u2028OK4\u2029OK5\r\nOK6\n\rOK7", index);
 
-            var result = mutable.WithMutability(false);
-
-            Assert.That(result, Is.EqualTo(cursor));
-        }
-
-        [Test]
-        public void SetItem_WhenTheCursorIsNotMutable_ThrowsException()
-        {
-            var cursor = new Cursor("OK");
-            Assert.That(() => cursor["OK"] = "OK", Throws.InvalidOperationException);
+            Assert.That($"({cursor.Line},{cursor.Column})", Is.EqualTo($"({line},{column})"));
         }
 
         [Test]
@@ -187,31 +185,33 @@ namespace Pegasus.Tests.Common
         }
 
         [Test]
-        public void GetHashCode_WithEqualSubjectsAndIndexesAndStateKey_ReturnsSameValue([Values(0, 1, 2)] int index)
+        public void SetItem_WhenTheCursorIsNotMutable_ThrowsException()
         {
-            var subjectA = new Cursor("OK", index);
-            var subjectB = subjectA.Advance(0);
-
-            Assert.That(subjectB.GetHashCode(), Is.EqualTo(subjectA.GetHashCode()));
+            var cursor = new Cursor("OK");
+            Assert.That(() => cursor["OK"] = "OK", Throws.InvalidOperationException);
         }
 
-        [TestCase(0, 1, 1)]
-        [TestCase(1, 1, 2)]
-        [TestCase(2, 1, 3)]
-        [TestCase(3, 1, 4)]
-        [TestCase(4, 2, 1)]
-        [TestCase(8, 3, 1)]
-        [TestCase(12, 4, 1)]
-        [TestCase(16, 5, 1)]
-        [TestCase(20, 5, 5)]
-        [TestCase(21, 6, 1)]
-        [TestCase(25, 6, 5)]
-        [TestCase(26, 7, 1)]
-        public void GetLineAndColumn_Always_ReturnsExpectedValues(int index, int line, int column)
+        [Test]
+        public void WithMutability_WhenTheStateHasBeenModified_ReturnsAnUnequalCursor()
         {
-            var cursor = new Cursor("OK1\rOK2\nOK3\u2028OK4\u2029OK5\r\nOK6\n\rOK7", index);
+            var cursor = new Cursor("OK");
+            var mutable = cursor.WithMutability(true);
+            mutable["OK"] = "OK";
 
-            Assert.That($"({cursor.Line},{cursor.Column})", Is.EqualTo($"({line},{column})"));
+            var result = mutable.WithMutability(false);
+
+            Assert.That(result, Is.Not.EqualTo(cursor));
+        }
+
+        [Test]
+        public void WithMutability_WhenTheStateHasNotBeenModified_ReturnsAnEqualCursor()
+        {
+            var cursor = new Cursor("OK");
+            var mutable = cursor.WithMutability(true);
+
+            var result = mutable.WithMutability(false);
+
+            Assert.That(result, Is.EqualTo(cursor));
         }
     }
 }

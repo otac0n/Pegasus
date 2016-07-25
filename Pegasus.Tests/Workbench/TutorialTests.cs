@@ -24,18 +24,6 @@ namespace Pegasus.Tests.Workbench
             Assert.That(result.Errors, Is.Empty);
         }
 
-        [TestCaseSource("Tutorials")]
-        public void Parse_ForAllFoundTutorials_Succeeds(Tutorial tutorial)
-        {
-            var grammar = new PegParser().Parse(tutorial.GrammarText);
-            var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<object>(compiled);
-
-            var result = parser.Parse(tutorial.TestText);
-
-            Assert.That(result, Is.Not.Null);
-        }
-
         [TestCase("0", 0)]
         [TestCase("1+1", 2)]
         [TestCase("((((((1+1))))))", 2)]
@@ -55,6 +43,18 @@ namespace Pegasus.Tests.Workbench
             var result = parser.Parse(expression);
 
             Assert.That(result, Is.EqualTo(value).Within(0.1).Percent);
+        }
+
+        [TestCaseSource("Tutorials")]
+        public void Parse_ForAllFoundTutorials_Succeeds(Tutorial tutorial)
+        {
+            var grammar = new PegParser().Parse(tutorial.GrammarText);
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<object>(compiled);
+
+            var result = parser.Parse(tutorial.TestText);
+
+            Assert.That(result, Is.Not.Null);
         }
     }
 }
