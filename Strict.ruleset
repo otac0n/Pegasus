@@ -2,6 +2,7 @@
 <RuleSet Name="Strict" Description="A strict ruleset based on the Microsoft All Rules ruleset." ToolsVersion="14.0">
   <IncludeAll Action="Warning" />
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1002" Action="None" />
     <Rule Id="CA1006" Action="None" />
     <Rule Id="CA1020" Action="None" />
     <Rule Id="CA1026" Action="None" />
@@ -20,7 +21,6 @@
     <Rule Id="SA1600" Action="None" />
     <Rule Id="SA1601" Action="None" />
     <Rule Id="SA1602" Action="None" />
-    <Rule Id="SA1609" Action="None" />
     <Rule Id="SA1629" Action="Warning" />
     <Rule Id="SA1652" Action="None" />
   </Rules>
