@@ -30,7 +30,7 @@ namespace Pegasus.Common
         /// <param name="subject">The parsing subject.</param>
         /// <param name="location">The location within the parsing subject.</param>
         /// <param name="fileName">The filename of the subject.</param>
-        public Cursor(string subject, int location, string fileName = null)
+        public Cursor(string subject, int location = 0, string fileName = null)
         {
             if (subject == null)
             {

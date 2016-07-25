@@ -12,7 +12,13 @@ namespace Pegasus.Tests.Common
         [Test]
         public void Constructor_WhenGivenANullSubject_ThrowsException()
         {
-            Assert.That(() => new Cursor(null, 0), Throws.InstanceOf<ArgumentNullException>());
+            Assert.That(() => new Cursor(null), Throws.InstanceOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public void Constructor_WhenGivenALocationLessThanZero_ThrowsException()
+        {
+            Assert.That(() => new Cursor(string.Empty, -1), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -45,7 +51,7 @@ namespace Pegasus.Tests.Common
         [Test]
         public void WithMutability_WhenTheStateHasBeenModified_ReturnsAnUnequalCursor()
         {
-            var cursor = new Cursor("OK", 0);
+            var cursor = new Cursor("OK");
             var mutable = cursor.WithMutability(true);
             mutable["OK"] = "OK";
 
@@ -57,7 +63,7 @@ namespace Pegasus.Tests.Common
         [Test]
         public void WithMutability_WhenTheStateHasNotBeenModified_ReturnsAnEqualCursor()
         {
-            var cursor = new Cursor("OK", 0);
+            var cursor = new Cursor("OK");
             var mutable = cursor.WithMutability(true);
 
             var result = mutable.WithMutability(false);
@@ -68,7 +74,7 @@ namespace Pegasus.Tests.Common
         [Test]
         public void SetItem_WhenTheCursorIsNotMutable_ThrowsException()
         {
-            var cursor = new Cursor("OK", 0);
+            var cursor = new Cursor("OK");
             Assert.That(() => cursor["OK"] = "OK", Throws.InvalidOperationException);
         }
 
@@ -84,7 +90,7 @@ namespace Pegasus.Tests.Common
         [Test]
         public void OpEquality_WithEqualSubjectAndIndex_ReturnsTrue()
         {
-            var subjectA = new Cursor("OK", 0);
+            var subjectA = new Cursor("OK");
             var subjectB = subjectA.Advance(0);
 
             Assert.That(subjectA == subjectB, Is.True);
@@ -94,7 +100,7 @@ namespace Pegasus.Tests.Common
         public void OpEquality_WithNullReferenceOnLeft_ReturnsFalse()
         {
             var subjectA = (Cursor)null;
-            var subjectB = new Cursor("OK", 0);
+            var subjectB = new Cursor("OK");
 
             Assert.That(subjectA == subjectB, Is.False);
         }
@@ -102,7 +108,7 @@ namespace Pegasus.Tests.Common
         [Test]
         public void OpEquality_WithNullReferenceOnRight_ReturnsFalse()
         {
-            var subjectA = new Cursor("OK", 0);
+            var subjectA = new Cursor("OK");
             var subjectB = (Cursor)null;
 
             Assert.That(subjectA == subjectB, Is.False);
@@ -111,8 +117,8 @@ namespace Pegasus.Tests.Common
         [Test]
         public void OpEquality_WithUnequalEndSubjects_ReturnsFalse()
         {
-            var subjectA = new Cursor("OK1", 0);
-            var subjectB = new Cursor("OK2", 0);
+            var subjectA = new Cursor("OK1");
+            var subjectB = new Cursor("OK2");
 
             Assert.That(subjectA == subjectB, Is.False);
         }
@@ -120,7 +126,7 @@ namespace Pegasus.Tests.Common
         [Test]
         public void OpEquality_WithUnequalIndexes_ReturnsFalse()
         {
-            var subjectA = new Cursor("OK", 0);
+            var subjectA = new Cursor("OK");
             var subjectB = new Cursor("OK", 1);
 
             Assert.That(subjectA == subjectB, Is.False);
@@ -138,7 +144,7 @@ namespace Pegasus.Tests.Common
         [Test]
         public void OpInequality_WithEqualSubjectAndIndex_ReturnsFalse()
         {
-            var subjectA = new Cursor("OK", 0);
+            var subjectA = new Cursor("OK");
             var subjectB = subjectA.Advance(0);
 
             Assert.That(subjectA != subjectB, Is.False);
@@ -148,7 +154,7 @@ namespace Pegasus.Tests.Common
         public void OpInequality_WithNullReferenceOnLeft_ReturnsTrue()
         {
             var subjectA = (Cursor)null;
-            var subjectB = new Cursor("OK", 0);
+            var subjectB = new Cursor("OK");
 
             Assert.That(subjectA != subjectB, Is.True);
         }
@@ -156,7 +162,7 @@ namespace Pegasus.Tests.Common
         [Test]
         public void OpInequality_WithNullReferenceOnRight_ReturnsTrue()
         {
-            var subjectA = new Cursor("OK", 0);
+            var subjectA = new Cursor("OK");
             var subjectB = (Cursor)null;
 
             Assert.That(subjectA != subjectB, Is.True);
@@ -165,8 +171,8 @@ namespace Pegasus.Tests.Common
         [Test]
         public void OpInequality_WithUnequalEndSubjects_ReturnsTrue()
         {
-            var subjectA = new Cursor("OK1", 0);
-            var subjectB = new Cursor("OK2", 0);
+            var subjectA = new Cursor("OK1");
+            var subjectB = new Cursor("OK2");
 
             Assert.That(subjectA != subjectB, Is.True);
         }
@@ -174,7 +180,7 @@ namespace Pegasus.Tests.Common
         [Test]
         public void OpInequality_WithUnequalIndexes_ReturnsTrue()
         {
-            var subjectA = new Cursor("OK", 0);
+            var subjectA = new Cursor("OK");
             var subjectB = new Cursor("OK", 1);
 
             Assert.That(subjectA != subjectB, Is.True);
