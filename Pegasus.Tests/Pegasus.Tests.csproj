@@ -79,6 +79,8 @@
     <Compile Include="Performance\RegressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegressionTests.cs" />
+    <Compile Include="TraceUtility.cs" />
+    <Compile Include="Tracing\DiagnosticsTracerTests.cs" />
     <Compile Include="Workbench\TutorialTests.cs" />
   </ItemGroup>
   <ItemGroup>

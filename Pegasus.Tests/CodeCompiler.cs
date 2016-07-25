@@ -8,6 +8,7 @@ namespace Pegasus.Tests
     using System.Linq;
     using Microsoft.CSharp;
     using Pegasus.Common;
+    using Pegasus.Common.Tracing;
 
     public static class CodeCompiler
     {
@@ -44,6 +45,25 @@ namespace Pegasus.Tests
             {
                 this.type = type;
                 this.instance = Activator.CreateInstance(type);
+            }
+
+            public ITracer Tracer
+            {
+                get
+                {
+                    return (ITracer)this.instance
+                        .GetType()
+                        .GetProperty("Tracer", typeof(ITracer))
+                        .GetValue(this.instance);
+                }
+
+                set
+                {
+                    this.instance
+                        .GetType()
+                        .GetProperty("Tracer", typeof(ITracer))
+                        .SetValue(this.instance, value);
+                }
             }
 
             public T Parse(string subject, string fileName = null)
