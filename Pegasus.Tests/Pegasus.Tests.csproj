@@ -82,6 +82,7 @@
     <Compile Include="StringUtilities.cs" />
     <Compile Include="TraceUtility.cs" />
     <Compile Include="Tracing\DiagnosticsTracerTests.cs" />
+    <Compile Include="Tracing\NullTracerTests.cs" />
     <Compile Include="Workbench\TutorialTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +114,9 @@
     <None Include="Performance\Regression\gitter-piratejon.peg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Tracing\tracing-test.peg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -129,6 +133,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Performance\Regression\simple.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Tracing\tracing-test.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

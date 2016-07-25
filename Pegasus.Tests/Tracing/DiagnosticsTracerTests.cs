@@ -2,7 +2,7 @@
 
 namespace Pegasus.Tests.Tracing
 {
-    using System;
+    using System.IO;
     using System.Text.RegularExpressions;
     using Compiler;
     using NUnit.Framework;
@@ -15,14 +15,14 @@ namespace Pegasus.Tests.Tracing
         [Test]
         public void EndToEndTest()
         {
-            var grammar = new PegParser().Parse("@trace true; start = basicRule leftRecursiveRule outerRule (memoizedRule 'NO' / memoizedRule)*; basicRule = 'OK'; leftRecursiveRule -memoize = leftRecursiveRule '+' 'OK' / 'OK'; memoizedRule -memoize = 'OK'; outerRule = innerRule; innerRule = 'OK';");
+            var grammar = new PegParser().Parse(File.ReadAllText(@"Tracing\tracing-test.peg"));
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
             parser.Tracer = DiagnosticsTracer.Instance;
             var output = TraceUtility.Trace(() =>
             {
-                parser.Parse("OKOK+OKOKOK");
+                parser.Parse(File.ReadAllText(@"Tracing\tracing-test.txt"));
             });
 
             var stateKey = Regex.Match(output, @"state key (\d+)").Groups[1].Value;

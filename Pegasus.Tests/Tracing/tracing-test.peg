@@ -1,0 +1,6 @@
+﻿@trace true;
+start = basicRule leftRecursiveRule outerRule (memoizedRule 'NO' / memoizedRule)*; basicRule = 'OK';
+leftRecursiveRule -memoize = leftRecursiveRule '+' 'OK' / 'OK';
+memoizedRule -memoize = 'OK';
+outerRule = innerRule;
+innerRule = 'OK';
