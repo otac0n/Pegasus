@@ -87,6 +87,28 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.True);
         }
 
+        [Test]
+        public void Compile_WhenTheGrammarContainsAnAndCodeExpression_ExecutesExpression()
+        {
+            var grammar = new PegParser().Parse("a = &{true} 'OK'");
+
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
+
+            Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarContainsAnAndExpression_ExecutesExpression()
+        {
+            var grammar = new PegParser().Parse("a = &other 'OK'; other <int> = 'OK' { 0 }");
+
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
+
+            Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
+        }
+
         [TestCase("string")]
         [TestCase("foo")]
         [TestCase("bar")]
@@ -96,6 +118,28 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
 
             Assert.That(compiled.ExpressionTypes[grammar.Rules.Single().Expression].ToString(), Is.EqualTo(type));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarContainsANotCodeExpression_ExecutesExpression()
+        {
+            var grammar = new PegParser().Parse("a = !{false} 'OK'");
+
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
+
+            Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
+        }
+
+        [Test]
+        public void Compile_WhenTheGrammarContainsANotExpression_ExecutesExpression()
+        {
+            var grammar = new PegParser().Parse("a = !other 'OK'; other <int> = 'NO' { 0 }");
+
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
+
+            Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
         }
 
         [Test]
