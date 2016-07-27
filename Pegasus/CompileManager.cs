@@ -48,6 +48,7 @@ namespace Pegasus
 
             if (!hadFatal)
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
                 File.WriteAllText(outputFile, result.Code);
             }
         }
