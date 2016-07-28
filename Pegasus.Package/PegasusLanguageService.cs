@@ -208,10 +208,12 @@ namespace Pegasus.Package
                     return cached;
                 }
 
-                var simplifiedTokens = SyntaxHighlighter.GetTokens(GetLexicalElements(text));
+                var tokens = SyntaxHighlighter.GetTokens(GetLexicalElements(text));
+                tokens = SyntaxHighlighter<TokenType>.AddDefaultTokens(tokens, text.Length, TokenType.Text);
+                tokens = SyntaxHighlighter<TokenType>.SplitOnWhiteSpace(tokens, text);
 
-                MemoryCache.Default.Add(text, simplifiedTokens, DateTimeOffset.Now.AddMinutes(1));
-                return simplifiedTokens;
+                MemoryCache.Default.Add(text, tokens, DateTimeOffset.Now.AddMinutes(1));
+                return tokens;
             }
 
             private static IList<LexicalElement> GetLexicalElements(string text)
