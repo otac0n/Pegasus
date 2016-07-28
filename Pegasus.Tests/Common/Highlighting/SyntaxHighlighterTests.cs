@@ -16,8 +16,31 @@ namespace Pegasus.Tests.Common.Highlighting
     {
         public enum Token
         {
-            Whitespace,
             Number,
+            Text,
+            Unknown,
+            Whitespace,
+        }
+
+        [Test]
+        public void Highlight_GivenAGrammarThatReturnsIdenticalAdjacentLexicalElements_ReturnsCombinedToken()
+        {
+            TestScenario(
+                grammar: "text -lexical = '' .*;",
+                rules: new HighlightRuleCollection<Token>
+                {
+                    { @"^ text \b", Token.Text },
+                },
+                tokens: new TokenList
+                {
+                    { "this", Token.Text },
+                    { " ", Token.Text },
+                    { "is", Token.Text },
+                    { " ", Token.Text },
+                    { "a", Token.Text },
+                    { " ", Token.Text },
+                    { "sentence.", Token.Text },
+                });
         }
 
         [Test]
@@ -37,6 +60,18 @@ namespace Pegasus.Tests.Common.Highlighting
                     { "123", Token.Number },
                     { "  ", Token.Whitespace },
                     { "789", Token.Number },
+                });
+        }
+
+        [Test]
+        public void Highlight_WhenTheParseResultDoesNotContainLexicalElements_ReturnsDefaultToken()
+        {
+            TestScenario(
+                grammar: "start = '' .*; fake -lexical = 'OK';",
+                rules: new HighlightRuleCollection<Token>(),
+                tokens: new TokenList
+                {
+                    { "asdf", Token.Unknown },
                 });
         }
 
@@ -66,6 +101,8 @@ namespace Pegasus.Tests.Common.Highlighting
 
             var highlighter = new SyntaxHighlighter<Token>(rules);
             var tokens = highlighter.GetTokens(lexicalElements);
+            tokens = SyntaxHighlighter<Token>.AddDefaultTokens(tokens, subject.Length, Token.Unknown);
+            tokens = SyntaxHighlighter<Token>.SplitOnWhiteSpace(tokens, subject);
 
             Assert.That(ToAssertString(tokens), Is.EqualTo(ToAssertString(result)));
         }

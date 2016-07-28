@@ -25,6 +25,88 @@ namespace Pegasus.Common.Highlighting
         }
 
         /// <summary>
+        /// Examines the specified list of tokens and produces a new list with default tokens covering any characters that were not already represented.
+        /// </summary>
+        /// <remarks>
+        /// For performance reasons, the specified list of tokens is assumed to be in order.
+        /// </remarks>
+        /// <param name="tokens">The list of existing tokens to be examined.</param>
+        /// <param name="subjectLength">The length of the parsed text.</param>
+        /// <param name="defaultValue">The value of the tokens that will be added.</param>
+        /// <returns>A new list containing all of the original tokens and new tokens, in order.</returns>
+        public static List<HighlightedSegment<T>> AddDefaultTokens(IList<HighlightedSegment<T>> tokens, int subjectLength, T defaultValue)
+        {
+            var result = new List<HighlightedSegment<T>>();
+
+            var prevEnd = 0;
+            foreach (var token in tokens)
+            {
+                if (token.Start > prevEnd)
+                {
+                    result.Add(new HighlightedSegment<T>(prevEnd, token.Start, defaultValue));
+                }
+                else
+                {
+                    result.Add(token);
+                }
+
+                prevEnd = token.End;
+            }
+
+            if (prevEnd < subjectLength)
+            {
+                result.Add(new HighlightedSegment<T>(prevEnd, subjectLength, defaultValue));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Examines the specified list of tokens and produces a new list with any tokens that span both whitespace and non-whitespace characters split into multiple tokens.
+        /// </summary>
+        /// <remarks>
+        /// Some editors, such as Visual Studio, use the edges of tokens as cursor stops. Splitting on whitespace maintains expected keyboard navigation shortcuts.
+        /// </remarks>
+        /// <param name="tokens">The list of existing tokens to be examined.</param>
+        /// <param name="subject">The original parsing subject.</param>
+        /// <returns>A new list of tokens containing the original tokens, with ones that span whitespace and non-whitespace characters split.</returns>
+        public static List<HighlightedSegment<T>> SplitOnWhiteSpace(List<HighlightedSegment<T>> tokens, string subject)
+        {
+            var result = new List<HighlightedSegment<T>>();
+
+            foreach (var token in tokens)
+            {
+                if (token.End - token.Start < 2)
+                {
+                    result.Add(token);
+                }
+                else
+                {
+                    var prevEnd = token.Start;
+                    var endIndex = token.End - 1;
+                    var prevIsWhitespace = char.IsWhiteSpace(subject[prevEnd]);
+                    for (int i = prevEnd + 1; i < endIndex; i++)
+                    {
+                        var nextIsWhitespace = char.IsWhiteSpace(subject[i]);
+                        if (prevIsWhitespace != nextIsWhitespace)
+                        {
+                            result.Add(new HighlightedSegment<T>(prevEnd, i, token.Value));
+                            prevEnd = i;
+                        }
+
+                        prevIsWhitespace = nextIsWhitespace;
+                    }
+
+                    result.Add(prevEnd == token.Start
+                        ? token
+                        : new HighlightedSegment<T>(prevEnd, token.End, token.Value));
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the list of tokens for the specified list of lexical elements.
         /// </summary>
         /// <param name="lexicalElements">The lexical elements for which to generate tokens.</param>
