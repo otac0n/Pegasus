@@ -48,7 +48,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Package", "Pegasus.
 		{7D630AC1-62A7-439F-AC80-0EA800F3A846} = {7D630AC1-62A7-439F-AC80-0EA800F3A846}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PegGrammar", "PegGrammar\PegGrammar.csproj", "{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Templates", "Pegasus.Templates\Pegasus.Templates.csproj", "{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
