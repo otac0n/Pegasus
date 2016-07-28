@@ -1,0 +1,15 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <Target Name="UpdateVersionNumber" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <WorkingPath>$(IntermediateOutputPath)Templates\</WorkingPath>
+    </PropertyGroup>
+    <GetVersion SolutionDirectory="$(SolutionDir)" NoFetch="$(GitVersion_NoFetchEnabled)">
+      <Output TaskParameter="NuGetVersion" PropertyName="GitVersion_NuGetVersion" />
+    </GetVersion>
+    <Copy SourceFiles="@(Content)" DestinationFolder="$(WorkingPath)" />
+    <ItemGroup>
+      <VSTemplate Include="$(WorkingPath)PegGrammar.vstemplate" />
+    </ItemGroup>
+    <XmlPoke XmlInputPath="%(VSTemplate.Identity)" Query="/v:VSTemplate/v:WizardData/v:packages/v:package[@id='Pegasus']/@version" Value="$(GitVersion_NuGetVersion)" Namespaces="&lt;Namespace Prefix='v' Uri='http://schemas.microsoft.com/developer/vstemplate/2005' /&gt;" />
+  </Target>
+</Project>

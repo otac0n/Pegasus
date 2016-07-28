@@ -43,12 +43,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Parser.peg" />
-    <None Include="PegGrammar.ico" />
-    <VSTemplate Include="PegGrammar.vstemplate" />
+    <Content Include="Parser.peg" />
+    <Content Include="PegGrammar.ico" />
+    <Content Include="PegGrammar.vstemplate" />
+    <None Include="SetVersion.msbuild">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="SetVersion.msbuild" />
   <Import Project="..\packages\GitVersionTask.3.5.4\build\dotnet\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.3.5.4\build\dotnet\GitVersionTask.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
