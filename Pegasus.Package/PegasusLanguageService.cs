@@ -209,8 +209,8 @@ namespace Pegasus.Package
                 }
 
                 var tokens = SyntaxHighlighter.GetTokens(GetLexicalElements(text));
-                tokens = SyntaxHighlighter<TokenType>.AddDefaultTokens(tokens, text.Length, TokenType.Text);
-                tokens = SyntaxHighlighter<TokenType>.SplitOnWhiteSpace(tokens, text);
+                tokens = SyntaxHighlighter.AddDefaultTokens(tokens, text.Length, TokenType.Text);
+                tokens = SyntaxHighlighter.SplitOnWhiteSpace(tokens, text);
 
                 MemoryCache.Default.Add(text, tokens, DateTimeOffset.Now.AddMinutes(1));
                 return tokens;

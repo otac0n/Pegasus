@@ -101,8 +101,8 @@ namespace Pegasus.Tests.Common.Highlighting
 
             var highlighter = new SyntaxHighlighter<Token>(rules);
             var tokens = highlighter.GetTokens(lexicalElements);
-            tokens = SyntaxHighlighter<Token>.AddDefaultTokens(tokens, subject.Length, Token.Unknown);
-            tokens = SyntaxHighlighter<Token>.SplitOnWhiteSpace(tokens, subject);
+            tokens = highlighter.AddDefaultTokens(tokens, subject.Length, Token.Unknown);
+            tokens = highlighter.SplitOnWhiteSpace(tokens, subject);
 
             Assert.That(ToAssertString(tokens), Is.EqualTo(ToAssertString(result)));
         }

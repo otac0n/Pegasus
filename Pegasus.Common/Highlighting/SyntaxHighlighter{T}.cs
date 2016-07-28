@@ -34,8 +34,13 @@ namespace Pegasus.Common.Highlighting
         /// <param name="subjectLength">The length of the parsed text.</param>
         /// <param name="defaultValue">The value of the tokens that will be added.</param>
         /// <returns>A new list containing all of the original tokens and new tokens, in order.</returns>
-        public static List<HighlightedSegment<T>> AddDefaultTokens(IList<HighlightedSegment<T>> tokens, int subjectLength, T defaultValue)
+        public List<HighlightedSegment<T>> AddDefaultTokens(IList<HighlightedSegment<T>> tokens, int subjectLength, T defaultValue)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException(nameof(tokens));
+            }
+
             var result = new List<HighlightedSegment<T>>();
 
             var prevEnd = 0;
@@ -62,6 +67,18 @@ namespace Pegasus.Common.Highlighting
         }
 
         /// <summary>
+        /// Gets the list of tokens for the specified list of lexical elements.
+        /// </summary>
+        /// <param name="lexicalElements">The lexical elements for which to generate tokens.</param>
+        /// <returns>The list of tokens for the specified list of lexical elements.</returns>
+        public List<HighlightedSegment<T>> GetTokens(IList<LexicalElement> lexicalElements)
+        {
+            var highlightedElements = this.HighlightLexicalElements(lexicalElements);
+            var simplifiedTokens = SimplifyHighlighting(highlightedElements);
+            return simplifiedTokens;
+        }
+
+        /// <summary>
         /// Examines the specified list of tokens and produces a new list with any tokens that span both whitespace and non-whitespace characters split into multiple tokens.
         /// </summary>
         /// <remarks>
@@ -70,8 +87,18 @@ namespace Pegasus.Common.Highlighting
         /// <param name="tokens">The list of existing tokens to be examined.</param>
         /// <param name="subject">The original parsing subject.</param>
         /// <returns>A new list of tokens containing the original tokens, with ones that span whitespace and non-whitespace characters split.</returns>
-        public static List<HighlightedSegment<T>> SplitOnWhiteSpace(List<HighlightedSegment<T>> tokens, string subject)
+        public List<HighlightedSegment<T>> SplitOnWhiteSpace(List<HighlightedSegment<T>> tokens, string subject)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException(nameof(tokens));
+            }
+
+            if (subject == null)
+            {
+                throw new ArgumentNullException(nameof(subject));
+            }
+
             var result = new List<HighlightedSegment<T>>();
 
             foreach (var token in tokens)
@@ -104,18 +131,6 @@ namespace Pegasus.Common.Highlighting
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Gets the list of tokens for the specified list of lexical elements.
-        /// </summary>
-        /// <param name="lexicalElements">The lexical elements for which to generate tokens.</param>
-        /// <returns>The list of tokens for the specified list of lexical elements.</returns>
-        public List<HighlightedSegment<T>> GetTokens(IList<LexicalElement> lexicalElements)
-        {
-            var highlightedElements = this.HighlightLexicalElements(lexicalElements);
-            var simplifiedTokens = SimplifyHighlighting(highlightedElements);
-            return simplifiedTokens;
         }
 
         private static List<HighlightedSegment<T>> SimplifyHighlighting(IList<HighlightedSegment<T>> tokens)
