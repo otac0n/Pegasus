@@ -54,7 +54,7 @@ namespace Pegasus.Package
 
         private class Scanner : IScanner
         {
-            private static IDictionary<TokenType, TokenColor> colorMap = new Dictionary<TokenType, TokenColor>
+            private static readonly IDictionary<TokenType, TokenColor> ColorMap = new Dictionary<TokenType, TokenColor>
             {
                 { TokenType.Comment, TokenColor.Comment },
                 { TokenType.Delimiter, TokenColor.Text },
@@ -67,7 +67,7 @@ namespace Pegasus.Package
                 { TokenType.WhiteSpace, TokenColor.Text },
             };
 
-            private static SyntaxHighlighter<TokenType> syntaxHighlighter = new SyntaxHighlighter<TokenType>(new HighlightRuleCollection<TokenType>
+            private static readonly SyntaxHighlighter<TokenType> SyntaxHighlighter = new SyntaxHighlighter<TokenType>(new HighlightRuleCollection<TokenType>
             {
                 { @"^ whitespace \b", TokenType.WhiteSpace },
                 { @"^ (settingName|ruleFlag|actionType) \b", TokenType.Keyword },
@@ -158,7 +158,7 @@ namespace Pegasus.Package
                     tokenInfo.StartIndex = Math.Max(lineStartIndex, token.Start) - lineStartIndex;
                     tokenInfo.EndIndex = Math.Min(lineEndIndex, token.End) - lineStartIndex - 1;
                     tokenInfo.Type = token.Value;
-                    tokenInfo.Color = colorMap[token.Value];
+                    tokenInfo.Color = ColorMap[token.Value];
                 }
 
                 if (tokens.Count > 0 && tokenInfo.Type == TokenType.Unknown)
@@ -208,7 +208,7 @@ namespace Pegasus.Package
                     return cached;
                 }
 
-                var simplifiedTokens = syntaxHighlighter.GetTokens(GetLexicalElements(text));
+                var simplifiedTokens = SyntaxHighlighter.GetTokens(GetLexicalElements(text));
 
                 MemoryCache.Default.Add(text, simplifiedTokens, DateTimeOffset.Now.AddMinutes(1));
                 return simplifiedTokens;
