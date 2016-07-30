@@ -1,0 +1,8 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <Target Name="UpdateVersionNumber" BeforeTargets="CoreCompile" Condition=" '$(CI)' == 'True' ">
+    <GetVersion SolutionDirectory="$(SolutionDir)" NoFetch="$(GitVersion_NoFetchEnabled)">
+      <Output TaskParameter="MajorMinorPatch" PropertyName="GitVersion_MajorMinorPatch" />
+    </GetVersion>
+    <XmlPoke XmlInputPath="source.extension.vsixmanifest" Query="/v:PackageManifest/v:Metadata/v:Identity/@Version" Value="$(GitVersion_MajorMinorPatch)" Namespaces="&lt;Namespace Prefix='v' Uri='http://schemas.microsoft.com/developer/vsx-schema/2011' /&gt;" />
+  </Target>
+</Project>
