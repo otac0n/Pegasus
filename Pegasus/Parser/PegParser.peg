@@ -110,10 +110,10 @@ action <CodeExpression> -memoize
   = type:actionType code:code { new CodeExpression(code, type) }
 
 actionType <CodeType> -lexical
-  = "#ERROR"i { CodeType.Error }
-  / "#STATE"i { CodeType.State }
-  / "#PARSE"i { CodeType.Parse }
-  /           { CodeType.Result }
+  = "#ERROR"i     { CodeType.Error }
+  / "#PARSE"i     { CodeType.Parse }
+  / "#" "STATE"i? { CodeType.State }
+  /               { CodeType.Result }
 
 code <CodeSpan> -lexical
   = "{" contents:braceContents "}" { new CodeSpan(contents, contentsStart, contentsEnd) }

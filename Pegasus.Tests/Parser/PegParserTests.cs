@@ -81,6 +81,26 @@ namespace Pegasus.Tests.Parser
         }
 
         [Test]
+        [TestCase("a = #ERROR{}", CodeType.Error, false)]
+        [TestCase("a = #error{}", CodeType.Error, false)]
+        [TestCase("a = #STATE{}", CodeType.State, false)]
+        [TestCase("a = #state{}", CodeType.State, false)]
+        [TestCase("a = #{}", CodeType.State, false)]
+        [TestCase("a = #PARSE{}", CodeType.Parse, true)]
+        [TestCase("a = #parse{}", CodeType.Parse, true)]
+        [TestCase("a = {}", CodeType.Result, true)]
+        public void Parse_WithCodeExpression_YieldsCodeExpressionWithCorrectCodeType(string subject, CodeType codeType, bool inSequence)
+        {
+            var parser = new PegParser();
+
+            var grammar = parser.Parse(subject);
+            var expression = grammar.Rules.Single().Expression;
+            var codeExpression = (CodeExpression)(inSequence ? ((SequenceExpression)expression).Sequence.Single() : expression);
+
+            Assert.That(codeExpression.CodeType, Is.EqualTo(codeType));
+        }
+
+        [Test]
         [TestCase("a = 'OK'i", true)]
         [TestCase("a = 'OK'", false)]
         public void Parse_WithLiteralExpression_YieldsLiteralExpressionWithCorrectCaseSensitivity(string subject, bool ignoreCase)

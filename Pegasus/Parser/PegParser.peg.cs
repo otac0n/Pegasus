@@ -2206,7 +2206,7 @@ namespace
                 {
                     r0 = this.ReturnHelper<CodeType>(startCursor0, ref cursor, state =>
                         #line 113 "PegParser.peg"
-                CodeType.Error
+                    CodeType.Error
                         #line default
                         , ruleName: "actionType");
                 }
@@ -2219,12 +2219,12 @@ namespace
             {
                 var startCursor1 = cursor;
                 IParseResult<string> r2 = null;
-                r2 = this.ParseLiteral(ref cursor, "#STATE", ignoreCase: true);
+                r2 = this.ParseLiteral(ref cursor, "#PARSE", ignoreCase: true);
                 if (r2 != null)
                 {
                     r0 = this.ReturnHelper<CodeType>(startCursor1, ref cursor, state =>
                         #line 114 "PegParser.peg"
-                CodeType.State
+                    CodeType.Parse
                         #line default
                         , ruleName: "actionType");
                 }
@@ -2237,14 +2237,38 @@ namespace
             {
                 var startCursor2 = cursor;
                 IParseResult<string> r3 = null;
-                r3 = this.ParseLiteral(ref cursor, "#PARSE", ignoreCase: true);
+                r3 = this.ParseLiteral(ref cursor, "#");
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper<CodeType>(startCursor2, ref cursor, state =>
-                        #line 115 "PegParser.peg"
-                CodeType.Parse
-                        #line default
-                        , ruleName: "actionType");
+                    IParseResult<IList<string>> r4 = null;
+                    var startCursor3 = cursor;
+                    var l0 = new List<string>();
+                    while (l0.Count < 1)
+                    {
+                        IParseResult<string> r5 = null;
+                        r5 = this.ParseLiteral(ref cursor, "STATE", ignoreCase: true);
+                        if (r5 != null)
+                        {
+                            l0.Add(r5.Value);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    r4 = this.ReturnHelper<IList<string>>(startCursor3, ref cursor, state => l0.AsReadOnly());
+                    if (r4 != null)
+                    {
+                        r0 = this.ReturnHelper<CodeType>(startCursor2, ref cursor, state =>
+                            #line 115 "PegParser.peg"
+                    CodeType.State
+                            #line default
+                            , ruleName: "actionType");
+                    }
+                    else
+                    {
+                        cursor = startCursor2;
+                    }
                 }
                 else
                 {
@@ -2253,10 +2277,10 @@ namespace
             }
             if (r0 == null)
             {
-                var startCursor3 = cursor;
-                r0 = this.ReturnHelper<CodeType>(startCursor3, ref cursor, state =>
+                var startCursor4 = cursor;
+                r0 = this.ReturnHelper<CodeType>(startCursor4, ref cursor, state =>
                     #line 116 "PegParser.peg"
-                CodeType.Result
+                    CodeType.Result
                     #line default
                     , ruleName: "actionType");
             }
