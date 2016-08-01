@@ -64,6 +64,25 @@ namespace Pegasus.Tests.Common.Highlighting
         }
 
         [Test]
+        public void Highlight_WhenTheParseResultContainsSectionsNotCoveredByLexicalElements_ReturnsDefaultToken()
+        {
+            TestScenario(
+                grammar: @"start = '' line<0,,EOL>; line -lexical = '' [^\r\n]+; EOL = '' [\r\n]+ / !.;",
+                rules: new HighlightRuleCollection<Token>
+                {
+                    { @"^ line \b", Token.Text },
+                },
+                tokens: new TokenList
+                {
+                    { "line1", Token.Text },
+                    { "\r\n", Token.Unknown },
+                    { "line2", Token.Text },
+                    { "\r\n", Token.Unknown },
+                    { "line3", Token.Text },
+                });
+        }
+
+        [Test]
         public void Highlight_WhenTheParseResultDoesNotContainLexicalElements_ReturnsDefaultToken()
         {
             TestScenario(

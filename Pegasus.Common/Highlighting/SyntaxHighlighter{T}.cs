@@ -50,11 +50,8 @@ namespace Pegasus.Common.Highlighting
                 {
                     result.Add(new HighlightedSegment<T>(prevEnd, token.Start, defaultValue));
                 }
-                else
-                {
-                    result.Add(token);
-                }
 
+                result.Add(token);
                 prevEnd = token.End;
             }
 
