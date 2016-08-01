@@ -1,6 +1,6 @@
 ﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
-namespace Pegasus.Tests.Performance
+namespace Pegasus.Tests
 {
     using System;
     using System.Diagnostics;
@@ -11,7 +11,7 @@ namespace Pegasus.Tests.Performance
     using System.Reflection;
     using NUnit.Framework;
 
-    public static class PerformanceTests
+    public static class PerformanceTestUtils
     {
         private static decimal[] tDistribution = new decimal[]
         {

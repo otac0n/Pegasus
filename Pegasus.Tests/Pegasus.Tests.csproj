@@ -91,18 +91,15 @@
     <Compile Include="Expressions\SequenceExpressionTests.cs" />
     <Compile Include="Expressions\TypedExpressionTests.cs" />
     <Compile Include="Parser\PegParserTests.cs" />
-    <Compile Include="Performance\PegCompilerTests.cs" />
-    <Compile Include="Performance\PegParserTests.cs" />
-    <Compile Include="Performance\PerformanceTests.cs" />
-    <Compile Include="CompilePegGrammarTests.cs" />
-    <Compile Include="Performance\RegressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegressionTests.cs" />
-    <Compile Include="StringUtilities.cs" />
-    <Compile Include="TraceUtility.cs" />
     <Compile Include="Tracing\DiagnosticsTracerTests.cs" />
     <Compile Include="Tracing\NullTracerTests.cs" />
     <Compile Include="Workbench\TutorialTests.cs" />
+    <Compile Include="CompilePegGrammarTests.cs" />
+    <Compile Include="PerformanceTestUtils.cs" />
+    <Compile Include="RegressionTests.cs" />
+    <Compile Include="StringUtilities.cs" />
+    <Compile Include="TraceUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
@@ -127,16 +124,16 @@
       <Link>stylecop.json</Link>
     </AdditionalFiles>
     <None Include="packages.config" />
-    <None Include="Performance\Regression\gitter-piratejon.peg">
+    <None Include="TestCases\gitter-piratejon.peg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Performance\Regression\gitter-piratejon.txt">
+    <None Include="TestCases\gitter-piratejon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Performance\Regression\simple.peg">
+    <None Include="TestCases\simple.peg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Performance\Regression\simple.txt">
+    <None Include="TestCases\simple.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Tracing\tracing-test.peg">

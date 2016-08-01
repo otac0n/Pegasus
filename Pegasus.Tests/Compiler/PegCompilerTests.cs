@@ -4,27 +4,26 @@ namespace Pegasus.Tests.Compiler
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using NUnit.Framework;
     using Pegasus.Common;
     using Pegasus.Compiler;
     using Pegasus.Parser;
+    using static PerformanceTestUtils;
 
     public class PegCompilerTests
     {
         [Test]
-        [TestCase(0, 0)]
-        [TestCase(1, 0)]
-        [TestCase(2, 1)]
-        public void Compile_ImpossibleQuantifier_YieldsWarning(int min, int max)
+        [Category("Performance")]
+        public void Compile_Performance_PegGrammar()
         {
-            var grammar = new PegParser().Parse("a = 'OK'<" + min + "," + max + ">;");
+            var pegGrammar = new PegParser().Parse(File.ReadAllText("PegParser.peg"));
 
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0015"));
-            Assert.That(error.IsWarning, Is.True);
+            Evaluate(() =>
+            {
+                PegCompiler.Compile(pegGrammar);
+            });
         }
 
         [Test]
@@ -488,6 +487,21 @@ namespace Pegasus.Tests.Compiler
         }
 
         [Test]
+        [TestCase(0, 0)]
+        [TestCase(1, 0)]
+        [TestCase(2, 1)]
+        public void Compile_WithAnImpossibleQuantifier_YieldsWarning(int min, int max)
+        {
+            var grammar = new PegParser().Parse("a = 'OK'<" + min + "," + max + ">;");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.First();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0015"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
         public void Compile_WithComplexLeftRecursion_Succeeds()
         {
             var parser = new PegParser();
@@ -654,6 +668,25 @@ namespace Pegasus.Tests.Compiler
             var error = result.Errors.First();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0017"));
             Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        [Category("Performance")]
+        [TestCase("simple")]
+        [TestCase("gitter-piratejon")]
+        public void GeneratedParser_Performance_Regression(string testName)
+        {
+            var parserSource = File.ReadAllText($@"TestCases\{testName}.peg");
+            var subject = File.ReadAllText($@"TestCases\{testName}.txt");
+            var parsed = new PegParser().Parse(parserSource);
+            var compiled = PegCompiler.Compile(parsed);
+            Assert.That(compiled.Errors.Where(e => !e.IsWarning), Is.Empty);
+            var pegParser = CodeCompiler.Compile<dynamic>(compiled);
+
+            Evaluate(() =>
+            {
+                pegParser.Parse(subject);
+            });
         }
     }
 }

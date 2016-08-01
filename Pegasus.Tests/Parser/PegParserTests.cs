@@ -7,9 +7,34 @@ namespace Pegasus.Tests.Parser
     using NUnit.Framework;
     using Pegasus.Expressions;
     using Pegasus.Parser;
+    using static PerformanceTestUtils;
 
     public class PegParserTests
     {
+        [Test]
+        [Category("Performance")]
+        public void Parse_Performance_NestedEmptyGrammar()
+        {
+            var emptyGrammar = "a = ((())) ((() (() (((()) (() () ()))) ()) () (((((() (( ()) () (( ())))) (() (()))) () () (())) () (() (() () (())) ()) () () (((( ()) ())) ((()) (()) ) () () (((()) ) ()) ) ((() (() ()) ((()) ())))) ) ()) (((() ((() ((()) ()) ())) (() (() (()) () ((())))))) (((() ()))) (() ((() (()) () (()) (() ()))) ()) ()) () ()) ()";
+
+            Evaluate(() =>
+            {
+                new PegParser().Parse(emptyGrammar);
+            });
+        }
+
+        [Test]
+        [Category("Performance")]
+        public void Parse_Performance_PegGrammar()
+        {
+            var pegGrammar = File.ReadAllText("PegParser.peg");
+
+            Evaluate(() =>
+            {
+                new PegParser().Parse(pegGrammar);
+            });
+        }
+
         [TestCase("a = (('' ('') (())) (('' '') '' ''))")]
         [TestCase("a = ('' '' ('' () () '') '' (('') ''))")]
         [TestCase("a = '' ('' ((('' '')))) '' () '' '' ''")]
