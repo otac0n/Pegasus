@@ -58,7 +58,7 @@ namespace Pegasus.Tests.Compiler
             var result = PegCompiler.Compile(grammar);
 
             var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("CS1026"));
+            Assert.That(error.ErrorNumber, Is.EqualTo("CS1073"));
             Assert.That(error.IsWarning, Is.False);
         }
 
