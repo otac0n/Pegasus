@@ -65,21 +65,13 @@ labeled <Expression> -memoize
   / code:action &{ code.CodeType == CodeType.State || code.CodeType == CodeType.Error } { code }
 
 prefixed <Expression>
-  = and _ code:code {
-        new AndCodeExpression(code)
-    }
-  / and _ expression:suffixed {
-        new AndExpression(expression)
-    }
-  / not _ code:code {
-        new NotCodeExpression(code)
-    }
-  / not _ expression:suffixed {
-        new NotExpression(expression)
-    }
-  / suffixed
+  = and _ c:code   { new AndCodeExpression(c) }
+  / and _ e:suffix { new AndExpression(e) }
+  / not _ c:code   { new NotCodeExpression(c) }
+  / not _ e:suffix { new NotExpression(e) }
+  / suffix
 
-suffixed <Expression>
+suffix <Expression>
   = expression:primary _ q:quantifier {
         new RepetitionExpression(expression, q)
     }
