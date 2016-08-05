@@ -14,8 +14,10 @@
     </GetVersion>
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\$(Configuration)\build" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Roslyn.Compilers.CSharp.dll" DestinationFolder="obj\$(Configuration)\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Roslyn.Compilers.dll" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Microsoft.CodeAnalysis.CSharp.dll" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Microsoft.CodeAnalysis.dll" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\System.Collections.Immutable.dll" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\System.Reflection.Metadata.dll" DestinationFolder="obj\$(Configuration)\build" />
     <Copy SourceFiles="Pegasus.targets" DestinationFolder="obj\$(Configuration)\build" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\net40" />
     <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\net40" />
