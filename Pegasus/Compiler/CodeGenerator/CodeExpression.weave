@@ -14,8 +14,12 @@
     throw this.ExceptionHelper(cursor, state =>
         {{@RenderCode model.CodeSpan}}
         );
+{{elif model.CodeType == CodeType.Parse}}
+    {{: this.currentContext.ResultName }} = this.ParseHelper<{{= this.currentContext.ResultType }}>(ref cursor, (ref Cursor state) =>
+        {{@RenderCode model.CodeSpan}}
+        );
 {{else}}
     {{
-        throw new InvalidOperationException("Code expressions are only valid at the end of a sequence expression.");
+        throw new InvalidOperationException($"Code expressions of type {model.CodeType} are only valid at the end of a sequence expression.");
     }}
 {{/if}}

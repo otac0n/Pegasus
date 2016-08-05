@@ -48,8 +48,8 @@ choice <Expression>
   = choices:sequence<1,,_ slash _> { choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) }
 
 sequence <Expression>
-  = elements:labeled<0,,_> _ code:action {
-        new SequenceExpression(elements.Concat(new Expression[] { code }))
+  = elements:labeled<0,,_> _ action:resultAction {
+        new SequenceExpression(elements.Concat(new Expression[] { action }))
     }
   / elements:labeled<0,,_> {
         elements.Count == 1
@@ -62,7 +62,8 @@ labeled <Expression> -memoize
         new PrefixedExpression(label, expression)
     }
   / prefixed
-  / code:action &{ code.CodeType == CodeType.State || code.CodeType == CodeType.Error } { code }
+  / stateAction
+  / errorAction
 
 prefixed <Expression>
   = and _ c:code   { new AndCodeExpression(c) }
@@ -86,6 +87,7 @@ primary <Expression> -memoize
         var typeValue = type.SingleOrDefault();
         return typeValue != null ? new TypedExpression(typeValue, expression) : expression;
     }}
+  / parseAction
 
 quantifier <Quantifier> -memoize
   = q:question { new Quantifier(qStart, qEnd, min: 0, max: 1) }
@@ -98,14 +100,17 @@ quantifier <Quantifier> -memoize
 integer <int> -lexical
   = digits:(digit+ "") { int.Parse(digits) }
 
-action <CodeExpression> -memoize
-  = type:actionType code:code { new CodeExpression(code, type) }
+errorAction <CodeExpression> -memoize
+  = "#ERROR"i code:code { new CodeExpression(code, CodeType.Error) }
 
-actionType <CodeType> -lexical
-  = "#ERROR"i     { CodeType.Error }
-  / "#PARSE"i     { CodeType.Parse }
-  / "#" "STATE"i? { CodeType.State }
-  /               { CodeType.Result }
+parseAction <CodeExpression> -memoize
+  = "#PARSE"i code:code { new CodeExpression(code, CodeType.Parse) }
+
+stateAction <CodeExpression> -memoize
+  = "#" "STATE"i? code:code { new CodeExpression(code, CodeType.State) }
+
+resultAction <CodeExpression> -memoize
+  = code:code { new CodeExpression(code, CodeType.Result) }
 
 code <CodeSpan> -lexical
   = "{" contents:braceContents "}" { new CodeSpan(contents, contentsStart, contentsEnd) }

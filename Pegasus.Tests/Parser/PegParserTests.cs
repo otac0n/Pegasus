@@ -86,8 +86,8 @@ namespace Pegasus.Tests.Parser
         [TestCase("a = #STATE{}", CodeType.State, false)]
         [TestCase("a = #state{}", CodeType.State, false)]
         [TestCase("a = #{}", CodeType.State, false)]
-        [TestCase("a = #PARSE{}", CodeType.Parse, true)]
-        [TestCase("a = #parse{}", CodeType.Parse, true)]
+        [TestCase("a = #PARSE{}", CodeType.Parse, false)]
+        [TestCase("a = #parse{}", CodeType.Parse, false)]
         [TestCase("a = {}", CodeType.Result, true)]
         public void Parse_WithCodeExpression_YieldsCodeExpressionWithCorrectCodeType(string subject, CodeType codeType, bool inSequence)
         {
