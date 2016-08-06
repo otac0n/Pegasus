@@ -3519,17 +3519,15 @@ namespace
             if (r1 != null)
             {
                 IParseResult<string> r3 = null;
-                var charStart = cursor;
                 r3 = this.ParseAny(ref cursor);
-                var charEnd = cursor;
-                var @char = ValueOrDefault(r3);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
-                        #line 210 "PegParser.peg"
-                                     @char
-                        #line default
-                        );
+                    {
+                        var len = cursor.Location - startCursor0.Location;
+                        r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
+                            state.Subject.Substring(startCursor0.Location, len)
+                            );
+                    }
                 }
                 else
                 {
@@ -3816,17 +3814,15 @@ namespace
             if (r1 != null)
             {
                 IParseResult<string> r3 = null;
-                var charStart = cursor;
                 r3 = this.ParseAny(ref cursor);
-                var charEnd = cursor;
-                var @char = ValueOrDefault(r3);
                 if (r3 != null)
                 {
-                    r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
-                        #line 239 "PegParser.peg"
-                                     @char
-                        #line default
-                        );
+                    {
+                        var len = cursor.Location - startCursor0.Location;
+                        r0 = this.ReturnHelper<string>(startCursor0, ref cursor, state =>
+                            state.Subject.Substring(startCursor0.Location, len)
+                            );
+                    }
                 }
                 else
                 {

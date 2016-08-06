@@ -207,7 +207,7 @@ singleQuotedCharacter
   / eolEscapeSequence
 
 simpleSingleQuotedCharacter
-  = !("'" / "\\" / eolChar) char:. { @char }
+  = !("'" / "\\" / eolChar) .
 
 class <Expression> -lexical
   = lbracket inverted:"^"? parts:(classCharacterRange / classCharacter)* (rbracket / #error{ "PEG0010:" + Resources.PEG0010_ERROR_PARSER_UnterminatedClass }) flags:"i"? {
@@ -236,7 +236,7 @@ bracketDelimitedCharacter
   / eolEscapeSequence
 
 simpleBracketDelimitedCharacter
-  = !("]" / "\\" / eolChar) char:. { @char }
+  = !("]" / "\\" / eolChar) .
 
 simpleEscapeSequence
   = "\\" !(digit / "x" / "u" / eolChar) char:. {
