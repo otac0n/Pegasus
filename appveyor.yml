@@ -3,10 +3,12 @@ configuration: Release
 install:
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
   - choco install gitversion.portable -pre -y
+  - choco install GitReleaseNotes.Portable
   - pip install codecov
 before_build:
   - nuget restore
   - ps: gitversion /l console /output buildserver
+  - GitReleaseNotes . /OutputFile ReleaseNotes.md
 build:
   project: Pegasus.sln
 after_test:
@@ -15,6 +17,7 @@ after_test:
 cache:
   - packages -> **\packages.config
 artifacts:
+  - path: 'ReleaseNotes.md'
   - path: 'Package\bin\**\*.nupkg'
   - path: 'Pegasus.Templates\bin\**\*.zip'
   - path: 'Pegasus.Package\bin\**\*.vsix'
