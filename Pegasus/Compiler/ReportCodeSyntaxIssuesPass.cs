@@ -2,9 +2,9 @@
 
 namespace Pegasus.Compiler
 {
-    using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Pegasus.Expressions;
 
@@ -25,16 +25,13 @@ namespace Pegasus.Compiler
                 this.result = result;
             }
 
+            [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseExpression(System.String,System.Int32,Microsoft.CodeAnalysis.ParseOptions,System.Boolean)", Justification = "Not localizable.")]
             protected override void WalkCodeExpression(CodeExpression codeExpression)
             {
-                var ix = codeExpression.CodeType == CodeType.State
-                    ? Tuple.Create("state => {", "}")
-                    : Tuple.Create("state =>", string.Empty);
-                var prefix = ix.Item1;
-                var suffix = ix.Item2;
+                const string prefix = "state =>";
 
                 var startCursor = codeExpression.CodeSpan.Start;
-                var code = (prefix + codeExpression.CodeSpan.Code + suffix).TrimEnd();
+                var code = (prefix + codeExpression.CodeSpan.Code).TrimEnd();
                 var expression = SyntaxFactory.ParseExpression(code);
 
                 if (expression.ContainsDiagnostics)
