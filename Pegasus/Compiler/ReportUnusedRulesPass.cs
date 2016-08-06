@@ -34,6 +34,15 @@ namespace Pegasus.Compiler
                 this.usedRules.Add(startRule);
                 this.rulesToVisit.Enqueue(startRule);
 
+                var publicRules = grammar.Rules.Where(r => r.Flags.Any(f => f.Name == "public" || f.Name == "export"));
+                foreach (var rule in publicRules)
+                {
+                    if (this.usedRules.Add(rule.Identifier.Name))
+                    {
+                        this.rulesToVisit.Enqueue(rule.Identifier.Name);
+                    }
+                }
+
                 while (this.rulesToVisit.Count > 0)
                 {
                     var ruleName = this.rulesToVisit.Dequeue();

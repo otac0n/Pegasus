@@ -96,6 +96,7 @@ namespace Pegasus.Tests.Compiler
             Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
         }
 
+        [Test]
         [TestCase("string")]
         [TestCase("foo")]
         [TestCase("bar")]
@@ -140,6 +141,7 @@ namespace Pegasus.Tests.Compiler
             Assert.That(parser.Parse(string.Empty), Is.EqualTo("OK"));
         }
 
+        [Test]
         [TestCase(true, "&", "OK")]
         [TestCase(false, "&", "")]
         [TestCase(true, "!", "")]
@@ -353,6 +355,7 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.False);
         }
 
+        [Test]
         [TestCase("a = (#PARSE{ this.b(ref state) })* b; b = 'OK';", "PEG0021")]
         [TestCase("a = (#PARSE{ this.b(ref state) })<1,5> b; b = 'OK';", "PEG0022")]
         public void Compile_WhenTheGrammarRepeatsAParseCodeExpressionWithNoMaximum_YieldsWarning(string subject, string errorNumber)
@@ -592,6 +595,30 @@ namespace Pegasus.Tests.Compiler
             var error = result.Errors.Single();
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0001"));
             Assert.That(error.IsWarning, Is.False);
+        }
+
+        [Test]
+        [TestCase("-export")]
+        [TestCase("-public")]
+        public void Compile_WithPublicOrExportedRulesWithLowercaseName_YieldsWarning(string flag)
+        {
+            var grammar = new PegParser().Parse($"start = 'OK'; b {flag} = 'OK';");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0025"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [Test]
+        public void Compile_WithRulesOnlyUsedByExportOrPublic_YieldsNone()
+        {
+            var grammar = new PegParser().Parse("start = 'OK'; B -export = 'OK'; C -public = 'OK';");
+
+            var result = PegCompiler.Compile(grammar);
+
+            Assert.That(result.Errors, Is.Empty);
         }
 
         [Test]
