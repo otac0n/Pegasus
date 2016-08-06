@@ -51,18 +51,6 @@ namespace Pegasus.Tests.Compiler
         }
 
         [Test]
-        public void Compile_WhenACSharpExpressionDoesntConsumeAllOfTheSourceText_YieldsError()
-        {
-            var grammar = new PegParser().Parse("a = {{ return \"OK\"; } extra }");
-
-            var result = PegCompiler.Compile(grammar);
-
-            var error = result.Errors.First();
-            Assert.That(error.ErrorNumber, Is.EqualTo("CS1073"));
-            Assert.That(error.IsWarning, Is.False);
-        }
-
-        [Test]
         public void Compile_WhenExportedRuleNameIsLowercase_YieldsWarning()
         {
             var grammar = new PegParser().Parse("a -export = 'OK'");

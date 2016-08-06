@@ -2,9 +2,11 @@
 
 namespace Pegasus.Tests.Parser
 {
+    using System;
     using System.IO;
     using System.Linq;
     using NUnit.Framework;
+    using Pegasus.Common;
     using Pegasus.Expressions;
     using Pegasus.Parser;
     using static PerformanceTestUtils;
@@ -33,6 +35,30 @@ namespace Pegasus.Tests.Parser
             {
                 new PegParser().Parse(pegGrammar);
             });
+        }
+
+        [Test]
+        public void Parse_WhenACSharpExpressionDoesntConsumeAllOfTheSourceText_YieldsError()
+        {
+            var parser = new PegParser();
+
+            try
+            {
+                parser.Parse("a = {{ return \"OK\"; } extra }");
+            }
+            catch (FormatException ex)
+            {
+                Assert.That(ex.Message, Is.StringStarting("PEG0011:"));
+                var cursor = (Cursor)ex.Data["cursor"];
+                Assert.That(cursor.Location, Is.EqualTo(22));
+            }
+        }
+
+        [Test]
+        public void Parse_WhenACSharpExpressionHasUnbalancedCurlyBraces_Succeeds()
+        {
+            var parser = new PegParser();
+            Assert.That(() => parser.Parse("curly = { \"{\" }"), Throws.Nothing);
         }
 
         [TestCase("a = (('' ('') (())) (('' '') '' ''))")]
@@ -81,14 +107,14 @@ namespace Pegasus.Tests.Parser
         }
 
         [Test]
-        [TestCase("a = #ERROR{}", CodeType.Error, false)]
-        [TestCase("a = #error{}", CodeType.Error, false)]
+        [TestCase("a = #ERROR{ \"OK\" }", CodeType.Error, false)]
+        [TestCase("a = #error{ \"OK\" }", CodeType.Error, false)]
         [TestCase("a = #STATE{}", CodeType.State, false)]
         [TestCase("a = #state{}", CodeType.State, false)]
         [TestCase("a = #{}", CodeType.State, false)]
-        [TestCase("a = #PARSE{}", CodeType.Parse, false)]
-        [TestCase("a = #parse{}", CodeType.Parse, false)]
-        [TestCase("a = {}", CodeType.Result, true)]
+        [TestCase("a = #PARSE{ null }", CodeType.Parse, false)]
+        [TestCase("a = #parse{ null }", CodeType.Parse, false)]
+        [TestCase("a = { \"OK\" }", CodeType.Result, true)]
         public void Parse_WithCodeExpression_YieldsCodeExpressionWithCorrectCodeType(string subject, CodeType codeType, bool inSequence)
         {
             var parser = new PegParser();

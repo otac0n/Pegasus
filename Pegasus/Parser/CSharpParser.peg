@@ -1,0 +1,56 @@
+﻿@namespace Pegasus.Parser
+@classname CSharpParser
+@accessibility internal
+@using Microsoft.CodeAnalysis.CSharp
+@using Microsoft.CodeAnalysis.CSharp.Syntax
+@members
+{
+    private static ParseResult<T> ParseHelper<T>(ref Cursor cursor, T syntax)
+        where T : CSharpSyntaxNode
+    {
+        if (syntax.Span.IsEmpty)
+        {
+            return null;
+        }
+
+        var start = cursor;
+        cursor = start.Advance(syntax.FullSpan.End);
+        return new ParseResult<T>(start, cursor, syntax);
+    }
+}
+
+ArgumentList <ArgumentListSyntax> -export = #parse{
+    ParseHelper(ref state, SyntaxFactory.ParseArgumentList(state.Subject, state.Location, consumeFullText: false))
+}
+
+AttributeArgumentList <AttributeArgumentListSyntax> -export = #parse{
+    ParseHelper(ref state, SyntaxFactory.ParseAttributeArgumentList(state.Subject, state.Location, consumeFullText: false))
+}
+
+BracketedArgumentList <BracketedArgumentListSyntax> -export = #parse{
+    ParseHelper(ref state, SyntaxFactory.ParseBracketedArgumentList(state.Subject, state.Location, consumeFullText: false))
+}
+
+BracketedParameterList <BracketedParameterListSyntax> -export = #parse{
+    ParseHelper(ref state, SyntaxFactory.ParseBracketedParameterList(state.Subject, state.Location, consumeFullText: false))
+}
+
+Expression <ExpressionSyntax> -export = #parse{
+    ParseHelper(ref state, SyntaxFactory.ParseExpression(state.Subject, state.Location, consumeFullText: false))
+}
+
+Name <NameSyntax> -export = #parse{
+    ParseHelper(ref state, SyntaxFactory.ParseName(state.Subject, state.Location, consumeFullText: false))
+}
+
+ParameterList <ParameterListSyntax> -export = #parse{
+    ParseHelper(ref state, SyntaxFactory.ParseParameterList(state.Subject, state.Location, consumeFullText: false))
+}
+
+Statement <StatementSyntax> -export = #parse{
+    ParseHelper(ref state, SyntaxFactory.ParseStatement(state.Subject, state.Location, consumeFullText: false))
+}
+
+Type <TypeSyntax> -export = #parse{
+    ParseHelper(ref state, SyntaxFactory.ParseTypeName(state.Subject, state.Location, consumeFullText: false))
+}

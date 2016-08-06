@@ -3,8 +3,13 @@
 @using System.Globalization
 @using System.Linq
 @using System.Text.RegularExpressions
+@using Microsoft.CodeAnalysis.CSharp.Syntax
 @using Pegasus.Expressions
 @using Pegasus.Properties
+@members
+{
+    private CSharpParser cSharpParser = new CSharpParser();
+}
 
 grammar <Grammar>
   = _ settings:setting<0,,_> _ rules:rule<0,,_> _ EOF {
@@ -12,7 +17,7 @@ grammar <Grammar>
     }
 
 setting <KeyValuePair<Identifier, object>>
-  = key:settingName _ value:(<object> string / code / type) (_ semicolon)? {
+  = key:settingName _ value:(<object> type / identifier / string / code) (_ semicolon)? {
         new KeyValuePair<Identifier, object>(key, value)
     }
 
@@ -41,8 +46,8 @@ expression <Expression>
   = choice
 
 expressionType <CodeSpan> -memoize
-  = lt _ name:type _ gt { name }
-  / &lt #ERROR{ "PEG0014:" + Resources.PEG0014_ERROR_PARSER_InvalidType }
+  = lt _ name:type _ (gt / #error{ "PEG0014:" + Resources.PEG0014_ERROR_PARSER_InvalidType }) { name }
+  / &lt #error{ "PEG0014:" + Resources.PEG0014_ERROR_PARSER_InvalidType }
 
 choice <Expression>
   = choices:sequence<1,,_ slash _> { choices.Count == 1 ? choices[0] : new ChoiceExpression(choices) }
@@ -66,10 +71,10 @@ labeled <Expression> -memoize
   / errorAction
 
 prefixed <Expression>
-  = and _ c:code   { new AndCodeExpression(c) }
-  / and _ e:suffix { new AndExpression(e) }
-  / not _ c:code   { new NotCodeExpression(c) }
-  / not _ e:suffix { new NotExpression(e) }
+  = and _ c:delimitedExpression { new AndCodeExpression(c) }
+  / and _ e:suffix              { new AndExpression(e) }
+  / not _ c:delimitedExpression { new NotCodeExpression(c) }
+  / not _ e:suffix              { new NotExpression(e) }
   / suffix
 
 suffix <Expression>
@@ -101,29 +106,44 @@ integer <int> -lexical
   = digits:(digit+ "") { int.Parse(digits) }
 
 errorAction <CodeExpression> -memoize
-  = "#ERROR"i code:code { new CodeExpression(code, CodeType.Error) }
+  = "#error"i code:delimitedExpression { new CodeExpression(code, CodeType.Error) }
 
 parseAction <CodeExpression> -memoize
-  = "#PARSE"i code:code { new CodeExpression(code, CodeType.Parse) }
+  = "#parse"i code:delimitedExpression { new CodeExpression(code, CodeType.Parse) }
 
 stateAction <CodeExpression> -memoize
-  = "#" "STATE"i? code:code { new CodeExpression(code, CodeType.State) }
+  = "#" "state"i? code:delimitedStatements { new CodeExpression(code, CodeType.State) }
 
 resultAction <CodeExpression> -memoize
-  = code:code { new CodeExpression(code, CodeType.Result) }
+  = code:delimitedExpression { new CodeExpression(code, CodeType.Result) }
+
+delimitedExpression <CodeSpan> -memoize -lexical
+  = "{" _ e:cSharpExpression _ ("}" / #error{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }) { new CodeSpan(e.ToFullString(), eStart, eEnd) }
+  / "{" _ b:cSharpBlock      _ ("}" / #error{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }) { new CodeSpan(b.ToFullString(), bStart, bEnd) }
+  / "{" #error{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }
+
+delimitedStatements <CodeSpan> -memoize -lexical
+  = !whitespace b:cSharpBlock { new CodeSpan(b.ToFullString(), bStart, bEnd) }
+  / "{" #error{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }
+
+cSharpBlock <BlockSyntax>
+  = s:cSharpStatement &{ s is BlockSyntax } { s as BlockSyntax }
+
+cSharpExpression <ExpressionSyntax>
+  = #parse{ this.cSharpParser.Exported.Expression(ref state) }
+
+cSharpStatement <StatementSyntax>
+  = #parse{ this.cSharpParser.Exported.Statement(ref state) }
+
+cSharpType <TypeSyntax>
+  = #parse{ this.cSharpParser.Exported.Type(ref state) }
 
 code <CodeSpan> -lexical
   = "{" contents:braceContents "}" { new CodeSpan(contents, contentsStart, contentsEnd) }
-  / "{" #ERROR{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }
+  / "{" #error{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }
 
 braceContents
-  = parts:(nonBraceCharacters / "{" braceContents "}")* { string.Concat(parts) }
-
-nonBraceCharacters
-  = chars:nonBraceCharacter+ { string.Concat(chars) }
-
-nonBraceCharacter
-  = [^{}]
+  = parts:("" chars:[^{}]+ / "{" braceContents "}")* { string.Concat(parts) }
 
 equals    -lexical = "="
 colon     -lexical = ":"
@@ -147,27 +167,7 @@ identifier <Identifier> -memoize -lexical
   = name:(!digit (letter / digit / "_" / "$")+) { new Identifier(name, nameStart, nameEnd) }
 
 type <CodeSpan> -lexical
-  = type:(nonArrayType (_ rankSpecifiers)*) { new CodeSpan(type, typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type, @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
-
-nonArrayType
-  = nullableType
-  / typeName
-
-nullableType
-  = typeName _ question
-
-rankSpecifiers
-  = lbracket _ comma<0,,_> _ rbracket
-
-typeName
-  = identifier (_ typeArgumentList)? _ dot _ typeName
-  / identifier (_ typeArgumentList)?
-
-typeArgumentList
-  = lt _ typeArguments _ gt
-
-typeArguments
-  = type<1,,_ comma _>
+  = type:cSharpType { new CodeSpan(type.ToFullString(), typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type.ToString(), @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
 
 literal <Expression> -lexical
   = value:string flags:("ir" / "ri" / "i" / "r" / ) {
@@ -178,7 +178,7 @@ string -lexical
   = string:(doubleQuotedString / singleQuotedString) { @string }
 
 doubleQuotedString
-  = '"' chars:doubleQuotedCharacter* ('"' / #ERROR{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }) { string.Concat(chars) }
+  = '"' chars:doubleQuotedCharacter* ('"' / #error{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }) { string.Concat(chars) }
 
 doubleQuotedCharacter
   = simpleDoubleQuotedCharacter
@@ -192,7 +192,7 @@ simpleDoubleQuotedCharacter
   = !('"' / "\\" / eolChar) char:. { @char }
 
 singleQuotedString
-  = "'" chars:singleQuotedCharacter* ("'" / #ERROR{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }) { string.Concat(chars) }
+  = "'" chars:singleQuotedCharacter* ("'" / #error{ "PEG0009:" + Resources.PEG0009_ERROR_PARSER_UnterminatedString }) { string.Concat(chars) }
 
 singleQuotedCharacter
   = simpleSingleQuotedCharacter
@@ -206,7 +206,7 @@ simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) char:. { @char }
 
 class <Expression> -lexical
-  = lbracket inverted:"^"? parts:(classCharacterRange / classCharacter)* (rbracket / #ERROR{ "PEG0010:" + Resources.PEG0010_ERROR_PARSER_UnterminatedClass }) flags:"i"? {
+  = lbracket inverted:"^"? parts:(classCharacterRange / classCharacter)* (rbracket / #error{ "PEG0010:" + Resources.PEG0010_ERROR_PARSER_UnterminatedClass }) flags:"i"? {
         new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
@@ -304,4 +304,4 @@ whitespace -lexical
 
 EOF
   = !.
-  / unexpected:&. #ERROR{ "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_ERROR_PARSER_UnexpectedEndOfInput, unexpected) }
+  / unexpected:&. #error{ "PEG0008:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0008_ERROR_PARSER_UnexpectedEndOfInput, unexpected) }
