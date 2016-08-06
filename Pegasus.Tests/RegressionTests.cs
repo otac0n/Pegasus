@@ -13,7 +13,7 @@ namespace Pegasus.Tests
         [Test(Description = "GitHub bug #31")]
         public void Compile_WhenARuleContainsAStateExpressionAsPartOfASequence_IncludesTheContentOfThatStateExpression()
         {
-            var grammar = new PegParser().Parse("foo = #STATE{TEST;} 'OK';");
+            var grammar = new PegParser().Parse("foo = #{TEST;} 'OK';");
 
             var result = PegCompiler.Compile(grammar);
 
@@ -23,7 +23,7 @@ namespace Pegasus.Tests
         [Test(Description = "GitHub bug #31")]
         public void Compile_WhenARuleContainsAStateExpressionAsPartOfASequenceThatEndsWithACodeExpression_IncludesTheContentOfTheCodeExpression()
         {
-            var grammar = new PegParser().Parse("foo = #STATE{OK;} a:'OK' {TEST};");
+            var grammar = new PegParser().Parse("foo = #{OK;} a:'OK' {TEST};");
 
             var result = PegCompiler.Compile(grammar);
 
@@ -68,7 +68,7 @@ namespace Pegasus.Tests
         [Test(Description = "GitHub bug #58")]
         public void Compile_WhenErrorExpressionIsRepeated_YieldsNoErrors()
         {
-            var grammar = new PegParser().Parse("a = (#ERROR{ \"\" })*");
+            var grammar = new PegParser().Parse("a = (#error{ \"\" })*");
 
             var result = PegCompiler.Compile(grammar);
 
@@ -117,7 +117,7 @@ namespace Pegasus.Tests
                 "}",
                 "start <int>",
                 "  = 'OK'           t:test 'NO' { t }",
-                "  / 'OK' #STATE{ } t:test      { t }",
+                "  / 'OK' #{ } t:test      { t }",
                 "test <int> -memoize = { ++callCount }"));
 
             var compiled = PegCompiler.Compile(grammar);
@@ -136,7 +136,7 @@ namespace Pegasus.Tests
                 "}",
                 "start <int>",
                 "  = 'OK'                                     t:test 'NO' { t }",
-                "  / 'OK' #STATE{ state[\"foo\"] = \"bar\"; } t:test      { t }",
+                "  / 'OK' #{ state[\"foo\"] = \"bar\"; } t:test      { t }",
                 "test <int> -memoize = { ++callCount }"));
 
             var compiled = PegCompiler.Compile(grammar);
@@ -179,7 +179,7 @@ namespace Pegasus.Tests
         }
 
         [Test(Description = "GitHub bug #61")]
-        [TestCase("foo = (#STATE{ state[\"ok\"] = false; } ('x' #STATE{ state[\"ok\"] = true; })* &{ state[\"ok\"] })*;")]
+        [TestCase("foo = (#{ state[\"ok\"] = false; } ('x' #{ state[\"ok\"] = true; })* &{ state[\"ok\"] })*;")]
         [TestCase(@"EOF = !.; EOL = '\n'; line = !EOF (!EOL .)* (EOL / EOF); lines = line*;")]
         public void Parse_WhenZeroWidthRepetitionIsBlockedByAssertions_YieldsNoErrors(string grammarText)
         {

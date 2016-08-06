@@ -17,13 +17,13 @@ namespace Pegasus.Workbench
         private static readonly SyntaxHighlighter<string> SyntaxHighlighter = new SyntaxHighlighter<string>(new HighlightRuleCollection<string>
         {
             { @"^ whitespace \b", "WhiteSpace" },
-            { @"^ (settingName|ruleFlag|actionType) \b", "Keyword" },
+            { @"^ (settingName|ruleFlag|errorActionType|parseActionType|stateActionType) \b", "Keyword" },
             { @"^ (dot|lbracket|rbracket) \s type \b ", "Delimiter" },
             { @"^ (string|literal|class|dot) \b", "String" },
             { @"^ identifier \s ruleName \b", "RuleName" },
             { @"^ identifier \b", "Identifier" },
             { @"^ (singleLineComment|multiLineComment) \b", "Comment" },
-            { @"^ code \b", "Text" },
+            { @"^ (code|delimitedExpression|delimitedStatements) \b", "Text" },
             { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", "Delimiter" },
         });
 

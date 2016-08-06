@@ -133,7 +133,7 @@ namespace Pegasus.Tests.Compiler
         [Test]
         public void Compile_WhenTheGrammarContainsAParseExpression_ExecutesTheParseExpression()
         {
-            var grammar = new PegParser().Parse("a = #PARSE{ this.ReturnHelper<string>(state, ref state, _ => \"OK\") };");
+            var grammar = new PegParser().Parse("a = #parse{ this.ReturnHelper<string>(state, ref state, _ => \"OK\") };");
 
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
@@ -160,7 +160,7 @@ namespace Pegasus.Tests.Compiler
         [Test]
         public void Compile_WhenTheGrammarHasAnErrorExpressionInTheMiddleOfASequence_ThrowsException()
         {
-            var grammar = new PegParser().Parse("a = 'OK' #ERROR{ \"OK\" } 'OK'");
+            var grammar = new PegParser().Parse("a = 'OK' #error{ \"OK\" } 'OK'");
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
@@ -170,7 +170,7 @@ namespace Pegasus.Tests.Compiler
         [Test]
         public void Compile_WhenTheGrammarHasAnErrorExpressionInTheMiddleOfASequenceWrappedInParentheses_ThrowsException()
         {
-            var grammar = new PegParser().Parse("a = 'OK' (#ERROR{ \"OK\" }) 'OK'");
+            var grammar = new PegParser().Parse("a = 'OK' (#error{ \"OK\" }) 'OK'");
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
@@ -250,7 +250,7 @@ namespace Pegasus.Tests.Compiler
         [Test]
         public void Compile_WhenTheGrammarHasLexicalRuleConsistingOfAStateExpression_ProducesAParserThatReturnsTheLexicalElements()
         {
-            var grammar = new PegParser().Parse("a -lexical = #STATE{};");
+            var grammar = new PegParser().Parse("a -lexical = #{};");
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
@@ -356,8 +356,8 @@ namespace Pegasus.Tests.Compiler
         }
 
         [Test]
-        [TestCase("a = (#PARSE{ this.b(ref state) })* b; b = 'OK';", "PEG0021")]
-        [TestCase("a = (#PARSE{ this.b(ref state) })<1,5> b; b = 'OK';", "PEG0022")]
+        [TestCase("a = (#parse{ this.b(ref state) })* b; b = 'OK';", "PEG0021")]
+        [TestCase("a = (#parse{ this.b(ref state) })<1,5> b; b = 'OK';", "PEG0022")]
         public void Compile_WhenTheGrammarRepeatsAParseCodeExpressionWithNoMaximum_YieldsWarning(string subject, string errorNumber)
         {
             var grammar = new PegParser().Parse(subject);

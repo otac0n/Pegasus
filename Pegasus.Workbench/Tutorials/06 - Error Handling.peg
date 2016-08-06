@@ -9,8 +9,8 @@ subject <object>
     = p:prens* EOF { p }
 
 prens <object>
-    = "(" p:prens* (")" / #ERROR{ "Expected )" }) { p }
+    = "(" p:prens* (")" / #error{ "Expected )" }) { p }
 
 EOF
     = !.
-    / c:. #ERROR{ "Unexpected character " + c }
+    / c:. #error{ "Unexpected character " + c }

@@ -106,23 +106,27 @@ integer <int> -lexical
   = digits:(digit+ "") { int.Parse(digits) }
 
 errorAction <CodeExpression> -memoize
-  = "#error"i code:delimitedExpression { new CodeExpression(code, CodeType.Error) }
+  = errorActionType code:delimitedExpression { new CodeExpression(code, CodeType.Error) }
 
 parseAction <CodeExpression> -memoize
-  = "#parse"i code:delimitedExpression { new CodeExpression(code, CodeType.Parse) }
+  = parseActionType code:delimitedExpression { new CodeExpression(code, CodeType.Parse) }
 
 stateAction <CodeExpression> -memoize
-  = "#" "state"i? code:delimitedStatements { new CodeExpression(code, CodeType.State) }
+  = stateActionType code:delimitedStatements { new CodeExpression(code, CodeType.State) }
 
 resultAction <CodeExpression> -memoize
   = code:delimitedExpression { new CodeExpression(code, CodeType.Result) }
 
-delimitedExpression <CodeSpan> -memoize -lexical
+errorActionType -lexical = "#error"i
+parseActionType -lexical = "#parse"i
+stateActionType -lexical = "#" "state"i?
+
+delimitedExpression <CodeSpan> -lexical
   = "{" _ e:cSharpExpression _ ("}" / #error{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }) { new CodeSpan(e.ToFullString(), eStart, eEnd) }
   / "{" _ b:cSharpBlock      _ ("}" / #error{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }) { new CodeSpan(b.ToFullString(), bStart, bEnd) }
   / "{" #error{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }
 
-delimitedStatements <CodeSpan> -memoize -lexical
+delimitedStatements <CodeSpan> -lexical
   = !whitespace b:cSharpBlock { new CodeSpan(b.ToFullString(), bStart, bEnd) }
   / "{" #error{ "PEG0011:" + Resources.PEG0011_ERROR_PARSER_UnterminatedCode }
 

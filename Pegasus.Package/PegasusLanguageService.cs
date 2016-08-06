@@ -70,13 +70,13 @@ namespace Pegasus.Package
             private static readonly SyntaxHighlighter<TokenType> SyntaxHighlighter = new SyntaxHighlighter<TokenType>(new HighlightRuleCollection<TokenType>
             {
                 { @"^ whitespace \b", TokenType.WhiteSpace },
-                { @"^ (settingName|ruleFlag|actionType) \b", TokenType.Keyword },
+                { @"^ (settingName|ruleFlag|errorActionType|parseActionType|stateActionType) \b", TokenType.Keyword },
                 { @"^ (dot|lbracket|rbracket) \s type \b ", TokenType.Delimiter },
                 { @"^ (string|literal|class|dot) \b", TokenType.String },
                 { @"^ identifier \b", TokenType.Identifier },
                 { @"^ singleLineComment \b", TokenType.LineComment },
                 { @"^ multiLineComment \b", TokenType.Comment },
-                { @"^ code \b", TokenType.Text },
+                { @"^ (code|delimitedExpression|delimitedStatements) \b", TokenType.Text },
                 { @"^ (slash|and|not|question|star|plus|lparen|rparen|equals|lt|gt|colon|semicolon|comma) \b", TokenType.Delimiter },
             });
 
