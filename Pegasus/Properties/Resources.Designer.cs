@@ -61,15 +61,6 @@ namespace Pegasus.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unexpected character &apos;{0}&apos;..
-        /// </summary>
-        internal static string CS1026_ERROR_UnexpectedCharacter {
-            get {
-                return ResourceManager.GetString("CS1026_ERROR_UnexpectedCharacter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No grammar rules were defined..
         /// </summary>
         internal static string PEG0001_ERROR_NoRulesDefined {
