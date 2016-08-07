@@ -34,7 +34,7 @@ namespace Pegasus
                 throw new ArgumentNullException(nameof(logError));
             }
 
-            outputFile = outputFile ?? inputFile + ".cs";
+            outputFile = outputFile ?? inputFile + ".g.cs";
 
             var subject = File.ReadAllText(inputFile);
             var result = CompileString(subject, fileName: inputFile);

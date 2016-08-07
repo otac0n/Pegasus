@@ -144,7 +144,7 @@ namespace Pegasus.Tests
                     BuildEngine = new BuildEngine(buildEvents),
                 };
 
-                tempCsFile = tempPegFile + ".cs";
+                tempCsFile = tempPegFile + ".g.cs";
                 var result = task.Execute();
 
                 assert(tempPegFile, tempCsFile, result, buildEvents);

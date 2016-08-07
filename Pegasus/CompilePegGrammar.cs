@@ -21,7 +21,7 @@ namespace Pegasus
         /// Gets or sets the output filename that will contain the resulting code.
         /// </summary>
         /// <remarks>
-        /// Set to null to use the default, which is the input filename with ".cs" appended.
+        /// Set to null to use the default, which is the input filename with ".g.cs" appended.
         /// </remarks>
         public string OutputFile { get; set; }
 

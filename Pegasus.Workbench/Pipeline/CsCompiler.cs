@@ -16,7 +16,7 @@ namespace Pegasus.Workbench.Pipeline
 
     internal sealed class CsCompiler
     {
-        public const string SentinelFileName = "_.peg.cs";
+        public const string SentinelFileName = "_.peg.g.cs";
 
         public CsCompiler(IObservable<Tuple<string, Grammar>> codeAndGrammar)
         {

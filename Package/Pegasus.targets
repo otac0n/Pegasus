@@ -19,10 +19,10 @@
   <Target Name="_UpdatePegGrammarsMetatdata">
     <ItemGroup>
       <PegGrammar Condition=" '%(PegGrammar.Link)' != '' ">
-        <OutputPath>$(IntermediateOutputPath)%(PegGrammar.Link).cs</OutputPath>
+        <OutputPath>$(IntermediateOutputPath)%(PegGrammar.Link).g.cs</OutputPath>
       </PegGrammar>
       <PegGrammar Condition=" '%(PegGrammar.Link)' == '' ">
-        <OutputPath>$(IntermediateOutputPath)%(PegGrammar.Identity).cs</OutputPath>
+        <OutputPath>$(IntermediateOutputPath)%(PegGrammar.Identity).g.cs</OutputPath>
       </PegGrammar>
     </ItemGroup>
   </Target>

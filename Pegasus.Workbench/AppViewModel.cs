@@ -76,7 +76,7 @@ namespace Pegasus.Workbench
                                 return new CompilerError(grammarName, e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning };
 
                             case Pipeline.CsCompiler.SentinelFileName:
-                                return new CompilerError(grammarName + ".cs", e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning };
+                                return new CompilerError(grammarName + ".g.cs", e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning };
 
                             case Pipeline.TestParser.SentinelFileName:
                                 return new CompilerError(testName, e.Line, e.Column, e.ErrorNumber, e.ErrorText) { IsWarning = e.IsWarning };
