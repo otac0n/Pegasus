@@ -122,10 +122,10 @@
     <Compile Include="Expressions\SequenceExpression.cs" />
     <Compile Include="Expressions\TypedExpression.cs" />
     <Compile Include="Expressions\WildcardExpression.cs" />
-    <Compile Include="Parser\CSharpParser.peg.cs">
+    <Compile Include="Parser\CSharpParser.peg.g.cs">
       <DependentUpon>CSharpParser.peg</DependentUpon>
     </Compile>
-    <Compile Include="Parser\PegParser.peg.cs">
+    <Compile Include="Parser\PegParser.peg.g.cs">
       <DependentUpon>PegParser.peg</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />

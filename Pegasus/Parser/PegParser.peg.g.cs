@@ -3179,10 +3179,53 @@ namespace
                 if (r2 == null)
                 {
                     var startCursor1 = cursor;
+                    IParseResult<IList<string>> r3 = null;
+                    var unrecognizedStart = cursor;
+                    var startCursor2 = cursor;
+                    var l0 = new List<string>();
+                    while (true)
                     {
-                        var len = cursor.Location - startCursor1.Location;
-                        r2 = this.ReturnHelper<string>(startCursor1, ref cursor, state =>
-                            state.Subject.Substring(startCursor1.Location, len)
+                        IParseResult<string> r4 = null;
+                        r4 = this.ParseClass(ref cursor, "az", ignoreCase: true);
+                        if (r4 != null)
+                        {
+                            l0.Add(r4.Value);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if (l0.Count >= 1)
+                    {
+                        r3 = this.ReturnHelper<IList<string>>(startCursor2, ref cursor, state => l0.AsReadOnly());
+                    }
+                    else
+                    {
+                        cursor = startCursor2;
+                    }
+                    var unrecognizedEnd = cursor;
+                    var unrecognized = ValueOrDefault(r3);
+                    if (r3 != null)
+                    {
+                        throw this.ExceptionHelper(cursor, state =>
+                            #line 177 "PegParser.peg"
+                                                                               "PEG0026:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0026_ERROR_PARSER_StringFlagsUnrecognized, unrecognized)
+                            #line default
+                            );
+                    }
+                    else
+                    {
+                        cursor = startCursor1;
+                    }
+                }
+                if (r2 == null)
+                {
+                    var startCursor3 = cursor;
+                    {
+                        var len = cursor.Location - startCursor3.Location;
+                        r2 = this.ReturnHelper<string>(startCursor3, ref cursor, state =>
+                            state.Subject.Substring(startCursor3.Location, len)
                             );
                     }
                 }
