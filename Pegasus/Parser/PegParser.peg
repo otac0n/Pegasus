@@ -8,7 +8,7 @@
 @using Pegasus.Properties
 @members
 {
-    private CSharpParser cSharpParser = new CSharpParser();
+    private readonly CSharpParser cSharpParser = new CSharpParser();
 }
 
 grammar <Grammar>

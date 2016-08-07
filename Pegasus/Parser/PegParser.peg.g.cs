@@ -58,7 +58,7 @@ namespace
     {
         #line 10 "PegParser.peg"
  
-    private CSharpParser cSharpParser = new CSharpParser();
+    private readonly CSharpParser cSharpParser = new CSharpParser();
         #line default
         private Dictionary<CacheKey, object> storage;
 
