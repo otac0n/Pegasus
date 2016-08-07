@@ -3,12 +3,14 @@ Pegasus
 
 Pegasus is a PEG-style parser generator for C# that integrates with MSBuild and Visual Studio.
 
+[![Join the Chat](https://img.shields.io/badge/chat-join-brightgreen.svg?style=flat-square)](https://gitter.im/otac0n/Pegasus)
+
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/otac0n/Pegasus/blob/master/license.md)
+[![Get it on NuGet](https://img.shields.io/nuget/v/Pegasus.svg?style=flat-square)](http://nuget.org/packages/Pegasus)
+
 [![Appveyor Build](https://img.shields.io/appveyor/ci/otac0n/Pegasus.svg?style=flat-square)](https://ci.appveyor.com/project/otac0n/pegasus)
 [![Codecov](https://img.shields.io/codecov/c/github/otac0n/Pegasus.svg?style=flat-square)](https://codecov.io/gh/otac0n/Pegasus)
-[![Get it on NuGet](https://img.shields.io/nuget/v/Pegasus.svg?style=flat-square)](http://nuget.org/packages/Pegasus)
 [![Get it on NuGet](https://img.shields.io/nuget/vpre/Pegasus.svg?style=flat-square)](http://nuget.org/packages/Pegasus)
-[![Join the Chat](https://img.shields.io/badge/chat-join-brightgreen.svg?style=flat-square)](https://gitter.im/otac0n/Pegasus)
 
 Getting Started
 ---------------
@@ -19,7 +21,7 @@ The easiest way to get a copy of Pegasus is to install the [Pegasus NuGet packag
 
 Due to a limitation in Visual Studio, you will need to reload your project for the 'PegGrammar' build action to be recognized.
 
-Once you have the package installed, files in your project marked as 'PegGrammar' in the properties window will be compiled to their respective `.peg.cs` parser classes before every build.  These parser classes will be automatically included in compilation.
+Once you have the package installed, files in your project marked as 'PegGrammar' in the properties window will be compiled to their respective `.peg.g.cs` parser classes before every build.  These parser classes will be automatically included in compilation.
 
 For help with grammar syntax, see [the syntax guide wiki entry](https://github.com/otac0n/Pegasus/wiki/Syntax-Guide)
 
