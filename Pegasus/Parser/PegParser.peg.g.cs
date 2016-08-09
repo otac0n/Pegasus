@@ -2554,14 +2554,11 @@ namespace
                 IParseResult<string> r1 = null;
                 var startCursor1 = cursor;
                 IParseResult<string> r2 = null;
-                r2 = this.whitespace(ref cursor);
-                if (r2 == null)
-                {
-                    r1 = this.ReturnHelper<string>(cursor, ref cursor, state => string.Empty);
-                }
-                else
+                r2 = this.ParseLiteral(ref cursor, "{");
+                if (r2 != null)
                 {
                     cursor = startCursor1;
+                    r1 = this.ReturnHelper<string>(cursor, ref cursor, state => r2.Value);
                 }
                 if (r1 != null)
                 {
@@ -2574,7 +2571,7 @@ namespace
                     {
                         r0 = this.ReturnHelper<CodeSpan>(startCursor0, ref cursor, state =>
                             #line 130 "PegParser.peg"
-                                new CodeSpan(b.ToFullString(), bStart, bEnd)
+                         new CodeSpan(b.ToFullString(), bStart, bEnd)
                             #line default
                             , ruleName: "delimitedStatements");
                     }
@@ -3662,24 +3659,65 @@ namespace
                         }
                         if (r6 != null)
                         {
-                            IParseResult<IList<string>> r7 = null;
+                            IParseResult<string> r7 = null;
                             var flagsStart = cursor;
-                            var startCursor3 = cursor;
-                            var l2 = new List<string>();
-                            while (l2.Count < 1)
+                            if (r7 == null)
                             {
-                                IParseResult<string> r8 = null;
-                                r8 = this.ParseLiteral(ref cursor, "i");
-                                if (r8 != null)
+                                r7 = this.ParseLiteral(ref cursor, "i");
+                            }
+                            if (r7 == null)
+                            {
+                                var startCursor3 = cursor;
+                                IParseResult<IList<string>> r8 = null;
+                                var unrecognizedStart = cursor;
+                                var startCursor4 = cursor;
+                                var l2 = new List<string>();
+                                while (true)
                                 {
-                                    l2.Add(r8.Value);
+                                    IParseResult<string> r9 = null;
+                                    r9 = this.ParseClass(ref cursor, "az", ignoreCase: true);
+                                    if (r9 != null)
+                                    {
+                                        l2.Add(r9.Value);
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                if (l2.Count >= 1)
+                                {
+                                    r8 = this.ReturnHelper<IList<string>>(startCursor4, ref cursor, state => l2.AsReadOnly());
                                 }
                                 else
                                 {
-                                    break;
+                                    cursor = startCursor4;
+                                }
+                                var unrecognizedEnd = cursor;
+                                var unrecognized = ValueOrDefault(r8);
+                                if (r8 != null)
+                                {
+                                    throw this.ExceptionHelper(cursor, state =>
+                                        #line 213 "PegParser.peg"
+                                                                                                                                                                                                        "PEG0026:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0026_ERROR_PARSER_CharacterClassFlagsUnrecognized, unrecognized)
+                                        #line default
+                                        );
+                                }
+                                else
+                                {
+                                    cursor = startCursor3;
                                 }
                             }
-                            r7 = this.ReturnHelper<IList<string>>(startCursor3, ref cursor, state => l2.AsReadOnly());
+                            if (r7 == null)
+                            {
+                                var startCursor5 = cursor;
+                                {
+                                    var len = cursor.Location - startCursor5.Location;
+                                    r7 = this.ReturnHelper<string>(startCursor5, ref cursor, state =>
+                                        state.Subject.Substring(startCursor5.Location, len)
+                                        );
+                                }
+                            }
                             var flagsEnd = cursor;
                             var flags = ValueOrDefault(r7);
                             if (r7 != null)
@@ -3689,7 +3727,7 @@ namespace
         new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
-            ignoreCase: flags.SingleOrDefault() == "i")
+            ignoreCase: flags == "i")
                                     #line default
                                     , ruleName: "class");
                             }

@@ -202,6 +202,9 @@
     <value>The rule '{0}' is public. Public rule names should begin with an uppercase letter.</value>
     <comment>warning</comment>
   </data>
+  <data name="PEG0026_ERROR_PARSER_CharacterClassFlagsUnrecognized" xml:space="preserve">
+    <value>The character class flags '{0}' were unrecognized.</value>
+  </data>
   <data name="PEG0026_ERROR_PARSER_StringFlagsUnrecognized" xml:space="preserve">
     <value>The string flags '{0}' were unrecognized.</value>
   </data>

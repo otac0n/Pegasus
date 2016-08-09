@@ -313,6 +313,15 @@ namespace Pegasus.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The character class flags &apos;{0}&apos; were unrecognized..
+        /// </summary>
+        internal static string PEG0026_ERROR_PARSER_CharacterClassFlagsUnrecognized {
+            get {
+                return ResourceManager.GetString("PEG0026_ERROR_PARSER_CharacterClassFlagsUnrecognized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The string flags &apos;{0}&apos; were unrecognized..
         /// </summary>
         internal static string PEG0026_ERROR_PARSER_StringFlagsUnrecognized {
