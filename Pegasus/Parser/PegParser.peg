@@ -174,8 +174,8 @@ type <CodeSpan> -lexical
   = type:cSharpType { new CodeSpan(type.ToFullString(), typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type.ToString(), @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
 
 literal <Expression> -lexical
-  = value:string flags:("ir" / "ri" / "i" / "r" / unrecognized:[a-z]i+ #error{ "PEG0026:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0026_ERROR_PARSER_StringFlagsUnrecognized, unrecognized) } / ) {
-        new LiteralExpression(valueStart, flagsEnd, value, ignoreCase: flags.Contains('i'), fromResource: flags.Contains('r'))
+  = value:string flags:([si] "r" / "r" [si] / [si] / "r" / unrecognized:[a-z]i+ #error{ "PEG0026:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0026_ERROR_PARSER_StringFlagsUnrecognized, unrecognized) } / ) {
+        new LiteralExpression(valueStart, flagsEnd, value, ignoreCase: flags.Contains('i') ? true : flags.Contains('s') ? false : (bool?)null, fromResource: flags.Contains('r'))
     }
 
 string -lexical
@@ -210,11 +210,11 @@ simpleSingleQuotedCharacter
   = !("'" / "\\" / eolChar) .
 
 class <Expression> -lexical
-  = lbracket inverted:"^"? parts:(classCharacterRange / classCharacter)* (rbracket / #error{ "PEG0010:" + Resources.PEG0010_ERROR_PARSER_UnterminatedClass }) flags:("i" / unrecognized:[a-z]i+ #error{ "PEG0026:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0026_ERROR_PARSER_CharacterClassFlagsUnrecognized, unrecognized) } / ) {
+  = lbracket inverted:"^"? parts:(classCharacterRange / classCharacter)* (rbracket / #error{ "PEG0010:" + Resources.PEG0010_ERROR_PARSER_UnterminatedClass }) flags:([si] / unrecognized:[a-z]i+ #error{ "PEG0026:" + string.Format(CultureInfo.CurrentCulture, Resources.PEG0026_ERROR_PARSER_CharacterClassFlagsUnrecognized, unrecognized) } / ) {
         new ClassExpression(
             parts,
             negated: inverted.SingleOrDefault() == "^",
-            ignoreCase: flags == "i")
+            ignoreCase: flags == "i" ? true : flags == "s" ? false : (bool?)null)
     }
 
 classCharacterRange <CharacterRange>

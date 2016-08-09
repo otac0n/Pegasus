@@ -493,6 +493,35 @@ namespace Pegasus.Tests.Compiler
         }
 
         [Test]
+        [TestCase("a = 'Ok';", "Ok", "OK")]
+        [TestCase("@ignorecase false; a = 'Ok';", "Ok", "OK")]
+        [TestCase("@ignorecase true; a = 'Ok';", "OK", "XX")]
+        [TestCase("a = [O] [k];", "Ok", "OK")]
+        [TestCase("@ignorecase false; a = [O] [k];", "Ok", "OK")]
+        [TestCase("@ignorecase true; a = [O] [k];", "OK", "XX")]
+        [TestCase("a = 'Ok'i;", "OK", "XX")]
+        [TestCase("@ignorecase false; a = 'Ok'i;", "OK", "XX")]
+        [TestCase("@ignorecase true; a = 'Ok'i;", "OK", "XX")]
+        [TestCase("a = [O]i [k]i;", "OK", "XX")]
+        [TestCase("@ignorecase false; a = [O]i [k]i;", "OK", "XX")]
+        [TestCase("@ignorecase true; a = [O]i [k]i;", "OK", "XX")]
+        [TestCase("a = 'Ok's;", "Ok", "OK")]
+        [TestCase("@ignorecase false; a = 'Ok's;", "Ok", "OK")]
+        [TestCase("@ignorecase true; a = 'Ok's;", "Ok", "OK")]
+        [TestCase("a = [O]s [k]s;", "Ok", "OK")]
+        [TestCase("@ignorecase false; a = [O]s [k]s;", "Ok", "OK")]
+        [TestCase("@ignorecase true; a = [O]s [k]s;", "Ok", "OK")]
+        public void Compile_WithCaseSensitivityCombinations_ProducesCorrectParser(string subject, string match, string unmatch)
+        {
+            var grammar = new PegParser().Parse(subject);
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
+
+            Assert.That(parser.Parse(match), Is.EqualTo(match));
+            Assert.That(() => parser.Parse(unmatch), Throws.Exception);
+        }
+
+        [Test]
         public void Compile_WithComplexLeftRecursion_Succeeds()
         {
             var parser = new PegParser();

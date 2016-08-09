@@ -23,6 +23,7 @@
     var accessibility = settings["accessibility"].SingleOrDefault() ?? "public";
     var resources = settings["resources"].SingleOrDefault();
     var startRule = settings["start"].Select(n => n.ToString()).SingleOrDefault();
+    var ignoreCase = settings["ignorecase"].Select(v => bool.Parse(v.ToString().Trim())).SingleOrDefault();
     this.trace = settings["trace"].Select(v => bool.Parse(v.ToString().Trim())).SingleOrDefault();
 
     if (startRule == null && !hasPublic && !hasExported)
@@ -202,7 +203,7 @@ namespace
             {{/wrapif}}
         }
 
-        private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false{{if hasLexical}}, string ruleName = null{{/if}})
+        private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = {{= ignoreCase.ToString().ToLower() }}{{if hasLexical}}, string ruleName = null{{/if}})
         {
             if (cursor.Location + literal.Length <= cursor.Subject.Length)
             {
@@ -218,7 +219,7 @@ namespace
             return null;
         }
 
-        private IParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, bool negated = false, bool ignoreCase = false{{if hasLexical}}, string ruleName = null{{/if}})
+        private IParseResult<string> ParseClass(ref Cursor cursor, string characterRanges, bool negated = false, bool ignoreCase = {{= ignoreCase.ToString().ToLower() }}{{if hasLexical}}, string ruleName = null{{/if}})
         {
             if (cursor.Location + 1 <= cursor.Subject.Length)
             {

@@ -77,8 +77,9 @@ namespace Pegasus.Tests.Parser
 
         [Test]
         [TestCase("a = [abc]i", true)]
-        [TestCase("a = [abc]", false)]
-        public void Parse_WithClassExpression_YieldsClassExpressionWithCorrectCaseSensitivity(string subject, bool ignoreCase)
+        [TestCase("a = [abc]s", false)]
+        [TestCase("a = [abc]", null)]
+        public void Parse_WithClassExpression_YieldsClassExpressionWithCorrectCaseSensitivity(string subject, bool? ignoreCase)
         {
             var parser = new PegParser();
 
@@ -128,8 +129,9 @@ namespace Pegasus.Tests.Parser
 
         [Test]
         [TestCase("a = 'OK'i", true)]
-        [TestCase("a = 'OK'", false)]
-        public void Parse_WithLiteralExpression_YieldsLiteralExpressionWithCorrectCaseSensitivity(string subject, bool ignoreCase)
+        [TestCase("a = 'OK's", false)]
+        [TestCase("a = 'OK'", null)]
+        public void Parse_WithLiteralExpression_YieldsLiteralExpressionWithCorrectCaseSensitivity(string subject, bool? ignoreCase)
         {
             var parser = new PegParser();
 
