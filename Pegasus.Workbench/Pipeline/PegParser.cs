@@ -41,9 +41,9 @@ namespace Pegasus.Workbench.Pipeline
         {
             subject = subject ?? string.Empty;
 
+            IList<LexicalElement> lexicalElements;
             try
             {
-                IList<LexicalElement> lexicalElements;
                 var grammar = new Pegasus.Parser.PegParser().Parse(subject, SentinelFileName, out lexicalElements);
 
                 return new ParseResult
@@ -56,6 +56,7 @@ namespace Pegasus.Workbench.Pipeline
             catch (Exception ex)
             {
                 var cursor = ex.Data["cursor"] as Cursor ?? new Cursor(subject, 0, SentinelFileName);
+                lexicalElements = cursor.GetLexicalElements();
 
                 var parts = Regex.Split(ex.Message, @"(?<=^\w+):");
                 if (parts.Length == 1)
@@ -65,6 +66,7 @@ namespace Pegasus.Workbench.Pipeline
 
                 return new ParseResult
                 {
+                    LexicalElements = lexicalElements,
                     Errors = new List<CompilerError>
                     {
                         new CompilerError(SentinelFileName, cursor.Line, cursor.Column, errorNumber: parts[0], errorText: parts[1]),

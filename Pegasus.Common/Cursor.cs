@@ -4,6 +4,7 @@ namespace Pegasus.Common
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Threading;
 
@@ -17,6 +18,11 @@ namespace Pegasus.Common
     [DebuggerDisplay("({Line},{Column})")]
     public class Cursor : IEquatable<Cursor>
     {
+        /// <summary>
+        /// The state key used for the linked list of lexical elements.
+        /// </summary>
+        public const string LexicalElementsKey = "_lexical";
+
         private static int previousStateKey = -1;
 
         private readonly bool inTransition;
@@ -197,6 +203,17 @@ namespace Pegasus.Common
             hash = (hash * -0x25555529) + this.stateKey;
 
             return hash;
+        }
+
+        /// <summary>
+        /// Gets the lexical elements contained in the cursor.
+        /// </summary>
+        /// <returns>A read-only collection of <see cref="LexicalElement"/>.</returns>
+        public IList<LexicalElement> GetLexicalElements()
+        {
+            var lexical = (this[LexicalElementsKey] as ListNode<LexicalElement>).ToList();
+            lexical.Reverse();
+            return new ReadOnlyCollection<LexicalElement>(lexical);
         }
 
         /// <summary>

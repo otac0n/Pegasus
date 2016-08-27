@@ -4599,9 +4599,7 @@ namespace
                 {
                     throw ExceptionHelper(cursor, state => "Failed to parse '" + ruleName + "'.");
                 }
-                var lexical = (cursor["_lexical"] as ListNode<LexicalElement>).ToList();
-                lexical.Reverse();
-                lexicalElements = lexical.AsReadOnly();
+                lexicalElements = cursor.GetLexicalElements();
                 return result;
             }
             finally
@@ -4680,7 +4678,7 @@ namespace
             {
                 var state = endCursor.WithMutability(true);
                 var element = new LexicalElement { StartCursor = startCursor, EndCursor = endCursor, Name = ruleName };
-                state["_lexical"] = (state["_lexical"] as ListNode<LexicalElement>).Push(element);
+                state[Cursor.LexicalElementsKey] = (state[Cursor.LexicalElementsKey] as ListNode<LexicalElement>).Push(element);
                 element.EndCursor = endCursor = state.WithMutability(false);
             }
             var result = wrappedCode(endCursor);
@@ -4709,7 +4707,7 @@ namespace
                 {
                     var state = cursor.WithMutability(true);
                     var element = new LexicalElement { StartCursor = startCursor, EndCursor = cursor, Name = ruleName };
-                    state["_lexical"] = (state["_lexical"] as ListNode<LexicalElement>).Push(element);
+                    state[Cursor.LexicalElementsKey] = (state[Cursor.LexicalElementsKey] as ListNode<LexicalElement>).Push(element);
                     element.EndCursor = cursor = state.WithMutability(false);
                 }
 

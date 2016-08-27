@@ -152,16 +152,18 @@ namespace Pegasus.Workbench
 
         private static IList<LexicalElement> GetLexicalElements(string text)
         {
+            IList<LexicalElement> lexicalElements;
             try
             {
-                IList<LexicalElement> lexicalElements;
                 new PegParser().Parse(text, null, out lexicalElements);
-                return lexicalElements;
             }
-            catch (FormatException)
+            catch (FormatException ex)
             {
-                return new LexicalElement[0];
+                var cursor = ex.Data["cursor"] as Cursor;
+                lexicalElements = cursor?.GetLexicalElements() ?? new LexicalElement[0];
             }
+
+            return lexicalElements;
         }
     }
 }
