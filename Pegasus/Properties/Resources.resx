@@ -208,6 +208,9 @@
   <data name="PEG0026_ERROR_PARSER_StringFlagsUnrecognized" xml:space="preserve">
     <value>The string flags '{0}' were unrecognized.</value>
   </data>
+  <data name="PEG0027_ERROR_WrongNumberOfOutputFiles" xml:space="preserve">
+    <value>The number of output files must match the number of input files.</value>
+  </data>
   <data name="Usage" xml:space="preserve">
     <value>Usage:
     pegasus file</value>

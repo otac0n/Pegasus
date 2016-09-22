@@ -11,17 +11,22 @@ namespace Pegasus
     {
         public static int Main(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length == 0)
             {
                 ShowUsage();
                 return -1;
             }
 
-            var errors = new List<CompilerError>();
-            CompileManager.CompileFile(args[0], null, errors.Add);
-            ShowErrors(errors);
+            var errorCount = 0;
+            foreach (var arg in args)
+            {
+                var errors = new List<CompilerError>();
+                CompileManager.CompileFile(arg, null, errors.Add);
+                ShowErrors(errors);
+                errorCount += errors.Count;
+            }
 
-            return errors.Count;
+            return errorCount;
         }
 
         private static void ShowErrors(List<CompilerError> errors)

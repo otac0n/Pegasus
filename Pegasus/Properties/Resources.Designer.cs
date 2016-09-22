@@ -331,6 +331,15 @@ namespace Pegasus.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The number of output files must match the number of input files..
+        /// </summary>
+        internal static string PEG0027_ERROR_WrongNumberOfOutputFiles {
+            get {
+                return ResourceManager.GetString("PEG0027_ERROR_WrongNumberOfOutputFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Usage:
         ///    pegasus file.
         /// </summary>

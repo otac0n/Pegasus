@@ -128,39 +128,48 @@ namespace Pegasus.Tests
             });
         }
 
+        [Test]
+        public void Execute_WithMisMatchedNumberOfArguments_LogsError()
+        {
+            List<BuildEventArgs> buildEvents;
+            var result = TestTask(new[] { "a.peg" }, new string[0], out buildEvents);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void Execute_WithMisMatchedNumberOfArguments_ReturnsFalse()
+        {
+            List<BuildEventArgs> buildEvents;
+            var result = TestTask(new[] { "a.peg" }, new string[0], out buildEvents);
+
+            Assert.That(buildEvents.OfType<BuildErrorEventArgs>(), Is.Not.Empty);
+        }
+
         private static void TestTask(string pegGrammar, Action<string, string, bool, List<BuildEventArgs>> assert)
         {
-            string tempPegFile = null;
-            string tempCsFile = null;
-            try
+            string tempPegFile;
+            string tempCsFile;
+            using (Disposable.TempFile(pegGrammar, out tempPegFile))
+            using (Disposable.TempGeneratedFile(tempCsFile = tempPegFile + ".g.cs"))
             {
-                tempPegFile = Path.GetTempFileName();
-                File.WriteAllText(tempPegFile, pegGrammar);
-
-                var buildEvents = new List<BuildEventArgs>();
-                var task = new CompilePegGrammar
-                {
-                    InputFile = tempPegFile,
-                    BuildEngine = new BuildEngine(buildEvents),
-                };
-
-                tempCsFile = tempPegFile + ".g.cs";
-                var result = task.Execute();
-
+                List<BuildEventArgs> buildEvents;
+                var result = TestTask(new[] { tempPegFile }, null, out buildEvents);
                 assert(tempPegFile, tempCsFile, result, buildEvents);
             }
-            finally
-            {
-                if (tempPegFile != null)
-                {
-                    File.Delete(tempPegFile);
-                }
+        }
 
-                if (tempCsFile != null)
-                {
-                    File.Delete(tempCsFile);
-                }
-            }
+        private static bool TestTask(string[] inputFiles, string[] outputFiles, out List<BuildEventArgs> buildEvents)
+        {
+            buildEvents = new List<BuildEventArgs>();
+            var task = new CompilePegGrammar
+            {
+                InputFiles = inputFiles,
+                OutputFiles = outputFiles,
+                BuildEngine = new BuildEngine(buildEvents),
+            };
+
+            return task.Execute();
         }
 
         private class BuildEngine : IBuildEngine
@@ -180,10 +189,7 @@ namespace Pegasus.Tests
 
             public string ProjectFileOfTaskNode => null;
 
-            public bool BuildProjectFile(string projectFileName, string[] targetNames, IDictionary globalProperties, IDictionary targetOutputs)
-            {
-                throw new NotImplementedException();
-            }
+            public bool BuildProjectFile(string projectFileName, string[] targetNames, IDictionary globalProperties, IDictionary targetOutputs) => false;
 
             public void LogCustomEvent(CustomBuildEventArgs e) => this.buildEvents.Add(e);
 

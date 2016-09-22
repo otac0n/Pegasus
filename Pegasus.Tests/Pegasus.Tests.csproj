@@ -87,6 +87,7 @@
     <Compile Include="Common\Highlighting\SyntaxHighlighterTests.cs" />
     <Compile Include="Common\ParseResultTests.cs" />
     <Compile Include="Compiler\PegCompilerTests.cs" />
+    <Compile Include="Disposable.cs" />
     <Compile Include="Expressions\AndCodeExpressionTests.cs" />
     <Compile Include="Expressions\AndExpressionTests.cs" />
     <Compile Include="Expressions\CharacterRangeTests.cs" />
