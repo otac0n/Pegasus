@@ -4,6 +4,7 @@
     <CompileDependsOn>$(CompileDependsOn);CompilePegGrammars</CompileDependsOn>
     <CoreCompileDependsOn>$(CoreCompileDependsOn);CompilePegGrammars</CoreCompileDependsOn>
     <CoreBuildDependsOn>$(CoreBuildDependsOn);CompilePegGrammars</CoreBuildDependsOn>
+    <CleanDependsOn>$(CleanDependsOn);CleanPegGrammars</CleanDependsOn>
   </PropertyGroup>
   <ItemGroup>
     <AvailableItemName Include="PegGrammar" />
@@ -25,6 +26,10 @@
         <OutputPath>$(IntermediateOutputPath)$([System.Text.RegularExpressions.Regex]::Replace(%(PegGrammar.Identity), '(?&lt;=^|\\|/)..(?=$|\\|/)', '__')).g.cs</OutputPath>
       </PegGrammar>
     </ItemGroup>
+  </Target>
+
+  <Target Name="CleanPegGrammars" DependsOnTargets="_UpdatePegGrammarsMetatdata">
+    <Delete Files="@(PegGrammar -> '%(OutputPath)')" ContinueOnError="true" />
   </Target>
 
   <Target Name="_CompilePegGrammars" DependsOnTargets="_UpdatePegGrammarsMetatdata" Inputs="$(MSBuildThisFileFullPath);$(MSBuildProjectFile);@(PegGrammar)" Outputs="@(PegGrammar -> '%(OutputPath)')">
