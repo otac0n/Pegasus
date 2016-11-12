@@ -6,6 +6,7 @@ namespace Pegasus.Common
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading;
 
     /// <summary>
@@ -209,6 +210,7 @@ namespace Pegasus.Common
         /// Gets the lexical elements contained in the cursor.
         /// </summary>
         /// <returns>A read-only collection of <see cref="LexicalElement"/>.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This method is too expensive to be a property.")]
         public IList<LexicalElement> GetLexicalElements()
         {
             var lexical = (this[LexicalElementsKey] as ListNode<LexicalElement>).ToList();

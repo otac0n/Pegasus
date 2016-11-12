@@ -38,6 +38,7 @@ namespace Pegasus.Common.Tracing
         }
 
         /// <inheritdoc/>
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "This is fine.")]
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validation excluded for performance reasons.")]
         public void TraceRuleEnter(string ruleName, Cursor cursor)
         {
@@ -46,6 +47,7 @@ namespace Pegasus.Common.Tracing
         }
 
         /// <inheritdoc/>
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "This is fine.")]
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validation excluded for performance reasons.")]
         public void TraceRuleExit<T>(string ruleName, Cursor cursor, IParseResult<T> parseResult)
         {
