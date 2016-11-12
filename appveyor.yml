@@ -7,6 +7,8 @@ install:
   - pip install codecov
 before_build:
   - nuget restore
+  - gitversion /showconfig
+  - gitversion
   - ps: gitversion /l console /output buildserver
   - GitReleaseNotes . /AllTags /C breaking /O ReleaseNotes.md
 build:
