@@ -19,10 +19,10 @@
   <Target Name="_UpdatePegGrammarsMetatdata">
     <ItemGroup>
       <PegGrammar Condition=" '%(PegGrammar.Link)' != '' ">
-        <OutputPath>$(IntermediateOutputPath)%(PegGrammar.Link).g.cs</OutputPath>
+        <OutputPath>$(IntermediateOutputPath)$([System.Text.RegularExpressions.Regex]::Replace(%(PegGrammar.Link), '(?&lt;=^|\\|/)..(?=$|\\|/)', '__')).g.cs</OutputPath>
       </PegGrammar>
       <PegGrammar Condition=" '%(PegGrammar.Link)' == '' ">
-        <OutputPath>$(IntermediateOutputPath)%(PegGrammar.Identity).g.cs</OutputPath>
+        <OutputPath>$(IntermediateOutputPath)$([System.Text.RegularExpressions.Regex]::Replace(%(PegGrammar.Identity), '(?&lt;=^|\\|/)..(?=$|\\|/)', '__')).g.cs</OutputPath>
       </PegGrammar>
     </ItemGroup>
   </Target>
