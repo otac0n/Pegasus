@@ -10,6 +10,13 @@ namespace Pegasus.Tests.Common
     public class CursorTests
     {
         [Test]
+        public void Advance_WhenTheCursorIsMutable_ThrowsException()
+        {
+            var cursor = new Cursor("OK", 0).WithMutability(mutable: true);
+            Assert.That(() => cursor.Advance(0), Throws.InstanceOf<InvalidOperationException>());
+        }
+
+        [Test]
         public void Constructor_WhenGivenALocationLessThanZero_ThrowsException()
         {
             Assert.That(() => new Cursor(string.Empty, -1), Throws.InstanceOf<ArgumentOutOfRangeException>());
@@ -189,6 +196,24 @@ namespace Pegasus.Tests.Common
         {
             var cursor = new Cursor("OK");
             Assert.That(() => cursor["OK"] = "OK", Throws.InvalidOperationException);
+        }
+
+        [TestCase("OK", 0)]
+        [TestCase("OK", 1)]
+        [TestCase("OK\r\nOK", 5)]
+        public void Touch_Always_CreatesACursorWithIdenticalProperties(string subject, int location)
+        {
+            var cursor = new Cursor(subject, location);
+            var touched = cursor.Touch();
+            Assert.That(cursor.Location == touched.Location && cursor.Subject == touched.Subject, Is.True);
+        }
+
+        [Test]
+        public void Touch_Always_CreatesADistinctCursor()
+        {
+            var cursor = new Cursor("OK", 0);
+            var touched = cursor.Touch();
+            Assert.That(cursor.Equals(touched), Is.False);
         }
 
         [Test]

@@ -23,6 +23,13 @@ namespace Pegasus.Tests.Common.Highlighting
         }
 
         [Test]
+        public void AddDefaultTokens_WhenGivenANullListOfTokens_ThrownArgumentNullException()
+        {
+            var highlighter = new SyntaxHighlighter<Token>(Enumerable.Empty<HighlightRule<Token>>());
+            Assert.That(() => highlighter.AddDefaultTokens(null, 1, Token.Unknown), Throws.InstanceOf<ArgumentNullException>());
+        }
+
+        [Test]
         public void Highlight_GivenAGrammarThatReturnsIdenticalAdjacentLexicalElements_ReturnsCombinedToken()
         {
             TestScenario(
@@ -92,6 +99,20 @@ namespace Pegasus.Tests.Common.Highlighting
                 {
                     { "asdf", Token.Unknown },
                 });
+        }
+
+        [Test]
+        public void SplitOnWhiteSpace_WhenGivenANullListOfSegments_ThrownArgumentNullException()
+        {
+            var highlighter = new SyntaxHighlighter<Token>(Enumerable.Empty<HighlightRule<Token>>());
+            Assert.That(() => highlighter.SplitOnWhiteSpace(null, "OK"), Throws.InstanceOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public void SplitOnWhiteSpace_WhenGivenANullSubject_ThrownArgumentNullException()
+        {
+            var highlighter = new SyntaxHighlighter<Token>(Enumerable.Empty<HighlightRule<Token>>());
+            Assert.That(() => highlighter.SplitOnWhiteSpace(new List<HighlightedSegment<Token>>(), null), Throws.InstanceOf<ArgumentNullException>());
         }
 
         private static void TestScenario(string grammar, HighlightRuleCollection<Token> rules, TokenList tokens)
