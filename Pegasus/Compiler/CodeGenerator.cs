@@ -82,11 +82,6 @@ namespace Pegasus.Compiler
 
         private static string EscapeName(object name)
         {
-            if (name == null)
-            {
-                return null;
-            }
-
             var n = name.ToString();
             return keywords.Contains(n) ? "@" + n : n;
         }

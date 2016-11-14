@@ -671,6 +671,17 @@ namespace Pegasus.Tests.Compiler
         }
 
         [Test]
+        public void Compile_WithStartRule_ProducesCorrectParser()
+        {
+            var grammar = new PegParser().Parse("@start b; a = #error{ \"wrong start rule\" }; b = 'OK';");
+
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
+
+            Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
+        }
+
+        [Test]
         [TestCase("a = a;")]
         [TestCase("a = '' a;")]
         [TestCase("a = b a; b = '';")]

@@ -198,20 +198,24 @@ namespace Pegasus.Tests.Common
             Assert.That(() => cursor["OK"] = "OK", Throws.InvalidOperationException);
         }
 
-        [TestCase("OK", 0)]
-        [TestCase("OK", 1)]
-        [TestCase("OK\r\nOK", 5)]
-        public void Touch_Always_CreatesACursorWithIdenticalProperties(string subject, int location)
+        [TestCase("OK", 0, false)]
+        [TestCase("OK", 1, false)]
+        [TestCase("OK\r\nOK", 5, false)]
+        [TestCase("OK", 0, true)]
+        [TestCase("OK", 1, true)]
+        [TestCase("OK\r\nOK", 5, true)]
+        public void Touch_Always_CreatesACursorWithIdenticalProperties(string subject, int location, bool mutable)
         {
-            var cursor = new Cursor(subject, location);
+            var cursor = new Cursor(subject, location).WithMutability(mutable: mutable);
             var touched = cursor.Touch();
             Assert.That(cursor.Location == touched.Location && cursor.Subject == touched.Subject, Is.True);
         }
 
-        [Test]
-        public void Touch_Always_CreatesADistinctCursor()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Touch_Always_CreatesADistinctCursor(bool mutable)
         {
-            var cursor = new Cursor("OK", 0);
+            var cursor = new Cursor("OK", 0).WithMutability(mutable: mutable);
             var touched = cursor.Touch();
             Assert.That(cursor.Equals(touched), Is.False);
         }

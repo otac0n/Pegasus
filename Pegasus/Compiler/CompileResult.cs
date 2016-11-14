@@ -70,7 +70,7 @@ namespace Pegasus.Compiler
             var parts = ((System.Linq.Expressions.MemberExpression)error.Body).Member.Name.Split('_');
             var errorId = parts[0];
 
-            bool isWarning;
+            bool? isWarning = null;
             switch (parts[1])
             {
                 case "ERROR":
@@ -81,13 +81,15 @@ namespace Pegasus.Compiler
                     isWarning = true;
                     break;
 
+#if DEBUG
                 default:
                     throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Unknown error type '{0}'.", parts[1]), "error");
+#endif
             }
 
             var errorFormat = error.Compile()();
             var errorText = string.Format(CultureInfo.CurrentCulture, errorFormat, args);
-            this.Errors.Add(new CompilerError(cursor.FileName ?? string.Empty, cursor.Line, cursor.Column, errorId, errorText) { IsWarning = isWarning });
+            this.Errors.Add(new CompilerError(cursor.FileName ?? string.Empty, cursor.Line, cursor.Column, errorId, errorText) { IsWarning = isWarning ?? true });
         }
     }
 }
