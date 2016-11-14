@@ -75,7 +75,6 @@ namespace Pegasus.Tests.Parser
             Assert.That(result.Sequence, Is.Empty);
         }
 
-        [Test]
         [TestCase("a = [abc]i", true)]
         [TestCase("a = [abc]s", false)]
         [TestCase("a = [abc]", null)]
@@ -107,7 +106,6 @@ namespace Pegasus.Tests.Parser
             Assert.That(charClass.Ranges, Is.EquivalentTo(expected));
         }
 
-        [Test]
         [TestCase("a = #ERROR{ \"OK\" }", CodeType.Error, false)]
         [TestCase("a = #error{ \"OK\" }", CodeType.Error, false)]
         [TestCase("a = #STATE{}", CodeType.State, false)]
@@ -127,7 +125,6 @@ namespace Pegasus.Tests.Parser
             Assert.That(codeExpression.CodeType, Is.EqualTo(codeType));
         }
 
-        [Test]
         [TestCase("a = 'OK'i", true)]
         [TestCase("a = 'OK's", false)]
         [TestCase("a = 'OK'", null)]

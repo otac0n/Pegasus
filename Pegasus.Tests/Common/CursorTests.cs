@@ -34,7 +34,6 @@ namespace Pegasus.Tests.Common
             Assert.That(() => new Cursor(null), Throws.InstanceOf<ArgumentNullException>());
         }
 
-        [Test]
         [TestCase("abc\ndef", 0, 1, 1)]
         [TestCase("abc\ndef", 1, 1, 2)]
         [TestCase("abc\ndef", 2, 1, 3)]

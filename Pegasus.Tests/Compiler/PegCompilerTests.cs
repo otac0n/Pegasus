@@ -96,7 +96,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
         }
 
-        [Test]
         [TestCase("string")]
         [TestCase("foo")]
         [TestCase("bar")]
@@ -141,7 +140,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(parser.Parse(string.Empty), Is.EqualTo("OK"));
         }
 
-        [Test]
         [TestCase(true, "&", "OK")]
         [TestCase(false, "&", "")]
         [TestCase(true, "!", "")]
@@ -355,7 +353,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.False);
         }
 
-        [Test]
         [TestCase("a = (#parse{ this.b(ref state) })* b; b = 'OK';", "PEG0021")]
         [TestCase("a = (#parse{ this.b(ref state) })<1,5> b; b = 'OK';", "PEG0022")]
         public void Compile_WhenTheGrammarRepeatsAParseCodeExpressionWithNoMaximum_YieldsWarning(string subject, string errorNumber)
@@ -461,7 +458,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(result, Is.EqualTo(value));
         }
 
-        [Test]
         [TestCase("a = b; b = c; c = d; d = a;")]
         [TestCase("a = b / c; b = 'OK'; c = a;")]
         [TestCase("a = &b c; b = a; c = 'OK';")]
@@ -477,7 +473,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.False);
         }
 
-        [Test]
         [TestCase(0, 0)]
         [TestCase(1, 0)]
         [TestCase(2, 1)]
@@ -492,7 +487,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.True);
         }
 
-        [Test]
         [TestCase("a = 'Ok';", "Ok", "OK")]
         [TestCase("@ignorecase false; a = 'Ok';", "Ok", "OK")]
         [TestCase("@ignorecase true; a = 'Ok';", "OK", "XX")]
@@ -550,7 +544,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.False);
         }
 
-        [Test]
         [TestCase("namespace")]
         [TestCase("classname")]
         public void Compile_WithDuplicateSetting_YieldsError(string settingName)
@@ -577,7 +570,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.False);
         }
 
-        [Test]
         [TestCase("accessibility", "private")]
         public void Compile_WithInvalidSettingValue_YieldsError(string settingName, string value)
         {
@@ -626,7 +618,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.False);
         }
 
-        [Test]
         [TestCase("-export")]
         [TestCase("-public")]
         public void Compile_WithPublicOrExportedRulesWithLowercaseName_YieldsWarning(string flag)
@@ -681,7 +672,6 @@ namespace Pegasus.Tests.Compiler
             Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
         }
 
-        [Test]
         [TestCase("a = a;")]
         [TestCase("a = '' a;")]
         [TestCase("a = b a; b = '';")]
