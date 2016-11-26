@@ -9,8 +9,8 @@ Pegasus is a PEG-style parser generator for C# that integrates with MSBuild and 
 [![Get it on NuGet](https://img.shields.io/nuget/v/Pegasus.svg?style=flat-square)](http://nuget.org/packages/Pegasus)
 
 [![Appveyor Build](https://img.shields.io/appveyor/ci/otac0n/Pegasus.svg?style=flat-square)](https://ci.appveyor.com/project/otac0n/pegasus)
-[![Codecov](https://img.shields.io/codecov/c/github/otac0n/Pegasus.svg?style=flat-square)](https://codecov.io/gh/otac0n/Pegasus)
-[![Get it on NuGet](https://img.shields.io/nuget/vpre/Pegasus.svg?style=flat-square)](http://nuget.org/packages/Pegasus)
+[![Test Coverage](https://img.shields.io/codecov/c/github/otac0n/Pegasus.svg?style=flat-square)](https://codecov.io/gh/otac0n/Pegasus)
+[![Pre-release packages available](https://img.shields.io/nuget/vpre/Pegasus.svg?style=flat-square)](http://nuget.org/packages/Pegasus)
 
 Getting Started
 ---------------

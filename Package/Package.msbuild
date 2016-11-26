@@ -27,7 +27,11 @@
       <WorkbenchFiles Include="$(SolutionDir)Pegasus.Workbench\bin\$(Configuration)\**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(WorkbenchFiles)" DestinationFiles="@(WorkbenchFiles->'obj\$(Configuration)\tools\workbench\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="obj\$(Configuration)\readme.txt" />
+    <PropertyGroup>
+      <Readme>$([System.IO.File]::ReadAllText("$(SolutionDir)readme.md"))</Readme>
+      <ReadmeText>$([System.Text.RegularExpressions.Regex]::Replace($(Readme), "!\[(?&lt;alt&gt;[^[\]]+)\]\([^)]+\)", "${alt}"))</ReadmeText>
+    </PropertyGroup>
+    <WriteLinesToFile File="obj\$(Configuration)\readme.txt" Lines="$(ReadmeText)" />
     <Copy SourceFiles="Pegasus.nuspec" DestinationFiles="obj\$(Configuration)\Pegasus.nuspec" />
     <MakeDir Directories="$(OutputPath)" />
     <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\$(Configuration)\Pegasus.nuspec -NoPackageAnalysis -NonInteractive -OutputDir $(OutputPath) -Version $(GitVersion_NuGetVersion)" />
