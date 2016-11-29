@@ -21,6 +21,9 @@ artifacts:
   - path: 'Package\bin\**\*.nupkg'
   - path: 'Pegasus.Templates\bin\**\*.zip'
   - path: 'Pegasus.Package\bin\**\*.vsix'
+  - path: 'Pegasus.Workbench\bin\%CONFIGURATION%'
+    name: Pegasus.Workbench
+    type: zip
 deploy:
   provider: NuGet
   api_key:
