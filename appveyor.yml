@@ -30,3 +30,13 @@ deploy:
     secure: 2tZ8tu75MkmhyIcFGzFZsukJx9WAfV94mMtIAnSlurGlGqKaUhG6n6fTimXiIQiB
   skip_symbols: false
   artifact: /.*\.nupkg/
+skip_commits:
+  files:
+    - .gitattributes
+    - .gitignore
+    - CodeMaid.config
+    - CustomDictionary.xml
+    - license.md
+    - pegasus.gv
+    - Pegasus.svg
+    - stylecop.json
