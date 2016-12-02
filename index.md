@@ -12,7 +12,7 @@ Pegasus is a PEG (Parsing Expression Grammar) parser generator for .NET that int
 * Packrat parsing via the `-memoize` rule flag.
 * Stateful parsing, including backtracking of state.
 
-### Syntax Examples ###
+### Syntax Example ###
 
 Mathematical Expression Evaluator
 
@@ -22,25 +22,30 @@ Mathematical Expression Evaluator
     start <decimal>
       = _ value:additive _ EOF { value }
 
-    additive <decimal> -memoize
+    additive <double> -memoize
         = left:additive _ "+" _ right:multiplicative { left + right }
         / left:additive _ "-" _ right:multiplicative { left - right }
         / multiplicative
 
-    multiplicative <decimal> -memoize
-        = left:multiplicative _ "*" _ right:primary { left * right }
-        / left:multiplicative _ "/" _ right:primary { left / right }
+    multiplicative <double> -memoize
+        = left:multiplicative _ "*" _ right:power { left * right }
+        / left:multiplicative _ "/" _ right:power { left / right }
+        / power
+
+    power <double>
+        = left:primary _ "^" _ right:power { Math.Pow(left, right) }
         / primary
 
-    primary <decimal>
+    primary <double> -memoize
         = decimal
+        / "-" _ primary:primary { -primary }
         / "(" _ additive:additive _ ")" { additive }
 
-    decimal <decimal>
-        = value:([0-9]+ ("." [0-9]+)?) { decimal.Parse(value) }
+    decimal <double>
+        = value:([0-9]+ ("." [0-9]+)?) { double.Parse(value) }
 
     _ = [ \t\r\n]*
 
     EOF
       = !.
-      / unexpected:. #ERROR{ "Unexpected character '" + unexpected + "'." }
+      / unexpected:. #error{ "Unexpected character '" + unexpected + "'." }
