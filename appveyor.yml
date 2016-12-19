@@ -35,8 +35,6 @@ skip_commits:
     - .gitattributes
     - .gitignore
     - CodeMaid.config
-    - CustomDictionary.xml
     - license.md
     - pegasus.gv
     - Pegasus.svg
-    - stylecop.json
