@@ -178,6 +178,14 @@ namespace Pegasus.Tests
             Assert.That(errorNumber, Is.EqualTo("PEG0023"));
         }
 
+        [Test(Description = "GitHub bugs #95")]
+        public void Parse_WhenTheLastElementInASequenceIsAParseExpression_DoesNotThrow()
+        {
+            var grammar = new PegParser().Parse("DefArg = WSO '$' v:[0-9] #parse{ DefArg(v) }; WSO = ;");
+
+            Assert.That(() => PegCompiler.Compile(grammar), Throws.Nothing);
+        }
+
         [Test(Description = "GitHub bug #61")]
         [TestCase("foo = (#{ state[\"ok\"] = false; } ('x' #{ state[\"ok\"] = true; })* &{ state[\"ok\"] })*;")]
         [TestCase(@"EOF = !.; EOL = '\n'; line = !EOF (!EOL .)* (EOL / EOF); lines = line*;")]
