@@ -1,4 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <Target Name="Clean">
     <ItemGroup>
       <ToDelete Include="$(OutputPath)\**\*" />
@@ -27,11 +27,11 @@
       <WorkbenchFiles Include="$(SolutionDir)Pegasus.Workbench\bin\$(Configuration)\**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(WorkbenchFiles)" DestinationFiles="@(WorkbenchFiles->'obj\$(Configuration)\tools\workbench\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <PropertyGroup>
-      <Readme>$([System.IO.File]::ReadAllText("$(SolutionDir)readme.md"))</Readme>
-      <ReadmeText>$([System.Text.RegularExpressions.Regex]::Replace($(Readme), "!\[(?&lt;alt&gt;[^[\]]+)\]\([^)]+\)", "${alt}"))</ReadmeText>
-    </PropertyGroup>
-    <WriteLinesToFile File="obj\$(Configuration)\readme.txt" Lines="$(ReadmeText)" />
+    <ReplaceFileText
+      InputFilename="$(SolutionDir)readme.md"
+      OutputFilename="obj\$(Configuration)\readme.txt"
+      MatchExpression="!\[(?&lt;alt&gt;[^[\]]+)\]\([^)]+\)"
+      ReplacementText="${alt}" />
     <Copy SourceFiles="Pegasus.nuspec" DestinationFiles="obj\$(Configuration)\Pegasus.nuspec" />
     <MakeDir Directories="$(OutputPath)" />
     <Exec Command="$(SolutionDir).nuget\nuget.exe pack obj\$(Configuration)\Pegasus.nuspec -NoPackageAnalysis -NonInteractive -OutputDir $(OutputPath) -Version $(GitVersion_NuGetVersion)" />
@@ -42,4 +42,21 @@
   <Target Name="BuiltProjectOutputGroup"></Target>
   <Target Name="SatelliteDllsProjectOutputGroup"></Target>
   <Target Name="DebugSymbolsProjectOutputGroup"></Target>
+  <UsingTask TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
+    <ParameterGroup>
+      <InputFilename ParameterType="System.String" Required="true" />
+      <OutputFilename ParameterType="System.String" Required="true" />
+      <MatchExpression ParameterType="System.String" Required="true" />
+      <ReplacementText ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.Core" />
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[File.WriteAllText(OutputFilename, Regex.Replace(File.ReadAllText(InputFilename), MatchExpression, ReplacementText));]]>
+      </Code>
+    </Task>
+  </UsingTask>
 </Project>
