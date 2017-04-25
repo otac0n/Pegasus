@@ -1,0 +1,1605 @@
+// Copyright (c) 2013, 2014 Masato Hagiwara
+// https://github.com/mhagiwara/camxes.js
+// Copyright (c) 2017 John Gietzen
+// This source is subject to the MIT license. Please see license.md for more information.
+// Originally from http://users.digitalkingdom.org/~rlpowell/hobbies/lojban/grammar/index.html
+
+text -lexical = expr:(intro_null NAI_clause* text_part_2 (!text_1 joik_jek)? text_1? faho_clause EOF?) { new { label = "text", arg = expr } }
+
+intro_null = expr:(spaces? su_clause* intro_si_clause) { expr == null ? null : new { label = "intro_null", arg = expr } }
+
+text_part_2 = expr:((CMENE_clause+ / indicators?) free*) { expr == null ? null : new { label = "text_part_2", arg = expr } }
+
+intro_si_clause = expr:(si_clause? SI_clause*)  { expr == null ? null : new { label = "intro_si_clause", arg = expr } }
+faho_clause = expr:((FAhO_clause dot_star)?) { new { label = "faho_clause", arg = expr } }
+
+text_1 = expr:(I_clause (jek / joik)? (stag? BO_clause)? free* text_1? / NIhO_clause+ free* su_clause* paragraphs? / paragraphs) { new { label = "text_1", arg = expr } }
+
+paragraphs = expr:(paragraph (NIhO_clause+ free* su_clause* paragraphs)?) { new { label = "paragraphs", arg = expr } }
+
+paragraph = expr:((statement / fragment) (I_clause !jek !joik !joik_jek free* (statement / fragment)?)*) { new { label = "paragraph", arg = expr } }
+
+statement = expr:(statement_1 / prenex statement) { new { label = "statement", arg = expr } }
+
+statement_1 = expr:(statement_2 (I_clause joik_jek statement_2?)*) { new { label = "statement_1", arg = expr } }
+
+statement_2 = expr:(statement_3 (I_clause (jek / joik)? stag? BO_clause free* statement_2)? / statement_3 (I_clause (jek / joik)? stag? BO_clause free*)?) { new { label = "statement_2", arg = expr } }
+
+statement_3 = expr:(sentence / tag? TUhE_clause free* text_1 TUhU_clause? free*) { new { label = "statement_3", arg = expr } }
+
+fragment = expr:(prenex / terms VAU_clause? free* / ek free* / gihek free* / quantifier / NA_clause !JA_clause free* / relative_clauses / links / linkargs) { new { label = "prenex", arg = expr } }
+
+prenex = expr:(terms ZOhU_clause free*) { new { label = "prenex", arg = expr } }
+
+sentence = expr:((terms bridi_tail_sa* CU_clause? free*)? bridi_tail_sa* bridi_tail) { new { label = "sentence", arg = expr } }
+
+sentence_sa = expr:(sentence_start (!sentence_start (sa_word / SA_clause !sentence_start ) )* SA_clause &text_1) { new { label = "sentence_sa", arg = expr } }
+
+sentence_start = expr:(I_pre / NIhO_pre) { new { label = "sentence_start", arg = expr } }
+
+subsentence = expr:(sentence / prenex subsentence) { new { label = "subsentence", arg = expr } }
+
+bridi_tail = expr:(bridi_tail_1 (gihek stag? KE_clause free* bridi_tail KEhE_clause? free* tail_terms)?) { new { label = "bridi_tail", arg = expr } }
+
+bridi_tail_sa = expr:(bridi_tail_start (term / !bridi_tail_start (sa_word / SA_clause !bridi_tail_start ) )* SA_clause &bridi_tail) { new { label = "bridi_tail_sa", arg = expr } }
+
+bridi_tail_start = expr:(ME_clause / NUhA_clause / NU_clause / NA_clause !KU_clause / NAhE_clause !BO_clause / selbri / tag bridi_tail_start / KE_clause bridi_tail_start / bridi_tail) { new { label = "bridi_tail_start", arg = expr } }
+
+bridi_tail_1 = expr:(bridi_tail_2 (gihek !(stag? BO_clause) !(stag? KE_clause) free* bridi_tail_2 tail_terms)*) { new { label = "bridi_tail_1", arg = expr } }
+
+bridi_tail_2 = expr:(bridi_tail_3 (gihek stag? BO_clause free* bridi_tail_2 tail_terms)?) { new { label = "bridi_tail_2", arg = expr } }
+
+bridi_tail_3 = expr:(selbri tail_terms / gek_sentence) { new { label = "bridi_tail_3", arg = expr } }
+
+gek_sentence = expr:(gek subsentence gik subsentence tail_terms / tag? KE_clause free* gek_sentence KEhE_clause? free* / NA_clause free* gek_sentence) { new { label = "gek_sentence", arg = expr } }
+
+tail_terms = expr:(terms? VAU_clause? free*) { expr == null ? null : new { label = "tail_terms", arg = expr } }
+
+terms = expr:(terms_1+) { new { label = "terms", arg = expr } }
+
+terms_1 = expr:(terms_2 (pehe_sa* PEhE_clause free* joik_jek terms_2)*) { new { label = "terms_1", arg = expr } }
+
+terms_2 = expr:(term (cehe_sa* CEhE_clause free* term)*) { new { label = "terms_2", arg = expr } }
+
+pehe_sa = expr:(PEhE_clause (!PEhE_clause (sa_word / SA_clause !PEhE_clause))* SA_clause) { new { label = "pehe_sa", arg = expr } }
+
+cehe_sa = expr:(CEhE_clause (!CEhE_clause (sa_word / SA_clause !CEhE_clause))* SA_clause) { new { label = "cehe_sa", arg = expr } }
+
+term = expr:(term_sa* term_1) { new { label = "term", arg = expr } }
+
+term_1 = expr:(sumti / ( !gek (tag / FA_clause free*) (sumti / KU_clause? free*) ) / termset / NA_clause KU_clause free*) { new { label = "term_1", arg = expr } }
+
+term_sa = expr:(term_start (!term_start (sa_word / SA_clause !term_start ) )* SA_clause &term_1) { new { label = "term_sa", arg = expr } }
+
+term_start = expr:(term_1 / LA_clause / LE_clause / LI_clause / LU_clause / LAhE_clause / quantifier term_start / gek sumti gik / FA_clause / tag term_start) { new { label = "term_start", arg = expr } }
+
+termset = termset:(gek_termset / NUhI_clause free* gek terms NUhU_clause? free* gik terms NUhU_clause? free* / NUhI_clause free* terms NUhU_clause? free*) { new { label = "termset", arg = expr } }
+
+gek_termset = expr:(gek terms_gik_terms) { new { label = "gek_termset", arg = expr } }
+
+terms_gik_terms = expr:(term (gik / terms_gik_terms) term) { new { label = "terms_gik_terms", arg = expr } }
+
+sumti = expr:(sumti_1 (VUhO_clause free* relative_clauses)?) { new { label = "sumti", arg = expr } }
+
+sumti_1 = expr:(sumti_2 (joik_ek stag? KE_clause free* sumti KEhE_clause? free*)?) { new { label = "sumti_1", arg = expr } }
+
+sumti_2 = expr:(sumti_3 (joik_ek sumti_3)*) { new { label = "sumti_2", arg = expr } }
+
+sumti_3 = expr:(sumti_4 (joik_ek stag? BO_clause free* sumti_3)?) { new { label = "sumti_3", arg = expr } }
+
+sumti_4 = expr:(sumti_5 / gek sumti gik sumti_4) { new { label = "sumti_4", arg = expr } }
+
+sumti_5 = expr:(quantifier? sumti_6 relative_clauses? / quantifier selbri KU_clause? free* relative_clauses?) { new { label = "sumti_5", arg = expr } }
+
+sumti_6 = expr:(ZO_clause free* / ZOI_clause free* / LOhU_clause free* / lerfu_string !MOI_clause BOI_clause? free* / LU_clause text LIhU_clause? free* / (LAhE_clause free* / NAhE_clause BO_clause free*) relative_clauses? sumti LUhU_clause? free* / KOhA_clause free* / LA_clause free* relative_clauses? CMENE_clause+ free* / (LA_clause / LE_clause) free* sumti_tail KU_clause? free* / li_clause) { new { label = "sumti_6", arg = expr } }
+
+li_clause = expr:(LI_clause free* mex LOhO_clause? free*) { new { label = "li_clause", arg = expr } }
+
+sumti_tail = expr:((sumti_6 relative_clauses?)? sumti_tail_1 / relative_clauses sumti_tail_1) { new { label = "sumti_tail", arg = expr } }
+
+sumti_tail_1 = expr:(selbri relative_clauses? / quantifier selbri relative_clauses? / quantifier sumti) { new { label = "sumti_tail_1", arg = expr } }
+
+relative_clauses = expr:(relative_clause (ZIhE_clause free* relative_clause)*) { new { label = "relative_clauses", arg = expr } }
+
+// relative_clause = GOI_clause free* term GEhU_clause? free* / NOI_clause free* subsentence KUhO_clause? free*
+
+relative_clause = expr:(relative_clause_sa* relative_clause_1) { new { label = "relative_clause", arg = expr } }
+
+relative_clause_sa = expr:(relative_clause_start (!relative_clause_start (sa_word / SA_clause !relative_clause_start ) )* SA_clause &relative_clause_1) { new { label = "relative_clause_sa", arg = expr } }
+
+relative_clause_1 = expr:(GOI_clause free* term GEhU_clause? free* / NOI_clause free* subsentence KUhO_clause? free* ) { new { label = "relative_clause_1", arg = expr } }
+
+relative_clause_start = expr:(GOI_clause / NOI_clause) { new { label = "relative_clause_start", arg = expr } }
+
+selbri = expr:(tag? selbri_1) { new { label = "selbri", arg = expr } }
+
+selbri_1 = expr:(selbri_2 / NA_clause free* selbri) { new { label = "selbri_1", arg = expr } }
+
+selbri_2 = expr:(selbri_3 (CO_clause free* selbri_2)?) { new { label = "selbri_2", arg = expr } }
+
+selbri_3 = expr:(selbri_4+) { new { label = "selbri_3", arg = expr } }
+
+selbri_4 = expr:(selbri_5 (joik_jek selbri_5 / joik stag? KE_clause free* selbri_3 KEhE_clause? free*)*) { new { label = "selbri_4", arg = expr } }
+
+selbri_5 = expr:(selbri_6 ((jek / joik) stag? BO_clause free* selbri_5)?) { new { label = "selbri_5", arg = expr } }
+
+selbri_6 = expr:(tanru_unit (BO_clause free* selbri_6)? / NAhE_clause? free* guhek selbri gik selbri_6) { new { label = "selbri_6", arg = expr } }
+
+tanru_unit = expr:(tanru_unit_1 (CEI_clause free* tanru_unit_1)*) { new { label = "tanru_unit", arg = expr } }
+
+tanru_unit_1 = expr:(tanru_unit_2 linkargs?) { new { label = "tanru_unit_1", arg = expr } }
+
+// ** zei is part of BRIVLA_clause
+tanru_unit_2 = expr:(BRIVLA_clause free* / GOhA_clause RAhO_clause? free* / KE_clause free* selbri_3 KEhE_clause? free* / ME_clause free* (sumti / lerfu_string) MEhU_clause? free* MOI_clause? free* / (number / lerfu_string) MOI_clause free* / NUhA_clause free* mex_operator / SE_clause free* tanru_unit_2 / JAI_clause free* tag? tanru_unit_2 / NAhE_clause free* tanru_unit_2 / NU_clause NAI_clause? free* (joik_jek NU_clause NAI_clause? free*)* subsentence KEI_clause? free*) { new { label = "tanru_unit_2", arg = expr } }
+
+linkargs = expr:(linkargs_sa* linkargs_1)  { new { label = "linkargs", arg = expr } }
+
+linkargs_1 = expr:(BE_clause free* term links? BEhO_clause? free*)  { new { label = "linkargs_1", arg = expr } }
+
+linkargs_sa = expr:(linkargs_start (!linkargs_start (sa_word / SA_clause !linkargs_start ) )* SA_clause &linkargs_1) { new { label = "linkargs_sa", arg = expr } }
+
+linkargs_start = expr:BE_clause { new { label = "linkargs_start", arg = expr } }
+
+links = expr:(links_sa* links_1) { new { label = "links", arg = expr } }
+
+links_1 = expr:(BEI_clause free* term links?) { new { label = "links_1", arg = expr } }
+
+links_sa = expr:(links_start (!links_start (sa_word / SA_clause !links_start ) )* SA_clause &links_1) { new { label = "links_sa", arg = expr } }
+
+links_start = expr:(BEI_clause) { new { label = "links_start", arg = expr } }
+
+quantifier = expr:(number !MOI_clause BOI_clause? free* / VEI_clause free* mex VEhO_clause? free*) { new { label = "quantifier", arg = expr } }
+
+// mex = mex_1 (operator mex_1)* / rp_clause
+
+mex = expr:(mex_sa* mex_0) { new { label = "mex", arg = expr } }
+
+mex_0 = expr:(mex_1 (operator mex_1)* / rp_clause) { new { label = "mex_0", arg = expr } }
+
+mex_sa = expr:(mex_start (!mex_start (sa_word / SA_clause !mex_start) )* SA_clause &mex_0) { new { label = "mex_sa", arg = expr } }
+
+mex_start = expr:(FUhA_clause / PEhO_clause / operand_start) { new { label = "mex_start", arg = expr } }
+
+rp_clause = expr:(FUhA_clause free* rp_expression) { new { label = "rp_clause", arg = expr } }
+
+mex_1 = expr:(mex_2 (BIhE_clause free* operator mex_1)?) { new { label = "mex_1", arg = expr } }
+
+mex_2 = expr:(operand / mex_forethought) { new { label = "mex_2", arg = expr } }
+
+// This is just to make for clearer parse trees
+mex_forethought = PEhO_clause? free* operator fore_operands KUhE_clause? free*
+fore_operands = expr:(mex_2+ ) { new { label = "fore_operands", arg = expr } }
+
+//li fu'a reboi ci pi'i voboi mu pi'i su'i reboi ci vu'u su'i du li rexa
+//rp_expression = rp_operand rp_operand operator
+//rp_operand = operand / rp_expression
+// AKA (almost; this one allows a single operand; above does not.
+//rp_expression = rp_expression rp_expression operator / operand
+
+// Right recursive version.
+rp_expression = expr:(operand rp_expression_tail) { new { label = "rp_expression", arg = expr } }
+rp_expression_tail = expr:(rp_expression operator rp_expression_tail / ()) { new { label = "rp_expression_tail", arg = expr } }
+
+operator = expr:(operator_sa* operator_0) { new { label = "operator", arg = expr } }
+
+operator_0 = expr:(operator_1 (joik_jek operator_1 / joik stag? KE_clause free* operator KEhE_clause? free*)*) { new { label = "operator_0", arg = expr } }
+
+operator_sa = expr:(operator_start (!operator_start (sa_word / SA_clause !operator_start) )* SA_clause &operator_0) { new { label = "operator_sa", arg = expr } }
+
+operator_start = expr:(guhek / KE_clause / SE_clause? NAhE_clause / SE_clause? MAhO_clause / SE_clause? VUhU_clause) { new { label = "operator_start", arg = expr } }
+
+operator_1 = expr:(operator_2 / guhek operator_1 gik operator_2 / operator_2 (jek / joik) stag? BO_clause free* operator_1) { new { label = "operator_1", arg = expr } }
+
+operator_2 = expr:(mex_operator / KE_clause free* operator KEhE_clause? free*) { new { label = "operator_2", arg = expr } }
+
+mex_operator = expr:(SE_clause free* mex_operator / NAhE_clause free* mex_operator / MAhO_clause free* mex TEhU_clause? free* / NAhU_clause free* selbri TEhU_clause? free* / VUhU_clause free*) { new { label = "mex_operator", arg = expr } }
+
+operand = expr:(operand_sa* operand_0) { new { label = "operand", arg = expr } }
+
+operand_0 = expr:(operand_1 (joik_ek stag? KE_clause free* operand KEhE_clause? free*)?) { new { label = "operand_0", arg = expr } }
+
+operand_sa = expr:(operand_start (!operand_start (sa_word / SA_clause !operand_start) )* SA_clause &operand_0) { new { label = "operand_sa", arg = expr } }
+
+operand_start = expr:(quantifier / lerfu_word / NIhE_clause / MOhE_clause / JOhI_clause / gek / LAhE_clause / NAhE_clause) { new { label = "operand_start", arg = expr } }
+
+operand_1 = expr:(operand_2 (joik_ek operand_2)*) { new { label = "operand_1", arg = expr } }
+
+operand_2 = expr:(operand_3 (joik_ek stag? BO_clause free* operand_2)?) { new { label = "operand_2", arg = expr } }
+
+operand_3 = expr:(quantifier / lerfu_string !MOI_clause BOI_clause? free* / NIhE_clause free* selbri TEhU_clause? free* / MOhE_clause free* sumti TEhU_clause? free* / JOhI_clause free* mex_2+ TEhU_clause? free* / gek operand gik operand_3 / (LAhE_clause free* / NAhE_clause BO_clause free*) operand LUhU_clause? free*) { new { label = "operand_3", arg = expr } }
+
+number = expr:(PA_clause (PA_clause / lerfu_word)*) { new { label = "number", arg = expr } }
+
+lerfu_string = expr:(lerfu_word (PA_clause / lerfu_word)*) { new { label = "lerfu_string", arg = expr } }
+
+// ** BU clauses are part of BY_clause
+lerfu_word = expr:(BY_clause / LAU_clause lerfu_word / TEI_clause lerfu_string FOI_clause) { new { label = "lerfu_word", arg = expr } }
+
+ek = expr:(NA_clause? SE_clause? A_clause NAI_clause?) { new { label = "ek", arg = expr } }
+
+gihek = expr:(gihek_sa* gihek_1) { new { label = "gihek", arg = expr } }
+
+gihek_1 = expr:(NA_clause? SE_clause? GIhA_clause NAI_clause?) { new { label = "gihek_1", arg = expr } }
+
+gihek_sa = expr:(gihek_1 (!gihek_1 (sa_word / SA_clause !gihek_1 ) )* SA_clause &gihek) { new { label = "gihek_sa", arg = expr } }
+
+jek = expr:(NA_clause? SE_clause? JA_clause NAI_clause?) { new { label = "jek", arg = expr } }
+
+joik = expr:(SE_clause? JOI_clause NAI_clause? / interval / GAhO_clause interval GAhO_clause) { new { label = "joik", arg = expr } }
+
+interval = expr:(SE_clause? BIhI_clause NAI_clause?) { new { label = "interval", arg = expr } }
+
+joik_ek = expr:(joik_ek_sa* joik_ek_1) { new { label = "joik_ek", arg = expr } }
+
+joik_ek_1 = expr:((joik free* / ek free*)) { new { label = "joik_ek_1", arg = expr } }
+
+joik_ek_sa = expr:(joik_ek_1 (!joik_ek_1 (sa_word / SA_clause !joik_ek_1 ) )* SA_clause &joik_ek) { new { label = "joik_ek_sa", arg = expr } }
+
+joik_jek = expr:(joik free* / jek free*) { new { label = "joik_jek", arg = expr } }
+
+gek = expr:(SE_clause? GA_clause NAI_clause? free* / joik GI_clause free* / stag gik) { new { label = "gek", arg = expr } }
+
+guhek = expr:(SE_clause? GUhA_clause NAI_clause? free*) { new { label = "guhek", arg = expr } }
+
+gik = expr:(GI_clause NAI_clause? free*) { new { label = "gik", arg = expr } }
+
+tag = expr:(tense_modal (joik_jek tense_modal)*) { new { label = "tag", arg = expr } }
+
+stag = expr:(simple_tense_modal ((jek / joik) simple_tense_modal)* / tense_modal (joik_jek tense_modal)*) { new { label = "stag", arg = expr } }
+
+tense_modal = expr:(simple_tense_modal free* / FIhO_clause free* selbri FEhU_clause? free*) { new { label = "tense_modal", arg = expr } }
+
+simple_tense_modal = expr:(NAhE_clause? SE_clause? BAI_clause NAI_clause? KI_clause? / NAhE_clause? ( ((time space? / space time?) CAhA_clause) / (time space? / space time?) / CAhA_clause ) KI_clause? / KI_clause / CUhE_clause) { new { label = "simple_tense_modal", arg = expr } }
+
+time = expr:(ZI_clause time_offset* (ZEhA_clause (PU_clause NAI_clause?)?)? interval_property* / ZI_clause? time_offset+ (ZEhA_clause (PU_clause NAI_clause?)?)? interval_property* / ZI_clause? time_offset* ZEhA_clause (PU_clause NAI_clause?)? interval_property* / ZI_clause? time_offset* (ZEhA_clause (PU_clause NAI_clause?)?)? interval_property+) { new { label = "time", arg = expr } }
+
+time_offset = expr:(PU_clause NAI_clause? ZI_clause?) { new { label = "time_offset", arg = expr } }
+
+space = expr:(VA_clause space_offset* space_interval? (MOhI_clause space_offset)? / VA_clause? space_offset+ space_interval? (MOhI_clause space_offset)? / VA_clause? space_offset* space_interval (MOhI_clause space_offset)? / VA_clause? space_offset* space_interval? MOhI_clause space_offset) { new { label = "space", arg = expr } }
+
+space_offset = expr:(FAhA_clause NAI_clause? VA_clause?) { new { label = "space_offset", arg = expr } }
+
+space_interval = expr:((VEhA_clause / VIhA_clause / VEhA_clause VIhA_clause) (FAhA_clause NAI_clause?)? space_int_props / (VEhA_clause / VIhA_clause / VEhA_clause VIhA_clause) (FAhA_clause NAI_clause?)? / space_int_props) { new { label = "space_interval", arg = expr } }
+
+space_int_props = expr:((FEhE_clause interval_property)+) { new { label = "space_int_props", arg = expr } }
+
+interval_property = expr:(number ROI_clause NAI_clause? / TAhE_clause NAI_clause? / ZAhO_clause NAI_clause?) { new { label = "interval_property", arg = expr } }
+
+free = expr:(SEI_clause free* (terms CU_clause? free*)? selbri SEhU_clause? / SOI_clause free* sumti sumti? SEhU_clause? / vocative relative_clauses? selbri relative_clauses? DOhU_clause? / vocative relative_clauses? CMENE_clause+ free* relative_clauses? DOhU_clause? / vocative sumti? DOhU_clause? / (number / lerfu_string) MAI_clause / TO_clause text TOI_clause? / xi_clause) { new { label = "free", arg = expr } }
+
+xi_clause = expr:(XI_clause free* (number / lerfu_string) BOI_clause? / XI_clause free* VEI_clause free* mex VEhO_clause?) { new { label = "xi_clause", arg = expr } }
+
+vocative = expr:((COI_clause NAI_clause?)+ DOI_clause / (COI_clause NAI_clause?) (COI_clause NAI_clause?)* / DOI_clause)  { new { label = "vocative", arg = expr } }
+
+indicators = expr:(FUhE_clause? indicator+) { new { label = "indicators", arg = expr } }
+
+indicator =  expr:((UI_clause / CAI_clause) NAI_clause? / DAhO_clause / FUhO_clause) !BU_clause { new { label = "indicator", arg = expr } }
+
+
+// ****************
+// Magic Words
+// ****************
+
+zei_clause = expr:(pre_clause post:zei_clause_no_pre) { new { label = "zei_clause", arg = expr } }
+zei_clause_no_pre = expr:(pre_zei_bu (zei_tail? bu_tail)* zei_tail post_clause) { new { label = "zei_clause_no_pre", arg = expr } }
+
+bu_clause = expr:(pre_clause post:bu_clause_no_pre) { new { label = "bu_clause", arg = expr } }
+bu_clause_no_pre = expr:(pre_zei_bu (bu_tail? zei_tail)* bu_tail post_clause) { new { label = "bu_clause_no_pre", arg = expr } }
+
+zei_tail = expr:(ZEI_clause any_word)+ { new { label = "zei_tail", arg = expr } }
+bu_tail = expr:BU_clause+ { new { label = "bu_tail", arg = expr } }
+
+pre_zei_bu = expr:(!BU_clause !ZEI_clause !SI_clause !SA_clause !SU_clause !FAhO_clause any_word_SA_handling si_clause?) { new { label = "pre_zei_bu", arg = expr } }
+
+dot_star = .*
+
+// __ General Morphology Issues
+//
+// 1.  Spaces (including '.y') and UI are eaten *after* a word.
+//
+// 3.  BAhE is eaten *before* a word.
+
+// Handling of what can go after a cmavo
+post_clause = expr:(spaces? si_clause? !ZEI_clause !BU_clause indicators*) { expr == null ? null : new { label = "post_clause", arg = expr } }
+
+pre_clause = BAhE_clause?
+
+any_word_SA_handling = expr:(BRIVLA_pre / known_cmavo_SA / CMAVO_pre / CMENE_pre) { new { label = "any_word_SA_handling", arg = expr } }
+
+known_cmavo_SA = A_pre / BAI_pre / BAhE_pre / BE_pre / BEI_pre / BEhO_pre / BIhE_pre / BIhI_pre / BO_pre / BOI_pre / BU_pre / BY_pre / CAI_pre / CAhA_pre / CEI_pre / CEhE_pre / CO_pre / COI_pre / CU_pre / CUhE_pre / DAhO_pre / DOI_pre / DOhU_pre / FA_pre / FAhA_pre / FEhE_pre / FEhU_pre / FIhO_pre / FOI_pre / FUhA_pre / FUhE_pre / FUhO_pre / GA_pre / GAhO_pre / GEhU_pre / GI_pre / GIhA_pre / GOI_pre / GOhA_pre / GUhA_pre / I_pre / JA_pre / JAI_pre / JOI_pre / JOhI_pre / KE_pre / KEI_pre / KEhE_pre / KI_pre / KOhA_pre / KU_pre / KUhE_pre / KUhO_pre / LA_pre / LAU_pre / LAhE_pre / LE_pre / LEhU_pre / LI_pre / LIhU_pre / LOhO_pre / LOhU_pre / LU_pre / LUhU_pre / MAI_pre / MAhO_pre / ME_pre / MEhU_pre / MOI_pre / MOhE_pre / MOhI_pre / NA_pre / NAI_pre / NAhE_pre / NAhU_pre / NIhE_pre / NIhO_pre / NOI_pre / NU_pre / NUhA_pre / NUhI_pre / NUhU_pre / PA_pre / PEhE_pre / PEhO_pre / PU_pre / RAhO_pre / ROI_pre / SA_pre / SE_pre / SEI_pre / SEhU_pre / SI_clause / SOI_pre / SU_pre / TAhE_pre / TEI_pre / TEhU_pre / TO_pre / TOI_pre / TUhE_pre / TUhU_pre / UI_pre / VA_pre / VAU_pre / VEI_pre / VEhA_pre / VEhO_pre / VIhA_pre / VUhO_pre / VUhU_pre / XI_pre / ZAhO_pre / ZEI_pre / ZEhA_pre / ZI_pre / ZIhE_pre / ZO_pre / ZOI_pre / ZOhU_pre
+
+// Handling of spaces and things like spaces.
+// ___ SPACE ___
+// Do *NOT* delete the line above!
+
+// SU clauses
+su_clause = (erasable_clause / su_word)* SU_clause 
+
+// Handling of SI and interactions with zo and lo'u...le'u
+
+si_clause -memoize = ((erasable_clause / si_word / SA_clause) si_clause? SI_clause)+
+
+erasable_clause = expr:(bu_clause_no_pre !ZEI_clause !BU_clause / zei_clause_no_pre !ZEI_clause !BU_clause) { new { label = "erasable_clause", arg = expr } }
+
+sa_word = pre_zei_bu
+
+si_word = pre_zei_bu
+
+su_word = !NIhO_clause !LU_clause !TUhE_clause !TO_clause !SU_clause !FAhO_clause any_word_SA_handling
+
+BRIVLA_clause = pre:BRIVLA_pre post:BRIVLA_post { new { label = "BRIVLA_clause", pre, post } } / expr:zei_clause { new { label = "BRIVLA_clause", arg = expr } }
+BRIVLA_pre = pre_clause BRIVLA spaces?
+BRIVLA_post = post_clause
+
+CMENE_clause = pre:CMENE_pre post:CMENE_post { new { label = "CMENE_clause", pre, post } }
+CMENE_pre = pre_clause CMENE spaces?
+CMENE_post = post_clause
+
+CMAVO_clause = pre:CMAVO_pre post:CMAVO_post { new { label = "CMAVO_clause", pre, post } }
+CMAVO_pre = pre_clause CMAVO spaces?
+CMAVO_post = post_clause
+
+//         eks; basic afterthought logical connectives 
+A_clause = pre:A_pre post:A_post { new { label = "A_clause", pre, post } }
+A_pre = pre_clause A spaces?
+A_post = post_clause
+
+
+//         modal operators 
+BAI_clause = pre:BAI_pre post:BAI_post { new { label = "BAI_clause", pre, post } }
+BAI_pre = pre_clause BAI spaces?
+BAI_post = post_clause
+
+//         next word intensifier 
+BAhE_clause = expr:(BAhE_pre BAhE_post)+ { new { label = "BAhE_clause", arg = expr } }
+BAhE_pre = BAhE spaces?
+BAhE_post = si_clause? !ZEI_clause !BU_clause
+
+//         sumti link to attach sumti to a selbri 
+BE_clause = pre:BE_pre post:BE_post  { new { label = "BE_clause", pre, post } }
+BE_pre = pre_clause BE spaces?
+BE_post = post_clause
+
+//         multiple sumti separator between BE, BEI 
+BEI_clause = pre:BEI_pre post:BEI_post { new { label = "BEI_clause", pre, post } }
+BEI_pre = pre_clause BEI spaces?
+BEI_post = post_clause
+
+//         terminates BEBEI specified descriptors 
+BEhO_clause = pre:BEhO_pre post:BEhO_post { new { label = "BEhO_clause", pre, post } }
+BEhO_pre = pre_clause BEhO spaces?
+BEhO_post = post_clause
+
+//         prefix for high_priority MEX operator
+BIhE_clause = pre:BIhE_pre post:BIhE_post  { new { label = "BIhE_clause", pre, post } }
+BIhE_pre = pre_clause BIhE spaces?
+BIhE_post = post_clause
+
+//         interval component of JOI 
+BIhI_clause = pre:BIhI_pre post:BIhI_post { new { label = "BIhI_clause", pre, post } }
+BIhI_pre = pre_clause BIhI spaces?
+BIhI_post = post_clause
+
+//         joins two units with shortest scope 
+BO_clause = pre:BO_pre post:BO_post  { new { label = "BO_clause", pre, post } }
+BO_pre = pre_clause BO spaces?
+BO_post = post_clause
+
+//         number or lerfu_string terminator 
+BOI_clause = pre:BOI_pre post:BOI_post { new { label = "BOI_clause", pre, post } }
+BOI_pre = pre_clause BOI spaces?
+BOI_post = post_clause
+
+//         turns any word into a BY lerfu word 
+BU_clause = pre:BU_pre post:BU_post { new { label = "BU_clause", pre, post } }
+BU_pre = pre_clause BU spaces?
+BU_post = spaces?
+
+//         individual lerfu words 
+BY_clause = pre:BY_pre post:BY_post { new { label = "BY_clause", pre, post } } / expr:bu_clause { new { label = "BY_clause", expr } }
+BY_pre = pre_clause BY spaces?
+BY_post = post_clause
+
+
+//         specifies actualitypotentiality of tense 
+CAhA_clause = pre:CAhA_pre post:CAhA_post { new { label = "CAhA_clause", pre, post } }
+CAhA_pre = pre_clause CAhA spaces?
+CAhA_post = post_clause
+
+//         afterthought intensity marker 
+CAI_clause = pre:CAI_pre post:CAI_post { new { label = "CAI_clause", pre, post } }
+CAI_pre = pre_clause CAI spaces?
+CAI_post = post_clause
+
+//         pro_bridi assignment operator 
+CEI_clause = pre:CEI_pre post:CEI_post { new { label = "CEI_clause", pre, post } }
+CEI_pre = pre_clause CEI spaces?
+CEI_post = post_clause
+
+//         afterthought term list connective 
+CEhE_clause = pre:CEhE_pre post:CEhE_post { new { label = "CEhE_clause", pre, post } }
+CEhE_pre = pre_clause CEhE spaces?
+CEhE_post = post_clause
+
+//         names; require consonant end, then pause no
+
+//                                    LA or DOI selma'o embedded, pause before if
+
+//                                    vowel initial and preceded by a vowel 
+
+//         tanru inversion  
+CO_clause = pre:CO_pre post:CO_post { new { label = "CO_clause", pre, post } }
+CO_pre = pre_clause CO spaces?
+CO_post = post_clause
+
+COI_clause = pre:COI_pre post:COI_post { new { label = "COI_clause", pre, post } }
+COI_pre = pre_clause COI spaces?
+COI_post = post_clause
+
+//         vocative marker permitted inside names; must
+
+//                                    always be followed by pause or DOI 
+
+//         separator between head sumti and selbri 
+CU_clause = pre:CU_pre post:CU_post { new { label = "CU_clause", pre, post } }
+CU_pre = pre_clause CU spaces?
+CU_post = post_clause
+
+//         tensemodal question 
+CUhE_clause = pre:CUhE_pre post:CUhE_post { new { label = "CUhE_clause", pre, post } }
+CUhE_pre = pre_clause CUhE spaces?
+CUhE_post = post_clause
+
+
+//         cancel anaphoracataphora assignments 
+DAhO_clause = pre:DAhO_pre post:DAhO_post { new { label = "DAhO_clause", pre, post } }
+DAhO_pre = pre_clause DAhO spaces?
+DAhO_post = post_clause
+
+//         vocative marker
+DOI_clause = pre:DOI_pre post:DOI_post { new { label = "DOI_clause", pre, post } }
+DOI_pre = pre_clause DOI spaces?
+DOI_post = post_clause
+
+//         terminator for DOI_marked vocatives 
+DOhU_clause = pre:DOhU_pre post:DOhU_post { new { label = "DOhU_clause", pre, post } }
+DOhU_pre = pre_clause DOhU spaces?
+DOhU_post = post_clause
+
+//         modifier head generic case tag 
+FA_clause = pre:FA_pre post:FA_post { new { label = "FA_clause", pre, post } }
+FA_pre = pre_clause FA spaces?
+FA_post = post_clause
+
+//         superdirections in space 
+FAhA_clause = pre:FAhA_pre post:FAhA_post { new { label = "FAhA_clause", pre, post } }
+FAhA_pre = pre_clause FAhA spaces?
+FAhA_post = post_clause
+
+//         normally elided 'done pause' to indicate end
+//                                    of utterance string 
+
+FAhO_clause = expr:(pre_clause FAhO spaces?) { new { label = "FAhO_clause", arg = expr } }
+
+//         space interval mod flag 
+FEhE_clause = pre:FEhE_pre post:FEhE_post { new { label = "FEhE_clause", pre, post } }
+FEhE_pre = pre_clause FEhE spaces?
+FEhE_post = post_clause
+
+//         ends bridi to modal conversion 
+FEhU_clause = pre:FEhU_pre post:FEhU_post { new { label = "FEhU_clause", pre, post } }
+FEhU_pre = pre_clause FEhU spaces?
+FEhU_post = post_clause
+
+//         marks bridi to modal conversion 
+FIhO_clause = pre:FIhO_pre post:FIhO_post { new { label = "FIhO_clause", pre, post } }
+FIhO_pre = pre_clause FIhO spaces?
+FIhO_post = post_clause
+
+//         end compound lerfu 
+FOI_clause = pre:FOI_pre post:FOI_post { new { label = "FOI_clause", pre, post } }
+FOI_pre = pre_clause FOI spaces?
+FOI_post = post_clause
+
+//         reverse Polish flag 
+FUhA_clause = pre:FUhA_pre post:FUhA_post { new { label = "FUhA_clause", pre, post } }
+FUhA_pre = pre_clause FUhA spaces?
+FUhA_post = post_clause
+// FUhA_no_SA_handling = pre_clause FUhA post_clause
+
+//         open long scope for indicator 
+FUhE_clause = pre:FUhE_pre post:FUhE_post { new { label = "FUhE_clause", pre, post } }
+FUhE_pre = pre_clause FUhE spaces?
+FUhE_post = !BU_clause spaces? !ZEI_clause !BU_clause
+// FUhE_no_SA_handling = pre_clause FUhE post_clause
+
+//         close long scope for indicator 
+FUhO_clause = pre:FUhO_pre post:FUhO_post { new { label = "FUhO_clause", pre, post } }
+FUhO_pre = pre_clause FUhO spaces?
+FUhO_post = post_clause
+// FUhO_no_SA_handling = pre_clause FUhO post_clause
+
+
+//         geks; forethought logical connectives 
+GA_clause = pre:GA_pre post:GA_post { new { label = "GA_clause", pre, post } }
+GA_pre = pre_clause GA spaces?
+GA_post = post_clause
+// GA_no_SA_handling = pre_clause GA post_clause
+
+//         openclosed interval markers for BIhI 
+GAhO_clause = pre:GAhO_pre post:GAhO_post { new { label = "GAhO_clause", pre, post } }
+GAhO_pre = pre_clause GAhO spaces?
+GAhO_post = post_clause
+// GAhO_no_SA_handling = pre_clause GAhO post_clause
+
+//         marker ending GOI relative clauses 
+GEhU_clause = pre:GEhU_pre post:GEhU_post { new { label = "GEhU_clause", pre, post } }
+GEhU_pre = pre_clause GEhU spaces?
+GEhU_post = post_clause
+// GEhU_no_SA_handling = pre_clause GEhU post_clause
+
+//         forethought medial marker 
+GI_clause = pre:GI_pre post:GI_post { new { label = "GI_clause", pre, post } }
+GI_pre = pre_clause GI spaces?
+GI_post = post_clause
+// GI_no_SA_handling = pre_clause GI post_clause
+
+//         logical connectives for bridi_tails 
+GIhA_clause = pre:GIhA_pre post:GIhA_post { new { label = "GIhA_clause", pre, post } }
+GIhA_pre = pre_clause GIhA spaces?
+GIhA_post = post_clause
+// GIhA_no_SA_handling = pre_clause GIhA post_clause
+
+//         attaches a sumti modifier to a sumti 
+GOI_clause = pre:GOI_pre post:GOI_post { new { label = "GOI_clause", pre, post } }
+GOI_pre = pre_clause GOI spaces?
+GOI_post = post_clause
+// GOI_no_SA_handling = pre_clause GOI post_clause
+
+//         pro_bridi 
+GOhA_clause = pre:GOhA_pre post:GOhA_post { new { label = "GOhA_clause", pre, post } }
+GOhA_pre = pre_clause GOhA spaces?
+GOhA_post = post_clause
+// GOhA_no_SA_handling = pre_clause GOhA post_clause
+
+//         GEK for tanru units, corresponds to JEKs 
+GUhA_clause = pre:GUhA_pre post:GUhA_post { new { label = "GUhA_clause", pre, post } }
+GUhA_pre = pre_clause GUhA spaces?
+GUhA_post = post_clause
+// GUhA_no_SA_handling = pre_clause GUhA post_clause
+
+
+//         sentence link 
+I_clause = expr:(sentence_sa* I_pre I_post) { new { label = "I_clause", arg = expr } }
+I_pre = pre_clause I spaces?
+I_post = post_clause
+// I_no_SA_handling = pre_clause I post_clause
+
+
+//         jeks; logical connectives within tanru 
+JA_clause = pre:JA_pre post:JA_post { new { label = "JA_clause", pre, post } }
+JA_pre = pre_clause JA spaces?
+JA_post = post_clause
+// JA_no_SA_handling = pre_clause JA post_clause
+
+//         modal conversion flag 
+JAI_clause = pre:JAI_pre post:JAI_post { new { label = "JAI_clause", pre, post } }
+JAI_pre = pre_clause JAI spaces?
+JAI_post = post_clause
+// JAI_no_SA_handling = pre_clause JAI post_clause
+
+//         flags an array operand 
+JOhI_clause = pre:JOhI_pre post:JOhI_post { new { label = "JOhI_clause", pre, post } }
+JOhI_pre = pre_clause JOhI spaces?
+JOhI_post = post_clause
+// JOhI_no_SA_handling = pre_clause JOhI post_clause
+
+//         non_logical connectives 
+JOI_clause = pre:JOI_pre post:JOI_post { new { label = "JOI_clause", pre, post } }
+JOI_pre = pre_clause JOI spaces?
+JOI_post = post_clause
+// JOI_no_SA_handling = pre_clause JOI post_clause
+
+
+//         left long scope marker 
+KE_clause = pre:KE_pre post:KE_post { new { label = "KE_clause", pre, post } }
+KE_pre = pre_clause KE spaces?
+KE_post = post_clause
+// KE_no_SA_handling = pre_clause KE post_clause
+
+//         right terminator for KE groups 
+KEhE_clause = pre:KEhE_pre post:KEhE_post { new { label = "KEhE_clause", pre, post } }
+KEhE_pre = pre_clause KEhE spaces?
+KEhE_post = post_clause
+// KEhE_no_SA_handling = pre_clause KEhE post_clause
+
+//         right terminator, NU abstractions 
+KEI_clause = pre:KEI_pre post:KEI_post { new { label = "KEI_clause", pre, post } }
+KEI_pre = pre_clause KEI spaces?
+KEI_post = post_clause
+KEI_no_SA_handling = pre_clause KEI post_clause
+
+//         multiple utterance scope for tenses 
+KI_clause = pre:KI_pre post:KI_post { new { label = "KI_clause", pre, post } }
+KI_pre = pre_clause KI spaces?
+KI_post = post_clause
+// KI_no_SA_handling = pre_clause KI post_clause
+
+//         sumti anaphora 
+KOhA_clause = pre:KOhA_pre post:KOhA_post { new { label = "KOhA_clause", pre, post } }
+KOhA_pre = pre_clause KOhA spaces?
+KOhA_post = post_clause
+// KOhA_no_SA_handling = pre_clause KOhA spaces?
+
+//         right terminator for descriptions, etc. 
+KU_clause = pre:KU_pre post:KU_post { new { label = "KU_clause", pre, post } }
+KU_pre = pre_clause KU spaces?
+KU_post = post_clause
+// KU_no_SA_handling = pre_clause KU post_clause
+
+//         MEX forethought delimiter 
+KUhE_clause = pre:KUhE_pre post:KUhE_post { new { label = "KUhE_clause", pre, post } }
+KUhE_pre = pre_clause KUhE spaces?
+KUhE_post = post_clause
+// KUhE_no_SA_handling = pre_clause KUhE post_clause
+
+//         right terminator, NOI relative clauses 
+KUhO_clause = pre:KUhO_pre post:KUhO_post { new { label = "KUhO_clause", pre, post } }
+KUhO_pre = pre_clause KUhO spaces?
+KUhO_post = post_clause
+// KUhO_no_SA_handling = pre_clause KUhO post_clause
+
+
+//         name descriptors 
+LA_clause = pre:LA_pre post:LA_post { new { label = "LA_clause", pre, post } }
+LA_pre = pre_clause LA spaces?
+LA_post = post_clause
+// LA_no_SA_handling = pre_clause LA post_clause
+
+//         lerfu prefixes 
+LAU_clause = pre:LAU_pre post:LAU_post { new { label = "LAU_clause", pre, post } }
+LAU_pre = pre_clause LAU spaces?
+LAU_post = post_clause
+// LAU_no_SA_handling = pre_clause LAU post_clause
+
+//         sumti qualifiers 
+LAhE_clause = pre:LAhE_pre post:LAhE_post { new { label = "LAhE_clause", pre, post } }
+LAhE_pre = pre_clause LAhE spaces?
+LAhE_post = post_clause
+// LAhE_no_SA_handling = pre_clause LAhE post_clause
+
+//         sumti descriptors 
+LE_clause = pre:LE_pre post:LE_post { new { label = "LE_clause", pre, post } }
+LE_pre = pre_clause LE spaces?
+LE_post = post_clause
+// LE_no_SA_handling = pre_clause LE post_clause
+
+
+//         possibly ungrammatical text right quote 
+LEhU_clause = pre:LEhU_pre post:LEhU_post { new { label = "LEhU_clause", pre, post } }
+LEhU_pre = pre_clause LEhU spaces?
+LEhU_post = spaces?
+// LEhU_clause_no_SA = LEhU_pre_no_SA LEhU_post
+// LEhU_pre_no_SA = pre_clause LEhU spaces?
+// LEhU_no_SA_handling = pre_clause LEhU post_clause
+
+//         convert number to sumti 
+LI_clause = pre:LI_pre post:LI_post { new { label = "LI_clause", pre, post } }
+LI_pre = pre_clause LI spaces?
+LI_post = post_clause
+// LI_no_SA_handling = pre_clause LI post_clause
+
+//         grammatical text right quote 
+LIhU_clause = pre:LIhU_pre post:LIhU_post { new { label = "LIhU_clause", pre, post } }
+LIhU_pre = pre_clause LIhU spaces?
+LIhU_post = post_clause
+// LIhU_no_SA_handling = pre_clause LIhU post_clause
+
+//         elidable terminator for LI 
+LOhO_clause = pre:LOhO_pre post:LOhO_post { new { label = "LOhO_clause", pre, post } }
+LOhO_pre = pre_clause LOhO spaces?
+LOhO_post = post_clause
+// LOhO_no_SA_handling = pre_clause LOhO post_clause
+
+//         possibly ungrammatical text left quote 
+LOhU_clause = pre:LOhU_pre post:LOhU_post { new { label = "LOhU_clause", pre, post } }
+LOhU_pre = pre_clause LOhU spaces? (!LEhU any_word)* LEhU_clause spaces?
+LOhU_post = post_clause
+// LOhU_no_SA_handling = pre_clause LOhU spaces? (!LEhU any_word)* LEhU_clause spaces?
+
+//         grammatical text left quote 
+LU_clause = pre:LU_pre post:LU_post { new { label = "LU_clause", pre, post } }
+LU_pre = pre_clause LU spaces?
+LU_post = post_clause
+// LU_no_SA_handling = pre_clause LU post_clause
+
+//         LAhE close delimiter 
+LUhU_clause = pre:LUhU_pre post:LUhU_post { new { label = "LUhU_clause", pre, post } }
+LUhU_pre = pre_clause LUhU spaces?
+LUhU_post = post_clause
+// LUhU_no_SA_handling = pre_clause LUhU post_clause
+
+
+//         change MEX expressions to MEX operators 
+MAhO_clause = pre:MAhO_pre post:MAhO_post { new { label = "MAhO_clause", pre, post } }
+MAhO_pre = pre_clause MAhO spaces?
+MAhO_post = post_clause
+// MAhO_no_SA_handling = pre_clause MAhO post_clause
+
+//         change numbers to utterance ordinals 
+MAI_clause = pre:MAI_pre post:MAI_post { new { label = "MAI_clause", pre, post } }
+MAI_pre = pre_clause MAI spaces?
+MAI_post = post_clause
+// MAI_no_SA_handling = pre_clause MAI post_clause
+
+//         converts a sumti into a tanru_unit 
+ME_clause = pre:ME_pre post:ME_post { new { label = "ME_clause", pre, post } }
+ME_pre = pre_clause ME spaces?
+ME_post = post_clause
+// ME_no_SA_handling = pre_clause ME post_clause
+
+//         terminator for ME 
+MEhU_clause = pre:MEhU_pre post:MEhU_post { new { label = "MEhU_clause", pre, post } }
+MEhU_pre = pre_clause MEhU spaces?
+MEhU_post = post_clause
+// MEhU_no_SA_handling = pre_clause MEhU post_clause
+
+//         change sumti to operand, inverse of LI 
+MOhE_clause = pre:MOhE_pre post:MOhE_post { new { label = "MOhE_clause", pre, post } }
+MOhE_pre = pre_clause MOhE spaces?
+MOhE_post = post_clause
+// MOhE_no_SA_handling = pre_clause MOhE post_clause
+
+//         motion tense marker 
+MOhI_clause = pre:MOhI_pre post:MOhI_post { new { label = "MOhI_clause", pre, post } }
+MOhI_pre = pre_clause MOhI spaces?
+MOhI_post = post_clause
+// MOhI_no_SA_handling = pre_clause MOhI post_clause
+
+//         change number to selbri 
+MOI_clause = pre:MOI_pre post:MOI_post { new { label = "MOI_clause", pre, post } }
+MOI_pre = pre_clause MOI spaces?
+MOI_post = post_clause
+// MOI_no_SA_handling = pre_clause MOI post_clause
+
+
+//         bridi negation  
+NA_clause = pre:NA_pre post:NA_post { new { label = "NA_clause", pre, post } }
+NA_pre = pre_clause NA spaces?
+NA_post = post_clause
+// NA_no_SA_handling = pre_clause NA post_clause
+
+//         attached to words to negate them 
+NAI_clause = pre:NAI_pre post:NAI_post { new { label = "NAI_clause", pre, post } }
+NAI_pre = pre_clause NAI spaces?
+NAI_post = post_clause
+// NAI_no_SA_handling = pre_clause NAI post_clause
+
+//         scalar negation  
+NAhE_clause = pre:NAhE_pre post:NAhE_post { new { label = "NAhE_clause", pre, post } }
+NAhE_pre = pre_clause NAhE spaces?
+NAhE_post = post_clause
+// NAhE_no_SA_handling = pre_clause NAhE post_clause
+
+//         change a selbri into an operator 
+NAhU_clause = pre:NAhU_pre post:NAhU_post { new { label = "NAhU_clause", pre, post } }
+NAhU_pre = pre_clause NAhU spaces?
+NAhU_post = post_clause
+// NAhU_no_SA_handling = pre_clause NAhU post_clause
+
+//         change selbri to operand; inverse of MOI 
+NIhE_clause = pre:NIhE_pre post:NIhE_post { new { label = "NIhE_clause", pre, post } }
+NIhE_pre = pre_clause NIhE spaces?
+NIhE_post = post_clause
+// NIhE_no_SA_handling = pre_clause NIhE post_clause
+
+//         new paragraph; change of subject 
+NIhO_clause = expr:(sentence_sa* NIhO_pre NIhO_post) { new { label = "NIhO_clause", arg = expr } }
+NIhO_pre = pre_clause NIhO spaces?
+NIhO_post = su_clause* post_clause
+// NIhO_no_SA_handling = pre_clause NIhO su_clause* post_clause
+
+//         attaches a subordinate clause to a sumti 
+NOI_clause = pre:NOI_pre post:NOI_post { new { label = "NOI_clause", pre, post } }
+NOI_pre = pre_clause NOI spaces?
+NOI_post = post_clause
+// NOI_no_SA_handling = pre_clause NOI post_clause
+
+//         abstraction  
+NU_clause = pre:NU_pre post:NU_post { new { label = "NU_clause", pre, post } }
+NU_pre = pre_clause NU spaces?
+NU_post = post_clause
+// NU_no_SA_handling = pre_clause NU post_clause
+
+//         change operator to selbri; inverse of MOhE 
+NUhA_clause = pre:NUhA_pre post:NUhA_post { new { label = "NUhA_clause", pre, post } }
+NUhA_pre = pre_clause NUhA spaces?
+NUhA_post = post_clause
+// NUhA_no_SA_handling = pre_clause NUhA post_clause
+
+//         marks the start of a termset 
+NUhI_clause = pre:NUhI_pre post:NUhI_post { new { label = "NUhI_clause", pre, post } }
+NUhI_pre = pre_clause NUhI spaces?
+NUhI_post = post_clause
+// NUhI_no_SA_handling = pre_clause NUhI post_clause
+
+//         marks the middle and end of a termset 
+NUhU_clause = pre:NUhU_pre post:NUhU_post { new { label = "NUhU_clause", pre, post } }
+NUhU_pre = pre_clause NUhU spaces?
+NUhU_post = post_clause
+// NUhU_no_SA_handling = pre_clause NUhU post_clause
+
+
+//         numbers and numeric punctuation 
+PA_clause = pre:PA_pre post:PA_post { new { label = "PA_clause", pre, post } }
+PA_pre = pre_clause PA spaces?
+PA_post = post_clause
+// PA_no_SA_handling = pre_clause PA post_clause
+
+//         afterthought termset connective prefix 
+PEhE_clause = pre:PEhE_pre post:PEhE_post { new { label = "PEhE_clause", pre, post } }
+PEhE_pre = pre_clause PEhE spaces?
+PEhE_post = post_clause
+// PEhE_no_SA_handling = pre_clause PEhE post_clause
+
+//         forethought (Polish) flag 
+PEhO_clause = pre:PEhO_pre post:PEhO_post { new { label = "PEhO_clause", pre, post } }
+PEhO_pre = pre_clause PEhO spaces?
+PEhO_post = post_clause
+// PEhO_no_SA_handling = pre_clause PEhO post_clause
+
+//         directions in time 
+PU_clause = pre:PU_pre post:PU_post { new { label = "PA_clause", pre, post } }
+PU_pre = pre_clause PU spaces?
+PU_post = post_clause
+// PU_no_SA_handling = pre_clause PU post_clause
+
+
+//         flag for modified interpretation of GOhI 
+RAhO_clause = pre:RAhO_pre post:RAhO_post { new { label = "RAhO_clause", pre, post } }
+RAhO_pre = pre_clause RAhO spaces?
+RAhO_post = post_clause
+// RAhO_no_SA_handling = pre_clause RAhO post_clause
+
+//         converts number to extensional tense 
+ROI_clause = pre:ROI_pre post:ROI_post { new { label = "ROI_clause", pre, post } }
+ROI_pre = pre_clause ROI spaces?
+ROI_post = post_clause
+// ROI_no_SA_handling = pre_clause ROI post_clause
+
+SA_clause = pre:SA_pre post:SA_post { new { label = "SA_clause", pre, post } }
+SA_pre = pre_clause SA spaces?
+SA_post = spaces?
+
+//         metalinguistic eraser to the beginning of
+
+//                                    the current utterance 
+
+//         conversions 
+SE_clause = pre:SE_pre post:SE_post { new { label = "SE_clause", pre, post } }
+SE_pre = pre_clause SE spaces?
+SE_post = post_clause
+// SE_no_SA_handling = pre_clause SE post_clause
+
+//         metalinguistic bridi insert marker 
+SEI_clause = pre:SEI_pre post:SEI_post { new { label = "SEI_clause", pre, post } }
+SEI_pre = pre_clause SEI spaces?
+SEI_post = post_clause
+// SEI_no_SA_handling = pre_clause SEI post_clause
+
+//         metalinguistic bridi end marker 
+SEhU_clause = pre:SEhU_pre post:SEhU_post { new { label = "SEhU_clause", pre, post } }
+SEhU_pre = pre_clause SEhU spaces?
+SEhU_post = post_clause
+// SEhU_no_SA_handling = pre_clause SEhU post_clause
+
+//         metalinguistic single word eraser 
+SI_clause = expr:(spaces? SI spaces?) { new { label = "SI_clause", arg = expr } }
+
+//         reciprocal sumti marker 
+SOI_clause = pre:SOI_pre post:SOI_post { new { label = "SOI_clause", arg = pre, post } } 
+SOI_pre = pre_clause SOI spaces?
+SOI_post = post_clause
+// SOI_no_SA_handling = pre_clause SOI post_clause
+
+//         metalinguistic eraser of the entire text 
+SU_clause = pre:SU_pre post:SU_post { new { label = "SU_clause", arg = pre, post } }
+SU_pre = pre_clause SU spaces?
+SU_post = post_clause
+
+
+//         tense interval properties 
+TAhE_clause = pre:TAhE_pre post:TAhE_post { new { label = "TAhE_clause", pre, post } }
+TAhE_pre = pre_clause TAhE spaces?
+TAhE_post = post_clause
+// TAhE_no_SA_handling = pre_clause TAhE post_clause
+
+//         closing gap for MEX constructs 
+TEhU_clause = pre:TEhU_pre post:TEhU_post { new { label = "TEhU_clause", arg = pre, post } }
+TEhU_pre = pre_clause TEhU spaces?
+TEhU_post = post_clause
+// TEhU_no_SA_handling = pre_clause TEhU post_clause
+
+//         start compound lerfu 
+TEI_clause = pre:TEI_pre post:TEI_post { new { label = "TEI_clause", pre, post } }
+TEI_pre = pre_clause TEI spaces?
+TEI_post = post_clause
+// TEI_no_SA_handling = pre_clause TEI post_clause
+
+//         left discursive parenthesis 
+TO_clause = pre:TO_pre post:TO_post { new { label = "TO_clause", arg = pre, post } }
+TO_pre = pre_clause TO spaces?
+TO_post = post_clause
+// TO_no_SA_handling = pre_clause TO post_clause
+
+//         right discursive parenthesis 
+TOI_clause = pre:TOI_pre post:TOI_post { new { label = "TOI_clause", arg = pre, post } }
+TOI_pre = pre_clause TOI spaces?
+TOI_post = post_clause
+// TOI_no_SA_handling = pre_clause TOI post_clause
+
+//         multiple utterance scope mark 
+TUhE_clause = pre:TUhE_pre post:TUhE_post { new { label = "TUhE_clause", arg = pre, post } }
+TUhE_pre = pre_clause TUhE spaces?
+TUhE_post = su_clause* post_clause
+// TUhE_no_SA_handling = pre_clause TUhE su_clause* post_clause
+
+//         multiple utterance end scope mark 
+TUhU_clause = pre:TUhU_pre post:TUhU_post { new { label = "TUhU_clause", arg = pre, post } }
+TUhU_pre = pre_clause TUhU spaces?
+TUhU_post = post_clause
+// TUhU_no_SA_handling = pre_clause TUhU post_clause
+
+
+//         attitudinals, observationals, discursives 
+UI_clause = pre:UI_pre post:UI_post { new { label = "UI_clause", pre, post } }
+UI_pre = pre_clause UI spaces?
+UI_post = post_clause
+// UI_no_SA_handling = pre_clause UI post_clause
+
+
+//         distance in space_time 
+VA_clause = pre:VA_pre post:VA_post { new { label = "VA_clause", arg = pre, post } }
+VA_pre = pre_clause VA spaces?
+VA_post = post_clause
+// VA_no_SA_handling = pre_clause VA post_clause
+
+//         end simple bridi or bridi_tail 
+VAU_clause = pre:VAU_pre post:VAU_post { new { label = "VAU_clause", arg = pre, post } }
+VAU_pre = pre_clause VAU spaces?
+VAU_post = post_clause
+// VAU_no_SA_handling = pre_clause VAU post_clause
+
+//         left MEX bracket 
+VEI_clause = pre:VEI_pre post:VEI_post { new { label = "VEI_clause", arg = pre, post } }
+VEI_pre = pre_clause VEI spaces?
+VEI_post = post_clause
+// VEI_no_SA_handling = pre_clause VEI post_clause
+
+//         right MEX bracket 
+VEhO_clause = pre:VEhO_pre post:VEhO_post { new { label = "VEhO_clause", arg = pre, post } }
+VEhO_pre = pre_clause VEhO spaces?
+VEhO_post = post_clause
+// VEhO_no_SA_handling = pre_clause VEhO post_clause
+
+//         MEX operator 
+VUhU_clause = pre:VUhU_pre post:VUhU_post { new { label = "VUhU_clause", pre, post } }
+VUhU_pre = pre_clause VUhU spaces?
+VUhU_post = post_clause
+// VUhU_no_SA_handling = pre_clause VUhU post_clause
+
+//         space_time interval size 
+VEhA_clause = pre:VEhA_pre post:VEhA_post { new { label = "VEhA_clause", pre, post } }
+VEhA_pre = pre_clause VEhA spaces?
+VEhA_post = post_clause
+// VEhA_no_SA_handling = pre_clause VEhA post_clause
+
+//         space_time dimensionality marker 
+VIhA_clause = pre:VIhA_pre post:VIhA_post { new { label = "VIhA_clause", pre, post } }
+VIhA_pre = pre_clause VIhA spaces?
+VIhA_post = post_clause
+// VIhA_no_SA_handling = pre_clause VIhA post_clause
+
+VUhO_clause = pre:VUhO_pre post:VUhO_post { new { label = "VUhO_clause", pre, post } }
+VUhO_pre = pre_clause VUhO spaces?
+VUhO_post = post_clause
+// VUhO_no_SA_handling = pre_clause VUhO post_clause
+
+// glue between logically connected sumti and relative clauses 
+
+
+//         subscripting operator 
+XI_clause = pre:XI_pre post:XI_post { new { label = "XI_clause", pre, post } }
+XI_pre = pre_clause XI spaces?
+XI_post = post_clause
+// XI_no_SA_handling = pre_clause XI post_clause
+
+
+//         hesitation 
+// Very very special case.  Handled in the morphology section.
+// Y_clause = spaces? Y spaces?
+
+
+//         event properties _ inchoative, etc. 
+ZAhO_clause = pre:ZAhO_pre post:ZAhO_post { new { label = "ZAhO_clause", pre, post } }
+ZAhO_pre = pre_clause ZAhO spaces?
+ZAhO_post = post_clause
+// ZAhO_no_SA_handling = pre_clause ZAhO post_clause
+
+//         time interval size tense 
+ZEhA_clause = pre:ZEhA_pre post:ZEhA_post { new { label = "ZEhA_clause", pre, post } }
+ZEhA_pre = pre_clause ZEhA spaces?
+ZEhA_post = post_clause
+// ZEhA_no_SA_handling = pre_clause ZEhA post_clause
+
+//         lujvo glue 
+ZEI_clause = pre:ZEI_pre post:ZEI_post { new { label = "ZEI_clause", pre, post } }
+// ZEI_clause_no_SA = ZEI_pre_no_SA ZEI ZEI_post
+ZEI_pre = pre_clause ZEI spaces?
+// ZEI_pre_no_SA = pre_clause
+ZEI_post = spaces?
+// ZEI_no_SA_handling = pre_clause ZEI post_clause
+
+//         time distance tense 
+ZI_clause = pre:ZI_pre post:ZI_post { new { label = "ZI_clause", pre, post } }
+ZI_pre = pre_clause ZI spaces?
+ZI_post = post_clause
+// ZI_no_SA_handling = pre_clause ZI post_clause
+
+//         conjoins relative clauses 
+ZIhE_clause = pre:ZIhE_pre post:ZIhE_post { new { label = "ZIhE_clause", pre, post } }
+ZIhE_pre = pre_clause ZIhE spaces?
+ZIhE_post = post_clause
+// ZIhE_no_SA_handling = pre_clause ZIhE post_clause
+
+//         single word metalinguistic quote marker 
+ZO_clause = pre:ZO_pre post:ZO_post { new { label = "ZO_clause", pre, post } }
+ZO_pre = pre_clause ZO spaces? any_word spaces?
+ZO_post = post_clause
+// ZO_no_SA_handling = pre_clause ZO spaces? any_word spaces?
+
+//         delimited quote marker 
+ZOI_clause = pre:ZOI_pre post:ZOI_post { new { label = "ZOI_clause", pre, post } }
+ZOI_pre = pre_clause ZOI spaces? zoi_open zoi_word* zoi_close spaces?
+ZOI_post = post_clause
+// ZOI_no_SA_handling = pre_clause ZOI spaces? zoi_open zoi_word* zoi_close spaces?
+
+//         prenex terminator (not elidable) 
+ZOhU_clause = pre:ZOhU_pre post:ZOhU_post { new { label = "ZOhU_clause", pre, post } }
+ZOhU_pre = pre_clause ZOhU spaces?
+ZOhU_post = post_clause
+// ZOhU_no_SA_handling = pre_clause ZOhU post_clause
+
+
+// ___ MORPHOLOGY ___
+
+CMENE = expr:cmene { new { label = "CMENE", arg = expr } }
+BRIVLA = expr:(gismu_2 / lujvo / fuhivla) { new { label = "BRIVLA", arg = expr } }
+gismu_2 = expr:(gismu) { new { label = "gismu", arg = expr } }
+CMAVO = expr:(A / BAI / BAhE / BE / BEI / BEhO / BIhE / BIhI / BO / BOI / BU / BY / CAhA / CAI / CEI / CEhE / CO / COI / CU / CUhE / DAhO / DOI / DOhU / FA / FAhA / FAhO / FEhE / FEhU / FIhO / FOI / FUhA / FUhE / FUhO / GA / GAhO / GEhU / GI / GIhA / GOI / GOhA / GUhA / I / JA / JAI / JOhI / JOI / KE / KEhE / KEI / KI / KOhA / KU / KUhE / KUhO / LA / LAU / LAhE / LE / LEhU / LI / LIhU / LOhO / LOhU / LU / LUhU / MAhO / MAI / ME / MEhU / MOhE / MOhI / MOI / NA / NAI / NAhE / NAhU / NIhE / NIhO / NOI / NU / NUhA / NUhI / NUhU / PA / PEhE / PEhO / PU / RAhO / ROI / SA / SE / SEI / SEhU / SI / SOI / SU / TAhE / TEhU / TEI / TO / TOI / TUhE / TUhU / UI / VA / VAU / VEI / VEhO / VUhU / VEhA / VIhA / VUhO / XI / ZAhO / ZEhA / ZEI / ZI / ZIhE / ZO / ZOI / ZOhU / cmavo) { new { label = "CMAVO", arg = expr } }
+
+// This is a Parsing Expression Grammar for the morphology of Lojban.
+// See http://www.pdos.lcs.mit.edu/~baford/packrat/
+//
+// All rules have the form
+//
+// name = peg_expression
+//
+// which means that the grammatical construct "name" is parsed using
+// "peg_expression".
+//
+// 1) Concatenation is expressed by juxtaposition with no operator symbol.
+// 2) / represents *ORDERED* alternation (choice). If the first
+// option succeeds, the others will never be checked.
+// 3) ? indicates that the element to the left is optional.
+// 4) * represents optional repetition of the construct to the left.
+// 5) + represents one_or_more repetition of the construct to the left.
+// 6) () serves to indicate the grouping of the other operators.
+// 7) & indicates that the element to the right must follow (but the
+// marked element itself does not absorb anything).
+// 8) ! indicates that the element to the right must not follow (the
+// marked element itself does not absorb anything).
+// 9) . represents any character.
+// 10) ' ' or " " represents a literal string.
+// 11) [] represents a character class.
+//
+// Repetitions grab as much as they can.
+//
+//
+// ___ GRAMMAR ___
+// This grammar classifies words by their morphological class (cmene,
+// gismu, lujvo, fuhivla, cmavo, and non_lojban_word).
+//
+//The final section sorts cmavo into grammatical classes (A, BAI, BAhE, ..., ZOhU).
+//
+// mi'e ((xorxes))
+
+lojban_word = CMENE / CMAVO / BRIVLA
+
+any_word = expr:lojban_word spaces? { expr.SingleOrDefault() }
+
+zoi_open = lojban_word
+zoi_word = non_lojban_word
+zoi_close = lojban_word
+
+//___________________________________________________________________
+
+cmene = expr:(!h &consonant_final coda? (any_syllable / digit)* &pause) { new { label = "cmene", arg = _join(expr) } }
+
+consonant_final = expr:((non_space &non_space)* consonant &pause) { _join(expr) }
+
+//cmene = !h cmene_syllable* &consonant coda? consonantal_syllable* onset &pause
+
+//cmene_syllable = !doi_la_lai_lahi coda? consonantal_syllable* onset nucleus / digit
+
+//doi_la_lai_lahi = (d o i / l a (h? i)?) !h !nucleus
+
+//___________________________________________________________________
+
+cmavo = expr:(!cmene !CVCy_lujvo cmavo_form &post_word) { _join(expr) }
+
+CVCy_lujvo = expr:(CVC_rafsi y h? initial_rafsi* brivla_core / stressed_CVC_rafsi y short_final_rafsi) { _join(expr) }
+
+cmavo_form = expr:(!h !cluster onset (nucleus h)* (!stressed nucleus / nucleus !cluster) / y+ / digit) { _join(expr) }
+
+//___________________________________________________________________
+
+brivla = expr:(!cmavo initial_rafsi* brivla_core) { _join(expr) }
+
+brivla_core = expr:(fuhivla / gismu / CVV_final_rafsi / stressed_initial_rafsi short_final_rafsi) { _join(expr) }
+
+stressed_initial_rafsi = expr:(stressed_extended_rafsi / stressed_y_rafsi / stressed_y_less_rafsi) { _join(expr) }
+
+initial_rafsi = expr:(extended_rafsi / y_rafsi / !any_extended_rafsi y_less_rafsi) { _join(expr) }
+
+//___________________________________________________________________
+
+any_extended_rafsi = expr:(fuhivla / extended_rafsi / stressed_extended_rafsi) { _join(expr) }
+
+fuhivla = expr:(fuhivla_head stressed_syllable consonantal_syllable* final_syllable) { _join(expr) }
+
+stressed_extended_rafsi = expr:(stressed_brivla_rafsi / stressed_fuhivla_rafsi) { _join(expr) }
+
+extended_rafsi = expr:(brivla_rafsi / fuhivla_rafsi) { _join(expr) }
+
+stressed_brivla_rafsi = expr:(&unstressed_syllable brivla_head stressed_syllable h y) { _join(expr) }
+
+brivla_rafsi = expr:(&(syllable consonantal_syllable* syllable) brivla_head h y h?) { _join(expr) }
+
+stressed_fuhivla_rafsi = expr:(fuhivla_head stressed_syllable &consonant onset y) { _join(expr) }
+
+fuhivla_rafsi = expr:(&unstressed_syllable fuhivla_head &consonant onset y h?) { _join(expr) }
+
+fuhivla_head = expr:(!rafsi_string brivla_head) { _join(expr) }
+
+brivla_head = expr:(!cmavo !slinkuhi !h &onset unstressed_syllable*) { _join(expr) }
+
+slinkuhi = expr:(consonant rafsi_string) { _join(expr) }
+
+rafsi_string = expr:(y_less_rafsi* (gismu / CVV_final_rafsi / stressed_y_less_rafsi short_final_rafsi / y_rafsi / stressed_y_rafsi / stressed_y_less_rafsi? initial_pair y)) { _join(expr) }
+
+//___________________________________________________________________
+
+gismu = expr:(stressed_long_rafsi &final_syllable vowel &post_word) { _join(expr) }
+
+CVV_final_rafsi = expr:(consonant stressed_vowel h &final_syllable vowel &post_word) { _join(expr) }
+
+short_final_rafsi = expr:(&final_syllable (consonant diphthong / initial_pair vowel) &post_word) { _join(expr) }
+
+stressed_y_rafsi = expr:((stressed_long_rafsi / stressed_CVC_rafsi) y) { _join(expr) }
+
+stressed_y_less_rafsi = expr:(stressed_CVC_rafsi !y / stressed_CCV_rafsi / stressed_CVV_rafsi) { _join(expr) }
+
+stressed_long_rafsi = expr:( (stressed_CCV_rafsi / stressed_CVC_rafsi) consonant ) { _join(expr) }
+
+stressed_CVC_rafsi = expr:(consonant stressed_vowel consonant) { _join(expr) }
+
+stressed_CCV_rafsi = expr:(initial_pair stressed_vowel) { _join(expr) }
+
+stressed_CVV_rafsi = expr:(consonant (unstressed_vowel h stressed_vowel / stressed_diphthong) r_hyphen?) { _join(expr) }
+
+y_rafsi = expr:((long_rafsi / CVC_rafsi) y h?) { _join(expr) }
+
+y_less_rafsi = expr:(!y_rafsi (CVC_rafsi !y / CCV_rafsi / CVV_rafsi) !any_extended_rafsi) { _join(expr) }
+
+long_rafsi = expr:((CCV_rafsi / CVC_rafsi) consonant) { _join(expr) }
+
+CVC_rafsi = expr:(consonant unstressed_vowel consonant) { _join(expr) }
+
+CCV_rafsi = expr:(initial_pair unstressed_vowel) { _join(expr) }
+
+CVV_rafsi = expr:(consonant (unstressed_vowel h unstressed_vowel / unstressed_diphthong) r_hyphen?) { _join(expr) }
+
+r_hyphen = expr:(r &consonant / n &r) { _join(expr) }
+
+//___________________________________________________________________
+
+final_syllable = expr:(onset !y !stressed nucleus !cmene &post_word) { _join(expr) }
+
+stressed_syllable = expr:(&stressed syllable / syllable &stress) { _join(expr) }
+
+stressed_diphthong = expr:(&stressed diphthong / diphthong &stress) { _join(expr) }
+
+stressed_vowel = expr:(&stressed vowel / vowel &stress) { _join(expr) }
+
+unstressed_syllable = expr:(!stressed syllable !stress / consonantal_syllable) { _join(expr) }
+
+unstressed_diphthong = expr:(!stressed diphthong !stress) { _join(expr) }
+
+unstressed_vowel = expr:(!stressed vowel !stress) { _join(expr) }
+
+stress = expr:(consonant* y? syllable pause) { _join(expr) }
+
+stressed = expr:(onset comma* [AEIOU]) { _join(expr) }
+
+any_syllable = expr:(onset nucleus coda? / consonantal_syllable) { _join(expr) }
+
+syllable = expr:(onset !y nucleus coda?) { _join(expr) }
+
+consonantal_syllable = expr:(consonant syllabic &(consonantal_syllable / onset) (consonant &spaces)?) { _join(expr) }
+
+coda = expr:(!any_syllable consonant &any_syllable / syllabic? consonant? &pause) { _join(expr) }
+
+onset = expr:(h / consonant? glide / initial) { _join(expr) }
+
+nucleus = expr:(vowel / diphthong / y !nucleus) { _join(expr) }
+
+//_________________________________________________________________
+
+glide = expr:(i / u) &nucleus !glide { expr }
+
+diphthong = expr:(a i / a u / e i / o i) !nucleus !glide { _join(expr) }
+
+vowel = expr:(a / e / i / o / u) !nucleus { expr }
+
+a = comma* [aA] { "a" }
+
+e = comma* [eE] { "e" }
+
+i = comma* [iI] { "i" }
+
+o = comma* [oO] { "o" }
+
+u = comma* [uU] { "u" }
+
+y = comma* [yY] { "y" }
+
+
+//___________________________________________________________________
+
+cluster = expr:(consonant consonant+) { _join(expr) }
+
+initial_pair = expr:(&initial consonant consonant !consonant) { _join(expr) }
+
+initial = expr:(affricate / sibilant? other? liquid?) !consonant !glide { _join(expr) }
+
+affricate = expr:(t c / t s / d j / d z) { _join(expr) }
+
+liquid = expr:(l / r) { _join(expr) }
+
+other = expr:(p / t !l / k / f / x / b / d !l / g / v / m / n !liquid) { _join(expr) }
+
+sibilant = expr:(c / s !x / (j / z) !n !liquid) { _join(expr) }
+
+consonant = expr:(voiced / unvoiced / syllabic) { expr }
+
+syllabic = expr:(l / m / n / r) { expr }
+
+voiced = expr:(b / d / g / j / v / z) { expr }
+
+unvoiced = expr:(c / f / k / p / s / t / x) { expr }
+
+l = comma* [lL] !h !l { "l" }
+
+m = comma* [mM] !h !m !z { "m" }
+
+n = comma* [nN] !h !n !affricate  { "n" }
+
+r = comma* [rR] !h !r { "r" }
+
+b = comma* [bB] !h !b !unvoiced { "b" }
+
+d = comma* [dD] !h !d !unvoiced { "d" }
+
+g = comma* [gG] !h !g !unvoiced { "g" }
+
+v = comma* [vV] !h !v !unvoiced { "v" }
+
+j = comma* [jJ] !h !j !z !unvoiced { "j" }
+
+z = comma* [zZ] !h !z !j !unvoiced { "z" }
+
+s = comma* [sS] !h !s !c !voiced { "s" }
+
+c = comma* [cC] !h !c !s !x !voiced { "c" }
+
+x = comma* [xX] !h !x !c !k !voiced { "x" }
+
+k = comma* [kK] !h !k !x !voiced { "k" }
+
+f = comma* [fF] !h !f !voiced { "f" }
+
+p = comma* [pP] !h !p !voiced { "p" }
+
+t = comma* [tT] !h !t !voiced { "t" }
+
+h = comma* ['h] &nucleus { "'" }
+
+//___________________________________________________________________
+
+digit = expr:(comma* [0123456789] !h !nucleus) { _join(expr) }
+
+post_word = expr:(pause / !nucleus lojban_word)  { _join(expr) }
+
+pause = expr:(comma* space_char / EOF)  { _join(expr) }
+
+EOF = expr:(comma* !.)  { _join(expr) }
+
+comma = ","
+
+non_lojban_word = expr:(!lojban_word non_space+)  { _join(expr) }
+
+non_space = expr:(!space_char .) { _join(expr) }
+
+//Unicode_style and escaped chars not compatible with cl_peg
+space_char = [.\t\n\r?!\u0020] { "" }
+
+// space_char = [.?! ] / space_char1 / space_char2 
+// space_char1 = '	'
+// space_char2 = ''
+
+//___________________________________________________________________
+
+spaces = expr:(!Y initial_spaces)  { _join(expr) }
+
+initial_spaces = expr:((comma* space_char / !ybu Y)+ EOF? / EOF)  { _join(expr) }
+
+ybu = expr:(Y space_char* BU)  { _join(expr) }
+
+lujvo = expr:(!gismu !fuhivla brivla)  { new { label = "lujvo", arg = expr } }
+
+//___________________________________________________________________
+
+A = &cmavo expr:( a / e / j i / o / u ) &post_word { new { label = "A", arg = _join(expr) } }
+
+BAI = &cmavo expr:( d u h o / s i h u / z a u / k i h i / d u h i / c u h u / t u h i / t i h u / d i h o / j i h u / r i h a / n i h i / m u h i / k i h u / v a h u / k o i / c a h i / t a h i / p u h e / j a h i / k a i / b a i / f i h e / d e h i / c i h o / m a u / m u h u / r i h i / r a h i / k a h a / p a h u / p a h a / l e h a / k u h u / t a i / b a u / m a h i / c i h e / f a u / p o h i / c a u / m a h e / c i h u / r a h a / p u h a / l i h e / l a h u / b a h i / k a h i / s a u / f a h e / b e h i / t i h i / j a h e / g a h a / v a h o / j i h o / m e h a / d o h e / j i h e / p i h o / g a u / z u h e / m e h e / r a i ) &post_word { new { label = "BAI", arg = _join(expr) } }
+
+BAhE = &cmavo expr:( b a h e / z a h e ) &post_word { new { label = "BAhE", arg = _join(expr) } }
+
+BE = &cmavo expr:( b e ) &post_word  { new { label = "BE", arg = _join(expr) } }
+
+BEI = &cmavo expr:( b e i ) &post_word { new { label = "BEI", arg = _join(expr) } }
+
+BEhO = &cmavo expr:( b e h o ) &post_word { new { label = "BEhO", arg = _join(expr) } }
+
+BIhE = &cmavo expr:( b i h e ) &post_word { new { label = "BIhE", arg = _join(expr) } }
+
+BIhI = &cmavo expr:( m i h i / b i h o / b i h i ) &post_word { new { label = "BIhI", arg = _join(expr) } }
+
+BO = &cmavo expr:( b o ) &post_word  { new { label = "BO", arg = _join(expr) } }
+
+BOI = &cmavo expr:( b o i ) &post_word { new { label = "BOI", arg = _join(expr) } }
+
+BU = &cmavo expr:( b u ) &post_word { new { label = "BU", arg = _join(expr) } }
+
+BY = ybu / &cmavo expr:( j o h o / r u h o / g e h o / j e h o / l o h a / n a h a / s e h e / t o h a / g a h e / y h y / b y / c y / d y / f y / g y / j y / k y / l y / m y / n y / p y / r y / s y / t y / v y / x y / z y ) &post_word { new { label = "BY", arg = _join(expr) } }
+
+CAhA = &cmavo expr:( c a h a / p u h i / n u h o / k a h e ) &post_word { new { label = "CAhA", arg = _join(expr) } }
+
+CAI = &cmavo expr:( p e i / c a i / c u h i / s a i / r u h e ) &post_word { new { label = "CAI", arg = _join(expr) } }
+
+CEI = &cmavo expr:( c e i ) &post_word { new { label = "CEI", arg = _join(expr) } }
+
+CEhE = &cmavo expr:( c e h e ) &post_word { new { label = "CEhE", arg = _join(expr) } }
+
+CO = &cmavo expr:( c o ) &post_word { new { label = "CO", arg = _join(expr) } }
+
+COI = &cmavo expr:( j u h i / c o i / f i h i / t a h a / m u h o / f e h o / c o h o / p e h u / k e h o / n u h e / r e h i / b e h e / j e h e / m i h e / k i h e / v i h o ) &post_word { new { label = "COI", arg = _join(expr) } }
+
+CU = &cmavo expr:( c u ) &post_word { new { label = "CU", arg = _join(expr) } }
+
+CUhE = &cmavo expr:( c u h e / n a u ) &post_word { new { label = "CUhE", arg = _join(expr) } }
+
+DAhO = &cmavo expr:( d a h o ) &post_word { new { label = "DAhO", arg = _join(expr) } }
+
+DOI = &cmavo expr:( d o i ) &post_word { new { label = "DOI", arg = _join(expr) } }
+
+DOhU = &cmavo expr:( d o h u ) &post_word { new { label = "DOhU", arg = _join(expr) } }
+
+FA = &cmavo expr:( f a i / f a / f e / f o / f u / f i h a / f i ) &post_word { new { label = "FA", arg = _join(expr) } }
+
+FAhA = &cmavo expr:( d u h a / b e h a / n e h u / v u h a / g a h u / t i h a / n i h a / c a h u / z u h a / r i h u / r u h u / r e h o / t e h e / b u h u / n e h a / p a h o / n e h i / t o h o / z o h i / z e h o / z o h a / f a h a ) &post_word  &post_word { new { label = "FAhA", arg = _join(expr) } }
+
+FAhO = &cmavo expr:( f a h o ) &post_word { new { label = "FAhO", arg = _join(expr) } }
+
+FEhE = &cmavo expr:( f e h e ) &post_word { new { label = "FEhE", arg = _join(expr) } }
+
+FEhU = &cmavo expr:( f e h u ) &post_word { new { label = "FEhU", arg = _join(expr) } }
+
+FIhO = &cmavo expr:( f i h o ) &post_word { new { label = "FIhO", arg = _join(expr) } }
+
+FOI = &cmavo expr:( f o i ) &post_word { new { label = "FOI", arg = _join(expr) } }
+
+FUhA = &cmavo expr:( f u h a ) &post_word { new { label = "FUhA", arg = _join(expr) } }
+
+FUhE = &cmavo expr:( f u h e ) &post_word { new { label = "FUhE", arg = _join(expr) } }
+
+FUhO = &cmavo expr:( f u h o ) &post_word { new { label = "FUhO", arg = _join(expr) } }
+
+GA = &cmavo expr:( g e h i / g e / g o / g a / g u ) &post_word { new { label = "GA", arg = _join(expr) } }
+
+GAhO = &cmavo expr:( k e h i / g a h o ) &post_word { new { label = "GAhO", arg = _join(expr) } }
+
+GEhU = &cmavo expr:( g e h u ) &post_word { new { label = "GEhU", arg = _join(expr) } }
+
+GI = &cmavo expr:( g i ) &post_word { new { label = "GI", arg = _join(expr) } }
+
+GIhA = &cmavo expr:( g i h e / g i h i / g i h o / g i h a / g i h u ) &post_word { new { label = "GIhA", arg = _join(expr) } }
+
+GOI = &cmavo expr:( n o h u / n e / g o i / p o h u / p e / p o h e / p o ) &post_word { new { label = "GOI", arg = _join(expr) } }
+
+GOhA = &cmavo expr:( m o / n e i / g o h u / g o h o / g o h i / n o h a / g o h e / g o h a / d u / b u h a / b u h e / b u h i / c o h e ) &post_word { new { label = "GOhA", arg = _join(expr) } } 
+
+GUhA = &cmavo expr:( g u h e / g u h i / g u h o / g u h a / g u h u ) &post_word { new { label = "GUhA", arg = _join(expr) } }
+
+I = &cmavo expr:( i ) &post_word { new { label = "I", arg = _join(expr) } }
+
+JA = &cmavo expr:( j e h i / j e / j o / j a / j u ) &post_word { new { label = "JA", arg = _join(expr) } } 
+
+JAI = &cmavo expr:( j a i ) &post_word { new { label = "JAI", arg = _join(expr) } }
+
+JOhI = &cmavo expr:( j o h i ) &post_word { new { label = "JOhI", arg = _join(expr) } }
+
+JOI = &cmavo expr:( f a h u / p i h u / j o i / c e h o / c e / j o h u / k u h a / j o h e / j u h e ) &post_word { new { label = "JOI", arg = _join(expr) } }
+
+KE = &cmavo expr:( k e ) &post_word { new { label = "KE", arg = _join(expr) } }
+
+KEhE = &cmavo expr:( k e h e ) &post_word { new { label = "KEhE", arg = _join(expr) } }
+
+KEI = &cmavo expr:( k e i ) &post_word { new { label = "KEI", arg = _join(expr) } }
+
+KI = &cmavo expr:( k i ) &post_word { new { label = "KI", arg = _join(expr) } }
+
+KOhA = &cmavo expr:( d a h u / d a h e / d i h u / d i h e / d e h u / d e h e / d e i / d o h i / m i h o / m a h a / m i h a / d o h o / k o h a / f o h u / k o h e / k o h i / k o h o / k o h u / f o h a / f o h e / f o h i / f o h o / v o h a / v o h e / v o h i / v o h o / v o h u / r u / r i / r a / t a / t u / t i / z i h o / k e h a / m a / z u h i / z o h e / c e h u / d a / d e / d i / k o / m i / d o ) &post_word { new { label = "KOhA", arg = _join(expr) } }
+
+KU = &cmavo expr:( k u ) &post_word { new { label = "KU", arg = _join(expr) } }
+
+KUhE = &cmavo expr:( k u h e ) &post_word { new { label = "KUhE", arg = _join(expr) } }
+
+KUhO = &cmavo expr:( k u h o ) &post_word { new { label = "KUhO", arg = _join(expr) } }
+
+LA = &cmavo expr:( l a i / l a h i / l a ) &post_word { new { label = "LA", arg = _join(expr) } }
+
+LAU = &cmavo expr:( c e h a / l a u / z a i / t a u ) &post_word { new { label = "LAU", arg = _join(expr) } }
+
+LAhE = &cmavo expr:( t u h a / l u h a / l u h o / l a h e / v u h i / l u h i / l u h e ) &post_word { new { label = "LAhE", arg = _join(expr) } }
+
+LE = &cmavo expr:( l e i / l o i / l e h i / l o h i / l e h e / l o h e / l o / l e ) &post_word { new { label = "LE", arg = _join(expr) } }
+
+LEhU = &cmavo expr:( l e h u ) &post_word { new { label = "LEhU", arg = _join(expr) } }
+
+LI = &cmavo expr:( m e h o / l i ) &post_word { new { label = "LI", arg = _join(expr) } }
+
+LIhU = &cmavo expr:( l i h u ) &post_word { new { label = "LIhU", arg = _join(expr) } }
+
+LOhO = &cmavo expr:( l o h o ) &post_word { new { label = "LOhO", arg = _join(expr) } }
+
+LOhU = &cmavo expr:( l o h u ) &post_word { new { label = "LOhU", arg = _join(expr) } }
+
+LU = &cmavo expr:( l u ) &post_word { new { label = "LU", arg = _join(expr) } }
+
+LUhU = &cmavo expr:( l u h u ) &post_word { new { label = "LUhU", arg = _join(expr) } }
+
+MAhO = &cmavo expr:( m a h o ) &post_word { new { label = "MAhO", arg = _join(expr) } }
+
+MAI = &cmavo expr:( m o h o / m a i ) &post_word { new { label = "MAI", arg = _join(expr) } }
+
+ME = &cmavo expr:( m e ) &post_word { new { label = "ME", arg = _join(expr) } }
+
+MEhU = &cmavo expr:( m e h u ) &post_word { new { label = "MEhU", arg = _join(expr) } }
+
+MOhE = &cmavo expr:( m o h e ) &post_word { new { label = "MOhE", arg = _join(expr) } }
+
+MOhI = &cmavo expr:( m o h i ) &post_word { new { label = "MOhI", arg = _join(expr) } }
+
+MOI = &cmavo expr:( m e i / m o i / s i h e / c u h o / v a h e ) &post_word { new { label = "MOI", arg = _join(expr) } }
+
+NA = &cmavo expr:( j a h a / n a ) &post_word { new { label = "MA", arg = _join(expr) } }
+
+NAI = &cmavo expr:( n a i ) &post_word { new { label = "NAI", arg = _join(expr) } }
+
+NAhE = &cmavo expr:( t o h e / j e h a / n a h e / n o h e ) &post_word { new { label = "NAhE", arg = _join(expr) } }
+
+NAhU = &cmavo expr:( n a h u ) &post_word { new { label = "NAhU", arg = _join(expr) } }
+
+NIhE = &cmavo expr:( n i h e ) &post_word { new { label = "NIhE", arg = _join(expr) } }
+
+NIhO = &cmavo expr:( n i h o / n o h i ) &post_word { new { label = "NIhO", arg = _join(expr) } }
+
+NOI = &cmavo expr:( v o i / n o i / p o i ) &post_word { new { label = "NOI", arg = _join(expr) } }
+
+NU = &cmavo expr:( n i / d u h u / s i h o / n u / l i h i / k a / j e i / s u h u / z u h o / m u h e / p u h u / z a h i ) &post_word { new { label = "NU", arg = _join(expr) } }
+
+NUhA = &cmavo expr:( n u h a ) &post_word { new { label = "NUhA", arg = _join(expr) } }
+
+NUhI = &cmavo expr:( n u h i ) &post_word { new { label = "NUhI", arg = _join(expr) } }
+
+NUhU = &cmavo expr:( n u h u ) &post_word { new { label = "NUhU", arg = _join(expr) } }
+
+PA = &cmavo expr:( d a u / f e i / g a i / j a u / r e i / v a i / p i h e / p i / f i h u / z a h u / m e h i / n i h u / k i h o / c e h i / m a h u / r a h e / d a h a / s o h a / j i h i / s u h o / s u h e / r o / r a u / s o h u / s o h i / s o h e / s o h o / m o h a / d u h e / t e h o / k a h o / c i h i / t u h o / x o / p a i / n o h o / n o / p a / r e / c i / v o / m u / x a / z e / b i / s o / digit ) &post_word { new { label = "PA", arg = _join(expr) } }
+
+PEhE = &cmavo expr:( p e h e ) &post_word { new { label = "PEhE", arg = _join(expr) } }
+
+PEhO = &cmavo expr:( p e h o ) &post_word { new { label = "PEhO", arg = _join(expr) } }
+
+PU = &cmavo expr:( b a / p u / c a ) &post_word { new { label = "PU", arg = _join(expr) } }
+
+RAhO = &cmavo expr:( r a h o ) &post_word { new { label = "RAhO", arg = _join(expr) } }
+
+ROI = &cmavo expr:( r e h u / r o i ) &post_word { new { label = "ROI", arg = _join(expr) } }
+
+SA = &cmavo expr:( s a ) &post_word { new { label = "SA", arg = _join(expr) } }
+
+SE = &cmavo expr:( s e / t e / v e / x e ) &post_word { new { label = "SE", arg = _join(expr) } }
+
+SEI = &cmavo expr:( s e i / t i h o ) &post_word { new { label = "SEI", arg = _join(expr) } }
+
+SEhU = &cmavo expr:( s e h u ) &post_word { new { label = "SEhU", arg = _join(expr) } }
+
+SI = &cmavo expr:( s i ) &post_word { new { label = "SI", arg = _join(expr) } }
+
+SOI = &cmavo expr:( s o i ) &post_word { new { label = "SOI", arg = _join(expr) } }
+
+SU = &cmavo expr:( s u ) &post_word { new { label = "SU", arg = _join(expr) } }
+
+TAhE = &cmavo expr:( r u h i / t a h e / d i h i / n a h o ) &post_word { new { label = "TAhE", arg = _join(expr) } }
+
+TEhU = &cmavo expr:( t e h u ) &post_word { new { label = "TEhU", arg = _join(expr) } }
+
+TEI = &cmavo expr:( t e i ) &post_word { new { label = "TEI", arg = _join(expr) } }
+
+TO = &cmavo expr:( t o h i / t o ) &post_word { new { label = "TO", arg = _join(expr) } }
+
+TOI = &cmavo expr:( t o i ) &post_word { new { label = "TOI", arg = _join(expr) } }
+
+TUhE = &cmavo expr:( t u h e ) &post_word { new { label = "TUhE", arg = _join(expr) } }
+
+TUhU = &cmavo expr:( t u h u ) &post_word { new { label = "TUhU", arg = _join(expr) } }
+
+UI = &cmavo expr:( i h a / i e / a h e / u h i / i h o / i h e / a h a / i a / o h i / o h e / e h e / o i / u o / e h i / u h o / a u / u a / a h i / i h u / i i / u h a / u i / a h o / a i / a h u / i u / e i / o h o / e h a / u u / o h a / o h u / u h u / e h o / i o / e h u / u e / i h i / u h e / b a h a / j a h o / c a h e / s u h a / t i h e / k a h u / s e h o / z a h a / p e h i / r u h a / j u h a / t a h o / r a h u / l i h a / b a h u / m u h a / d o h a / t o h u / v a h i / p a h e / z u h u / s a h e / l a h a / k e h u / s a h u / d a h i / j e h u / s a h a / k a u / t a h u / n a h i / j o h a / b i h u / l i h o / p a u / m i h u / k u h i / j i h a / s i h a / p o h o / p e h a / r o h i / r o h e / r o h o / r o h u / r o h a / r e h e / l e h o / j u h o / f u h i / d a i / g a h i / z o h o / b e h u / r i h e / s e h i / s e h a / v u h e / k i h a / x u / g e h e / b u h o ) &post_word { new { label = "UI", arg = _join(expr) } }
+
+VA = &cmavo expr:( v i / v a / v u ) &post_word { new { label = "VA", arg = _join(expr) } }
+
+VAU = &cmavo expr:( v a u ) &post_word { new { label = "VAU", arg = _join(expr) } }
+
+VEI = &cmavo expr:( v e i ) &post_word { new { label = "VEI", arg = _join(expr) } }
+
+VEhO = &cmavo expr:( v e h o ) &post_word { new { label = "VEhO", arg = _join(expr) } }
+
+VUhU = &cmavo expr:( g e h a / f u h u / p i h i / f e h i / v u h u / s u h i / j u h u / g e i / p a h i / f a h i / t e h a / c u h a / v a h a / n e h o / d e h o / f e h a / s a h o / r e h a / r i h o / s a h i / p i h a / s i h i ) &post_word { new { label = "VUhU", arg = _join(expr) } }
+
+VEhA = &cmavo expr:( v e h u / v e h a / v e h i / v e h e ) &post_word { new { label = "VEhA", arg = _join(expr) } }
+
+VIhA = &cmavo expr:( v i h i / v i h a / v i h u / v i h e ) &post_word { new { label = "VIhA", arg = _join(expr) } }
+
+VUhO = &cmavo expr:( v u h o ) &post_word { new { label = "VUhO", arg = _join(expr) } }
+
+XI = &cmavo expr:( x i ) &post_word { new { label = "XI", arg = _join(expr) } }
+
+Y = &cmavo expr:( y+ ) &post_word { new { label = "Y", arg = _join(expr) } }
+
+ZAhO = &cmavo expr:( c o h i / p u h o / c o h u / m o h u / c a h o / c o h a / d e h a / b a h o / d i h a / z a h o ) &post_word { new { label = "ZAhO", arg = _join(expr) } }
+
+ZEhA = &cmavo expr:( z e h u / z e h a / z e h i / z e h e ) &post_word { new { label = "ZEhA", arg = _join(expr) } }
+
+ZEI = &cmavo expr:( z e i ) &post_word { new { label = "ZEI", arg = _join(expr) } }
+
+ZI = &cmavo expr:( z u / z a / z i ) &post_word { new { label = "ZI", arg = _join(expr) } }
+
+ZIhE = &cmavo expr:( z i h e ) &post_word { new { label = "ZIhE", arg = _join(expr) } }
+
+ZO = &cmavo expr:( z o ) &post_word { new { label = "ZO", arg = _join(expr) } }
+
+ZOI = &cmavo expr:( z o i / l a h o ) &post_word { new { label = "ZOI", arg = _join(expr) } }
+
+ZOhU = &cmavo expr:( z o h u ) &post_word { new { label = "ZOhU", arg = _join(expr) } }
