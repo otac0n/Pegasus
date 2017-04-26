@@ -277,7 +277,7 @@ namespace Pegasus.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The rule &apos;{0}&apos; is ambiguously left-recursive..
+        ///   Looks up a localized string similar to The rule &apos;{0}&apos; is ambiguously left-recursive. ({1}).
         /// </summary>
         internal static string PEG0023_ERROR_AmbiguousLeftRecursionDetected {
             get {

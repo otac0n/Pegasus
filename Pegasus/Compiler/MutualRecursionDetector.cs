@@ -16,11 +16,11 @@ namespace Pegasus.Compiler
         /// Detects which rules in a <see cref="Grammar"/> are mutually left-recursive.
         /// </summary>
         /// <param name="leftAdjacentExpressions">The set of left-adjacent <see cref="Expression">expressions</see> to inspect.</param>
-        /// <returns>A <see cref="HashSet{T}"/> containing the mutually left-recursive rules.</returns>
-        public static HashSet<Rule> Detect(ILookup<Rule, Expression> leftAdjacentExpressions)
+        /// <returns>A collection containing the mutually left-recursive rules.</returns>
+        public static List<List<Rule>> Detect(ILookup<Rule, Expression> leftAdjacentExpressions)
         {
             var ruleLookup = leftAdjacentExpressions.ToDictionary(i => i.Key.Identifier.Name, i => i.Key);
-            var mutuallyRecursive = new HashSet<Rule>();
+            var mutuallyRecursive = new List<List<Rule>>();
 
             var index = 0;
             var stack = new Stack<Rule>();
@@ -70,7 +70,8 @@ namespace Pegasus.Compiler
 
                     if (components.Count > 1)
                     {
-                        mutuallyRecursive.UnionWith(components);
+                        components.Reverse();
+                        mutuallyRecursive.Add(components);
                     }
                 }
 

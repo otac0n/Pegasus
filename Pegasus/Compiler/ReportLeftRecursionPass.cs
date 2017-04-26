@@ -23,9 +23,13 @@ namespace Pegasus.Compiler
                 }
             }
 
-            foreach (var rule in result.MutuallyRecursiveRules)
+            foreach (var set in result.MutuallyRecursiveRules)
             {
-                result.AddCompilerError(rule.Identifier.Start, () => Resources.PEG0023_ERROR_AmbiguousLeftRecursionDetected, rule.Identifier.Name);
+                var ruleNames = string.Join(", ", set.Select(r => r.Identifier.Name));
+                foreach (var rule in set)
+                {
+                    result.AddCompilerError(rule.Identifier.Start, () => Resources.PEG0023_ERROR_AmbiguousLeftRecursionDetected, rule.Identifier.Name, ruleNames);
+                }
             }
         }
     }
