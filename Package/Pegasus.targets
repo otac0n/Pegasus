@@ -3,6 +3,7 @@
   <PropertyGroup>
     <CompileDependsOn>$(CompileDependsOn);CompilePegGrammars</CompileDependsOn>
     <CoreCompileDependsOn>$(CoreCompileDependsOn);CompilePegGrammars</CoreCompileDependsOn>
+    <BuildDependsOn>$(BuildDependsOn);CompilePegGrammars</BuildDependsOn>
     <CoreBuildDependsOn>$(CoreBuildDependsOn);CompilePegGrammars</CoreBuildDependsOn>
     <CleanDependsOn>$(CleanDependsOn);CleanPegGrammars</CleanDependsOn>
   </PropertyGroup>
