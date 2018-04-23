@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Tests
 {
@@ -194,10 +194,10 @@ namespace Pegasus.Tests
         [TestCase("la .alis. co'a tatpi lo nu zutse lo rirxe korbi re'o lo mensi gi'e zukte fi no da")]
         public void Parse_WhenUsingLojbhan_DoesntTimeOut(string subject)
         {
-            var parserSource = File.ReadAllText($@"TestCases\LojbanGrammar.peg");
-            var grammar = new PegParser().Parse(parserSource);
+            var parserSource = File.ReadAllText(@"TestCases\LojbanGrammar.peg");
+            var grammar = new PegParser().Parse(parserSource, @"TestCases\LojbanGrammar.peg");
             var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<string>(compiled);
+            var parser = CodeCompiler.Compile<object>(compiled);
 
             Assert.That(parser.Parse(subject), Is.EqualTo(subject));
 

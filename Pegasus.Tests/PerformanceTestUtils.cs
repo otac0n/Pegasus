@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Tests
 {
@@ -146,7 +146,7 @@ namespace Pegasus.Tests
                 "performance");
             var outputPath = Path.Combine(
                 resultsFolder,
-                Enumerable.Aggregate(Path.GetInvalidPathChars(), testName, (n, c) => n.Replace(c, '_')) + ".csv");
+                Enumerable.Aggregate(Path.GetInvalidPathChars(), testName.Replace("\\", ""), (n, c) => n.Replace(c, '_')) + ".csv");
 
             var columns = "date,testSamples,testMean,testStandardDeviation,warmupSamples,warmupMean,warmupStandardDeviation,initialTime,baseTime,machine";
 
