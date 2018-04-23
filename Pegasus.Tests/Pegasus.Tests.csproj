@@ -149,6 +149,9 @@
     <None Include="TestCases\gitter-piratejon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TestCases\LojbanGrammar.peg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestCases\simple.peg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -1,11 +1,13 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Tests
 {
+    using System.IO;
     using System.Linq;
     using NUnit.Framework;
     using Pegasus.Compiler;
     using Pegasus.Parser;
+    using static PerformanceTestUtils;
 
     [TestFixture]
     public class RegressionTests
@@ -184,6 +186,25 @@ namespace Pegasus.Tests
             var grammar = new PegParser().Parse("DefArg = WSO '$' v:[0-9] #parse{ DefArg(v) }; WSO = ;");
 
             Assert.That(() => PegCompiler.Compile(grammar), Throws.Nothing);
+        }
+
+        [Test(Description = "GitHUb bug #97")]
+        [TestCase("mi nelci do")]
+        [TestCase("mi nelci lonu djica lonu klama")]
+        [TestCase("la .alis. co'a tatpi lo nu zutse lo rirxe korbi re'o lo mensi gi'e zukte fi no da")]
+        public void Parse_WhenUsingLojbhan_DoesntTimeOut(string subject)
+        {
+            var parserSource = File.ReadAllText(@"TestCases\LojbanGrammar.peg");
+            var grammar = new PegParser().Parse(parserSource, @"TestCases\LojbanGrammar.peg");
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<object>(compiled);
+
+            Assert.That(parser.Parse(subject), Is.EqualTo(subject));
+
+            Evaluate(() =>
+            {
+                var x = parser.Parse(subject);
+            });
         }
 
         [Test(Description = "GitHub bug #61")]
