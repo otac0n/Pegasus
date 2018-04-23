@@ -1,4 +1,4 @@
-﻿@namespace Pegasus.Parser
+@namespace Pegasus.Parser
 @classname PegParser
 @using System.Globalization
 @using System.Linq
@@ -102,7 +102,7 @@ quantifier <Quantifier> -memoize
   / start:lt _ min:integer _ comma _ max:integer? _ end:gt { new Quantifier(startStart, endEnd, min: min, max: max.Cast<int?>().SingleOrDefault()) }
   / start:lt _ count:integer _ end:gt { new Quantifier(startStart, endEnd, min: count, max: count) }
 
-integer <int> -lexical
+integer <int> -memoize -lexical
   = digits:(digit+ "") { int.Parse(digits) }
 
 errorAction <CodeExpression> -memoize
@@ -133,13 +133,13 @@ delimitedStatements <CodeSpan> -lexical
 cSharpBlock <BlockSyntax>
   = s:cSharpStatement &{ s is BlockSyntax } { s as BlockSyntax }
 
-cSharpExpression <ExpressionSyntax>
+cSharpExpression <ExpressionSyntax> -memoize
   = #parse{ this.cSharpParser.Exported.Expression(ref state) }
 
-cSharpStatement <StatementSyntax>
+cSharpStatement <StatementSyntax> -memoize
   = #parse{ this.cSharpParser.Exported.Statement(ref state) }
 
-cSharpType <TypeSyntax>
+cSharpType <TypeSyntax> -memoize
   = #parse{ this.cSharpParser.Exported.Type(ref state) }
 
 code <CodeSpan> -lexical
@@ -170,7 +170,7 @@ rbracket  -lexical = "]"
 identifier <Identifier> -memoize -lexical
   = name:(!digit (letter / digit / "_" / "$")+) { new Identifier(name, nameStart, nameEnd) }
 
-type <CodeSpan> -lexical
+type <CodeSpan> -memoize -lexical
   = type:cSharpType { new CodeSpan(type.ToFullString(), typeStart, typeEnd, value: Regex.Replace(Regex.Replace(type.ToString(), @"(?<!,)\s+|\s+(?=[,\]])", ""), @",(?=\w)", ", ")) }
 
 literal <Expression> -lexical
@@ -227,7 +227,7 @@ classCharacter <CharacterRange>
         new CharacterRange(char_[0], char_[0])
     }
 
-bracketDelimitedCharacter
+bracketDelimitedCharacter -memoize
   = simpleBracketDelimitedCharacter
   / simpleEscapeSequence
   / zeroEscapeSequence
@@ -281,19 +281,19 @@ lowerCaseLetter
 upperCaseLetter
   = [A-Z]
 
-_ = (whitespace / eol / comment)*
+_ -memoize = (whitespace / eol / comment)*
 
-comment
+comment -memoize
   = singleLineComment
   / multiLineComment
 
-singleLineComment -lexical
+singleLineComment -memoize -lexical
   = "//" (!eolChar .)*
 
 multiLineComment -lexical
   = "/*" (!"*/" .)* "*/"
 
-eol
+eol -memoize
   = "\n"
   / "\r\n"
   / "\r"
@@ -303,7 +303,7 @@ eol
 eolChar
   = [\n\r\u2028\u2029]
 
-whitespace -lexical
+whitespace -memoize -lexical
   = [ \t\v\f\u00A0\uFEFF\u1680\u180E\u2000-\u200A\u202F\u205F\u3000]
 
 EOF

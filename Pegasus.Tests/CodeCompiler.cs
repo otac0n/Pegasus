@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Tests
 {
@@ -14,7 +14,7 @@ namespace Pegasus.Tests
 
     public static class CodeCompiler
     {
-        public static ParserWrapper<T> Compile<T>(CompileResult result)
+        public static ParserWrapper<T> Compile<T>(CompileResult result, params string[] referenceAssemblies)
         {
             Assert.That(result.Errors.Where(e => !e.IsWarning), Is.Empty);
 
@@ -27,6 +27,7 @@ namespace Pegasus.Tests
             options.ReferencedAssemblies.Add("System.dll");
             options.ReferencedAssemblies.Add("System.Core.dll");
             options.ReferencedAssemblies.Add(typeof(Pegasus.Common.Cursor).Assembly.Location);
+            options.ReferencedAssemblies.AddRange(referenceAssemblies);
 
             var results = compiler.CompileAssemblyFromSource(options, result.Code);
             if (results.Errors.HasErrors)
