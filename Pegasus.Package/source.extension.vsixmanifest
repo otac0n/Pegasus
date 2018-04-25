@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
     <Identity Id="Pegasus.Package.243c099e-6e07-4be4-a418-84e77bb0f038" Version="0.0.0" Language="en-US" Publisher="John Gietzen" />
@@ -20,4 +20,9 @@
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
     <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="Pegasus.Templates" d:TargetPath="|Pegasus.Templates;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
   </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.Roslyn.LanguageServices" Version="[15.0, 16.0)" DisplayName="C# and Visual Basic Roslyn" />
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0, 16.0)" DisplayName="Visual Studio core editor" />
+    <Prerequisite Id="Microsoft.Component.MSBuild" Version="[15.0, 16.0)" DisplayName="MSBuild" />
+  </Prerequisites>
 </PackageManifest>
