@@ -12,8 +12,8 @@ namespace Pegasus.Tests
     public class PerformanceTracer : ITracer
     {
         private RuleStats cacheHitStats = new RuleStats();
-        private Dictionary<string, RuleStats> stats = new Dictionary<string, RuleStats>();
         private Stack<RuleStackEntry> ruleStack = new Stack<RuleStackEntry>();
+        private Dictionary<string, RuleStats> stats = new Dictionary<string, RuleStats>();
 
         public void TraceCacheHit<T>(string ruleName, Cursor cursor, CacheKey cacheKey, IParseResult<T> parseResult)
         {
@@ -47,8 +47,9 @@ namespace Pegasus.Tests
             }
 
             ruleStats.Invocations++;
-            ruleStats.Locations.TryGetValue(cursor.Location, out var count);
-            ruleStats.Locations[cursor.Location] = count + 1;
+            var key = new CacheKey(ruleName, cursor.StateKey, cursor.Location);
+            ruleStats.Locations.TryGetValue(key, out var count);
+            ruleStats.Locations[key] = count + 1;
         }
 
         public void TraceRuleExit<T>(string ruleName, Cursor cursor, IParseResult<T> parseResult)
@@ -127,26 +128,26 @@ namespace Pegasus.Tests
 
         private class RuleStackEntry
         {
-            public string RuleName { get; set; }
+            public bool? CacheHit { get; set; }
 
             public Cursor Cursor { get; set; }
 
-            public bool? CacheHit { get; set; }
+            public string RuleName { get; set; }
 
             public Stopwatch Stopwatch { get; set; }
         }
 
         private class RuleStats
         {
-            public int Invocations { get; set; }
-
             public int CacheHits { get; set; }
 
             public int CacheMisses { get; set; }
 
-            public long TotalTicks { get; set; }
+            public int Invocations { get; set; }
 
-            public Dictionary<int, int> Locations { get; } = new Dictionary<int, int>();
+            public Dictionary<CacheKey, int> Locations { get; } = new Dictionary<CacheKey, int>();
+
+            public long TotalTicks { get; set; }
         }
     }
 }
