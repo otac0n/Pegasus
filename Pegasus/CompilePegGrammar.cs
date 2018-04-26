@@ -42,7 +42,7 @@ namespace Pegasus
                 return false;
             }
 
-            for (int i = 0; i < this.InputFiles.Length; i++)
+            for (var i = 0; i < this.InputFiles.Length; i++)
             {
                 CompileManager.CompileFile(inputs[i], outputs[i], this.LogError);
             }

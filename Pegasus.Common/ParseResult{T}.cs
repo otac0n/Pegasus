@@ -81,7 +81,7 @@ namespace Pegasus.Common
         /// <returns>A hash code for the current <see cref="ParseResult{T}"/>.</returns>
         public override int GetHashCode()
         {
-            int hash = 0x51ED270B;
+            var hash = 0x51ED270B;
             hash = (hash * -0x25555529) + this.StartCursor.GetHashCode();
             hash = (hash * -0x25555529) + this.EndCursor.GetHashCode();
             hash = (hash * -0x25555529) + (object.ReferenceEquals(this.Value, null) ? 0 : this.Value.GetHashCode());

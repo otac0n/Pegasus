@@ -203,7 +203,7 @@ namespace Pegasus.Common
         /// <returns>A hash code for the current <see cref="Cursor"/>.</returns>
         public override int GetHashCode()
         {
-            int hash = 0x51ED270B;
+            var hash = 0x51ED270B;
             hash = (hash * -0x25555529) + this.Subject.GetHashCode();
             hash = (hash * -0x25555529) + this.Location.GetHashCode();
             hash = (hash * -0x25555529) + (this.FileName == null ? 0 : this.FileName.GetHashCode());
@@ -254,7 +254,7 @@ namespace Pegasus.Common
                 return;
             }
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var c = subject[start + i];
                 if (c == '\r' || c == '\n')

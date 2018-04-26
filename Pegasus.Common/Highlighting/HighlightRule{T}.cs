@@ -17,12 +17,14 @@ namespace Pegasus.Common.Highlighting
         /// <param name="value">The value of the match.</param>
         public HighlightRule(string pattern, T value)
         {
-            this.Pattern = new Regex(
-                pattern,
+            var options =
+                RegexOptions.IgnorePatternWhitespace
 #if !NETSTANDARD1_0
-                RegexOptions.Compiled |
+                 | RegexOptions.Compiled
 #endif
-                RegexOptions.IgnorePatternWhitespace);
+                ;
+
+            this.Pattern = new Regex(pattern, options);
             this.Value = value;
         }
 

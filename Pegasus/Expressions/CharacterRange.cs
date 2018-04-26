@@ -53,7 +53,7 @@ namespace Pegasus.Expressions
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            int hash = 0x51ED270B;
+            var hash = 0x51ED270B;
             hash = (hash * -0x25555529) + this.Min.GetHashCode();
             hash = (hash * -0x25555529) + this.Max.GetHashCode();
             return hash;

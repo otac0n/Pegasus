@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus
 {
@@ -39,7 +39,7 @@ namespace Pegasus
             var subject = File.ReadAllText(inputFile);
             var result = CompileString(subject, fileName: inputFile);
 
-            bool hadFatal = false;
+            var hadFatal = false;
             foreach (var error in result.Errors)
             {
                 hadFatal |= !error.IsWarning;

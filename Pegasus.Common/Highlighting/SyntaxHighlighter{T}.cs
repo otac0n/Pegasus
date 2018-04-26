@@ -109,7 +109,7 @@ namespace Pegasus.Common.Highlighting
                     var prevEnd = token.Start;
                     var endIndex = token.End - 1;
                     var prevIsWhitespace = char.IsWhiteSpace(subject[prevEnd]);
-                    for (int i = prevEnd + 1; i < endIndex; i++)
+                    for (var i = prevEnd + 1; i < endIndex; i++)
                     {
                         var nextIsWhitespace = char.IsWhiteSpace(subject[i]);
                         if (prevIsWhitespace != nextIsWhitespace)
@@ -236,13 +236,14 @@ namespace Pegasus.Common.Highlighting
                 }
 
                 lexicalStack.Push(Tuple.Create(maxRule ?? this.list.Count, e));
-                var key = string.Join(
-                    " ",
-                    lexicalStack.Select(d => d.Item2.Name)
+
+                var names = lexicalStack.Select(d => d.Item2.Name)
 #if NET35
                     .ToArray()
 #endif
-                    );
+                    ;
+
+                var key = string.Join(" ", names);
 
                 var result = this.Highlight(key, maxRule);
 

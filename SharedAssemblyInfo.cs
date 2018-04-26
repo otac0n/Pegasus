@@ -2,5 +2,5 @@
 using System.Reflection;
 
 [assembly: AssemblyProduct("Pegasus")]
-[assembly: AssemblyCopyright("Copyright © 2016 John Gietzen")]
+[assembly: AssemblyCopyright("Copyright © 2018 John Gietzen")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
