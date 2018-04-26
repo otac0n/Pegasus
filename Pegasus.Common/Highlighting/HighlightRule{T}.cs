@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Common.Highlighting
 {
@@ -19,7 +19,7 @@ namespace Pegasus.Common.Highlighting
         {
             this.Pattern = new Regex(
                 pattern,
-#if !PORTABLE
+#if !NETSTANDARD1_0
                 RegexOptions.Compiled |
 #endif
                 RegexOptions.IgnorePatternWhitespace);

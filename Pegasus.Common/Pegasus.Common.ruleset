@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Pegasus.Common" Description="Rules for the Pegasus.Common project." ToolsVersion="14.0">
+  <Include Path="..\Strict.ruleset" Action="Default" />
+</RuleSet>

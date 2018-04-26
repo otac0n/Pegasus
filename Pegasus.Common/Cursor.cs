@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Common
 {
@@ -12,7 +12,7 @@ namespace Pegasus.Common
     /// <summary>
     /// Represents a location within a parsing subject.
     /// </summary>
-#if !PORTABLE
+#if !NETSTANDARD1_0
 
     [Serializable]
 #endif
@@ -46,7 +46,7 @@ namespace Pegasus.Common
 
             if (location < 0 || location > subject.Length)
             {
-                throw new ArgumentOutOfRangeException("location");
+                throw new ArgumentOutOfRangeException(nameof(location));
             }
 
             this.Subject = subject;
@@ -115,7 +115,13 @@ namespace Pegasus.Common
         /// </summary>
         /// <param name="key">The key of the state value.</param>
         /// <returns>The state vale.</returns>
-        public dynamic this[string key]
+        public
+#if NET35 || NETSTANDARD1_0
+    object
+#else
+    dynamic
+#endif
+        this[string key]
         {
             get
             {

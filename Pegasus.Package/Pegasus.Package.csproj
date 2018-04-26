@@ -205,6 +205,7 @@
     <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
       <Project>{1fc19adf-446f-4118-8189-c25aadf12397}</Project>
       <Name>Pegasus.Common</Name>
+      <AdditionalProperties>TargetFramework=net45</AdditionalProperties>
     </ProjectReference>
     <ProjectReference Include="..\Pegasus\Pegasus.csproj">
       <Project>{58f12d13-9997-4c29-90ce-3c6c7409ba68}</Project>
@@ -234,8 +235,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\FixMe.0.1.1\build\FixMe.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\FixMe.0.1.1\build\FixMe.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.4.0.0-beta0007\build\dotnet\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.4.0.0-beta0007\build\dotnet\GitVersionTask.targets'))" />
+    <Error Condition="!Exists('..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets'))" />
   </Target>
   <Import Project="..\packages\FixMe.0.1.1\build\FixMe.targets" Condition="Exists('..\packages\FixMe.0.1.1\build\FixMe.targets')" />
-  <Import Project="..\packages\GitVersionTask.4.0.0-beta0007\build\dotnet\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.4.0.0-beta0007\build\dotnet\GitVersionTask.targets')" />
+  <Import Project="..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets')" />
 </Project>

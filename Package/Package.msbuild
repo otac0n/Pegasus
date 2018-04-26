@@ -19,10 +19,10 @@
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\System.Collections.Immutable.dll" DestinationFolder="obj\$(Configuration)\build" />
     <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\System.Reflection.Metadata.dll" DestinationFolder="obj\$(Configuration)\build" />
     <Copy SourceFiles="Pegasus.targets" DestinationFolder="obj\$(Configuration)\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\net40" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\net40" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus.Common\bin\$(Configuration)-Portable\Pegasus.Common.xml" DestinationFolder="obj\$(Configuration)\lib\portable-sl4+win8" />
+    <ItemGroup>
+      <CommonFiles Include="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(CommonFiles)" DestinationFiles="@(CommonFiles->'obj\$(Configuration)\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
     <ItemGroup>
       <WorkbenchFiles Include="$(SolutionDir)Pegasus.Workbench\bin\$(Configuration)\**\*" />
     </ItemGroup>

@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Common.Highlighting
 {
@@ -236,7 +236,14 @@ namespace Pegasus.Common.Highlighting
                 }
 
                 lexicalStack.Push(Tuple.Create(maxRule ?? this.list.Count, e));
-                var key = string.Join(" ", lexicalStack.Select(d => d.Item2.Name));
+                var key = string.Join(
+                    " ",
+                    lexicalStack.Select(d => d.Item2.Name)
+#if NET35
+                    .ToArray()
+#endif
+                    );
+
                 var result = this.Highlight(key, maxRule);
 
                 if (result != null)
@@ -249,5 +256,27 @@ namespace Pegasus.Common.Highlighting
 
             return highlighted;
         }
+
+#if NET35 || NETSTANDARD1_0
+
+        private static class Tuple
+        {
+            public static Tuple<T1, T2> Create<T1, T2>(T1 item1, T2 item2) => new Tuple<T1, T2>(item1, item2);
+        }
+
+        private class Tuple<T1, T2>
+        {
+            public Tuple(T1 item1, T2 item2)
+            {
+                this.Item1 = item1;
+                this.Item2 = item2;
+            }
+
+            public T1 Item1 { get; }
+
+            public T2 Item2 { get; }
+        }
+
+#endif
     }
 }
