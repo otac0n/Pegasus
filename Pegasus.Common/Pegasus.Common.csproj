@@ -38,6 +38,6 @@
     <PackageReference Include="FixMe" Version="0.1.1" PrivateAssets="All" />
     <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" PrivateAssets="All" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="All" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta006" PrivateAssets="All" />
   </ItemGroup>
 </Project>
