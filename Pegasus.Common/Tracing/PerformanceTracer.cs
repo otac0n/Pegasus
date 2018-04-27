@@ -1,21 +1,20 @@
 // Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
-namespace Pegasus.Tests
+namespace Pegasus.Common.Tracing
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using Pegasus.Common;
-    using Pegasus.Common.Tracing;
 
     /// <summary>
-    /// Measures the performance of rules for the traced grammar.
+    /// Measures the performance characteristics of the rules in the traced grammar.
     /// </summary>
-    /// <remarks>
-    /// The default implementation of this class uses <see cref="Trace"/> to display the results. Override this class to customize how results are presented.
-    /// </remarks>
-    public class PerformanceTracer : ITracer
+    public
+#if NETSTANDARD1_0
+    abstract
+#endif
+    class PerformanceTracer : ITracer
     {
         private RuleStats cacheHitStats = new RuleStats();
         private Stack<RuleStackEntry> ruleStack = new Stack<RuleStackEntry>();
@@ -190,7 +189,7 @@ namespace Pegasus.Tests
             public double EstimatedTotalTicksSaved { get; internal set; }
 
             /// <summary>
-            /// The total number of invocations.
+            /// Gets the total number of invocations.
             /// </summary>
             public int Invocations { get; internal set; }
 
