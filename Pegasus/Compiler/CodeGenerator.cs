@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Compiler
 {
@@ -52,9 +52,9 @@ namespace Pegasus.Compiler
 
         public override void WalkGrammar(Grammar grammar) => this.RenderGrammar(grammar, this.writer, this.currentIndentation);
 
-        protected override void WalkAndCodeExpression(AndCodeExpression andCodeExpression) => this.RenderCodeAssertion(new { Code = andCodeExpression.Code, MustMatch = true }, this.writer, this.currentIndentation);
+        protected override void WalkAndCodeExpression(AndCodeExpression andCodeExpression) => this.RenderCodeAssertion(new { andCodeExpression.Code, MustMatch = true }, this.writer, this.currentIndentation);
 
-        protected override void WalkAndExpression(AndExpression andExpression) => this.RenderAssertion(new { Expression = andExpression.Expression, MustMatch = true }, this.writer, this.currentIndentation);
+        protected override void WalkAndExpression(AndExpression andExpression) => this.RenderAssertion(new { andExpression.Expression, MustMatch = true }, this.writer, this.currentIndentation);
 
         protected override void WalkChoiceExpression(ChoiceExpression choiceExpression) => this.RenderChoiceExpression(choiceExpression, this.writer, this.currentIndentation);
 
@@ -66,9 +66,9 @@ namespace Pegasus.Compiler
 
         protected override void WalkNameExpression(NameExpression nameExpression) => this.RenderNameExpression(nameExpression, this.writer, this.currentIndentation);
 
-        protected override void WalkNotCodeExpression(NotCodeExpression notCodeExpression) => this.RenderCodeAssertion(new { Code = notCodeExpression.Code, MustMatch = false }, this.writer, this.currentIndentation);
+        protected override void WalkNotCodeExpression(NotCodeExpression notCodeExpression) => this.RenderCodeAssertion(new { notCodeExpression.Code, MustMatch = false }, this.writer, this.currentIndentation);
 
-        protected override void WalkNotExpression(NotExpression notExpression) => this.RenderAssertion(new { Expression = notExpression.Expression, MustMatch = false }, this.writer, this.currentIndentation);
+        protected override void WalkNotExpression(NotExpression notExpression) => this.RenderAssertion(new { notExpression.Expression, MustMatch = false }, this.writer, this.currentIndentation);
 
         protected override void WalkPrefixedExpression(PrefixedExpression prefixedExpression) => this.RenderPrefixedExpression(prefixedExpression, this.writer, this.currentIndentation);
 
@@ -94,8 +94,7 @@ namespace Pegasus.Compiler
             {
                 var c = input[i];
 
-                string literal;
-                if (simpleEscapeChars.TryGetValue(c, out literal))
+                if (simpleEscapeChars.TryGetValue(c, out var literal))
                 {
                     sb.Append(literal);
                 }
@@ -115,8 +114,7 @@ namespace Pegasus.Compiler
 
         private string CreateVariable(string prefix)
         {
-            int instance;
-            this.variables.TryGetValue(prefix, out instance);
+            this.variables.TryGetValue(prefix, out var instance);
             this.variables[prefix] = instance + 1;
             return prefix + instance;
         }

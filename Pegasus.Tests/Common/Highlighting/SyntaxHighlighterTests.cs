@@ -136,8 +136,7 @@ namespace Pegasus.Tests.Common.Highlighting
             var compiled = PegCompiler.Compile(new PegParser().Parse(grammar));
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            parser.Parse(subject, null, out lexicalElements);
+            parser.Parse(subject, null, out var lexicalElements);
 
             var highlighter = new SyntaxHighlighter<Token>(rules);
             var tokens = highlighter.GetTokens(lexicalElements);

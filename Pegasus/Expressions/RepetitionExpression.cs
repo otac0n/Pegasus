@@ -16,18 +16,8 @@ namespace Pegasus.Expressions
         /// <param name="quantifier">The quantifier that specifies how many times to match and the delimiter of the matches.</param>
         public RepetitionExpression(Expression expression, Quantifier quantifier)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
-            if (quantifier == null)
-            {
-                throw new ArgumentNullException(nameof(quantifier));
-            }
-
-            this.Expression = expression;
-            this.Quantifier = quantifier;
+            this.Expression = expression ?? throw new ArgumentNullException(nameof(expression));
+            this.Quantifier = quantifier ?? throw new ArgumentNullException(nameof(quantifier));
         }
 
         /// <summary>

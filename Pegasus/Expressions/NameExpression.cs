@@ -15,12 +15,7 @@ namespace Pegasus.Expressions
         /// <param name="identifier">The name of the referenced expression.</param>
         public NameExpression(Identifier identifier)
         {
-            if (identifier == null)
-            {
-                throw new ArgumentNullException(nameof(identifier));
-            }
-
-            this.Identifier = identifier;
+            this.Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
         }
 
         /// <summary>

@@ -22,18 +22,8 @@ namespace Pegasus.Expressions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "flags", Justification = "The usage of 'flags' here is intentional and desired.")]
         public Rule(Identifier identifier, Expression expression, IEnumerable<Identifier> flags)
         {
-            if (identifier == null)
-            {
-                throw new ArgumentNullException(nameof(identifier));
-            }
-
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
-            this.Identifier = identifier;
-            this.Expression = expression;
+            this.Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            this.Expression = expression ?? throw new ArgumentNullException(nameof(expression));
             this.Flags = (flags ?? Enumerable.Empty<Identifier>()).ToList().AsReadOnly();
         }
 

@@ -15,9 +15,6 @@ namespace Pegasus.Common.Highlighting
         /// </summary>
         /// <param name="pattern">The pattern to use for matching.</param>
         /// <param name="value">The value of the match.</param>
-        public void Add(string pattern, T value)
-        {
-            this.Add(new HighlightRule<T>(pattern, value));
-        }
+        public void Add(string pattern, T value) => this.Add(new HighlightRule<T>(pattern, value));
     }
 }

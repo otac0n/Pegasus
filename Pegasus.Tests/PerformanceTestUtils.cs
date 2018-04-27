@@ -62,7 +62,7 @@ namespace Pegasus.Tests
             1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
             1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
             1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m, 1.97m,
-            1.97m, 1.97m, 1.97m, 1.97m, 1.96m
+            1.97m, 1.97m, 1.97m, 1.97m, 1.96m,
         };
 
         private static TimeSpan TestTargetTime => TimeSpan.FromSeconds(2);
@@ -165,7 +165,7 @@ namespace Pegasus.Tests
 
                 File.WriteAllLines(outputPath, new[]
                 {
-                    columns
+                    columns,
                 });
             }
 

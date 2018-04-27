@@ -49,8 +49,7 @@ namespace Pegasus.Common.Tracing
                 Stopwatch = Stopwatch.StartNew(),
             });
 
-            RuleStats ruleStats;
-            if (!this.stats.TryGetValue(ruleName, out ruleStats))
+            if (!this.stats.TryGetValue(ruleName, out var ruleStats))
             {
                 ruleStats = this.stats[ruleName] = new RuleStats();
             }

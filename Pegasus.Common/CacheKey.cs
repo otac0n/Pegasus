@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Common
 {
@@ -29,10 +29,10 @@ namespace Pegasus.Common
 
             unchecked
             {
-                var hash = (int)2166136261;
-                hash = hash * 16777619 ^ (this.ruleName == null ? 0 : this.ruleName.GetHashCode());
-                hash = hash * 16777619 ^ this.stateKey;
-                hash = hash * 16777619 ^ this.location;
+                var hash = 0x51ED270B;
+                hash = (hash * -0x25555529) + (this.ruleName == null ? 0 : this.ruleName.GetHashCode());
+                hash = (hash * -0x25555529) + this.stateKey;
+                hash = (hash * -0x25555529) + this.location;
                 this.hash = hash;
             }
         }
@@ -50,7 +50,7 @@ namespace Pegasus.Common
             }
 
             var other = obj as CacheKey;
-            if (!object.ReferenceEquals(other, null))
+            if (!(other is null))
             {
                 return
                     this.location == other.location &&
@@ -65,9 +65,6 @@ namespace Pegasus.Common
         /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>A hash code for the current <see cref="CacheKey"/>.</returns>
-        public override int GetHashCode()
-        {
-            return this.hash;
-        }
+        public override int GetHashCode() => this.hash;
     }
 }

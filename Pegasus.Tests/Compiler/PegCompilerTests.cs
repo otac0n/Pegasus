@@ -182,8 +182,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse("OK", null, out lexicalElements);
+            var result = parser.Parse("OK", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "b@0:0" }));
@@ -196,8 +195,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse("OK", null, out lexicalElements);
+            var result = parser.Parse("OK", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "a@0:1" }));
@@ -210,8 +208,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse("OK", null, out lexicalElements);
+            var result = parser.Parse("OK", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "a@0:2" }));
@@ -224,8 +221,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse("OK", null, out lexicalElements);
+            var result = parser.Parse("OK", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "a@0:2" }));
@@ -238,8 +234,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<IList<string>>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse("OK", null, out lexicalElements);
+            var result = parser.Parse("OK", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "a@0:2" }));
@@ -252,8 +247,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse("OK", null, out lexicalElements);
+            var result = parser.Parse("OK", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "a@0:0" }));
@@ -266,8 +260,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse("OK", null, out lexicalElements);
+            var result = parser.Parse("OK", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "a@0:1" }));
@@ -292,8 +285,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse("OK", null, out lexicalElements);
+            var result = parser.Parse("OK", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "b@0:2", "a@0:2" }));
@@ -306,8 +298,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse("OK ", null, out lexicalElements);
+            var result = parser.Parse("OK ", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "b@0:2", "a@0:3" }));
@@ -320,8 +311,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse(" OK", null, out lexicalElements);
+            var result = parser.Parse(" OK", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "b@1:3", "a@0:3" }));
@@ -334,8 +324,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            IList<LexicalElement> lexicalElements;
-            var result = parser.Parse(" OK ", null, out lexicalElements);
+            var result = parser.Parse(" OK ", null, out var lexicalElements);
 
             var actual = lexicalElements.Select(e => e.Name + "@" + e.StartCursor.Location + ":" + e.EndCursor.Location).ToArray();
             Assert.That(actual, Is.EqualTo(new[] { "b@1:3", "a@0:4" }));

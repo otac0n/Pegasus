@@ -16,18 +16,8 @@ namespace Pegasus.Expressions
         /// <param name="expression">The expression that has been prefixed.</param>
         public PrefixedExpression(Identifier prefix, Expression expression)
         {
-            if (prefix == null)
-            {
-                throw new ArgumentNullException(nameof(prefix));
-            }
-
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
-            this.Prefix = prefix;
-            this.Expression = expression;
+            this.Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
+            this.Expression = expression ?? throw new ArgumentNullException(nameof(expression));
         }
 
         /// <summary>

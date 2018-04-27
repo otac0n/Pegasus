@@ -49,8 +49,7 @@ namespace Pegasus.Compiler
 
             public override void WalkExpression(Expression expression)
             {
-                bool? starting;
-                if (!this.zeroWidth.TryGetValue(expression, out starting))
+                if (!this.zeroWidth.TryGetValue(expression, out var starting))
                 {
                     this.zeroWidth[expression] = starting;
                 }
@@ -127,8 +126,7 @@ namespace Pegasus.Compiler
 
             protected override void WalkNameExpression(NameExpression nameExpression)
             {
-                bool? result;
-                this.zeroWidth.TryGetValue(this.rules[nameExpression.Identifier.Name].Expression, out result);
+                this.zeroWidth.TryGetValue(this.rules[nameExpression.Identifier.Name].Expression, out var result);
                 this.zeroWidth[nameExpression] = result;
             }
 

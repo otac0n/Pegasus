@@ -125,8 +125,7 @@ namespace Pegasus.Common
         {
             get
             {
-                object value;
-                this.state.TryGetValue(key, out value);
+                this.state.TryGetValue(key, out var value);
                 return value;
             }
 
@@ -191,7 +190,7 @@ namespace Pegasus.Common
         /// <param name="other">A <see cref="Cursor"/> to compare with this <see cref="Cursor"/>.</param>
         /// <returns>true if the cursors represent the same location at the same state; otherwise, false.</returns>
         public bool Equals(Cursor other) =>
-            !object.ReferenceEquals(other, null) &&
+            !(other is null) &&
             this.Location == other.Location &&
             this.Subject == other.Subject &&
             this.FileName == other.FileName &&
@@ -203,13 +202,15 @@ namespace Pegasus.Common
         /// <returns>A hash code for the current <see cref="Cursor"/>.</returns>
         public override int GetHashCode()
         {
-            var hash = 0x51ED270B;
-            hash = (hash * -0x25555529) + this.Subject.GetHashCode();
-            hash = (hash * -0x25555529) + this.Location.GetHashCode();
-            hash = (hash * -0x25555529) + (this.FileName == null ? 0 : this.FileName.GetHashCode());
-            hash = (hash * -0x25555529) + this.stateKey;
-
-            return hash;
+            unchecked
+            {
+                var hash = 0x51ED270B;
+                hash = (hash * -0x25555529) + this.Subject.GetHashCode();
+                hash = (hash * -0x25555529) + this.Location.GetHashCode();
+                hash = (hash * -0x25555529) + (this.FileName == null ? 0 : this.FileName.GetHashCode());
+                hash = (hash * -0x25555529) + this.stateKey;
+                return hash;
+            }
         }
 
         /// <summary>
@@ -228,22 +229,16 @@ namespace Pegasus.Common
         /// Creates an identical cursor with a unique <see cref="StateKey"/>.
         /// </summary>
         /// <returns>A unique cursor.</returns>
-        public Cursor Touch()
-        {
-            return new Cursor(this.Subject, this.Location, this.FileName, this.Line, this.Column, this.inTransition, this.mutable ? new Dictionary<string, object>(this.state) : this.state, GetNextStateKey(), this.mutable);
-        }
+        public Cursor Touch() => new Cursor(this.Subject, this.Location, this.FileName, this.Line, this.Column, this.inTransition, this.mutable ? new Dictionary<string, object>(this.state) : this.state, GetNextStateKey(), this.mutable);
 
         /// <summary>
         /// Returns a <see cref="Cursor"/> with the specified mutability.
         /// </summary>
         /// <param name="mutable">A value indicating whether or not the resulting <see cref="Cursor"/> should be mutable.</param>
         /// <returns>A <see cref="Cursor"/> with the specified mutability.</returns>
-        public Cursor WithMutability(bool mutable)
-        {
-            return !mutable && !this.mutable
+        public Cursor WithMutability(bool mutable) => !mutable && !this.mutable
                 ? this
                 : new Cursor(this.Subject, this.Location, this.FileName, this.Line, this.Column, this.inTransition, new Dictionary<string, object>(this.state), this.stateKey, mutable);
-        }
 
         private static int GetNextStateKey() => Interlocked.Increment(ref previousStateKey);
 

@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Expressions
 {
@@ -53,10 +53,13 @@ namespace Pegasus.Expressions
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            var hash = 0x51ED270B;
-            hash = (hash * -0x25555529) + this.Min.GetHashCode();
-            hash = (hash * -0x25555529) + this.Max.GetHashCode();
-            return hash;
+            unchecked
+            {
+                var hash = 0x51ED270B;
+                hash = (hash * -0x25555529) + this.Min.GetHashCode();
+                hash = (hash * -0x25555529) + this.Max.GetHashCode();
+                return hash;
+            }
         }
     }
 }

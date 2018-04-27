@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Compiler
 {
@@ -51,118 +51,61 @@ namespace Pegasus.Compiler
         {
             return expression =>
             {
-                AndExpression andExpression;
-                AndCodeExpression andCodeExpression;
-                ChoiceExpression choiceExpression;
-                ClassExpression classExpression;
-                CodeExpression codeExpression;
-                LiteralExpression literalExpression;
-                NameExpression nameExpression;
-                NotExpression notExpression;
-                NotCodeExpression notCodeExpression;
-                PrefixedExpression prefixedExpression;
-                RepetitionExpression repetitionExpression;
-                SequenceExpression sequenceExpression;
-                TypedExpression typedExpression;
-                WildcardExpression wildcardExpression;
-
-                if ((andExpression = expression as AndExpression) != null)
+                if (expression is AndExpression andExpression)
                 {
-                    if (And != null)
-                    {
-                        And(andExpression);
-                    }
+                    And?.Invoke(andExpression);
                 }
-                else if ((andCodeExpression = expression as AndCodeExpression) != null)
+                else if (expression is AndCodeExpression andCodeExpression)
                 {
-                    if (AndCode != null)
-                    {
-                        AndCode(andCodeExpression);
-                    }
+                    AndCode?.Invoke(andCodeExpression);
                 }
-                else if ((choiceExpression = expression as ChoiceExpression) != null)
+                else if (expression is ChoiceExpression choiceExpression)
                 {
-                    if (Choice != null)
-                    {
-                        Choice(choiceExpression);
-                    }
+                    Choice?.Invoke(choiceExpression);
                 }
-                else if ((classExpression = expression as ClassExpression) != null)
+                else if (expression is ClassExpression classExpression)
                 {
-                    if (Class != null)
-                    {
-                        Class(classExpression);
-                    }
+                    Class?.Invoke(classExpression);
                 }
-                else if ((codeExpression = expression as CodeExpression) != null)
+                else if (expression is CodeExpression codeExpression)
                 {
-                    if (Code != null)
-                    {
-                        Code(codeExpression);
-                    }
+                    Code?.Invoke(codeExpression);
                 }
-                else if ((literalExpression = expression as LiteralExpression) != null)
+                else if (expression is LiteralExpression literalExpression)
                 {
-                    if (Literal != null)
-                    {
-                        Literal(literalExpression);
-                    }
+                    Literal?.Invoke(literalExpression);
                 }
-                else if ((nameExpression = expression as NameExpression) != null)
+                else if (expression is NameExpression nameExpression)
                 {
-                    if (Name != null)
-                    {
-                        Name(nameExpression);
-                    }
+                    Name?.Invoke(nameExpression);
                 }
-                else if ((notExpression = expression as NotExpression) != null)
+                else if (expression is NotExpression notExpression)
                 {
-                    if (Not != null)
-                    {
-                        Not(notExpression);
-                    }
+                    Not?.Invoke(notExpression);
                 }
-                else if ((notCodeExpression = expression as NotCodeExpression) != null)
+                else if (expression is NotCodeExpression notCodeExpression)
                 {
-                    if (NotCode != null)
-                    {
-                        NotCode(notCodeExpression);
-                    }
+                    NotCode?.Invoke(notCodeExpression);
                 }
-                else if ((prefixedExpression = expression as PrefixedExpression) != null)
+                else if (expression is PrefixedExpression prefixedExpression)
                 {
-                    if (Prefixed != null)
-                    {
-                        Prefixed(prefixedExpression);
-                    }
+                    Prefixed?.Invoke(prefixedExpression);
                 }
-                else if ((repetitionExpression = expression as RepetitionExpression) != null)
+                else if (expression is RepetitionExpression repetitionExpression)
                 {
-                    if (Repetition != null)
-                    {
-                        Repetition(repetitionExpression);
-                    }
+                    Repetition?.Invoke(repetitionExpression);
                 }
-                else if ((sequenceExpression = expression as SequenceExpression) != null)
+                else if (expression is SequenceExpression sequenceExpression)
                 {
-                    if (Sequence != null)
-                    {
-                        Sequence(sequenceExpression);
-                    }
+                    Sequence?.Invoke(sequenceExpression);
                 }
-                else if ((typedExpression = expression as TypedExpression) != null)
+                else if (expression is TypedExpression typedExpression)
                 {
-                    if (Typed != null)
-                    {
-                        Typed(typedExpression);
-                    }
+                    Typed?.Invoke(typedExpression);
                 }
-                else if ((wildcardExpression = expression as WildcardExpression) != null)
+                else if (expression is WildcardExpression wildcardExpression)
                 {
-                    if (Wildcard != null)
-                    {
-                        Wildcard(wildcardExpression);
-                    }
+                    Wildcard?.Invoke(wildcardExpression);
                 }
                 else
                 {

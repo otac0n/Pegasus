@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Package
 {
@@ -188,11 +188,8 @@ namespace Pegasus.Package
 
             private static string GetAllText(IVsTextLines buffer)
             {
-                int endLine, endIndex;
-                string text;
-
-                if (buffer.GetLastLineIndex(out endLine, out endIndex) != VSConstants.S_OK ||
-                    buffer.GetLineText(0, 0, endLine, endIndex, out text) != VSConstants.S_OK)
+                if (buffer.GetLastLineIndex(out var endLine, out var endIndex) != VSConstants.S_OK ||
+                    buffer.GetLineText(0, 0, endLine, endIndex, out var text) != VSConstants.S_OK)
                 {
                     text = null;
                 }
@@ -202,8 +199,7 @@ namespace Pegasus.Package
 
             private static IList<HighlightedSegment<TokenType>> GetHighlightedTokens(string text)
             {
-                var cached = MemoryCache.Default.Get(text) as IList<HighlightedSegment<TokenType>>;
-                if (cached != null)
+                if (MemoryCache.Default.Get(text) is IList<HighlightedSegment<TokenType>> cached)
                 {
                     return cached;
                 }

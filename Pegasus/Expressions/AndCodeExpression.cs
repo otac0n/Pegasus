@@ -15,12 +15,7 @@ namespace Pegasus.Expressions
         /// <param name="code">The code to execute for the assertion.</param>
         public AndCodeExpression(CodeSpan code)
         {
-            if (code == null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            this.Code = code;
+            this.Code = code ?? throw new ArgumentNullException(nameof(code));
         }
 
         /// <summary>

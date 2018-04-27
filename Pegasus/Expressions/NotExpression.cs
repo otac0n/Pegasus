@@ -15,12 +15,7 @@ namespace Pegasus.Expressions
         /// <param name="expression">An expression that must not match at a location for this expression to match at that location.</param>
         public NotExpression(Expression expression)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
-            this.Expression = expression;
+            this.Expression = expression ?? throw new ArgumentNullException(nameof(expression));
         }
 
         /// <summary>

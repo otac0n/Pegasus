@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Compiler
 {
@@ -26,8 +26,7 @@ namespace Pegasus.Compiler
             var stack = new Stack<Rule>();
             var ruleData = new Dictionary<Rule, RuleData>();
 
-            Func<Rule, RuleData> strongConnect = null;
-            strongConnect = v =>
+            RuleData StrongConnect(Rule v)
             {
                 var vData = ruleData[v] = new RuleData
                 {
@@ -44,10 +43,9 @@ namespace Pegasus.Compiler
                                     .Where(n => n != v.Identifier.Name)
                                     .Select(n => ruleLookup[n]))
                 {
-                    RuleData wData;
-                    if (!ruleData.TryGetValue(w, out wData))
+                    if (!ruleData.TryGetValue(w, out var wData))
                     {
-                        wData = strongConnect(w);
+                        wData = StrongConnect(w);
                         vData.LowLink = Math.Min(vData.LowLink, wData.LowLink);
                     }
                     else if (stack.Contains(w))
@@ -76,13 +74,13 @@ namespace Pegasus.Compiler
                 }
 
                 return vData;
-            };
+            }
 
             foreach (var v in ruleLookup.Values)
             {
                 if (!ruleData.ContainsKey(v))
                 {
-                    strongConnect(v);
+                    StrongConnect(v);
                 }
             }
 

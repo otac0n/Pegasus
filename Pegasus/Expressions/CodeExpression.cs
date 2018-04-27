@@ -42,12 +42,7 @@ namespace Pegasus.Expressions
         /// <param name="codeType">The semantic usage of this expression.</param>
         public CodeExpression(CodeSpan codeSpan, CodeType codeType)
         {
-            if (codeSpan == null)
-            {
-                throw new ArgumentNullException(nameof(codeSpan));
-            }
-
-            this.CodeSpan = codeSpan;
+            this.CodeSpan = codeSpan ?? throw new ArgumentNullException(nameof(codeSpan));
             this.CodeType = codeType;
         }
 

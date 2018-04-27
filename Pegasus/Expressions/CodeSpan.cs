@@ -21,24 +21,9 @@ namespace Pegasus.Expressions
         /// <param name="value">The value of the code span.</param>
         public CodeSpan(string code, Cursor start, Cursor end, string value = null)
         {
-            if (code == null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (start == null)
-            {
-                throw new ArgumentNullException(nameof(start));
-            }
-
-            if (end == null)
-            {
-                throw new ArgumentNullException(nameof(end));
-            }
-
-            this.Code = code;
-            this.Start = start;
-            this.End = end;
+            this.Code = code ?? throw new ArgumentNullException(nameof(code));
+            this.Start = start ?? throw new ArgumentNullException(nameof(start));
+            this.End = end ?? throw new ArgumentNullException(nameof(end));
             this.value = value ?? code;
         }
 

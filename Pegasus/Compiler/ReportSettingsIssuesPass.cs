@@ -41,8 +41,7 @@ namespace Pegasus.Compiler
             {
                 var cursor = setting.Key.Start;
 
-                bool singleAllowed;
-                if (KnownSettings.TryGetValue(setting.Key.Name, out singleAllowed))
+                if (KnownSettings.TryGetValue(setting.Key.Name, out var singleAllowed))
                 {
                     if (singleAllowed && !seenSettings.Add(setting.Key.Name))
                     {
@@ -54,8 +53,7 @@ namespace Pegasus.Compiler
                     result.AddCompilerError(cursor, () => Resources.PEG0006_WARNING_SettingUnknown, setting.Key.Name);
                 }
 
-                string pattern;
-                if (ValuePatterns.TryGetValue(setting.Key.Name, out pattern))
+                if (ValuePatterns.TryGetValue(setting.Key.Name, out var pattern))
                 {
                     if (!Regex.IsMatch(setting.Value.ToString(), pattern))
                     {

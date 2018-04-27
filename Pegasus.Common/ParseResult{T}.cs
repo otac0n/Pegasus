@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Common
 {
@@ -70,7 +70,7 @@ namespace Pegasus.Common
         /// <param name="other">A <see cref="ParseResult{T}"/> to compare with this <see cref="ParseResult{T}"/>.</param>
         /// <returns>true if the parse results are considered equal; otherwise, false.</returns>
         public bool Equals(ParseResult<T> other) =>
-            !object.ReferenceEquals(other, null) &&
+            !(other is null) &&
             this.StartCursor == other.StartCursor &&
             this.EndCursor == other.EndCursor &&
             object.Equals(this.Value, other.Value);
@@ -81,12 +81,14 @@ namespace Pegasus.Common
         /// <returns>A hash code for the current <see cref="ParseResult{T}"/>.</returns>
         public override int GetHashCode()
         {
-            var hash = 0x51ED270B;
-            hash = (hash * -0x25555529) + this.StartCursor.GetHashCode();
-            hash = (hash * -0x25555529) + this.EndCursor.GetHashCode();
-            hash = (hash * -0x25555529) + (object.ReferenceEquals(this.Value, null) ? 0 : this.Value.GetHashCode());
-
-            return hash;
+            unchecked
+            {
+                var hash = 0x51ED270B;
+                hash = (hash * -0x25555529) + this.StartCursor.GetHashCode();
+                hash = (hash * -0x25555529) + this.EndCursor.GetHashCode();
+                hash = (hash * -0x25555529) + (object.ReferenceEquals(this.Value, null) ? 0 : this.Value.GetHashCode());
+                return hash;
+            }
         }
     }
 }

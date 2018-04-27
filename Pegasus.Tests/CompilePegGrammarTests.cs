@@ -131,8 +131,7 @@ namespace Pegasus.Tests
         [Test]
         public void Execute_WithMisMatchedNumberOfArguments_LogsError()
         {
-            List<BuildEventArgs> buildEvents;
-            var result = TestTask(new[] { "a.peg" }, new string[0], out buildEvents);
+            var result = TestTask(new[] { "a.peg" }, new string[0], out var buildEvents);
 
             Assert.That(result, Is.False);
         }
@@ -140,21 +139,18 @@ namespace Pegasus.Tests
         [Test]
         public void Execute_WithMisMatchedNumberOfArguments_ReturnsFalse()
         {
-            List<BuildEventArgs> buildEvents;
-            var result = TestTask(new[] { "a.peg" }, new string[0], out buildEvents);
+            var result = TestTask(new[] { "a.peg" }, new string[0], out var buildEvents);
 
             Assert.That(buildEvents.OfType<BuildErrorEventArgs>(), Is.Not.Empty);
         }
 
         private static void TestTask(string pegGrammar, Action<string, string, bool, List<BuildEventArgs>> assert)
         {
-            string tempPegFile;
             string tempCsFile;
-            using (Disposable.TempFile(pegGrammar, out tempPegFile))
+            using (Disposable.TempFile(pegGrammar, out var tempPegFile))
             using (Disposable.TempGeneratedFile(tempCsFile = tempPegFile + ".g.cs"))
             {
-                List<BuildEventArgs> buildEvents;
-                var result = TestTask(new[] { tempPegFile }, null, out buildEvents);
+                var result = TestTask(new[] { tempPegFile }, null, out var buildEvents);
                 assert(tempPegFile, tempCsFile, result, buildEvents);
             }
         }

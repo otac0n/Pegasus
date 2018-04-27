@@ -16,18 +16,8 @@ namespace Pegasus.Expressions
         /// <param name="expression">The wrapped expression.</param>
         public TypedExpression(CodeSpan type, Expression expression)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
-            this.Type = type;
-            this.Expression = expression;
+            this.Type = type ?? throw new ArgumentNullException(nameof(type));
+            this.Expression = expression ?? throw new ArgumentNullException(nameof(expression));
         }
 
         /// <summary>

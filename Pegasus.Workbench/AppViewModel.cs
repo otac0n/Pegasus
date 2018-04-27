@@ -47,8 +47,7 @@ namespace Pegasus.Workbench
             var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges);
             var testResults = testParser.Results.Select(r =>
             {
-                var s = r as string;
-                return s != null ? s : JsonConvert.SerializeObject(r, Formatting.Indented);
+                return r is string s ? s : JsonConvert.SerializeObject(r, Formatting.Indented);
             });
 
             var comparer = new CompilerErrorListEqualityComparer();

@@ -22,22 +22,13 @@ namespace Pegasus.Common.Tracing
         public static DiagnosticsTracer Instance { get; } = new DiagnosticsTracer();
 
         /// <inheritdoc/>
-        public void TraceCacheHit<T>(string ruleName, Cursor cursor, CacheKey cacheKey, IParseResult<T> parseResult)
-        {
-            this.TraceInfo(ruleName, cursor, "Cache hit.");
-        }
+        public void TraceCacheHit<T>(string ruleName, Cursor cursor, CacheKey cacheKey, IParseResult<T> parseResult) => this.TraceInfo(ruleName, cursor, "Cache hit.");
 
         /// <inheritdoc/>
-        public void TraceCacheMiss(string ruleName, Cursor cursor, CacheKey cacheKey)
-        {
-            this.TraceInfo(ruleName, cursor, "Cache miss.");
-        }
+        public void TraceCacheMiss(string ruleName, Cursor cursor, CacheKey cacheKey) => this.TraceInfo(ruleName, cursor, "Cache miss.");
 
         /// <inheritdoc/>
-        public void TraceInfo(string ruleName, Cursor cursor, string info)
-        {
-            Trace.WriteLine(info);
-        }
+        public void TraceInfo(string ruleName, Cursor cursor, string info) => Trace.WriteLine(info);
 
         /// <inheritdoc/>
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "This is fine.")]

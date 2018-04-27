@@ -154,8 +154,7 @@ namespace Pegasus.Compiler
             {
                 map = map ?? (t => t);
 
-                object type;
-                if (!this.types.ContainsKey(expression) && this.types.TryGetValue(toCopy, out type))
+                if (!this.types.ContainsKey(expression) && this.types.TryGetValue(toCopy, out var type))
                 {
                     this.types[expression] = map(type);
                 }

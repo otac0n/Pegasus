@@ -73,8 +73,7 @@ namespace Pegasus.Workbench
                     return new HighlightColor(Color.DarkGreen, false, false);
             }
 
-            HighlightColor color;
-            if (name == null || !this.environmentColors.TryGetValue(name, out color))
+            if (name == null || !this.environmentColors.TryGetValue(name, out var color))
             {
                 color = new HighlightColor(SystemColors.WindowText, false, false);
             }
@@ -138,8 +137,7 @@ namespace Pegasus.Workbench
 
         private static IList<HighlightedSegment<string>> GetHighlightedTokens(string text)
         {
-            var cached = MemoryCache.Default.Get(text) as IList<HighlightedSegment<string>>;
-            if (cached != null)
+            if (MemoryCache.Default.Get(text) is IList<HighlightedSegment<string>> cached)
             {
                 return cached;
             }

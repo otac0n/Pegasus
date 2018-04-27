@@ -17,10 +17,7 @@ namespace Pegasus.Common
         /// <param name="this">The list being prepended.</param>
         /// <param name="value">The value to prepend to the list.</param>
         /// <returns>A new read-only list with the given value prepended.</returns>
-        public static ListNode<T> Push<T>(this ListNode<T> @this, T value)
-        {
-            return new ListNode<T>(value, @this);
-        }
+        public static ListNode<T> Push<T>(this ListNode<T> @this, T value) => new ListNode<T>(value, @this);
 
         /// <summary>
         /// Converts a read-only <see cref="ListNode{T}"/> into a <see cref="List{T}"/>.

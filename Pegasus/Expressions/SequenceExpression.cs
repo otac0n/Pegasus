@@ -25,9 +25,8 @@ namespace Pegasus.Expressions
             var flattened = new List<Expression>();
             foreach (var e in sequence)
             {
-                SequenceExpression sequenceExpression;
                 LiteralExpression literalExpression;
-                if ((sequenceExpression = e as SequenceExpression) != null)
+                if (e is SequenceExpression sequenceExpression)
                 {
                     var last = sequenceExpression.Sequence.LastOrDefault() as CodeExpression;
                     if (last == null || last.CodeType == CodeType.State || last.CodeType == CodeType.Error)
