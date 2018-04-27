@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Workbench.Pipeline
 {
@@ -16,6 +16,27 @@ namespace Pegasus.Workbench.Pipeline
         {
             var compileResults = grammars
                 .ObserveOn(Scheduler.Default)
+                .Select(grammar =>
+                {
+                    if (grammar == null)
+                    {
+                        return grammar;
+                    }
+
+                    var trace = grammar.Settings.Where(s => s.Key.Name == "trace").SingleOrDefault();
+                    var identifier = trace.Key;
+                    if (identifier != null && trace.Value.ToString() == "true")
+                    {
+                        return grammar;
+                    }
+
+                    identifier = identifier ?? new Identifier("trace", grammar.End, grammar.End);
+                    var traceSetting = new KeyValuePair<Identifier, object>(identifier, "true");
+                    return new Grammar(
+                        grammar.Rules,
+                        grammar.Settings.Where(s => s.Key.Name != "trace").Concat(new[] { traceSetting }),
+                        grammar.End);
+                })
                 .Select(r => r == null ? new Compiler.CompileResult(r) : Compiler.PegCompiler.Compile(r))
                 .Publish()
                 .RefCount();

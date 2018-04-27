@@ -82,7 +82,7 @@ namespace Pegasus.Common.Tracing
                     ? 1.35
                     : (double)this.cacheHitStats.TotalTicks / this.cacheHitStats.Invocations;
 
-                this.ReportPerformance(cacheHitTicks, this.stats.Select(stat =>
+                this.ReportPerformance(TimeSpan.FromTicks((long)Math.Round(cacheHitTicks)), this.stats.Select(stat =>
                 {
                     var stats = stat.Value;
                     var isCached = stats.CacheMisses > 0;
@@ -98,11 +98,11 @@ namespace Pegasus.Common.Tracing
                     {
                         Name = stat.Key,
                         Invocations = stats.Invocations,
-                        AverageTicks = averageTicks,
+                        AverageTime = TimeSpan.FromTicks((long)Math.Round(averageTicks)),
                         IsCached = isCached,
                         CacheHits = cacheHits,
                         CacheMisses = cacheMisses,
-                        EstimatedTotalTicksSaved = estimatedTimeSaved,
+                        EstimatedTotalTimeSaved = TimeSpan.FromTicks((long)Math.Round(estimatedTimeSaved)),
                     };
                 }).ToArray());
             }
@@ -111,20 +111,20 @@ namespace Pegasus.Common.Tracing
         /// <summary>
         /// Displays or otherwise presents the results of the trace.
         /// </summary>
-        /// <param name="averageCacheHitTicks">The average duration of a cache hit.</param>
+        /// <param name="averageCacheHitDuration">The average duration of a cache hit.</param>
         /// <param name="stats">The performance stats to report.</param>
-        protected virtual void ReportPerformance(double averageCacheHitTicks, RulePerformanceInfo[] stats)
+        protected virtual void ReportPerformance(TimeSpan averageCacheHitDuration, RulePerformanceInfo[] stats)
         {
 #if !NETSTANDARD1_0
 
-            Trace.WriteLine($"Average Cache Hit Duration: {TimeSpan.FromTicks((long)Math.Round(averageCacheHitTicks))}");
+            Trace.WriteLine($"Average Cache Hit Duration: {averageCacheHitDuration}");
             foreach (var stat in stats)
             {
                 Trace.WriteLine($"Rule: {stat.Name}");
                 Trace.Indent();
 
                 Trace.WriteLine($"Invocations: {stat.Invocations}");
-                Trace.WriteLine($"Average Duration: {TimeSpan.FromTicks((long)Math.Round(stat.AverageTicks))}");
+                Trace.WriteLine($"Average Duration: {stat.AverageTime}");
                 Trace.WriteLine($"Is Cached: {stat.IsCached}");
                 Trace.Indent();
 
@@ -140,20 +140,18 @@ namespace Pegasus.Common.Tracing
 
                 Trace.Unindent();
 
-                var timeSaved = TimeSpan.FromTicks((long)Math.Round(stat.EstimatedTotalTicksSaved));
-
                 if (stat.IsCached || stat.CacheHits > 0)
                 {
-                    Trace.WriteLine($"Estimated Time Saved: {timeSaved}");
+                    Trace.WriteLine($"Estimated Time Saved: {stat.EstimatedTotalTimeSaved}");
                 }
 
-                if (!stat.IsCached && stat.EstimatedTotalTicksSaved > 0)
+                if (!stat.IsCached && stat.EstimatedTotalTimeSaved > TimeSpan.Zero)
                 {
-                    Trace.WriteLine($"Recommendation: Add the -memoize flag to `{stat.Name}`. (Saves {timeSaved})");
+                    Trace.WriteLine($"Recommendation: Add the -memoize flag to `{stat.Name}`. (Saves {stat.EstimatedTotalTimeSaved})");
                 }
-                else if (stat.IsCached && stat.EstimatedTotalTicksSaved < -TimeSpan.FromMilliseconds(10).Ticks)
+                else if (stat.IsCached && stat.EstimatedTotalTimeSaved < -TimeSpan.FromMilliseconds(10))
                 {
-                    Trace.WriteLine($"Recommendation: Remove -memoize flag from `{stat.Name}`. (Saves {timeSaved.Negate()})");
+                    Trace.WriteLine($"Recommendation: Remove -memoize flag from `{stat.Name}`. (Saves {stat.EstimatedTotalTimeSaved.Negate()})");
                 }
 
                 Trace.Unindent();
@@ -170,7 +168,7 @@ namespace Pegasus.Common.Tracing
             /// <summary>
             /// Gets the average duration of each invocation.
             /// </summary>
-            public double AverageTicks { get; internal set; }
+            public TimeSpan AverageTime { get; internal set; }
 
             /// <summary>
             /// Gets the total number of invocations that were a cache hit, or the total number of redundant invocations if the rule is not cached.
@@ -185,7 +183,7 @@ namespace Pegasus.Common.Tracing
             /// <summary>
             /// Gets the estimated total time saved by memoizing this rule.
             /// </summary>
-            public double EstimatedTotalTicksSaved { get; internal set; }
+            public TimeSpan EstimatedTotalTimeSaved { get; internal set; }
 
             /// <summary>
             /// Gets the total number of invocations.
