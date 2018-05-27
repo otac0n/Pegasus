@@ -234,9 +234,9 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\FixMe.0.1.1\build\FixMe.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\FixMe.0.1.1\build\FixMe.targets'))" />
+    <Error Condition="!Exists('..\packages\FixMe.1.0.0\build\FixMe.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\FixMe.1.0.0\build\FixMe.targets'))" />
     <Error Condition="!Exists('..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets'))" />
   </Target>
-  <Import Project="..\packages\FixMe.0.1.1\build\FixMe.targets" Condition="Exists('..\packages\FixMe.0.1.1\build\FixMe.targets')" />
+  <Import Project="..\packages\FixMe.1.0.0\build\FixMe.targets" Condition="Exists('..\packages\FixMe.1.0.0\build\FixMe.targets')" />
   <Import Project="..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets')" />
 </Project>
