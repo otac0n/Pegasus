@@ -158,6 +158,21 @@ namespace Pegasus.Tests
             Assert.That(error.ErrorNumber, Is.EqualTo("PEG0024"));
         }
 
+        [Test(Description = "GitHub bug #109")]
+        [TestCase("object = '' .+")]
+        [TestCase("object -memoize = '' .+")]
+        [TestCase("x = object; object -memoize = '' .+")]
+        [TestCase("x = object:object { @object }; object = '' .+")]
+        public void Compile_WhenRuleNameIsAReservedWord_CompilesCorrectly(string grammarText)
+        {
+            var grammar = new PegParser().Parse(grammarText);
+
+            var compiled = PegCompiler.Compile(grammar);
+            var parser = CodeCompiler.Compile<string>(compiled);
+
+            Assert.That(parser.Parse("OK"), Is.EqualTo("OK"));
+        }
+
         [Test(Description = "GitHub bug #38")]
         public void Parse_WhenARepetitionDelimiterFollowsTheRepeatedRule_DoesNotConsumeTheDelimiter()
         {

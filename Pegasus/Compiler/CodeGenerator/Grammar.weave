@@ -1,4 +1,4 @@
-﻿@model Grammar
+@model Grammar
 {{
     var settings = model.Settings.ToLookup(s => s.Key.Name, s => s.Value);
     var assemblyName = Assembly.GetExecutingAssembly().GetName();
@@ -132,7 +132,7 @@ namespace
             public {{= type }} Parse(string subject, string fileName{{if !hasLexical}} = null{{else}}, out IList<LexicalElement> lexicalElements{{/if}})
             {
                 var cursor = new Cursor(subject, 0, fileName);
-                return this.StartRuleHelper(cursor, this.{{= startRule }}, "{{= startRule }}"{{if hasLexical}}, out lexicalElements{{/if}}).Value;
+                return this.StartRuleHelper(cursor, this.{{: startRule }}, "{{= startRule }}"{{if hasLexical}}, out lexicalElements{{/if}}).Value;
             }
         {{/if}}
         {{each rule in model.Rules.Where(r => r.Flags.Any(f => f.Name == "public"))}}
@@ -171,7 +171,7 @@ namespace
             public {{= type }} {{: publicName }}(string subject, string fileName{{if !hasLexical}} = null{{else}}, out IList<LexicalElement> lexicalElements{{/if}})
             {
                 var cursor = new Cursor(subject, 0, fileName);
-                return this.StartRuleHelper(cursor, this.{{= rule.Identifier.Name }}, "{{= rule.Identifier.Name }}"{{if hasLexical}}, out lexicalElements{{/if}}).Value;
+                return this.StartRuleHelper(cursor, this.{{: rule.Identifier.Name }}, "{{= rule.Identifier.Name }}"{{if hasLexical}}, out lexicalElements{{/if}}).Value;
             }
         {{/each}}
 
