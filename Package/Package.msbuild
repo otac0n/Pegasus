@@ -12,20 +12,14 @@
     <GetVersion SolutionDirectory="$(SolutionDir)" NoFetch="$(GitVersion_NoFetchEnabled)">
       <Output TaskParameter="NuGetVersion" PropertyName="GitVersion_NuGetVersion" />
     </GetVersion>
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.exe" DestinationFolder="obj\$(Configuration)\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Pegasus.Common.dll" DestinationFolder="obj\$(Configuration)\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Microsoft.CodeAnalysis.CSharp.dll" DestinationFolder="obj\$(Configuration)\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\Microsoft.CodeAnalysis.dll" DestinationFolder="obj\$(Configuration)\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\System.Collections.Immutable.dll" DestinationFolder="obj\$(Configuration)\build" />
-    <Copy SourceFiles="$(SolutionDir)Pegasus\bin\$(Configuration)\System.Reflection.Metadata.dll" DestinationFolder="obj\$(Configuration)\build" />
-    <Copy SourceFiles="Pegasus.targets" DestinationFolder="obj\$(Configuration)\build" />
     <ItemGroup>
+      <BuildFiles Include="$(SolutionDir)Pegasus\bin\$(Configuration)\**\*" />
       <CommonFiles Include="$(SolutionDir)Pegasus.Common\bin\$(Configuration)\**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(CommonFiles)" DestinationFiles="@(CommonFiles->'obj\$(Configuration)\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <ItemGroup>
       <WorkbenchFiles Include="$(SolutionDir)Pegasus.Workbench\bin\$(Configuration)\**\*" />
     </ItemGroup>
+    <Copy SourceFiles="Pegasus.targets" DestinationFolder="obj\$(Configuration)\build" />
+    <Copy SourceFiles="@(BuildFiles)" DestinationFiles="@(BuildFiles->'obj\$(Configuration)\build\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(CommonFiles)" DestinationFiles="@(CommonFiles->'obj\$(Configuration)\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WorkbenchFiles)" DestinationFiles="@(WorkbenchFiles->'obj\$(Configuration)\tools\workbench\%(RecursiveDir)%(Filename)%(Extension)')" />
     <ReplaceFileText
       InputFilename="$(SolutionDir)readme.md"

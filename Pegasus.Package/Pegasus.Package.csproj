@@ -210,6 +210,7 @@
     <ProjectReference Include="..\Pegasus\Pegasus.csproj">
       <Project>{58f12d13-9997-4c29-90ce-3c6c7409ba68}</Project>
       <Name>Pegasus</Name>
+      <AdditionalProperties>TargetFramework=net45</AdditionalProperties>
     </ProjectReference>
     <ProjectReference Include="..\Pegasus.Templates\Pegasus.Templates.csproj">
       <Project>{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}</Project>

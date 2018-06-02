@@ -1,138 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\SharedAssemblyInfo.props" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{58F12D13-9997-4C29-90CE-3C6C7409BA68}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <StartupObject>Pegasus.Program</StartupObject>
     <ApplicationIcon>..\Pegasus.ico</ApplicationIcon>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pegasus</RootNamespace>
-    <AssemblyName>Pegasus</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Pegasus.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>..\Strict.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Pegasus.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>..\Strict.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <CodeAnalysisRuleSet>Pegasus.ruleset</CodeAnalysisRuleSet>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <DefineConstants>TRACE</DefineConstants>
+    <PackageTags>parser;generator;compiler;lexer;PEG;DSL;AST</PackageTags>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <MinClientVersion>2.5</MinClientVersion>
+    <SignAssembly>true</SignAssembly>
+    <TargetFrameworks>net45;netcoreapp2.0</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <DefineConstants>$(DefineConstants);NETFULL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
+    <DefineConstants>$(DefineConstants);NETCORE;NETCOREAPP2_0</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reflection.Metadata.1.2.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="CompileManager.cs" />
-    <Compile Include="CompilePegGrammar.cs" />
-    <Compile Include="Compiler\CodeGenerator.cs" />
-    <Compile Include="Compiler\CompilePass.cs" />
-    <Compile Include="Compiler\CompileResult.cs" />
-    <Compile Include="Compiler\ContainsAssertionsEvaluator.cs" />
-    <Compile Include="Compiler\ExpressionDispatch.cs" />
-    <Compile Include="Compiler\ExpressionTreeWalker.cs" />
-    <Compile Include="Compiler\GenerateCodePass.cs" />
-    <Compile Include="Compiler\LeftAdjacencyDetector.cs" />
-    <Compile Include="Compiler\LeftRecursionDetector.cs" />
-    <Compile Include="Compiler\MutualRecursionDetector.cs" />
-    <Compile Include="Compiler\PegCompiler.cs" />
-    <Compile Include="Compiler\ReportCodeSyntaxIssuesPass.cs" />
-    <Compile Include="Compiler\ReportConflictingNamesPass.cs" />
-    <Compile Include="Compiler\ReportDuplicateRulesPass.cs" />
-    <Compile Include="Compiler\ReportInvalidQuantifiersPass.cs" />
-    <Compile Include="Compiler\ReportLeftRecursionPass.cs" />
-    <Compile Include="Compiler\ReportMissingRulesPass.cs" />
-    <Compile Include="Compiler\ReportNoRulesPass.cs" />
-    <Compile Include="Compiler\ReportPublicRuleNameIssuesPass.cs" />
-    <Compile Include="Compiler\ReportResourcesMissingPass.cs" />
-    <Compile Include="Compiler\ReportRuleFlagsIssuesPass.cs" />
-    <Compile Include="Compiler\ReportSettingsIssuesPass.cs" />
-    <Compile Include="Compiler\ReportStartRuleNotFoundPass.cs" />
-    <Compile Include="Compiler\ReportUnknownTypesPass.cs" />
-    <Compile Include="Compiler\ReportUnusedRulesPass.cs" />
-    <Compile Include="Compiler\ReportZeroWidthRepetitionPass.cs" />
-    <Compile Include="Compiler\ResultTypeFinder.cs" />
-    <Compile Include="Compiler\ZeroWidthEvaluator.cs" />
-    <Compile Include="Expressions\AndCodeExpression.cs" />
-    <Compile Include="Expressions\AndExpression.cs" />
-    <Compile Include="Expressions\CharacterRange.cs" />
-    <Compile Include="Expressions\ChoiceExpression.cs" />
-    <Compile Include="Expressions\ClassExpression.cs" />
-    <Compile Include="Expressions\CodeExpression.cs" />
-    <Compile Include="Expressions\CodeSpan.cs" />
-    <Compile Include="Expressions\Expression.cs" />
-    <Compile Include="Expressions\Grammar.cs" />
-    <Compile Include="Expressions\Identifier.cs" />
-    <Compile Include="Expressions\LiteralExpression.cs" />
-    <Compile Include="Expressions\NameExpression.cs" />
-    <Compile Include="Expressions\NotCodeExpression.cs" />
-    <Compile Include="Expressions\NotExpression.cs" />
-    <Compile Include="Expressions\PrefixedExpression.cs" />
-    <Compile Include="Expressions\Quantifier.cs" />
-    <Compile Include="Expressions\RepetitionExpression.cs" />
-    <Compile Include="Expressions\Rule.cs" />
-    <Compile Include="Expressions\SequenceExpression.cs" />
-    <Compile Include="Expressions\TypedExpression.cs" />
-    <Compile Include="Expressions\WildcardExpression.cs" />
-    <Compile Include="Parser\CSharpParser.peg.g.cs">
+    <Compile Update="Parser\CSharpParser.peg.g.cs">
       <DependentUpon>CSharpParser.peg</DependentUpon>
     </Compile>
-    <Compile Include="Parser\PegParser.peg.g.cs">
+    <Compile Update="Parser\PegParser.peg.g.cs">
       <DependentUpon>PegParser.peg</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -152,50 +53,46 @@
     <WeaveTemplate Include="Compiler\CodeGenerator\Assertion.weave" />
     <WeaveTemplate Include="Compiler\CodeGenerator\SequenceExpression.weave" />
     <WeaveTemplate Include="Compiler\CodeGenerator\WildcardExpression.weave" />
-    <None Include="..\Key.snk">
-      <Link>Key.snk</Link>
-    </None>
-    <AdditionalFiles Include="..\stylecop.json">
-      <Link>stylecop.json</Link>
-    </AdditionalFiles>
-    <None Include="Compiler\CodeGenerator\_config.weave" />
-    <None Include="packages.config" />
-    <None Include="Parser\CSharpParser.peg" />
-    <None Include="Parser\PegParser.peg" />
+    <None Include="..\Key.snk" Link="Key.snk" />
+    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <PackageReference Include="FixMe" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="1.3.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.0.1" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta006" PrivateAssets="All" />
+    <PackageReference Include="Weave" Version="2.0.1-ci0008" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.6.85" />
+    <PackageReference Include="System.CodeDom" Version="4.4.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
-      <Project>{1FC19ADF-446F-4118-8189-C25AADF12397}</Project>
-      <Name>Pegasus.Common</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
-      <Link>CustomDictionary.xml</Link>
-    </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\FixMe.1.0.0\build\FixMe.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\FixMe.1.0.0\build\FixMe.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets'))" />
-    <Error Condition="!Exists('..\packages\Weave.2.0.1-ci0008\build\Weave.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Weave.2.0.1-ci0008\build\Weave.targets'))" />
+  <Target Name="ExcludeReferences" BeforeTargets="GenerateNuspec">
+    <ItemGroup>
+      <_FrameworkAssemblyReferences Remove="@(_FrameworkAssemblyReferences)" />
+    </ItemGroup>
   </Target>
-  <Import Project="..\packages\FixMe.1.0.0\build\FixMe.targets" Condition="Exists('..\packages\FixMe.1.0.0\build\FixMe.targets')" />
-  <Import Project="..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.4.0.0-beta0012\build\GitVersionTask.targets')" />
-  <Import Project="..\packages\Weave.2.0.1-ci0008\build\Weave.targets" Condition="Exists('..\packages\Weave.2.0.1-ci0008\build\Weave.targets')" />
+  <Target Name="UpdatePackageOutput" BeforeTargets="_GetPackageFiles">
+    <Copy SourceFiles="$(SolutionDir)readme.md" DestinationFiles="$(OutputPath)readme.txt" SkipUnchangedFiles="true" />
+    <ItemGroup>
+      <Content Include="$(OutputPath)readme.txt">
+        <Pack>true</Pack>
+        <PackagePath />
+      </Content>
+      <Content Include="$(OutputPath)**\*.dll;$(OutputPath)**\*.exe;$(OutputPath)**\*.config;$(OutputPath)**\*.json;$(OutputPath)**\*.xml" Exclude="$(OutputPath)**\Microsoft.Build.*">
+        <Pack>true</Pack>
+        <PackagePath>build\</PackagePath>
+      </Content>
+    </ItemGroup>
+  </Target>
 </Project>
