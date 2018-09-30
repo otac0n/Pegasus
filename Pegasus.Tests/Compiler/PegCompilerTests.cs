@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Tests.Compiler
 {
@@ -533,8 +533,8 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.False);
         }
 
-        [TestCase("namespace")]
-        [TestCase("classname")]
+        [TestCase(SettingName.Namespace)]
+        [TestCase(SettingName.ClassName)]
         public void Compile_WithDuplicateSetting_YieldsError(string settingName)
         {
             var grammar = new PegParser().Parse("@" + settingName + " OK; @" + settingName + " OK; a = 'OK';");
@@ -559,7 +559,7 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.False);
         }
 
-        [TestCase("accessibility", "private")]
+        [TestCase(SettingName.Accessibility, "private")]
         public void Compile_WithInvalidSettingValue_YieldsError(string settingName, string value)
         {
             var grammar = new PegParser().Parse("@" + settingName + " {" + value + "}; a = 'OK';");

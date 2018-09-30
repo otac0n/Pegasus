@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Compiler
 {
@@ -30,7 +30,7 @@ namespace Pegasus.Compiler
             {
                 var rules = grammar.Rules.ToDictionary(r => r.Identifier.Name, r => r);
 
-                var startRule = grammar.Settings.Where(s => s.Key.Name == "start").Select(s => s.Value.ToString()).SingleOrDefault() ?? grammar.Rules[0].Identifier.Name;
+                var startRule = grammar.Settings.Where(s => s.Key.Name == SettingName.Start).Select(s => s.Value.ToString()).SingleOrDefault() ?? grammar.Rules[0].Identifier.Name;
                 this.usedRules.Add(startRule);
                 this.rulesToVisit.Enqueue(startRule);
 

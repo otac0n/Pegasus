@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Compiler
 {
@@ -26,7 +26,7 @@ namespace Pegasus.Compiler
 
             public override void WalkGrammar(Grammar grammar)
             {
-                if (!grammar.Settings.Any(s => s.Key.Name == "resources"))
+                if (!grammar.Settings.Any(s => s.Key.Name == SettingName.Resources))
                 {
                     base.WalkGrammar(grammar);
                 }

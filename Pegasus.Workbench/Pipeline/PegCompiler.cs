@@ -8,6 +8,7 @@ namespace Pegasus.Workbench.Pipeline
     using System.Linq;
     using System.Reactive.Concurrency;
     using System.Reactive.Linq;
+    using Pegasus.Compiler;
     using Pegasus.Expressions;
 
     internal sealed class PegCompiler
@@ -23,18 +24,18 @@ namespace Pegasus.Workbench.Pipeline
                         return grammar;
                     }
 
-                    var trace = grammar.Settings.Where(s => s.Key.Name == "trace").SingleOrDefault();
+                    var trace = grammar.Settings.Where(s => s.Key.Name == SettingName.Trace).SingleOrDefault();
                     var identifier = trace.Key;
                     if (identifier != null && trace.Value.ToString() == "true")
                     {
                         return grammar;
                     }
 
-                    identifier = identifier ?? new Identifier("trace", grammar.End, grammar.End);
+                    identifier = identifier ?? new Identifier(SettingName.Trace, grammar.End, grammar.End);
                     var traceSetting = new KeyValuePair<Identifier, object>(identifier, "true");
                     return new Grammar(
                         grammar.Rules,
-                        grammar.Settings.Where(s => s.Key.Name != "trace").Concat(new[] { traceSetting }),
+                        grammar.Settings.Where(s => s.Key.Name != SettingName.Trace).Concat(new[] { traceSetting }),
                         grammar.End);
                 })
                 .Select(r => r == null ? new Compiler.CompileResult(r) : Compiler.PegCompiler.Compile(r))

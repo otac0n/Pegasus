@@ -18,13 +18,13 @@
     var hasLexical = allFlags.Contains("lexical");
     var hasPublic = allFlags.Contains("public");
     var hasExported = allFlags.Contains("export");
-    var @namespace = settings["namespace"].SingleOrDefault() ?? "Parsers";
-    var classname = settings["classname"].SingleOrDefault() ?? "Parser";
-    var accessibility = settings["accessibility"].SingleOrDefault() ?? "public";
-    var resources = settings["resources"].SingleOrDefault();
-    var startRule = settings["start"].Select(n => n.ToString()).SingleOrDefault();
-    var ignoreCase = settings["ignorecase"].Select(v => bool.Parse(v.ToString().Trim())).SingleOrDefault();
-    this.trace = settings["trace"].Select(v => bool.Parse(v.ToString().Trim())).SingleOrDefault();
+    var @namespace = settings[SettingName.Namespace].SingleOrDefault() ?? "Parsers";
+    var classname = settings[SettingName.ClassName].SingleOrDefault() ?? "Parser";
+    var accessibility = settings[SettingName.Accessibility].SingleOrDefault() ?? "public";
+    var resources = settings[SettingName.Resources].SingleOrDefault();
+    var startRule = settings[SettingName.Start].Select(n => n.ToString()).SingleOrDefault();
+    var ignoreCase = settings[SettingName.IgnoreCase].Select(v => bool.Parse(v.ToString().Trim())).SingleOrDefault();
+    this.trace = settings[SettingName.Trace].Select(v => bool.Parse(v.ToString().Trim())).SingleOrDefault();
 
     if (startRule == null && !hasPublic && !hasExported)
     {
@@ -40,7 +40,7 @@ namespace
     {{if trace}}
         using Pegasus.Common.Tracing;
     {{/if}}
-    {{each @using in settings["using"]}}
+    {{each @using in settings[SettingName.Using]}}
         using
             {{@RenderCode @using}}
             ;
@@ -59,7 +59,7 @@ namespace
     partial class
     {{@RenderCode classname}}
     {
-        {{each members in settings["members"]}}
+        {{each members in settings[SettingName.Members]}}
             {{@RenderCode members}}
         {{/each}}
         {{if hasMemoized}}

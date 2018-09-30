@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Compiler
 {
@@ -19,7 +19,7 @@ namespace Pegasus.Compiler
 
             foreach (var setting in grammar.Settings)
             {
-                if (setting.Key.Name == "start")
+                if (setting.Key.Name == SettingName.Start)
                 {
                     var name = setting.Value.ToString().Trim();
                     if (!knownRules.Contains(name))

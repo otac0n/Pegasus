@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Compiler
 {
@@ -11,22 +11,22 @@ namespace Pegasus.Compiler
     {
         private static readonly Dictionary<string, bool> KnownSettings = new Dictionary<string, bool>
         {
-            { "namespace", true },
-            { "classname", true },
-            { "accessibility", true },
-            { "resources", true },
-            { "start", true },
-            { "members", false },
-            { "using", false },
-            { "trace", true },
-            { "ignorecase", true },
+            { SettingName.Namespace, true },
+            { SettingName.ClassName, true },
+            { SettingName.Accessibility, true },
+            { SettingName.Resources, true },
+            { SettingName.Start, true },
+            { SettingName.Members, false },
+            { SettingName.Using, false },
+            { SettingName.Trace, true },
+            { SettingName.IgnoreCase, true },
         };
 
         private static readonly Dictionary<string, string> ValuePatterns = new Dictionary<string, string>
         {
-            { "accessibility", @"^\s*(public|internal)\s*$" },
-            { "trace", @"^\s*(true|false)\s*$" },
-            { "ignorecase", @"^\s*(true|false)\s*$" },
+            { SettingName.Accessibility, @"^\s*(public|internal)\s*$" },
+            { SettingName.Trace, @"^\s*(true|false)\s*$" },
+            { SettingName.IgnoreCase, @"^\s*(true|false)\s*$" },
         };
 
         public override IList<string> BlockedByErrors => new string[0];

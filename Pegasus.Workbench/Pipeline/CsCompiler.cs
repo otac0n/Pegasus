@@ -12,6 +12,7 @@ namespace Pegasus.Workbench.Pipeline
     using System.Reactive.Linq;
     using Microsoft.CSharp;
     using Pegasus.Common;
+    using Pegasus.Compiler;
     using Pegasus.Expressions;
 
     internal sealed class CsCompiler
@@ -77,8 +78,8 @@ namespace Pegasus.Workbench.Pipeline
                     };
                 }
 
-                var @namespace = grammar.Settings.Where(s => s.Key.Name == "namespace").Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parsers";
-                var @className = grammar.Settings.Where(s => s.Key.Name == "classname").Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parser";
+                var @namespace = grammar.Settings.Where(s => s.Key.Name == SettingName.Namespace).Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parsers";
+                var @className = grammar.Settings.Where(s => s.Key.Name == SettingName.ClassName).Select(s => s.Value.ToString()).SingleOrDefault() ?? "Parser";
 
                 var parserType = compilerResults.CompiledAssembly.GetType(@namespace + "." + @className);
                 return new Result
