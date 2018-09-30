@@ -29,12 +29,20 @@ namespace Pegasus.Compiler
             public override void WalkGrammar(Grammar grammar)
             {
                 var rules = grammar.Rules.ToDictionary(r => r.Identifier.Name, r => r);
+                var publicRules = grammar.Rules.Where(r => r.Flags.Any(f => f.Name == "public" || f.Name == "export")).ToList();
 
-                var startRule = grammar.Settings.Where(s => s.Key.Name == SettingName.Start).Select(s => s.Value.ToString()).SingleOrDefault() ?? grammar.Rules[0].Identifier.Name;
-                this.usedRules.Add(startRule);
-                this.rulesToVisit.Enqueue(startRule);
+                var startRule = grammar.Settings.Where(s => s.Key.Name == SettingName.Start).Select(s => s.Value.ToString()).SingleOrDefault();
+                if (startRule == null && publicRules.Count == 0)
+                {
+                    startRule = grammar.Rules[0].Identifier.Name;
+                }
 
-                var publicRules = grammar.Rules.Where(r => r.Flags.Any(f => f.Name == "public" || f.Name == "export"));
+                if (startRule != null)
+                {
+                    this.usedRules.Add(startRule);
+                    this.rulesToVisit.Enqueue(startRule);
+                }
+
                 foreach (var rule in publicRules)
                 {
                     if (this.usedRules.Add(rule.Identifier.Name))

@@ -611,7 +611,7 @@ namespace Pegasus.Tests.Compiler
         [TestCase("-public")]
         public void Compile_WithPublicOrExportedRulesWithLowercaseName_YieldsWarning(string flag)
         {
-            var grammar = new PegParser().Parse($"start = 'OK'; b {flag} = 'OK';");
+            var grammar = new PegParser().Parse($"a {flag} = 'OK';");
 
             var result = PegCompiler.Compile(grammar);
 
@@ -620,10 +620,24 @@ namespace Pegasus.Tests.Compiler
             Assert.That(error.IsWarning, Is.True);
         }
 
-        [Test]
-        public void Compile_WithRulesOnlyUsedByExportOrPublic_YieldsNone()
+        [TestCase("-export")]
+        [TestCase("-public")]
+        public void Compile_WithRulesNotUsedByExportOrPublic_YieldsError(string flag)
         {
-            var grammar = new PegParser().Parse("start = 'OK'; B -export = 'OK'; C -public = 'OK';");
+            var grammar = new PegParser().Parse($"other = 'unused'; A {flag} = 'OK';");
+
+            var result = PegCompiler.Compile(grammar);
+
+            var error = result.Errors.Single();
+            Assert.That(error.ErrorNumber, Is.EqualTo("PEG0017"));
+            Assert.That(error.IsWarning, Is.True);
+        }
+
+        [TestCase("-export")]
+        [TestCase("-public")]
+        public void Compile_WithRulesOnlyUsedByExportOrPublic_YieldsNone(string flag)
+        {
+            var grammar = new PegParser().Parse($"other = 'OK'; A {flag} = other;");
 
             var result = PegCompiler.Compile(grammar);
 
