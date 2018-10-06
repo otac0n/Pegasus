@@ -9,7 +9,7 @@ namespace Pegasus.Compiler
 
     internal class ReportUnusedRulesPass : CompilePass
     {
-        public override IList<string> BlockedByErrors => new[] { "PEG0001", "PEG0002", "PEG0003" };
+        public override IList<string> BlockedByErrors => new[] { "PEG0001", "PEG0002", "PEG0003", "PEG0005" };
 
         public override IList<string> ErrorsProduced => new[] { "PEG0017" };
 
@@ -28,22 +28,16 @@ namespace Pegasus.Compiler
 
             public override void WalkGrammar(Grammar grammar)
             {
-                var rules = grammar.Rules.ToDictionary(r => r.Identifier.Name, r => r);
-                var publicRules = grammar.Rules.Where(r => r.Flags.Any(f => f.Name == "public" || f.Name == "export")).ToList();
+                var rules = grammar.Rules.ToDictionary(r => r.Identifier.Name);
+                var visibleRules = PublicRuleFinder.Find(grammar);
 
-                var startRule = grammar.Settings.Where(s => s.Key.Name == SettingName.Start).Select(s => s.Value.ToString()).SingleOrDefault();
-                if (startRule == null && publicRules.Count == 0)
+                if (visibleRules.StartRule != null)
                 {
-                    startRule = grammar.Rules[0].Identifier.Name;
+                    this.usedRules.Add(visibleRules.StartRule.Identifier.Name);
+                    this.rulesToVisit.Enqueue(visibleRules.StartRule.Identifier.Name);
                 }
 
-                if (startRule != null)
-                {
-                    this.usedRules.Add(startRule);
-                    this.rulesToVisit.Enqueue(startRule);
-                }
-
-                foreach (var rule in publicRules)
+                foreach (var rule in visibleRules.PublicRules.Concat(visibleRules.ExportedRules))
                 {
                     if (this.usedRules.Add(rule.Identifier.Name))
                     {
@@ -57,7 +51,7 @@ namespace Pegasus.Compiler
                     this.WalkRule(rules[ruleName]);
                 }
 
-                var unusedRules = new HashSet<string>(grammar.Rules.Select(r => r.Identifier.Name));
+                var unusedRules = new HashSet<string>(rules.Keys);
                 unusedRules.ExceptWith(this.usedRules);
 
                 foreach (var ruleName in unusedRules)

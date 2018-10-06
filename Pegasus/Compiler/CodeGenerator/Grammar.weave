@@ -16,20 +16,13 @@
     var allFlags = new HashSet<string>(model.Rules.SelectMany(r => r.Flags.Select(f => f.Name)));
     var hasMemoized = allFlags.Contains("memoize");
     var hasLexical = allFlags.Contains("lexical");
-    var hasPublic = allFlags.Contains("public");
-    var hasExported = allFlags.Contains("export");
     var @namespace = settings[SettingName.Namespace].SingleOrDefault() ?? "Parsers";
     var classname = settings[SettingName.ClassName].SingleOrDefault() ?? "Parser";
     var accessibility = settings[SettingName.Accessibility].SingleOrDefault() ?? "public";
     var resources = settings[SettingName.Resources].SingleOrDefault();
-    var startRule = settings[SettingName.Start].Select(n => n.ToString()).SingleOrDefault();
     var ignoreCase = settings[SettingName.IgnoreCase].Select(v => bool.Parse(v.ToString().Trim())).SingleOrDefault();
     this.trace = settings[SettingName.Trace].Select(v => bool.Parse(v.ToString().Trim())).SingleOrDefault();
-
-    if (startRule == null && !hasPublic && !hasExported)
-    {
-        startRule = model.Rules[0].Identifier.Name;
-    }
+    var visibleRules = PublicRuleFinder.Find(model);
 }}
 namespace
 {{@RenderCode @namespace}}
@@ -82,7 +75,7 @@ namespace
                 }
             }
         {{/if}}
-        {{if hasExported}}
+        {{if visibleRules.ExportedRules.Count > 0}}
 
             private ExportedRules exported;
 
@@ -97,9 +90,9 @@ namespace
                 }
             }
         {{/if}}
-        {{if startRule != null}}
+        {{if visibleRules.StartRule != null}}
             {{
-                var type = this.types[model.Rules.Single(r => r.Identifier.Name == startRule).Expression];
+                var type = this.types[visibleRules.StartRule.Expression];
             }}
 
             /// <summary>
@@ -132,13 +125,13 @@ namespace
             public {{= type }} Parse(string subject, string fileName{{if !hasLexical}} = null{{else}}, out IList<LexicalElement> lexicalElements{{/if}})
             {
                 var cursor = new Cursor(subject, 0, fileName);
-                return this.StartRuleHelper(cursor, this.{{: startRule }}, "{{= startRule }}"{{if hasLexical}}, out lexicalElements{{/if}}).Value;
+                return this.StartRuleHelper(cursor, this.{{: visibleRules.StartRule.Identifier.Name }}, "{{= visibleRules.StartRule.Identifier.Name }}"{{if hasLexical}}, out lexicalElements{{/if}}).Value;
             }
         {{/if}}
-        {{each rule in model.Rules.Where(r => r.Flags.Any(f => f.Name == "public"))}}
+        {{each rule in visibleRules.PublicRules}}
             {{
                 var type = this.types[rule.Expression];
-                var publicName = "Parse" + rule.Identifier.Name.Substring(0, 1).ToUpper() + rule.Identifier.Name.Substring(1);
+                var publicName = "Parse" + PublicRuleFinder.GetPublicName(rule);
             }}
 
             /// <summary>
@@ -325,7 +318,7 @@ namespace
                 ? default(T)
                 : result.Value;
         }
-        {{if hasExported}}
+        {{if visibleRules.ExportedRules.Count > 0}}
 
             /// <summary>
             /// Defines the set of rules exported by this parser.
@@ -338,10 +331,10 @@ namespace
                 {
                     this.parser = parser;
                 }
-                {{each rule in model.Rules.Where(r => r.Flags.Any(f => f.Name == "export"))}}
+                {{each rule in visibleRules.ExportedRules}}
                     {{
                         var type = this.types[rule.Expression].ToString();
-                        var publicName = rule.Identifier.Name.Substring(0, 1).ToUpper() + rule.Identifier.Name.Substring(1);
+                        var publicName = PublicRuleFinder.GetPublicName(rule);
                     }}
 
                     /// <summary>
