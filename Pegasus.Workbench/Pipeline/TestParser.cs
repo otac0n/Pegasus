@@ -12,17 +12,18 @@ namespace Pegasus.Workbench.Pipeline
     using System.Text.RegularExpressions;
     using Pegasus.Common;
     using Pegasus.Common.Tracing;
+    using Pegasus.Workbench.Pipeline.Model;
 
     internal sealed class TestParser
     {
         public const string SentinelFileName = "_.txt";
 
-        public TestParser(IObservable<dynamic> parsers, IObservable<string> subjects)
+        public TestParser(IObservable<ParserEntrypoint> entrypoints, IObservable<string> subjects)
         {
             var testParserResults = subjects
-                .CombineLatest(parsers, (subject, parser) => new { subject, parser = (object)parser })
+                .CombineLatest(entrypoints, (subject, entrypoint) => new { subject, entrypoint })
                 .ObserveOn(Scheduler.Default)
-                .Select(p => ParseTest(p.parser, p.subject))
+                .Select(p => ParseTest(p.entrypoint, p.subject))
                 .Publish()
                 .RefCount();
 
@@ -35,9 +36,9 @@ namespace Pegasus.Workbench.Pipeline
         public IObservable<object> Results { get; set; }
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Any exception that happens during parsing should be reported through the UI.")]
-        private static ParseResult ParseTest(dynamic parser, string subject)
+        private static ParseResult ParseTest(ParserEntrypoint entrypoint, string subject)
         {
-            if (parser == null)
+            if (entrypoint == null)
             {
                 return new ParseResult
                 {
@@ -51,8 +52,7 @@ namespace Pegasus.Workbench.Pipeline
             try
             {
                 var tracer = new WarningsPerformanceTracer();
-                parser.Tracer = tracer;
-                var result = parser.Parse(subject, SentinelFileName);
+                var result = entrypoint.Parse(subject, SentinelFileName, tracer);
                 return new ParseResult
                 {
                     Result = result,

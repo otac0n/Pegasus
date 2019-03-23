@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Workbench
 {
@@ -43,8 +43,9 @@ namespace Pegasus.Workbench
 
             var pegParser = new Pipeline.PegParser(grammarTextChanges);
             var pegCompiler = new Pipeline.PegCompiler(pegParser.Grammars);
-            var csCompiler = new Pipeline.CsCompiler(pegCompiler.Codes.Zip(pegParser.Grammars, Tuple.Create));
-            var testParser = new Pipeline.TestParser(csCompiler.Parsers, testTextChanges);
+            var csCompiler = new Pipeline.CsCompiler(pegCompiler.Codes, pegParser.Grammars);
+            this.RuleSelector = new Pipeline.RuleSelector(csCompiler.Parsers, pegParser.Grammars);
+            var testParser = new Pipeline.TestParser(this.RuleSelector.SelectedEntrypoints, testTextChanges);
             var testResults = testParser.Results.Select(r =>
             {
                 return r is string s ? s : JsonConvert.SerializeObject(r, Formatting.Indented);
@@ -87,6 +88,7 @@ namespace Pegasus.Workbench
                 });
 
             this.pipeline = new CompositeDisposable(
+                this.RuleSelector,
                 testResults.BindTo(this, x => x.TestResults),
                 compileErrors.BindTo(this, x => x.CompileErrors));
 
@@ -183,6 +185,11 @@ namespace Pegasus.Workbench
         public IReactiveCommand LoadTutorial { get; }
 
         /// <summary>
+        /// Gets the <see cref="RuleSelector"/>.
+        /// </summary>
+        public Pipeline.RuleSelector RuleSelector { get; }
+
+        /// <summary>
         /// Gets the save command.
         /// </summary>
         public IReactiveCommand Save { get; }
@@ -224,9 +231,7 @@ namespace Pegasus.Workbench
         /// </summary>
         public IReadOnlyList<Tutorial> Tutorials { get; }
 
-        /// <summary>
-        /// Disposes the object.
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose() => this.pipeline.Dispose();
 
         private class CompilerErrorListEqualityComparer : IEqualityComparer<IList<CompilerError>>

@@ -19,11 +19,12 @@ namespace Pegasus.Workbench.Pipeline
     {
         public const string SentinelFileName = "_.peg.g.cs";
 
-        public CsCompiler(IObservable<Tuple<string, Grammar>> codeAndGrammar)
+        public CsCompiler(IObservable<string> codes, IObservable<Grammar> grammars)
         {
-            var csCompilerResults = codeAndGrammar
+            var csCompilerResults = codes
+                .Zip(grammars, (code, grammar) => new { code, grammar })
                 .ObserveOn(Scheduler.Default)
-                .Select(p => Compile(p.Item1, p.Item2))
+                .Select(p => Compile(p.code, p.grammar))
                 .Publish()
                 .RefCount();
 

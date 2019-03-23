@@ -40,10 +40,12 @@
   <ItemGroup>
     <Reference Include="ICSharpCode.TextEditor">
       <HintPath>..\packages\ICSharpCode.TextEditor.3.2.1.6466\lib\Net20\ICSharpCode.TextEditor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -60,6 +62,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
@@ -83,59 +86,23 @@
     </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Commands.cs" />
-    <Compile Include="FileUtilities.cs" />
-    <Compile Include="Tutorial.cs" />
-    <AdditionalFiles Include="..\stylecop.json">
-      <Link>stylecop.json</Link>
-    </AdditionalFiles>
-    <None Include="App.config" />
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <EmbeddedResource Include="Tutorials\01 - Hello world!.peg" />
-    <EmbeddedResource Include="Tutorials\01 - Hello world!.txt" />
-    <EmbeddedResource Include="Tutorials\02 - Variables.peg" />
-    <EmbeddedResource Include="Tutorials\02 - Variables.txt" />
-    <EmbeddedResource Include="Tutorials\03 - Code Blocks.peg" />
-    <EmbeddedResource Include="Tutorials\03 - Code Blocks.txt" />
-    <EmbeddedResource Include="Tutorials\04 - Class Members.peg" />
-    <EmbeddedResource Include="Tutorials\04 - Class Members.txt" />
-    <EmbeddedResource Include="Tutorials\05 - Calculator.peg" />
-    <EmbeddedResource Include="Tutorials\06 - Error Handling.peg" />
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AppViewModel.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="PathToFileNameConverter.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PegasusHighlightingStrategy.cs" />
+    <Compile Include="Pipeline\Model\ExportedRuleEntrypoint.cs" />
+    <Compile Include="Pipeline\Model\ParserEntrypoint.cs" />
+    <Compile Include="Pipeline\Model\PublicRuleEntrypoint.cs" />
+    <Compile Include="Pipeline\Model\StartRuleEntrypoint.cs" />
     <Compile Include="Pipeline\CsCompiler.cs" />
     <Compile Include="Pipeline\PegCompiler.cs" />
     <Compile Include="Pipeline\PegParser.cs" />
+    <Compile Include="Pipeline\RuleSelector.cs" />
     <Compile Include="Pipeline\TestParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -145,51 +112,83 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
-      <Project>{1fc19adf-446f-4118-8189-c25aadf12397}</Project>
-      <Name>Pegasus.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Pegasus\Pegasus.csproj">
-      <Project>{58f12d13-9997-4c29-90ce-3c6c7409ba68}</Project>
-      <Name>Pegasus</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Resource Include="Resources\Error.png" />
     <Resource Include="Resources\Information.png" />
-    <Resource Include="Resources\Warning.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="..\Pegasus.ico">
       <Link>Resources\Pegasus.ico</Link>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Resources\Warning.png" />
+    <EmbeddedResource Include="Tutorials\01 - Hello world!.peg" />
+    <EmbeddedResource Include="Tutorials\01 - Hello world!.txt" />
+    <EmbeddedResource Include="Tutorials\02 - Variables.peg" />
+    <EmbeddedResource Include="Tutorials\02 - Variables.txt" />
+    <EmbeddedResource Include="Tutorials\03 - Code Blocks.peg" />
+    <EmbeddedResource Include="Tutorials\03 - Code Blocks.txt" />
+    <EmbeddedResource Include="Tutorials\04 - Class Members.peg" />
+    <EmbeddedResource Include="Tutorials\04 - Class Members.txt" />
+    <EmbeddedResource Include="Tutorials\05 - Calculator.peg" />
     <EmbeddedResource Include="Tutorials\05 - Calculator.txt" />
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="Tutorials\06 - Error Handling.peg" />
     <EmbeddedResource Include="Tutorials\06 - Error Handling.txt" />
+    <None Include="App.config" />
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AppViewModel.cs" />
+    <Compile Include="Commands.cs" />
+    <Compile Include="FileUtilities.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="packages.config" />
+    <Compile Include="PathToFileNameConverter.cs" />
+    <Compile Include="PegasusHighlightingStrategy.cs" />
+    <AppDesigner Include="Properties\" />
+    <AdditionalFiles Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+    <Compile Include="Tutorial.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pegasus\Pegasus.csproj">
+      <Project>{58f12d13-9997-4c29-90ce-3c6c7409ba68}</Project>
+      <Name>Pegasus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
+      <Project>{1fc19adf-446f-4118-8189-c25aadf12397}</Project>
+      <Name>Pegasus.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
