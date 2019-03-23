@@ -101,7 +101,7 @@ namespace Pegasus.Workbench
             {
                 var fileName = (string)f;
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                await FileUtilities.WriteAllTextAsync(this.grammarFileName, this.grammarText);
+                await FileUtilities.WriteAllTextAsync(fileName, this.grammarText);
                 this.GrammarFileName = fileName;
                 this.GrammarChanged = false;
                 return true;
