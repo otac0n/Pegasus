@@ -2,12 +2,12 @@ os: Visual Studio 2017
 configuration: Release
 install:
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;C:\\ProgramData\\chocolatey\\bin;%PATH%"
-  - choco install gitversion.portable -pre -y
+  - choco install gitversion.portable -y
+  - gitversion /l console /output buildserver
   - choco install GitReleaseNotes.Portable
   - pip install codecov
 before_build:
   - nuget restore
-  - gitversion /l console /output buildserver
   #- GitReleaseNotes . /AllTags /C breaking /O ReleaseNotes.md
 build:
   project: Pegasus.sln
