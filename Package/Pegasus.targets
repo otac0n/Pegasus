@@ -1,12 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <CompileDependsOn>$(CompileDependsOn);CompilePegGrammars</CompileDependsOn>
-    <CoreCompileDependsOn>$(CoreCompileDependsOn);CompilePegGrammars</CoreCompileDependsOn>
-    <BuildDependsOn>$(BuildDependsOn);CompilePegGrammars</BuildDependsOn>
-    <CoreBuildDependsOn>$(CoreBuildDependsOn);CompilePegGrammars</CoreBuildDependsOn>
-    <CleanDependsOn>$(CleanDependsOn);CleanPegGrammars</CleanDependsOn>
-  </PropertyGroup>
   <ItemGroup>
     <AvailableItemName Include="PegGrammar" />
   </ItemGroup>
@@ -18,7 +11,7 @@
   </PropertyGroup>
   <UsingTask AssemblyFile="$(PegasusAssemblyPath)" TaskName="CompilePegGrammar" />
 
-  <Target Name="CompilePegGrammars" DependsOnTargets="_CompilePegGrammars" Condition=" '@(PegGrammar)' != '' ">
+  <Target Name="CompilePegGrammars" DependsOnTargets="CoreCompilePegGrammars" BeforeTargets="CoreCompile" Condition=" '@(PegGrammar)' != '' ">
     <ItemGroup>
       <Compile Include="%(PegGrammar.OutputPath)" />
     </ItemGroup>
@@ -35,11 +28,11 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="CleanPegGrammars" DependsOnTargets="_UpdatePegGrammarsMetatdata">
+  <Target Name="CleanPegGrammars" DependsOnTargets="_UpdatePegGrammarsMetatdata" BeforeTargets="Clean">
     <Delete Files="@(PegGrammar -> '%(OutputPath)')" ContinueOnError="true" />
   </Target>
 
-  <Target Name="_CompilePegGrammars" DependsOnTargets="_UpdatePegGrammarsMetatdata" Inputs="$(MSBuildThisFileFullPath);$(MSBuildProjectFile);@(PegGrammar)" Outputs="@(PegGrammar -> '%(OutputPath)')">
+  <Target Name="CoreCompilePegGrammars" DependsOnTargets="_UpdatePegGrammarsMetatdata" Inputs="$(MSBuildThisFileFullPath);$(MSBuildProjectFile);@(PegGrammar)" Outputs="@(PegGrammar -> '%(OutputPath)')">
     <CompilePegGrammar InputFiles="@(PegGrammar -> '%(FullPath)')" OutputFiles="@(PegGrammar -> '%(OutputPath)')" />
     <Message Text="%(PegGrammar.Identity) -> %(PegGrammar.OutputPath)" />
   </Target>
