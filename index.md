@@ -19,7 +19,7 @@ Mathematical Expression Evaluator
     @namespace PegExamples
     @classname MathExpressionParser
 
-    start <decimal>
+    start <double>
       = _ value:additive _ EOF { value }
 
     additive <double> -memoize
