@@ -34,6 +34,6 @@
 
   <Target Name="CoreCompilePegGrammars" DependsOnTargets="_UpdatePegGrammarsMetatdata" Inputs="$(MSBuildThisFileFullPath);$(MSBuildProjectFile);@(PegGrammar)" Outputs="@(PegGrammar -> '%(OutputPath)')">
     <CompilePegGrammar InputFiles="@(PegGrammar -> '%(FullPath)')" OutputFiles="@(PegGrammar -> '%(OutputPath)')" />
-    <Message Text="%(PegGrammar.Identity) -> %(PegGrammar.OutputPath)" />
+    <Message Text="%(PegGrammar.FullPath) -> %(PegGrammar.OutputPath)" />
   </Target>
 </Project>

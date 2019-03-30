@@ -37,7 +37,7 @@ namespace Pegasus
             outputFile = outputFile ?? inputFile + ".g.cs";
 
             var subject = File.ReadAllText(inputFile);
-            var result = CompileString(subject, fileName: inputFile);
+            var result = CompileString(subject, fileName: MakePragmaPath(inputFile, outputFile));
 
             var hadFatal = false;
             foreach (var error in result.Errors)
@@ -59,7 +59,7 @@ namespace Pegasus
         /// <param name="subject">The PEG grammar to parse and compile.</param>
         /// <param name="fileName">The filename to use in errors.</param>
         /// <returns>A <see cref="CompileResult"/> containing the result of the compilation.</returns>
-        public static CompileResult CompileString(string subject, string fileName = null)
+        public static CompileResult CompileString(string subject, string fileName)
         {
             Grammar grammar;
             try
@@ -81,6 +81,22 @@ namespace Pegasus
             }
 
             return PegCompiler.Compile(grammar);
+        }
+
+        /// <summary>
+        /// Compares the input and output path and returns the appropriate filename to use in <c>#line</c> pragmas.
+        /// </summary>
+        /// <param name="input">The input file path.</param>
+        /// <param name="output">The output file path.</param>
+        /// <returns>The input path transformed to the appropriate pragma path.</returns>
+        public static string MakePragmaPath(string input, string output)
+        {
+            output = Path.GetFullPath(output);
+            input = Path.GetFullPath(input);
+            var relativeUri = new Uri(output).MakeRelativeUri(new Uri(input));
+            return relativeUri.ToString().IndexOf('/') != -1
+                ? input
+                : Path.GetFileName(input);
         }
     }
 }
