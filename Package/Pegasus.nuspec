@@ -10,7 +10,7 @@
     <copyright>Copyright © 2018 John Gietzen</copyright>
     <description>A PEG (Parsing Expression Grammar) parser compiler that integrates with MSBuild / Visual Studio.  Features selective packrat parsing and syntax-highlighting output.</description>
     <tags>parser generator compiler lexer PEG DSL AST</tags>
-    <licenseUrl>https://raw.github.com/otac0n/Pegasus/master/license.md</licenseUrl>
+    <license type="MIT" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
   </metadata>
 </package>
