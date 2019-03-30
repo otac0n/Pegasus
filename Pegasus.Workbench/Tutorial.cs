@@ -1,4 +1,4 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Workbench
 {
@@ -59,14 +59,14 @@ namespace Pegasus.Workbench
                 var resourcePrefix = assembly.GetName().Name + ".Tutorials.";
                 var path = Path.Combine(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(assembly.CodeBase).Path)), "Tutorials");
 
-                var load = new Func<string, string>(name =>
+                string Load(string name)
                 {
                     using (var stream = assembly.GetManifestResourceStream(resourcePrefix + name))
                     using (var reader = new StreamReader(stream, Encoding.Default, true, 1024, true))
                     {
                         return reader.ReadToEnd();
                     }
-                });
+                }
 
                 var resources = assembly.GetManifestResourceNames();
                 var tutorialFiles = (from r in resources
@@ -76,7 +76,7 @@ namespace Pegasus.Workbench
                         let name = Path.GetFileNameWithoutExtension(peg)
                         join txt in tutorialFiles[".txt"]
                         on name equals Path.GetFileNameWithoutExtension(txt)
-                        select new Tutorial(name, load(peg), load(txt), Path.Combine(path, peg))).ToList().AsReadOnly();
+                        select new Tutorial(name, Load(peg), Load(txt), Path.Combine(path, peg))).ToList().AsReadOnly();
             });
         }
 

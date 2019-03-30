@@ -51,65 +51,52 @@ namespace Pegasus.Compiler
         {
             return expression =>
             {
-                if (expression is AndExpression andExpression)
+                switch (expression)
                 {
-                    And?.Invoke(andExpression);
-                }
-                else if (expression is AndCodeExpression andCodeExpression)
-                {
-                    AndCode?.Invoke(andCodeExpression);
-                }
-                else if (expression is ChoiceExpression choiceExpression)
-                {
-                    Choice?.Invoke(choiceExpression);
-                }
-                else if (expression is ClassExpression classExpression)
-                {
-                    Class?.Invoke(classExpression);
-                }
-                else if (expression is CodeExpression codeExpression)
-                {
-                    Code?.Invoke(codeExpression);
-                }
-                else if (expression is LiteralExpression literalExpression)
-                {
-                    Literal?.Invoke(literalExpression);
-                }
-                else if (expression is NameExpression nameExpression)
-                {
-                    Name?.Invoke(nameExpression);
-                }
-                else if (expression is NotExpression notExpression)
-                {
-                    Not?.Invoke(notExpression);
-                }
-                else if (expression is NotCodeExpression notCodeExpression)
-                {
-                    NotCode?.Invoke(notCodeExpression);
-                }
-                else if (expression is PrefixedExpression prefixedExpression)
-                {
-                    Prefixed?.Invoke(prefixedExpression);
-                }
-                else if (expression is RepetitionExpression repetitionExpression)
-                {
-                    Repetition?.Invoke(repetitionExpression);
-                }
-                else if (expression is SequenceExpression sequenceExpression)
-                {
-                    Sequence?.Invoke(sequenceExpression);
-                }
-                else if (expression is TypedExpression typedExpression)
-                {
-                    Typed?.Invoke(typedExpression);
-                }
-                else if (expression is WildcardExpression wildcardExpression)
-                {
-                    Wildcard?.Invoke(wildcardExpression);
-                }
-                else
-                {
-                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Unknown expression type '{0}'.", expression.GetType()), "expression");
+                    case AndExpression andExpression:
+                        And?.Invoke(andExpression);
+                        break;
+                    case AndCodeExpression andCodeExpression:
+                        AndCode?.Invoke(andCodeExpression);
+                        break;
+                    case ChoiceExpression choiceExpression:
+                        Choice?.Invoke(choiceExpression);
+                        break;
+                    case ClassExpression classExpression:
+                        Class?.Invoke(classExpression);
+                        break;
+                    case CodeExpression codeExpression:
+                        Code?.Invoke(codeExpression);
+                        break;
+                    case LiteralExpression literalExpression:
+                        Literal?.Invoke(literalExpression);
+                        break;
+                    case NameExpression nameExpression:
+                        Name?.Invoke(nameExpression);
+                        break;
+                    case NotExpression notExpression:
+                        Not?.Invoke(notExpression);
+                        break;
+                    case NotCodeExpression notCodeExpression:
+                        NotCode?.Invoke(notCodeExpression);
+                        break;
+                    case PrefixedExpression prefixedExpression:
+                        Prefixed?.Invoke(prefixedExpression);
+                        break;
+                    case RepetitionExpression repetitionExpression:
+                        Repetition?.Invoke(repetitionExpression);
+                        break;
+                    case SequenceExpression sequenceExpression:
+                        Sequence?.Invoke(sequenceExpression);
+                        break;
+                    case TypedExpression typedExpression:
+                        Typed?.Invoke(typedExpression);
+                        break;
+                    case WildcardExpression wildcardExpression:
+                        Wildcard?.Invoke(wildcardExpression);
+                        break;
+                    default:
+                        throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Unknown expression type '{0}'.", expression.GetType()), nameof(expression));
                 }
             };
         }

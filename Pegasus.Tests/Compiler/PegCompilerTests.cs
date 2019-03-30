@@ -162,7 +162,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            Assert.That(() => parser.Parse("OK"), Throws.InnerException.InstanceOf<FormatException>().With.InnerException.Message.EqualTo("OK"));
+            Assert.That(() => parser.Parse("OK"), Throws.InstanceOf<FormatException>().With.Message.EqualTo("OK"));
         }
 
         [Test]
@@ -172,7 +172,7 @@ namespace Pegasus.Tests.Compiler
             var compiled = PegCompiler.Compile(grammar);
             var parser = CodeCompiler.Compile<string>(compiled);
 
-            Assert.That(() => parser.Parse("OK"), Throws.InnerException.InstanceOf<FormatException>().With.InnerException.Message.EqualTo("OK"));
+            Assert.That(() => parser.Parse("OK"), Throws.InstanceOf<FormatException>().With.Message.EqualTo("OK"));
         }
 
         [Test]

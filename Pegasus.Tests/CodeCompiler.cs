@@ -6,6 +6,7 @@ namespace Pegasus.Tests
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using Microsoft.CSharp;
     using NUnit.Framework;
     using Pegasus.Common;
@@ -44,50 +45,73 @@ namespace Pegasus.Tests
         public class ParserWrapper<T>
         {
             private readonly object instance;
-            private readonly Type type;
+            private readonly Lazy<PropertyInfo> tracerProperty;
+            private readonly Lazy<MethodInfo> parseMethod;
+            private readonly Lazy<MethodInfo> parseLexicalMethod;
 
             public ParserWrapper(Type type)
             {
-                this.type = type;
+                this.Type = type;
                 this.instance = Activator.CreateInstance(type);
+                this.tracerProperty = new Lazy<PropertyInfo>(() => type.GetProperty("Tracer", typeof(ITracer)));
+                this.parseMethod = new Lazy<MethodInfo>(() => type.GetMethod("Parse", new[] { typeof(string), typeof(string) }));
+                this.parseLexicalMethod = new Lazy<MethodInfo>(() => type.GetMethod("Parse", new[] { typeof(string), typeof(string), typeof(IList<LexicalElement>).MakeByRefType() }));
             }
+
+            public Type Type { get; }
 
             public ITracer Tracer
             {
                 get
                 {
-                    return (ITracer)this.instance
-                        .GetType()
-                        .GetProperty("Tracer", typeof(ITracer))
-                        .GetValue(this.instance);
+                    try
+                    {
+                        return (ITracer)this.tracerProperty.Value.GetValue(this.instance);
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        throw ex.InnerException;
+                    }
                 }
 
                 set
                 {
-                    this.instance
-                        .GetType()
-                        .GetProperty("Tracer", typeof(ITracer))
-                        .SetValue(this.instance, value);
+                    try
+                    {
+                        this.tracerProperty.Value.SetValue(this.instance, value);
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        throw ex.InnerException;
+                    }
                 }
             }
 
             public T Parse(string subject, string fileName = null)
             {
-                return (T)this.instance
-                    .GetType()
-                    .GetMethod("Parse", new[] { typeof(string), typeof(string) })
-                    .Invoke(this.instance, new[] { subject, fileName });
+                try
+                {
+                    return (T)this.parseMethod.Value.Invoke(this.instance, new[] { subject, fileName });
+                }
+                catch (TargetInvocationException ex)
+                {
+                    throw ex.InnerException;
+                }
             }
 
             public T Parse(string subject, string fileName, out IList<LexicalElement> lexicalElements)
             {
-                var args = new object[] { subject, fileName, null };
-                var result = (T)this.instance
-                    .GetType()
-                    .GetMethod("Parse", new[] { typeof(string), typeof(string), typeof(IList<LexicalElement>).MakeByRefType() })
-                    .Invoke(this.instance, args);
-                lexicalElements = (IList<LexicalElement>)args[2];
-                return result;
+                try
+                {
+                    var args = new object[] { subject, fileName, null };
+                    var result = (T)this.parseLexicalMethod.Value.Invoke(this.instance, args);
+                    lexicalElements = (IList<LexicalElement>)args[2];
+                    return result;
+                }
+                catch (TargetInvocationException ex)
+                {
+                    throw ex.InnerException;
+                }
             }
         }
     }

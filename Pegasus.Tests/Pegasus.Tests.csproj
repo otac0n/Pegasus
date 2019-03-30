@@ -39,9 +39,11 @@
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -75,18 +77,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="CodeCompileFailedException.cs" />
-    <Compile Include="CodeCompiler.cs" />
+    <Compile Include="Common\Highlighting\SyntaxHighlighterTests.cs" />
     <Compile Include="Common\CacheKeyTests.cs" />
     <Compile Include="Common\CursorTests.cs" />
-    <Compile Include="Common\Highlighting\SyntaxHighlighterTests.cs" />
     <Compile Include="Common\ParseResultTests.cs" />
-    <Compile Include="CompileManagerTests.cs" />
     <Compile Include="Compiler\PegCompilerTests.cs" />
-    <Compile Include="Disposable.cs" />
     <Compile Include="Expressions\AndCodeExpressionTests.cs" />
     <Compile Include="Expressions\AndExpressionTests.cs" />
     <Compile Include="Expressions\CharacterRangeTests.cs" />
@@ -108,38 +103,9 @@
     <Compile Include="Expressions\TypedExpressionTests.cs" />
     <Compile Include="Parser\PegParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tracing\DiagnosticsTracerTests.cs" />
-    <Compile Include="Tracing\NullTracerTests.cs" />
-    <Compile Include="Workbench\TutorialTests.cs" />
-    <Compile Include="CompilePegGrammarTests.cs" />
-    <Compile Include="PerformanceTestUtils.cs" />
-    <Compile Include="RegressionTests.cs" />
-    <Compile Include="StringUtilities.cs" />
-    <Compile Include="TraceUtility.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
-      <Project>{1FC19ADF-446F-4118-8189-C25AADF12397}</Project>
-      <Name>Pegasus.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Pegasus.Workbench\Pegasus.Workbench.csproj">
-      <Project>{1da0d4f0-3867-4061-a466-8ba66a6fec71}</Project>
-      <Name>Pegasus.Workbench</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Pegasus\Pegasus.csproj">
-      <Project>{58F12D13-9997-4C29-90CE-3C6C7409BA68}</Project>
-      <Name>Pegasus</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Pegasus\Parser\PegParser.peg">
-      <Link>PegParser.peg</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <AdditionalFiles Include="..\stylecop.json">
-      <Link>stylecop.json</Link>
-    </AdditionalFiles>
-    <None Include="packages.config" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <None Include="TestCases\gitter-piratejon.peg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -155,21 +121,59 @@
     <None Include="TestCases\simple.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Tracing\DiagnosticsTracerTests.cs" />
+    <Compile Include="Tracing\NullTracerTests.cs" />
     <None Include="Tracing\tracing-test.peg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Tracing\tracing-test.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <Compile Include="Workbench\TutorialTests.cs" />
+    <Compile Include="CodeCompileFailedException.cs" />
+    <Compile Include="CodeCompiler.cs" />
+    <Compile Include="CompileManagerTests.cs" />
+    <Compile Include="CompilePegGrammarTests.cs" />
+    <Compile Include="CultureUtilities.cs" />
+    <Compile Include="Disposable.cs" />
+    <None Include="packages.config" />
+    <None Include="..\Pegasus\Parser\PegParser.peg">
+      <Link>PegParser.peg</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Compile Include="PerformanceTestUtils.cs" />
+    <EmbeddedResource Include="..\readme.md">
+      <Link>readme.md</Link>
+    </EmbeddedResource>
+    <Compile Include="RegressionTests.cs" />
+    <Compile Include="StringUtilities.cs" />
+    <AdditionalFiles Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+    <Compile Include="TraceUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pegasus\Pegasus.csproj">
+      <Project>{58F12D13-9997-4C29-90CE-3C6C7409BA68}</Project>
+      <Name>Pegasus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
+      <Project>{1FC19ADF-446F-4118-8189-C25AADF12397}</Project>
+      <Name>Pegasus.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pegasus.Workbench\Pegasus.Workbench.csproj">
+      <Project>{1da0d4f0-3867-4061-a466-8ba66a6fec71}</Project>
+      <Name>Pegasus.Workbench</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

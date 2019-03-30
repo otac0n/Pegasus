@@ -2,8 +2,14 @@
 
 namespace Pegasus.Tests
 {
+    using System;
+    using System.CodeDom.Compiler;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using Microsoft.CSharp;
     using NUnit.Framework;
     using Pegasus.Compiler;
     using Pegasus.Parser;
@@ -232,6 +238,107 @@ namespace Pegasus.Tests
             var result = PegCompiler.Compile(grammar);
 
             Assert.That(result.Errors.Where(e => !e.IsWarning).Select(e => e.ErrorText), Is.Empty);
+        }
+
+        [Test(Description = "Ensure that the readme is accurate in several cultures.")]
+        [TestCase("US")]
+        [TestCase("FR")]
+        [TestCase("IR")]
+        [TestCase("CN")]
+        [TestCase("RU")]
+        public void Compile_WhenGivenTheGrammarAndExampleInTheReadme_YieldsTheExpectedOutput(string culture)
+        {
+            var readmeText = typeof(RegressionTests).Assembly.GetResourceString("readme.md");
+
+            List<string> GetMarkdownCodeSections(string markdown)
+            {
+                const string CodePrefix = "    ";
+                var sections = new List<string>();
+                var lines = markdown.SplitLines();
+                for (var i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].StartsWith(CodePrefix))
+                    {
+                        var j = i + 1;
+
+                        for (; j < lines.Length; j++)
+                        {
+                            var line = lines[j];
+                            if (!(string.IsNullOrWhiteSpace(line) || line.StartsWith(CodePrefix)))
+                            {
+                                break;
+                            }
+                        }
+
+                        var count = j - i;
+                        var nextLine = j - 1;
+
+                        var section = new StringBuilder();
+                        for (j = 0; j < count; j++)
+                        {
+                            var line = lines[i + j];
+                            section.AppendLine(line.Length < CodePrefix.Length
+                                ? string.Empty
+                                : line.Substring(CodePrefix.Length));
+                        }
+
+                        sections.Add(section.ToString());
+
+                        i = nextLine;
+                    }
+                }
+
+                return sections;
+            }
+
+            var codeSections = GetMarkdownCodeSections(readmeText);
+            Assume.That(codeSections.Count, Is.GreaterThanOrEqualTo(2));
+            var grammarText = string.Join(Environment.NewLine, codeSections.Where(s => s.Contains("@classname")).Single());
+            var programText = string.Join(Environment.NewLine, codeSections.Where(s => s.Contains("parser.Parse")).Single());
+            var expectedOutput = Regex.Match(programText, @"// Outputs ""([^\r\n""]+)""").Groups[1].Value;
+            Assume.That(expectedOutput, Is.Not.EqualTo(string.Empty));
+            var grammar = new PegParser().Parse(grammarText);
+            var compiled = PegCompiler.Compile(grammar);
+
+            var compiler = new CSharpCodeProvider();
+            var options = new CompilerParameters
+            {
+                GenerateExecutable = false,
+                GenerateInMemory = true,
+            };
+            options.ReferencedAssemblies.Add("System.dll");
+            options.ReferencedAssemblies.Add("System.Core.dll");
+            options.ReferencedAssemblies.Add(typeof(Pegasus.Common.Cursor).Assembly.Location);
+            var testProgram = StringUtilities.JoinLines(
+                "using System;",
+                "using System.Text;",
+                "public static class TestHelper",
+                "{",
+                "    public static string Main()",
+                "    {",
+                "        var Console = new TestInvariantWriter();",
+                programText,
+                "        return Console.ToString();",
+                "    }",
+                "    private class TestInvariantWriter",
+                "    {",
+                "        private StringBuilder sb = new StringBuilder();",
+                "        public void WriteLine(object obj) { this.sb.AppendLine(Convert.ToString(obj, System.Globalization.CultureInfo.InvariantCulture)); }",
+                "        public override string ToString() { return this.sb.ToString(); }",
+                "    }",
+                "}");
+
+            var results = compiler.CompileAssemblyFromSource(options, compiled.Code, testProgram);
+            if (results.Errors.HasErrors)
+            {
+                throw new CodeCompileFailedException(results.Errors.Cast<CompilerError>().ToArray(), results.Output.Cast<string>().ToArray());
+            }
+
+            CultureUtilities.WithCulture(culture, () =>
+            {
+                var output = (string)results.CompiledAssembly.GetType("TestHelper").GetMethod("Main").Invoke(null, new object[0]);
+                Assert.That(output.TrimEnd(), Is.EqualTo(expectedOutput));
+            });
         }
     }
 }

@@ -32,8 +32,9 @@ Example
 
 Here is an example of a simple parser for mathematical expressions:
 
-    @namespace MyProject
+    @namespace PegExamples
     @classname ExpressionParser
+    @using System.Globalization
 
     additive <double> -memoize
         = left:additive "+" right:multiplicative { left + right }
@@ -55,12 +56,12 @@ Here is an example of a simple parser for mathematical expressions:
         / "(" additive:additive ")" { additive }
 
     decimal <double>
-        = value:([0-9]+ ("." [0-9]+)?) { double.Parse(value) }
+        = value:([0-9]+ ("." [0-9]+)?) { double.Parse(value, CultureInfo.InvariantCulture) }
 
 This will take mathematical expressions as strings and evaluate them with the proper order of operations and associativity to produce a result as a decimal.
 
 The above parser would be used like so:
 
-    var parser = new MyProject.ExpressionParser();
+    var parser = new PegExamples.ExpressionParser();
     var result = parser.Parse("5.1+2*3");
     Console.WriteLine(result); // Outputs "11.1".

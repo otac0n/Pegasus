@@ -1,7 +1,8 @@
-﻿// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
+// Copyright © John Gietzen. All Rights Reserved. This source is subject to the MIT license. Please see license.md for more information.
 
 namespace Pegasus.Tests.Workbench
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using NUnit.Framework;
@@ -12,16 +13,23 @@ namespace Pegasus.Tests.Workbench
     [TestFixture]
     public class TutorialTests
     {
-        private IEnumerable<TestCaseData> Tutorials => Tutorial.FindAll().Select(t => new TestCaseData(t));
+        private IEnumerable<string> Cultures => new[] { "US", "FR", "IR", "CN", "RU" };
 
-        [TestCaseSource("Tutorials")]
-        public void Compile_ForAllFoundTutorials_Succeeds(Tutorial tutorial)
+        private IEnumerable<Tutorial> Tutorials => Tutorial.FindAll();
+
+        [Test]
+        public void Compile_ForAllFoundTutorials_Succeeds(
+            [ValueSource(nameof(Tutorials))] Tutorial tutorial,
+            [ValueSource(nameof(Cultures))] string culture)
         {
-            var grammar = new PegParser().Parse(tutorial.GrammarText);
+            CultureUtilities.WithCulture(culture, () =>
+            {
+                var grammar = new PegParser().Parse(tutorial.GrammarText);
 
-            var result = PegCompiler.Compile(grammar);
+                var result = PegCompiler.Compile(grammar);
 
-            Assert.That(result.Errors, Is.Empty);
+                Assert.That(result.Errors, Is.Empty);
+            });
         }
 
         [TestCase("0", 0)]
@@ -45,16 +53,37 @@ namespace Pegasus.Tests.Workbench
             Assert.That(result, Is.EqualTo(value).Within(0.1).Percent);
         }
 
-        [TestCaseSource("Tutorials")]
-        public void Parse_ForAllFoundTutorials_Succeeds(Tutorial tutorial)
+        [Test]
+        public void Parse_For05Calculator_ThrowsForInvalidFormats(
+            [Values("5,7+8,9*42")] string expression,
+            [ValueSource(nameof(Cultures))] string culture)
         {
-            var grammar = new PegParser().Parse(tutorial.GrammarText);
-            var compiled = PegCompiler.Compile(grammar);
-            var parser = CodeCompiler.Compile<object>(compiled);
+            CultureUtilities.WithCulture(culture, () =>
+            {
+                var tutorial = Tutorial.FindAll().Single(t => t.Name == "05 - Calculator");
+                var grammar = new PegParser().Parse(tutorial.GrammarText);
+                var compiled = PegCompiler.Compile(grammar);
+                var parser = CodeCompiler.Compile<object>(compiled);
 
-            var result = parser.Parse(tutorial.TestText);
+                Assert.Throws<FormatException>(() => parser.Parse(expression));
+            });
+        }
 
-            Assert.That(result, Is.Not.Null);
+        [Test]
+        public void Parse_ForAllFoundTutorials_Succeeds(
+            [ValueSource(nameof(Tutorials))] Tutorial tutorial,
+            [ValueSource(nameof(Cultures))] string culture)
+        {
+            CultureUtilities.WithCulture(culture, () =>
+            {
+                var grammar = new PegParser().Parse(tutorial.GrammarText);
+                var compiled = PegCompiler.Compile(grammar);
+                var parser = CodeCompiler.Compile<object>(compiled);
+
+                var result = parser.Parse(tutorial.TestText);
+
+                Assert.That(result, Is.Not.Null);
+            });
         }
     }
 }

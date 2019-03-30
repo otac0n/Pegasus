@@ -1,10 +1,15 @@
-﻿// This calculator makes use of Pegasus' "left
+@using System.Globalization
+
+// This calculator makes use of Pegasus' "left
 //  recursion" support to provide the correct
 //  order of operations.
 // Left recursion happens when a rule calls
 //  itself immediately, before consuming any
 //  characters.
 // Left recursive rules must be memoized.
+
+start <double>
+  = value:additive EOF { value }
 
 additive <double> -memoize
     = left:additive "+" right:multiplicative { left + right }
@@ -26,4 +31,7 @@ primary <double> -memoize
     / "(" additive:additive ")" { additive }
 
 decimal <double>
-    = value:([0-9]+ ("." [0-9]+)?) { double.Parse(value) }
+    = value:([0-9]+ ("." [0-9]+)?) { double.Parse(value, CultureInfo.InvariantCulture) }
+
+EOF
+  = !.
