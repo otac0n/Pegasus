@@ -18,6 +18,7 @@ Mathematical Expression Evaluator
 
     @namespace PegExamples
     @classname MathExpressionParser
+    @using System.Globalization
 
     start <double>
       = _ value:additive _ EOF { value }
@@ -42,7 +43,7 @@ Mathematical Expression Evaluator
         / "(" _ additive:additive _ ")" { additive }
 
     decimal <double>
-        = value:([0-9]+ ("." [0-9]+)?) { double.Parse(value) }
+        = value:([0-9]+ ("." [0-9]+)?) { double.Parse(value, CultureInfo.InvariantCulture) }
 
     _ = [ \t\r\n]*
 
