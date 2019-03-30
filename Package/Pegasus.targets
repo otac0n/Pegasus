@@ -11,7 +11,7 @@
   </PropertyGroup>
   <UsingTask AssemblyFile="$(PegasusAssemblyPath)" TaskName="CompilePegGrammar" />
 
-  <Target Name="CompilePegGrammars" DependsOnTargets="CoreCompilePegGrammars" BeforeTargets="CoreCompile" Condition=" '@(PegGrammar)' != '' ">
+  <Target Name="CompilePegGrammars" DependsOnTargets="CoreCompilePegGrammars" BeforeTargets="Compile;CoreCompile;Build;CoreBuild" Condition=" '@(PegGrammar)' != '' ">
     <ItemGroup>
       <Compile Include="%(PegGrammar.OutputPath)" />
     </ItemGroup>
@@ -28,7 +28,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="CleanPegGrammars" DependsOnTargets="_UpdatePegGrammarsMetatdata" BeforeTargets="Clean">
+  <Target Name="CleanPegGrammars" DependsOnTargets="_UpdatePegGrammarsMetatdata" BeforeTargets="Clean;CoreClean">
     <Delete Files="@(PegGrammar -> '%(OutputPath)')" ContinueOnError="true" />
   </Target>
 
