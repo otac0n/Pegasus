@@ -10,7 +10,7 @@ namespace Pegasus.Workbench.Pipeline.Model
     /// </summary>
     public sealed class StartRuleEntrypoint : ParserEntrypoint
     {
-        private readonly dynamic parser;
+        private readonly object parser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StartRuleEntrypoint"/> class.
@@ -31,8 +31,9 @@ namespace Pegasus.Workbench.Pipeline.Model
                 return null;
             }
 
-            this.parser.Tracer = tracer;
-            return this.parser.Parse(subject, filename);
+            var type = this.parser.GetType();
+            type.GetProperty("Tracer").SetValue(this.parser, tracer);
+            return type.GetMethod("Parse").Invoke(this.parser, new object[] { subject, filename });
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Pegasus.Workbench.Pipeline.Model
     public sealed class PublicRuleEntrypoint : ParserEntrypoint
     {
         private readonly MethodInfo methodInfo;
-        private readonly dynamic parser;
+        private readonly object parser;
 
         public PublicRuleEntrypoint(object parser, Rule rule)
             : base("Parse" + PublicRuleFinder.GetPublicName(rule), rule)
@@ -26,7 +26,7 @@ namespace Pegasus.Workbench.Pipeline.Model
                 return null;
             }
 
-            this.parser.Tracer = tracer;
+            this.parser.GetType().GetProperty("Tracer").SetValue(this.parser, tracer);
             return this.methodInfo.Invoke(this.parser, new object[] { subject, filename });
         }
     }

@@ -9,6 +9,7 @@ namespace Pegasus.Workbench.Pipeline
     using System.Linq;
     using System.Reactive.Concurrency;
     using System.Reactive.Linq;
+    using System.Reflection;
     using System.Text.RegularExpressions;
     using Pegasus.Common;
     using Pegasus.Common.Tracing;
@@ -61,6 +62,11 @@ namespace Pegasus.Workbench.Pipeline
             }
             catch (Exception ex)
             {
+                if (ex is TargetInvocationException)
+                {
+                    ex = ex.InnerException;
+                }
+
                 var cursor = ex.Data["cursor"] as Cursor ?? new Cursor(subject, 0, SentinelFileName);
 
                 var parts = Regex.Split(ex.Message, @"(?<=^\w+):");

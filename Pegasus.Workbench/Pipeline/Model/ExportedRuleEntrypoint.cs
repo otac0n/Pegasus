@@ -8,7 +8,7 @@ namespace Pegasus.Workbench.Pipeline.Model
 
     public sealed class ExportedRuleEntrypoint : ParserEntrypoint
     {
-        private readonly dynamic parser;
+        private readonly object parser;
 
         public ExportedRuleEntrypoint(object parser, Rule rule)
             : base("Exported." + PublicRuleFinder.GetPublicName(rule), rule)
@@ -23,7 +23,7 @@ namespace Pegasus.Workbench.Pipeline.Model
                 return null;
             }
 
-            this.parser.Tracer = tracer;
+            this.parser.GetType().GetProperty("Tracer").SetValue(this.parser, tracer);
             return "Not supported.";
         }
     }
