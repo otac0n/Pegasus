@@ -21,7 +21,7 @@ The easiest way to get a copy of Pegasus is to install the [Pegasus NuGet packag
 
     PM> Install-Package Pegasus
 
-Due to a limitation in Visual Studio, you will need to reload your project for the 'PegGrammar' build action to be recognized.
+Due to a limitation in Visual Studio 2017 and earlier, you will need to reload your project for the 'PegGrammar' build action to be recognized.
 
 Once you have the package installed, files in your project marked as 'PegGrammar' in the properties window will be compiled to their respective `.peg.g.cs` parser classes before every build.  These parser classes will be automatically included in compilation.
 
