@@ -2,6 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\SharedAssemblyInfo.props" />
   <PropertyGroup>
+    <Description>A PEG (Parsing Expression Grammar) parser compiler that integrates with MSBuild / Visual Studio.  Features selective packrat parsing and syntax-highlighting output.</Description>
+    <PackageIconUrl>https://raw.github.com/otac0n/Pegasus/master/Pegasus.ico</PackageIconUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/otac0n/Pegasus</PackageProjectUrl>
+    <PackageTags>parser;generator;compiler;lexer;PEG;DSL;AST</PackageTags>
     <OutputType>Exe</OutputType>
     <StartupObject>Pegasus.Program</StartupObject>
     <ApplicationIcon>..\Pegasus.ico</ApplicationIcon>
@@ -10,19 +15,24 @@
     <CodeAnalysisRuleSet>Pegasus.ruleset</CodeAnalysisRuleSet>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <DefineConstants>TRACE</DefineConstants>
-    <PackageTags>parser;generator;compiler;lexer;PEG;DSL;AST</PackageTags>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <MinClientVersion>2.5</MinClientVersion>
     <SignAssembly>true</SignAssembly>
-    <TargetFrameworks>net45;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard2.0;netcoreapp2.0</TargetFrameworks>
+    <EmbedUntrackedSources>false</EmbedUntrackedSources>
+    <!-- Workaround for Source File path mismatch from Weave -->
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
     <DefineConstants>$(DefineConstants);NETFULL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
     <DefineConstants>$(DefineConstants);NETCORE;NETCOREAPP2_0</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FixMe" Version="1.0.0" PrivateAssets="All" />
@@ -74,6 +84,11 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.6.85" />
     <PackageReference Include="System.CodeDom" Version="4.4.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.CodeDom" Version="4.4.0" />
+    <None Include="CompilePegGrammar.cs" />
+    <Compile Remove="CompilePegGrammar.cs" />
   </ItemGroup>
   <Target Name="ExcludeReferences" BeforeTargets="GenerateNuspec">
     <ItemGroup>
