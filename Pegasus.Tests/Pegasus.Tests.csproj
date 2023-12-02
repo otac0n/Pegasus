@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pegasus.Tests</RootNamespace>
     <AssemblyName>Pegasus.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -75,6 +75,20 @@
       <HintPath>..\packages\System.Reflection.Metadata.1.2.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pegasus\Pegasus.csproj">
+      <Project>{58F12D13-9997-4C29-90CE-3C6C7409BA68}</Project>
+      <Name>Pegasus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
+      <Project>{1FC19ADF-446F-4118-8189-C25AADF12397}</Project>
+      <Name>Pegasus.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pegasus.Workbench\Pegasus.Workbench.csproj">
+      <Project>{1da0d4f0-3867-4061-a466-8ba66a6fec71}</Project>
+      <Name>Pegasus.Workbench</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Highlighting\SyntaxHighlighterTests.cs" />
@@ -157,20 +171,6 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Pegasus\Pegasus.csproj">
-      <Project>{58F12D13-9997-4C29-90CE-3C6C7409BA68}</Project>
-      <Name>Pegasus</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
-      <Project>{1FC19ADF-446F-4118-8189-C25AADF12397}</Project>
-      <Name>Pegasus.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Pegasus.Workbench\Pegasus.Workbench.csproj">
-      <Project>{1da0d4f0-3867-4061-a466-8ba66a6fec71}</Project>
-      <Name>Pegasus.Workbench</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

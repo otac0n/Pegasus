@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pegasus.Workbench</RootNamespace>
     <AssemblyName>Pegasus.Workbench</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
@@ -93,6 +93,16 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pegasus\Pegasus.csproj">
+      <Project>{58f12d13-9997-4c29-90ce-3c6c7409ba68}</Project>
+      <Name>Pegasus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
+      <Project>{1fc19adf-446f-4118-8189-c25aadf12397}</Project>
+      <Name>Pegasus.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Pipeline\Model\ExportedRuleEntrypoint.cs" />
@@ -179,16 +189,6 @@
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta006\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Pegasus\Pegasus.csproj">
-      <Project>{58f12d13-9997-4c29-90ce-3c6c7409ba68}</Project>
-      <Name>Pegasus</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj">
-      <Project>{1fc19adf-446f-4118-8189-c25aadf12397}</Project>
-      <Name>Pegasus.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

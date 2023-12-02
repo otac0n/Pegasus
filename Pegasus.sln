@@ -1,12 +1,7 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2015
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pegasus", "Pegasus\Pegasus.csproj", "{58F12D13-9997-4C29-90CE-3C6C7409BA68}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Tests", "Pegasus.Tests\Pegasus.Tests.csproj", "{13DC1195-1979-4799-A8F2-83CA8C16CD06}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6E5824F0-3C5B-47C9-A02D-9928BD360D9B}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -23,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Pegasus.svg = Pegasus.svg
 		readme.md = readme.md
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
+		SharedAssemblyInfo.props = SharedAssemblyInfo.props
 		Strict.ruleset = Strict.ruleset
 		stylecop.json = stylecop.json
 		Tests.ruleset = Tests.ruleset
@@ -30,14 +26,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Package", "Package\Package.csproj", "{7D630AC1-62A7-439F-AC80-0EA800F3A846}"
 	ProjectSection(ProjectDependencies) = postProject
-		{58F12D13-9997-4C29-90CE-3C6C7409BA68} = {58F12D13-9997-4C29-90CE-3C6C7409BA68}
-		{1FC19ADF-446F-4118-8189-C25AADF12397} = {1FC19ADF-446F-4118-8189-C25AADF12397}
 		{1DA0D4F0-3867-4061-A466-8BA66A6FEC71} = {1DA0D4F0-3867-4061-A466-8BA66A6FEC71}
+		{1FC19ADF-446F-4118-8189-C25AADF12397} = {1FC19ADF-446F-4118-8189-C25AADF12397}
+		{58F12D13-9997-4C29-90CE-3C6C7409BA68} = {58F12D13-9997-4C29-90CE-3C6C7409BA68}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pegasus.Common", "Pegasus.Common\Pegasus.Common.csproj", "{1FC19ADF-446F-4118-8189-C25AADF12397}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pegasus", "Pegasus\Pegasus.csproj", "{58F12D13-9997-4C29-90CE-3C6C7409BA68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Workbench", "Pegasus.Workbench\Pegasus.Workbench.csproj", "{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pegasus.Common", "Pegasus.Common\Pegasus.Common.csproj", "{1FC19ADF-446F-4118-8189-C25AADF12397}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Package", "Pegasus.Package\Pegasus.Package.csproj", "{0292AC9A-C27D-4D35-9328-B491F9E455F0}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -46,32 +42,28 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Package", "Pegasus.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Templates", "Pegasus.Templates\Pegasus.Templates.csproj", "{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Tests", "Pegasus.Tests\Pegasus.Tests.csproj", "{13DC1195-1979-4799-A8F2-83CA8C16CD06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pegasus.Workbench", "Pegasus.Workbench\Pegasus.Workbench.csproj", "{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{58F12D13-9997-4C29-90CE-3C6C7409BA68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58F12D13-9997-4C29-90CE-3C6C7409BA68}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58F12D13-9997-4C29-90CE-3C6C7409BA68}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58F12D13-9997-4C29-90CE-3C6C7409BA68}.Release|Any CPU.Build.0 = Release|Any CPU
-		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7D630AC1-62A7-439F-AC80-0EA800F3A846}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D630AC1-62A7-439F-AC80-0EA800F3A846}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D630AC1-62A7-439F-AC80-0EA800F3A846}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D630AC1-62A7-439F-AC80-0EA800F3A846}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58F12D13-9997-4C29-90CE-3C6C7409BA68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58F12D13-9997-4C29-90CE-3C6C7409BA68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58F12D13-9997-4C29-90CE-3C6C7409BA68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58F12D13-9997-4C29-90CE-3C6C7409BA68}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1FC19ADF-446F-4118-8189-C25AADF12397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1FC19ADF-446F-4118-8189-C25AADF12397}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FC19ADF-446F-4118-8189-C25AADF12397}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FC19ADF-446F-4118-8189-C25AADF12397}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0292AC9A-C27D-4D35-9328-B491F9E455F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0292AC9A-C27D-4D35-9328-B491F9E455F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0292AC9A-C27D-4D35-9328-B491F9E455F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -80,6 +72,14 @@ Global
 		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC6EA0B1-D9A5-41B4-84E5-823C944ACF38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13DC1195-1979-4799-A8F2-83CA8C16CD06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DA0D4F0-3867-4061-A466-8BA66A6FEC71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
