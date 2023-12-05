@@ -22,8 +22,6 @@
     <MinClientVersion>2.5</MinClientVersion>
     <SignAssembly>true</SignAssembly>
     <TargetFrameworks>net45;netstandard2.0;netcoreapp2.0</TargetFrameworks>
-    <EmbedUntrackedSources>false</EmbedUntrackedSources>
-    <!-- Workaround for Source File path mismatch from Weave -->
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
     <DefineConstants>$(DefineConstants);NETFULL</DefineConstants>
@@ -42,7 +40,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CSharp" Version="4.0.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta006" PrivateAssets="All" />
-    <PackageReference Include="Weave" Version="2.0.1-ci0008" PrivateAssets="All" />
+    <PackageReference Include="Weave" Version="2.1.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pegasus.Common\Pegasus.Common.csproj" />
